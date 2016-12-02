@@ -1,0 +1,1994 @@
+„“‹ X86;
+
+(*
+    Copyright 2013 Krotov Anton
+
+    This file is part of Compiler.
+
+    Compiler is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Compiler is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Compiler. If not, see <http://www.gnu.org/licenses/>.
+    *)
+
+’ ¬“β¨«μ := UTILS,
+    sys := SYSTEM, SCAN,
+    ¬®­αβ := modConstante,
+    ¬‘βΰ := modString,
+    ¬‘―¨α := modList,
+    ¬” ©« := modFile,
+    ¬ΰ®ζ := modProcess,
+    ¬®­α := modConsole,
+    ¬θ := modError;
+
+’›
+
+  PROC = –…„“€ (err: “‹…‚);
+
+  β€α¬“§¥«* = “€‡€’…‹ € ‡€‘ (¬‘―¨α.β“§¥«)
+    cmd, clen, varadr,  ¤ΰ, tcmd, codeadr: –…‹…; short: “‹…‚
+  …–;
+
+  β‚¥ι„«¨­ = €‘‘‚ 2 ‡ –…‹…;
+
+  tIdx* = €‘‘‚ ¬®­αβ._ADIM ‡ –…‹…;
+
+  β‘¥ªζ¨ο¬ο = €‘‘‚ 8 ‡ ‘‚;
+
+  β‘¥ªζ¨ο = ‡€‘
+    α¥ªζ_¨¬ο: β‘¥ªζ¨ο¬ο;
+    size, adr, sizealign, OAPfile, reserved6, reserved7, reserved8, attrflags: –…‹…
+  …–;
+
+  β‡ £®«®Ά®ª = ‡€‘
+    msdos: €‘‘‚ 180 ‡ ‘‚;
+    typecomp, seccount: sys.CARD16;
+    time, reserved1, reserved2: –…‹…;
+    PEoptsize, infflags, PEfile, compver: sys.CARD16;
+    ª®¤_ΰ §¬¥ΰ, ¤ ­­λ¥_ΰ §¬¥ΰ, initdatasize, startadr,
+    codeadr, rdataadr, loadadr, secalign, filealign,
+    oldestver, version, oldestverNT, reserved3,
+    filesize, headersize, dllcrc: –…‹…;
+    UI, reserved4: sys.CARD16;
+    αβνª_ΰ §¬, stkalloc, heapsize, heapalloc, reserved5, structcount: –…‹…;
+    structs: €‘‘‚ 16 ‡ ‡€‘ adr, size: –…‹… …–;
+    sections: €‘‘‚ 3 ‡ β‘¥ªζ¨ο
+  …–;
+
+  β‡ £®«®Ά®ª‚¨­ = ‡€‘
+    Machine: sys.CARD16;
+    α¥ªζ¨¨_η¨α«®: sys.CARD16;
+    ¤ β ‚ΰ¥¬ο_θβ ¬―,
+    PointerToSymbolTable,
+    NumberOfSymbols: –…‹…;
+    SizeOfOptionalHeader,
+    Characteristics: sys.CARD16;
+    text, data, bss: β‘¥ªζ¨ο
+  …–;
+
+  β‡ £®«®Ά®ª®«¨΅ΰ¨ = ‡€‘
+    menuet01: €‘‘‚ 8 ‡ ‘‚;
+    ver, start, size, mem, sp, param, path: –…‹…
+  …–;
+
+  ETABLE = ‡€‘
+    reserved1, time, reserved2, dllnameoffset, firstnum, adrcount,
+    namecount, arradroffset, arrnameptroffset, arrnumoffset: –…‹…;
+    arradr, arrnameptr: €‘‘‚ 10000H ‡ –…‹…;
+    arrnum: €‘‘‚ 10000H ‡ sys.CARD16;
+    text: €‘‘‚ 1000000 ‡ ‘‚;
+    textlen, size: –…‹…
+  …–;
+
+  β‘¬¥ι¥­¨¥ = ‡€‘
+    Page, Size: –…‹…;
+    reloc: €‘‘‚ 1024 ‡ sys.CARD16
+  …–;
+
+……
+    asmlist: ¬‘―¨α.βγ‘―¨α®ª;
+    start: β€α¬“§¥«;
+    MemErr: PROC;
+    dll, con, gui, kos, elf, obj: “‹…‚;
+    Lcount, reccount, topstk: –…‹…;
+    recarray: €‘‘‚ 2048 ‡ –…‹…;
+    current*: β€α¬“§¥«;
+    callstk: €‘‘‚ 1024, 2 ‡ β€α¬“§¥«;
+    OutFile: ¬‘βΰ.β‘βΰ®ª ;
+    Code: €‘‘‚ 4000000 ‡ ‘‚;
+    ccount: –…‹…;
+    Data: €‘‘‚ 1000000 ‡ ‘‚;
+    dcount: –…‹…;
+    Labels: €‘‘‚ 200000 ‡ –…‹…;
+    rdata: €‘‘‚ 400H ‡ –…‹…;
+    Header: β‡ £®«®Ά®ª;
+    etable: ETABLE;
+    ExecName: ¬‘βΰ.β‘βΰ®ª ;
+    LoadAdr: –…‹…;
+    Reloc: €‘‘‚ 200000 ‡ ‘‚;
+    rcount: –…‹…;
+    RtlProc: €‘‘‚ 20 ‡ –…‹…;
+    OutFilePos: –…‹…;
+    RelocSection: β‘¥ªζ¨ο;
+    felf: ¬‘βΰ.β‘βΰ®ª ;
+    fpu*: –…‹…;
+    isfpu: “‹…‚;
+    maxfpu: –…‹…;
+    fpucmd: β€α¬“§¥«;
+    kosexp: €‘‘‚ 65536 ‡ ‡€‘ Name: SCAN.βγ“§¥«;
+    Adr, NameLabel: –…‹… END;
+    kosexpcount: –…‹…;
+
+–…„“€ setfelf*(name: ¬‘βΰ.β‘βΰ®ª );
+    €—€‹
+      felf := name
+    …– setfelf;
+
+–…„“€ AddRtlProc*(idx, proc: –…‹…);
+    €—€‹
+      RtlProc[idx] := proc
+    …– AddRtlProc;
+
+–…„“€ IntToCard16(i: –…‹…): sys.CARD16;
+    …… w: sys.CARD16;
+    €—€‹
+      sys.GET(sys.ADR(i), w)
+      ‚…“’ w
+    …– IntToCard16;
+
+–…„“€ CopyStr(…… Dest: €‘‘‚ ‡ ‘‚; Source: €‘‘‚ ‡ ‘‚; …… di: –…‹…; si: –…‹…);
+    €—€‹
+      „…(di);
+      ‚’’
+        (di);
+        Dest[di] := Source[si];
+        (si)
+      ‘‚€ Dest[di] = 0X
+    …– CopyStr;
+
+–…„“€ exch(…… a, b: –…‹…);
+    …… c: –…‹…;
+    €—€‹
+      c := a;
+      a := b;
+      b := c
+    …– exch;
+
+–…„“€ Sort(…… NamePtr, Adr: €‘‘‚ ‡ –…‹…; Text: €‘‘‚ ‡ ‘‚; LB, RB: –…‹…);
+    …… L, R: –…‹…;
+
+      –…„“€ strle(s1, s2: –…‹…): “‹…‚;
+          …… S1, S2: €‘‘‚ 256 ‡ ‘‚; i: –…‹…;
+          €—€‹
+            i := 0;
+            CopyStr(S1, Text, i, s1);
+            i := 0;
+            CopyStr(S2, Text, i, s2)
+            ‚…“’ S1 <= S2
+          …– strle;
+
+    €—€‹
+      …‘‹ LB < RB ’ƒ„€
+        L := LB;
+        R := RB;
+        ‚’’
+          € (L < RB) & strle(NamePtr[L], NamePtr[LB]) „…‹€’
+            (L)
+          …–;
+          € (R > LB) & strle(NamePtr[LB], NamePtr[R]) „…‹€’
+            „…(R)
+          …–;
+          …‘‹ L < R ’ƒ„€
+            exch(NamePtr[L], NamePtr[R]);
+            exch(Adr[L], Adr[R])
+          …–
+        ‘‚€ L >= R;
+        …‘‹ R > LB ’ƒ„€
+          exch(NamePtr[LB], NamePtr[R]);
+          exch(Adr[LB], Adr[R]);
+          Sort(NamePtr, Adr, Text, LB, R - 1)
+        …–;
+        Sort(NamePtr, Adr, Text, R + 1, RB)
+      …–
+    …– Sort;
+
+–…„“€ PackExport(Name: €‘‘‚ ‡ ‘‚);
+    …… i: –…‹…;
+    €—€‹
+      Sort(etable.arrnameptr, etable.arradr, etable.text, 0, etable.namecount - 1);
+      „‹ i := 0 „ etable.namecount - 1 „…‹€’
+        etable.arrnum[i] := IntToCard16(i)
+      …–;
+      etable.size := 40 + etable.adrcount * 4 + etable.namecount * 6;
+      etable.arradroffset := 40;
+      etable.arrnameptroffset := 40 + etable.adrcount * 4;
+      etable.arrnumoffset := etable.arrnameptroffset + etable.namecount * 4;
+      etable.dllnameoffset := etable.size + etable.textlen;
+      CopyStr(etable.text, Name, etable.textlen, 0);
+      (etable.textlen);
+      „‹ i := 0 „ etable.namecount - 1 „…‹€’
+        etable.arrnameptr[i] := etable.arrnameptr[i] + etable.size
+      …–;
+      etable.size := etable.size + etable.textlen
+    …– PackExport;
+
+–…„“€ ProcExport*(Number: –…‹…; Name: SCAN.βγ“§¥«; NameLabel: –…‹…);
+    €—€‹
+      …‘‹ dll ’ƒ„€
+        etable.arradr[etable.adrcount] := Number;
+        (etable.adrcount);
+        etable.arrnameptr[etable.namecount] := etable.textlen;
+        (etable.namecount);
+        CopyStr(etable.text, Name.¨¬ο_γ§« , etable.textlen, 0);
+        (etable.textlen)
+      ‹…‘‹ obj ’ƒ„€
+        kosexp[kosexpcount].Name := Name;
+        kosexp[kosexpcount].Adr := Number;
+        kosexp[kosexpcount].NameLabel := NameLabel;
+        (kosexpcount)
+      …–
+    …– ProcExport;
+
+–…„“€ Err(code: –…‹…);
+    €—€‹
+        ‚›€’ code ‡
+            |1: ¬θ.‘®®΅ι(58); ¬®­α.‘βΰ_¥η βμ(OutFile)
+            |2: ¬θ.‘®®΅ι(60); ¬®­α.‘βΰ_¥η βμ(OutFile)
+            |3: ¬θ.‘®®΅ι(49)
+            |4: ¬θ.‘®®΅ι(79)
+        €—…
+        …–;
+        ¬®­α.‘βΰ_®Ά;
+        ¬ΰ®ζ.‚λε®¤(1)
+    …– Err;
+
+–…„“€ Align*(n, m: –…‹…): –…‹…;
+      ‚…“’ n + (m - n MOD m) MOD m
+    …– Align;
+
+–…„“€ PutReloc(R: β‘¬¥ι¥­¨¥);
+    …… i: –…‹…;
+    €—€‹
+      sys.PUT(sys.ADR(Reloc[rcount]), R.Page);
+      (rcount, 4);
+      sys.PUT(sys.ADR(Reloc[rcount]), R.Size);
+      (rcount, 4);
+      „‹ i := 0 „ ASR(R.Size - 8, 1) - 1 „…‹€’
+        sys.PUT(sys.ADR(Reloc[rcount]), R.reloc[i]);
+        (rcount, 2)
+      …–
+    …– PutReloc;
+
+–…„“€ InitArray(…… adr: –…‹…; chars: ¬‘βΰ.β‘βΰ®ª );
+    …… i, x, n: –…‹…;
+    €—€‹
+      n := LEN(chars) - 1;
+      i := 0;
+      € (i < n) & (chars[i] # 0X) „…‹€’
+        x := SCAN.‘¨¬Ά2hex(chars[i]) * 16 + SCAN.‘¨¬Ά2hex(chars[i + 1]);
+        sys.PUT(adr, CHR(x));
+        (adr);
+        (i, 2)
+      …–
+    …– InitArray;
+
+–…„“€ WriteF(F, A, N: –…‹…);
+    €—€‹
+        …‘‹ ¬” ©«.‡ ―¨α βμ(F, A, N) # N ’ƒ„€
+            Err(2)
+        …–
+    …– WriteF;
+
+–…„“€ Write(A, N: –…‹…);
+    €—€‹
+      sys.MOVE(A, OutFilePos, N);
+      OutFilePos := OutFilePos + N
+    …– Write;
+
+–…„“€ Fill(n: –…‹…; c: ‘‚);
+    …… i: –…‹…;
+    €—€‹
+      „‹ i := 1 „ n „…‹€’
+        Write(sys.ADR(c), 1)
+      …–
+    …– Fill;
+
+–…„“€ SetSection(…… Section: β‘¥ªζ¨ο; name: β‘¥ªζ¨ο¬ο; size, adr, sizealign, OAPfile, attrflags: –…‹…);
+    €—€‹
+      Section.α¥ªζ_¨¬ο := name;
+      Section.size := size;
+      Section.adr := adr;
+      Section.sizealign := sizealign;
+      Section.OAPfile := OAPfile;
+      Section.attrflags := attrflags;
+    …– SetSection;
+
+–…„“€ WritePE(FName: €‘‘‚ ‡ ‘‚; stksize, codesize, datasize, rdatasize, gsize: –…‹…);
+    ‘’ textattr = 60000020H; rdataattr = 40000040H; dataattr = 0C0000040H; relocattr = 42000040H;
+    …… i, F, adr, acodesize, compver, version, stkalloc, heapsize, heapalloc, filesize, filebuf: –…‹…;
+        cur: β€α¬“§¥«;
+    €—€‹
+
+        compver := 0;
+        version := 0;
+        stkalloc := stksize;
+        heapsize := 100000H;
+        heapalloc := 100000H;
+        acodesize := Align(codesize, 1000H) + 1000H;
+        adr := sys.ADR(rdata);
+        filesize := acodesize + Align(rdatasize, 1000H) + Align(datasize, 1000H) + Align(rcount, 1000H);
+
+        InitArray(adr, "5000000040000000000000003400000000000000000000006200000000000000");
+        InitArray(adr, "0000000000000000000000000000000000000000500000004000000000000000");
+        InitArray(adr, "A4014C6F61644C6962726172794100001F0147657450726F6341646472657373");
+        InitArray(adr, "00006B65726E656C33322E646C6C0000");
+
+        rdata[ 0] := acodesize + 50H;
+        rdata[ 1] := acodesize + 40H;
+        rdata[ 3] := acodesize + 34H;
+        rdata[ 6] := acodesize + 62H;
+        rdata[ 7] := acodesize;
+        rdata[13] := acodesize + 50H;
+        rdata[14] := acodesize + 40H;
+
+        adr := sys.ADR(Header.msdos);
+        InitArray(adr, "4D5A90000300000004000000FFFF0000B8000000000000004000000000000000");
+        InitArray(adr, "00000000000000000000000000000000000000000000000000000000B0000000");
+        InitArray(adr, "0E1FBA0E00B409CD21B8014CCD21546869732070726F6772616D2063616E6E6F");
+        InitArray(adr, "742062652072756E20696E20444F53206D6F64652E0D0D0A2400000000000000");
+        InitArray(adr, "5DCF9F8719AEF1D419AEF1D419AEF1D497B1E2D413AEF1D4E58EE3D418AEF1D4");
+        InitArray(adr, "5269636819AEF1D4000000000000000050450000");
+        Header.typecomp := IntToCard16(014CH);
+        …‘‹ dll ’ƒ„€
+            Header.seccount := IntToCard16(0004H);
+            Header.infflags := IntToCard16(210EH)
+        €—…
+            Header.seccount := IntToCard16(0003H);
+            Header.infflags := IntToCard16(010FH)
+        …–;
+        Header.time := ¬®­αβ._¤ β ;
+        Header.PEoptsize := IntToCard16(00E0H);
+        Header.PEfile := IntToCard16(010BH);
+        Header.compver := IntToCard16(compver);
+        Header.ª®¤_ΰ §¬¥ΰ := Align(codesize, 200H);
+        Header.¤ ­­λ¥_ΰ §¬¥ΰ := Align(datasize + gsize, 200H) + Align(rdatasize, 200H) + Align(rcount, 200H);
+        Header.startadr := 1000H;
+        Header.codeadr := 1000H;
+        Header.rdataadr := Header.codeadr + Align(codesize, 1000H);
+        Header.loadadr := LoadAdr;
+        Header.secalign := 1000H;
+        Header.filealign := 0200H;
+        Header.oldestver := 0004H;
+        Header.version := version;
+        Header.oldestverNT := 0004H;
+        Header.filesize := Align(codesize, 1000H) + Align(datasize + gsize, 1000H) + Align(rdatasize, 1000H) + Align(rcount, 1000H) + 1000H;
+        Header.headersize := 0400H;
+        Header.UI := IntToCard16(ORD(con) + 2);
+        Header.αβνª_ΰ §¬ := stksize;
+        Header.stkalloc := stkalloc;
+        Header.heapsize := heapsize;
+        Header.heapalloc := heapalloc;
+        Header.structcount := 10H;
+        …‘‹ dll ’ƒ„€
+            Header.structs[0].adr := Header.rdataadr + 0DAH;
+            Header.structs[0].size := etable.size
+        …–;
+
+        Header.structs[1].adr := Header.rdataadr + 0CH;
+        Header.structs[1].size := 28H;
+        Header.structs[12].adr := Header.rdataadr;
+        Header.structs[12].size := 0CH;
+
+        SetSection(Header.sections[0], ".text", codesize, 1000H, Align(codesize, 200H), 400H,
+                textattr);
+        SetSection(Header.sections[1], ".rdata", rdatasize, Align(codesize, 1000H) + 1000H,
+                Align(rdatasize, 200H), Align(codesize, 200H) + 400H, rdataattr);
+        SetSection(Header.sections[2], ".data", datasize + gsize, Align(codesize, 1000H) +
+                Align(rdatasize, 1000H) + 1000H, Align(datasize, 200H), Align(codesize, 200H) +
+                Align(rdatasize, 200H) + 400H, dataattr);
+
+        …‘‹ dll ’ƒ„€
+            SetSection(RelocSection, ".reloc", rcount, Header.sections[2].adr + Align(datasize +
+                    gsize, 1000H), Align(rcount, 200H), Header.sections[2].OAPfile +
+                    Align(datasize, 200H), relocattr);
+            Header.structs[5].adr := RelocSection.adr;
+            Header.structs[5].size := rcount
+        …–;
+
+        F := ¬” ©«.‘®§¤ βμ(FName);
+        …‘‹ F = 0 ’ƒ„€
+            Err(1)
+        …–;
+        OutFilePos := ¬“β¨«μ. ¬οβμ®Ά_®«γη(filesize);
+        filebuf := OutFilePos;
+        ¬θ.MemErr(OutFilePos = 0);
+
+        Write(sys.ADR(Header), sys.SIZE(β‡ £®«®Ά®ª));
+        …‘‹ dll ’ƒ„€
+            Write(sys.ADR(RelocSection), sys.SIZE(β‘¥ªζ¨ο));
+            Fill(Align(sys.SIZE(β‡ £®«®Ά®ª) + sys.SIZE(β‘¥ªζ¨ο), 200H) - (sys.SIZE(β‡ £®«®Ά®ª) +
+                    sys.SIZE(β‘¥ªζ¨ο)), 0X)
+        €—…
+            Fill(Align(sys.SIZE(β‡ £®«®Ά®ª), 200H) - sys.SIZE(β‡ £®«®Ά®ª), 0X)
+        …–;
+
+        cur := asmlist.―¥ΰΆλ©(β€α¬“§¥«);
+        € cur # “‘’ „…‹€’
+            Write(sys.ADR(Code[cur.cmd]), cur.clen);
+            cur := cur.α«¥¤γξι(β€α¬“§¥«)
+        …–;
+        Fill(Align(codesize, 200H) - codesize, 0X);
+        Write(sys.ADR(rdata), 0DAH);
+        …‘‹ dll ’ƒ„€
+            etable.time := Header.time;
+            Write(sys.ADR(etable), 40);
+            Write(sys.ADR(etable.arradr), etable.adrcount * 4);
+            Write(sys.ADR(etable.arrnameptr), etable.namecount * 4);
+            Write(sys.ADR(etable.arrnum), etable.namecount * 2);
+            Write(sys.ADR(etable.text), etable.textlen)
+        …–;
+        Fill(Align(rdatasize, 200H) - rdatasize, 0X);
+        Write(sys.ADR(Data), datasize);
+        Fill(Align(datasize, 200H) - datasize, 0X);
+        …‘‹ dll ’ƒ„€
+            Write(sys.ADR(Reloc), rcount);
+            Fill(Align(rcount, 200H) - rcount, 0X)
+        …–;
+        WriteF(F, filebuf, OutFilePos - filebuf);
+        ¬” ©«.‡ ªΰλβμ(F)
+    …– WritePE;
+
+–…„“€ New;
+    …… nov: β€α¬“§¥«;
+    €—€‹
+      NEW(nov);
+      MemErr(nov = “‘’);
+      nov.cmd := ccount;
+      ¬‘―¨α.‚αβ Ά¨βμ(asmlist, nov, current);
+      current := current.α«¥¤γξι(β€α¬“§¥«)
+    …– New;
+
+–…„“€ Empty(varadr: –…‹…);
+    €—€‹
+      New;
+      current.clen := 0;
+      current.tcmd := ¬®­αβ._ECMD;
+      current.varadr := varadr
+    …– Empty;
+
+–…„“€ OutByte(byte: –…‹…);
+    €—€‹
+      New;
+      current.clen := 1;
+      Code[ccount] := CHR(byte);
+      (ccount)
+    …– OutByte;
+
+–…„“€ OutInt(int: –…‹…);
+    €—€‹
+      New;
+      current.clen := 4;
+      sys.PUT(sys.ADR(Code[ccount]), int);
+      (ccount, 4)
+    …– OutInt;
+
+–…„“€ PushEAX;
+    €—€‹
+      OutByte(50H);
+      current.tcmd := ¬®­αβ._PUSHEAX
+    …– PushEAX;
+
+–…„“€ PushECX;
+    €—€‹
+      OutByte(51H);
+      current.tcmd := ¬®­αβ._PUSHECX
+    …– PushECX;
+
+–…„“€ PushEDX;
+    €—€‹
+      OutByte(52H);
+      current.tcmd := ¬®­αβ._PUSHEDX
+    …– PushEDX;
+
+–…„“€ PopEAX;
+    €—€‹
+      OutByte(58H);
+      current.tcmd := ¬®­αβ._POPEAX
+    …– PopEAX;
+
+–…„“€ PopECX;
+    €—€‹
+      OutByte(59H);
+      current.tcmd := ¬®­αβ._POPECX
+    …– PopECX;
+
+–…„“€ PopEDX;
+    €—€‹
+      OutByte(5AH);
+      current.tcmd := ¬®­αβ._POPEDX
+    …– PopEDX;
+
+–…„“€ OutCode(cmd: ¬‘βΰ.β‘βΰ®ª );
+    …… a, b: –…‹…;
+    €—€‹
+      New;
+      a := sys.ADR(Code[ccount]);
+      b := a;
+      InitArray(a, cmd);
+      ccount := a - b + ccount;
+      current.clen := a - b
+    …– OutCode;
+
+–…„“€ Del*(last: β€α¬“§¥«);
+    €—€‹
+      last.α«¥¤γξι := current.α«¥¤γξι;
+      …‘‹ current = asmlist.―®α«¥¤­¨© ’ƒ„€
+        asmlist.―®α«¥¤­¨© := last
+      …–;
+      current := last
+    …– Del;
+
+–…„“€ NewLabel*(): –…‹…;
+    €—€‹
+      (Lcount)
+      ‚…“’ Lcount
+    …– NewLabel;
+
+–…„“€ PushCall*(asmline: β€α¬“§¥«);
+    €—€‹
+      New;
+      callstk[topstk][0] := asmline;
+      callstk[topstk][1] := current;
+      (topstk)
+    …– PushCall;
+
+–…„“€ Param*;
+    €—€‹
+      current := callstk[topstk - 1][0]
+    …– Param;
+
+–…„“€ EndCall*;
+    €—€‹
+      current := callstk[topstk - 1][1];
+      „…(topstk)
+    …– EndCall;
+
+–…„“€ Init*(mem: PROC; UI: –…‹…);
+    …… nov: β€α¬“§¥«;
+    €—€‹
+      dcount := 4;
+      dll := UI = 1;
+      gui := UI = 2;
+      con := UI = 3;
+      kos := UI = 4;
+      elf := UI = 5;
+      obj := UI = 6;
+      MemErr := mem;
+      Lcount := ¬®­αβ._HALT;
+      asmlist := ¬‘―¨α.‘®§¤ βμ();
+      MemErr(asmlist = “‘’);
+      NEW(nov);
+      MemErr(nov = “‘’);
+      ¬‘―¨α.„®΅ Ά¨βμ(asmlist, nov);
+      current := nov;
+    …– Init;
+
+–…„“€ datastr(str: ¬‘βΰ.β‘βΰ®ª );
+    …… i, n: –…‹…;
+    €—€‹
+      i := 0;
+      n := LEN(str);
+      € (i < n) & (str[i] # 0X) „…‹€’
+        Data[dcount] := str[i];
+        (dcount);
+        (i)
+      …–;
+      Data[dcount] := 0X;
+      (dcount)
+    …– datastr;
+
+–…„“€ dataint(n: –…‹…);
+    €—€‹
+      sys.PUT(sys.ADR(Data[dcount]), n);
+      (dcount, 4)
+    …– dataint;
+
+–…„“€ jmp*(jamp: ‘‚; label: –…‹…);
+    …… n: –…‹…;
+    €—€‹
+      New;
+      ‚›€’ jamp ‡
+      |¬®­αβ._JMP, ¬®­αβ._CALL:
+        n := 5
+      |¬®­αβ._JE, ¬®­αβ._JLE, ¬®­αβ._JGE, ¬®­αβ._JG, ¬®­αβ._JL, ¬®­αβ._JNE:
+        Code[ccount] := 0FX;
+        (ccount);
+        n := 6
+      €—…
+      …–;
+      current.clen := n;
+      Code[ccount] := jamp;
+      (ccount);
+      current.codeadr := sys.ADR(Code[ccount]);
+      current.varadr := sys.ADR(Labels[label]);
+      current.tcmd := ¬®­αβ._JCMD;
+      current.short := ‘’€;
+      (ccount, 4)
+    …– jmp;
+
+–…„“€ jmplong(jamp: ‘‚; label: –…‹…);
+    €—€‹
+      jmp(jamp, label);
+      current.short := ‹†
+    …– jmplong;
+
+–…„“€ Label*(label: –…‹…);
+    €—€‹
+      New;
+      current.varadr := sys.ADR(Labels[label]);
+      current.tcmd := ¬®­αβ._LCMD
+    …– Label;
+
+–…„“€ CmdN(Number: –…‹…);
+    €—€‹
+      New;
+      current.clen := 4;
+      current.codeadr := sys.ADR(Code[ccount]);
+      current.varadr := sys.ADR(Labels[Number]);
+      current.tcmd := ¬®­αβ._OCMD;
+      (ccount, 4)
+    …– CmdN;
+
+–…„“€ IntByte(bytecode, intcode: ¬‘βΰ.β‘βΰ®ª ; n: –…‹…);
+    €—€‹
+      …‘‹ (n <= 127) & (n >= -128) ’ƒ„€
+        OutCode(bytecode);
+        OutByte(n)
+      €—…
+        OutCode(intcode);
+        OutInt(n)
+      …–
+    …– IntByte;
+
+–…„“€ DropFpu*(long: “‹…‚);
+    €—€‹
+      …‘‹ long ’ƒ„€
+        OutCode("83EC08DD1C24")
+      €—…
+        OutCode("83EC04D91C24")
+      …–;
+      „…(fpu)
+    …– DropFpu;
+
+–…„“€ AfterRet(func, float: “‹…‚; callconv, parsize: –…‹…);
+    €—€‹
+      …‘‹ callconv = ¬®­αβ._cdecl ’ƒ„€
+        OutCode("81C4");
+        OutInt(parsize)
+      …–;
+      …‘‹ func ’ƒ„€
+        …‘‹ float ’ƒ„€
+          OutCode("83EC08DD1C24")
+        €—…
+          PushEAX
+        …–
+      …–
+    …– AfterRet;
+
+–…„“€ FpuSave(local: –…‹…);
+    …… i: –…‹…;
+    €—€‹
+      …‘‹ fpu > maxfpu ’ƒ„€
+        maxfpu := fpu
+      …–;
+      „‹ i := 1 „ fpu „…‹€’
+        IntByte("DD5D", "DD9D", -local - i * 8)
+      …–
+    …– FpuSave;
+
+–…„“€ Incfpu;
+    €—€‹
+        …‘‹ fpu >= ¬®­αβ._FREGS ’ƒ„€
+            ¬“β¨«μ.θ¨΅®§_¥η βμ(SCAN.αβΰ®ª _­®¬, SCAN.―®§¨ζ_£«®΅, 97);
+            ¬ΰ®ζ.‚λε®¤(1)
+        …–;
+        (fpu);
+        isfpu := ‘’€
+    …– Incfpu;
+
+–…„“€ FpuLoad(local: –…‹…; float: “‹…‚);
+    …… i: –…‹…;
+    €—€‹
+      „‹ i := fpu „ 1  -1 „…‹€’
+        IntByte("DD45", "DD85", -local - i * 8)
+      …–;
+      …‘‹ float ’ƒ„€
+        Incfpu;
+        OutCode("DD042483C408")
+      …–
+    …– FpuLoad;
+
+–…„“€ Call*(proc: –…‹…; func, float: “‹…‚; callconv, ccall, bases, level, parsize, local: –…‹…);
+    …… i: –…‹…;
+    €—€‹
+      …‘‹ ccall # 0 ’ƒ„€
+        „‹ i := level „ level - bases + ORD(ccall = 1) + 1  -1 „…‹€’
+          IntByte("FF75", "FFB5", 4 * i + 4)
+        …–;
+        …‘‹ ccall = 1 ’ƒ„€
+          OutByte(55H)
+        …–
+      …–;
+      FpuSave(local);
+      jmplong(¬®­αβ._CALL, proc);
+      AfterRet(func, float, callconv, parsize);
+      FpuLoad(local, func & float)
+    …– Call;
+
+–…„“€ CallRTL(Proc: –…‹…);
+    €—€‹
+      New;
+      current.clen := 5;
+      Code[ccount] := ¬®­αβ._CALL;
+      (ccount);
+      current.codeadr := sys.ADR(Code[ccount]);
+      current.varadr := sys.ADR(RtlProc[Proc]);
+      current.tcmd := ¬®­αβ._JCMD;
+      (ccount, 4)
+    …– CallRTL;
+
+–…„“€ PushInt*(n: –…‹…);
+    €—€‹
+      OutByte(68H);
+      CmdN(n)
+    …– PushInt;
+
+–…„“€ Prolog*(exename: ¬‘βΰ.β‘βΰ®ª );
+    €—€‹
+      ExecName := exename;
+      Labels[¬®­αβ._hInstance] := -dcount;
+      dataint(0);
+      Labels[¬®­αβ._SELFNAME] := -dcount;
+      datastr(exename);
+      Label(¬®­αβ._START);
+      …‘‹ dll ’ƒ„€
+        OutCode("558BEC837D0C007507");
+        CallRTL(¬®­αβ._close);
+        OutCode("EB06837D0C017409B801000000C9C20C00")
+      ‹…‘‹ obj ’ƒ„€
+        OutCode("558BEC")
+      …–;
+      start := asmlist.―®α«¥¤­¨©(β€α¬“§¥«)
+    …– Prolog;
+
+–…„“€ AddRec*(base: –…‹…);
+    €—€‹
+      (reccount);
+      recarray[reccount] := base
+    …– AddRec;
+
+–…„“€ CmpOpt(inv: “‹…‚): –…‹…;
+    …… cur: β€α¬“§¥«; c: –…‹…;
+    €—€‹
+      c := ORD(Code[current.―ΰ¥¤λ¤γι.―ΰ¥¤λ¤γι(β€α¬“§¥«).cmd]);
+      …‘‹ inv ’ƒ„€
+        …‘‹ ODD(c) ’ƒ„€
+          „…(c)
+        €—…
+          (c)
+        …–
+      …–;
+      cur := current;
+      ‚’’
+        cur.tcmd := 0;
+        cur.clen := 0;
+        cur := cur.―ΰ¥¤λ¤γι(β€α¬“§¥«)
+      ‘‚€ cur.tcmd = ¬®­αβ._ICMP1;
+      cur.tcmd := 0;
+      cur.clen := 0
+      ‚…“’ c - 16
+    …– CmpOpt;
+
+–…„“€ ifwh*(L: –…‹…);
+    …… c: –…‹…;
+    €—€‹
+      …‘‹ current.―ΰ¥¤λ¤γι(β€α¬“§¥«).tcmd = ¬®­αβ._ICMP2 ’ƒ„€
+        c := CmpOpt(‘’€);
+        OutCode("5A583BC2");
+        jmp(CHR(c), L)
+      €—…
+        PopECX;
+        OutCode("85C9");
+        jmp(¬®­αβ._JE, L)
+      …–
+    …– ifwh;
+
+–…„“€ PushConst*(Number: –…‹…);
+    €—€‹
+      IntByte("6A", "68", Number);
+      current.―ΰ¥¤λ¤γι(β€α¬“§¥«).varadr := Number
+    …– PushConst;
+
+–…„“€ IfWhile*(L: –…‹…; orop: “‹…‚);
+    …… c, L1: –…‹…;
+    €—€‹
+      L1 := NewLabel();
+      …‘‹ current.―ΰ¥¤λ¤γι(β€α¬“§¥«).tcmd = ¬®­αβ._ICMP2 ’ƒ„€
+        c := CmpOpt(orop);
+        OutCode("5A583BC2");
+        jmp(CHR(c), L1);
+        PushConst(ORD(orop))
+      €—…
+        PopECX;
+        OutCode("85C9");
+        …‘‹ orop ’ƒ„€
+          jmp(¬®­αβ._JE, L1)
+        €—…
+          jmp(¬®­αβ._JNE, L1)
+        …–;
+        PushECX
+      …–;
+      jmp(¬®­αβ._JMP, L);
+      Label(L1)
+    …– IfWhile;
+
+–…„“€ newrec*;
+        €—€‹
+          CallRTL(¬®­αβ._newrec)
+        …– newrec;
+
+–…„“€ disprec*;
+        €—€‹
+          CallRTL(¬®­αβ._disprec)
+        …– disprec;
+
+–…„“€ String*(Number, Len: –…‹…; str: ¬‘βΰ.β‘βΰ®ª );
+    €—€‹
+      Labels[Number] := -dcount;
+      …‘‹ Len > 1 ’ƒ„€
+        datastr(str)
+      ‹…‘‹ Len = 1 ’ƒ„€
+        dataint(ORD(str[0]))
+      €—…
+        dataint(0)
+      …–
+    …– String;
+
+–…„“€ InsertFpuInit;
+    …… t: β€α¬“§¥«;
+    €—€‹
+      …‘‹ isfpu ’ƒ„€
+        t := current;
+        current := fpucmd;
+        …‘‹ maxfpu > 0 ’ƒ„€
+          OutCode("83EC");
+          OutByte(maxfpu * 8)
+        …–;
+        OutCode("DBE3");
+        current := t
+      …–
+    …– InsertFpuInit;
+
+–…„“€ ProcBeg*(Number, Local: –…‹…; Module: “‹…‚);
+    …… i: –…‹…;
+    €—€‹
+      …‘‹ Module ’ƒ„€
+        OutCode("EB0C");
+        Label(Number + 3);
+        PushInt(Number + 2);
+        jmplong(¬®­αβ._JMP, ¬®­αβ._HALT);
+        Label(Number + 1)
+      €—…
+        Label(Number)
+      …–;
+      OutCode("558BEC");
+      …‘‹ Local > 12 ’ƒ„€
+        IntByte("83EC", "81EC", Local);
+        OutCode("8BD733C08BFCB9");
+        OutInt(ASR(Local, 2));
+        OutCode("9CFCF3AB8BFA9D")
+      €—…
+        „‹ i := 4 „ Local  4 „…‹€’
+          OutCode("6A00")
+        …–
+      …–;
+      fpucmd := current;
+      fpu := 0;
+      maxfpu := 0;
+      isfpu := ‹†
+    …– ProcBeg;
+
+–…„“€ Leave*;
+    €—€‹
+      OutByte(0C9H);
+      InsertFpuInit
+    …– Leave;
+
+–…„“€ ProcEnd*(Number, Param: –…‹…; func, float: “‹…‚);
+    €—€‹
+      …‘‹ func & ~float ’ƒ„€
+        PopEAX
+      …–;
+      OutByte(0C9H);
+      …‘‹ Param = 0 ’ƒ„€
+        OutByte(0C3H)
+      €—…
+        OutByte(0C2H);
+        OutByte(Param MOD 256);
+        OutByte(ASR(Param, 8))
+      …–;
+      InsertFpuInit
+    …– ProcEnd;
+
+–…„“€ Module*(Name: ¬‘βΰ.β‘βΰ®ª ; Number: –…‹…);
+    €—€‹
+      String(Number + 2, LENGTH(Name), Name);
+      jmplong(¬®­αβ._JMP, Number + 1)
+    …– Module;
+
+–…„“€ Asm*(s: ¬‘βΰ.β‘βΰ®ª );
+    €—€‹
+      OutCode(s)
+    …– Asm;
+
+–…„“€ GlobalAdr*(offset: –…‹…);
+    €—€‹
+      OutByte(0BAH);
+      OutInt(offset);
+      current.codeadr := sys.ADR(Code[ccount - 4]);
+      current.tcmd := ¬®­αβ._GCMD;
+      PushEDX
+    …– GlobalAdr;
+
+–…„“€ Mono*(Number: –…‹…);
+    €—€‹
+      PopEDX;
+      PushInt(Number)
+    …– Mono;
+
+–…„“€ StrMono*;
+    €—€‹
+      PopEDX;
+      OutCode("6A02");
+      PushEDX
+    …– StrMono;
+
+–…„“€ Not*;
+    €—€‹
+      PopECX;
+      OutCode("85C90F94C1");
+      PushECX
+    …– Not;
+
+–…„“€ NegSet*;
+    €—€‹
+      OutCode("F71424")
+    …– NegSet;
+
+–…„“€ Int*(Op: –…‹…);
+    €—€‹
+      PopEDX;
+      ‚›€’ Op ‡
+      |¬®­αβ._®―«ξα:  OutCode("011424")
+      |¬®­αβ._®―¨­γα: OutCode("291424")
+      |¬®­αβ._®―“¬­®¦:  OutCode("58F7EA"); PushEAX
+      €—…
+      …–
+    …– Int;
+
+–…„“€ Set*(Op: –…‹…);
+    €—€‹
+      PopEDX;
+      OutCode("58");
+      ‚›€’ Op ‡
+      |¬®­αβ._®―«ξα:  OutCode("0B")
+      |¬®­αβ._®―¨­γα: OutCode("F7D223")
+      |¬®­αβ._®―“¬­®¦:  OutCode("23")
+      |¬®­αβ._®―„¥«: OutCode("33")
+      €—…
+      …–;
+      OutCode("C2");
+      PushEAX
+    …– Set;
+
+–…„“€ Setfpu*(newfpu: –…‹…);
+    €—€‹
+      fpu := newfpu
+    …– Setfpu;
+
+–…„“€ PushFlt*(x: „‹‚…™);
+    …… f: β‚¥ι„«¨­; L: –…‹…;
+    €—€‹
+      sys.PUT(sys.ADR(f), x);
+      Incfpu;
+      …‘‹ x = 0.0D0 ’ƒ„€
+        OutCode("D9EE")
+      ‹…‘‹ x = 1.0D0 ’ƒ„€
+        OutCode("D9E8")
+      €—…
+        L := NewLabel();
+        Labels[L] := -dcount;
+        dataint(f[0]);
+        dataint(f[1]);
+        OutByte(0BAH);
+        CmdN(L);
+        OutCode("DD02")
+      …–
+    …– PushFlt;
+
+–…„“€ farith*(op: –…‹…);
+    …… n: –…‹…;
+    €—€‹
+      OutCode("DE");
+      ‚›€’ op ‡
+      |¬®­αβ._®―«ξα:  n := 0C1H
+      |¬®­αβ._®―¨­γα: n := 0E9H
+      |¬®­αβ._®―“¬­®¦:  n := 0C9H
+      |¬®­αβ._®―„¥«: n := 0F9H
+      €—…
+      …–;
+      OutByte(n);
+      „…(fpu)
+    …– farith;
+
+–…„“€ fcmp*(Op: –…‹…);
+    …… n: –…‹…;
+    €—€‹
+      OutCode("33C9DED9DFE09E0F");
+      ‚›€’ Op ‡
+      |¬®­αβ._®― Ά­®: n := 94H
+      |¬®­αβ._®―¥ Ά­®: n := 95H
+      |¬®­αβ._®―¥­μθ¥: n := 97H
+      |¬®­αβ._®―®«μθ¥: n := 92H
+      |¬®­αβ._lexLE: n := 93H
+      |¬®­αβ._lexGE: n := 96H
+      €—…
+      …–;
+      „…(fpu, 2);
+      OutByte(n);
+      OutByte(0C1H);
+      PushECX
+    …– fcmp;
+
+–…„“€ fneg*;
+    €—€‹
+      OutCode("D9E0")
+    …– fneg;
+
+–…„“€ OnError*(n: –…‹…);
+    €—€‹
+      OutByte(68H);
+      OutInt(¬“β¨«μ.αβΰ®ª  * 16 + n);
+      jmplong(¬®­αβ._JMP, ¬“β¨«μ.ξ­¨β + 3)
+    …– OnError;
+
+–…„“€ idivmod*(opmod: “‹…‚);
+    €—€‹
+      PopECX;
+      …‘‹ opmod ’ƒ„€
+        OutCode("58E32E538BD833D9C1FB1F8BD0C1FA1F83F9FF750C3D0000008075055B6A00EB1AF7F985DB740685D2740203D15B52EB0A")
+      €—…
+        OutCode("58E32C538BD833D9C1FB1F8BD0C1FA1F83F9FF750B3D0000008075045B50EB19F7F985DB740585D27401485B50EB0A")
+      …–;
+      OnError(8)
+    …– idivmod;
+
+–…„“€ rset*;
+    €—€‹
+      CallRTL(¬®­αβ._rset);
+      PushEAX
+    …– rset;
+
+–…„“€ inset*;
+    €—€‹
+      CallRTL(¬®­αβ._inset);
+      PushEAX
+    …– inset;
+
+–…„“€ Dup*;
+    €—€‹
+      PopEDX;
+      PushEDX;
+      PushEDX
+    …– Dup;
+
+–…„“€ Inclusion*(Op: –…‹…);
+    €—€‹
+      PopEDX;
+      PopEAX;
+      …‘‹ Op = ¬®­αβ._lexLE ’ƒ„€
+        PushEDX
+      €—…
+        PushEAX
+      …–;
+      OutCode("0BC25933C8E3046A00EB026A01")
+    …– Inclusion;
+
+–…„“€ NegInt*;
+    €—€‹
+      OutCode("F71C24")
+    …– NegInt;
+
+–…„“€ CmpInt*(Op: –…‹…);
+    …… n: –…‹…;
+    €—€‹
+      OutCode("33C95A583BC20F"); current.tcmd := ¬®­αβ._ICMP1;
+      ‚›€’ Op ‡
+      |¬®­αβ._®― Ά­®: n := 94H
+      |¬®­αβ._®―¥ Ά­®: n := 95H
+      |¬®­αβ._®―¥­μθ¥: n := 9CH
+      |¬®­αβ._®―®«μθ¥: n := 9FH
+      |¬®­αβ._lexLE: n := 9EH
+      |¬®­αβ._lexGE: n := 9DH
+      €—…
+      …–;
+      OutByte(n);
+      OutCode("C1"); current.tcmd := ¬®­αβ._ICMP2;
+      PushECX;
+    …– CmpInt;
+
+–…„“€ CallVar*(func, float: “‹…‚; callconv, parsize, local: –…‹…);
+    €—€‹
+      PopEDX;
+      OutCode("8B1285D2750A");
+      OnError(2);
+      FpuSave(local);
+      OutCode("FFD2");
+      AfterRet(func, float, callconv, parsize);
+      FpuLoad(local, func & float)
+    …– CallVar;
+
+–…„“€ LocalAdr*(offset, bases: –…‹…);
+    €—€‹
+      …‘‹ bases = 0 ’ƒ„€
+        Empty(offset);
+        OutCode("8BD5")
+      €—…
+        IntByte("8B55", "8B95", 4 * bases + 4)
+      …–;
+      IntByte("83C2", "81C2", offset);
+      PushEDX;
+      …‘‹ bases = 0 ’ƒ„€
+        Empty(offset)
+      …–
+    …– LocalAdr;
+
+–…„“€ Field*(offset: –…‹…);
+    €—€‹
+      …‘‹ offset # 0 ’ƒ„€
+        IntByte("830424", "810424", offset)
+      …–
+    …– Field;
+
+–…„“€ DerefType*(n: –…‹…);
+    €—€‹
+      IntByte("8B5424", "8B9424", n);
+      OutCode("FF72FC")
+    …– DerefType;
+
+–…„“€ Guard*(T: –…‹…; Check: “‹…‚);
+    €—€‹
+      …‘‹ Check ’ƒ„€
+        PopEAX;
+        OutCode("85C074");
+        …‘‹ T <= 127 ’ƒ„€
+          OutByte(9)
+        €—…
+          OutByte(12)
+        …–;
+        PushEAX
+      …–;
+      PushConst(T);
+      PushEAX;
+      CallRTL(¬®­αβ._checktype);
+      …‘‹ Check ’ƒ„€
+        PushEAX
+      €—…
+        OutCode("85C0750A");
+        OnError(3)
+      …–
+    …– Guard;
+
+–…„“€ StProc*(proc: –…‹…);
+    €—€‹
+      ‚›€’ proc ‡
+      |¬®­αβ._stINC:   PopEDX; OutCode("590111")
+      |¬®­αβ._stDEC:   PopEDX; OutCode("592911")
+      |¬®­αβ._stINC1:  PopEDX; OutCode("FF02")
+      |¬®­αβ._stDEC1:  PopEDX; OutCode("FF0A")
+      |¬®­αβ._stINCL:  PopEDX; OutCode("580910")
+      |¬®­αβ._stEXCL:  PopEDX; OutCode("582110")
+      |¬®­αβ._sysBIT:  PopECX; OutCode("5A585333DB8A18E3050FABD3EB030FB3D388185B")
+      |¬®­αβ._stPACK:  OutCode("DB04245A5ADD02D9FDDD1A"); isfpu := ‘’€
+      |¬®­αβ._stPACK1: OutCode("DB04245A5AD902D9FDD91A"); isfpu := ‘’€
+      |¬®­αβ._stUNPK:  PopEDX; OutCode("59DD01D9F4DD19DB1A"); isfpu := ‘’€
+      |¬®­αβ._stUNPK1: PopEDX; OutCode("59D901D9F4D919DB1A"); isfpu := ‘’€
+      |¬®­αβ._stCOPY:  CallRTL(¬®­αβ._strcopy)
+      |¬®­αβ._sysMOVE: CallRTL(¬®­αβ._savearr)
+      €—…
+      …–
+    …– StProc;
+
+–…„“€ Assert*(proc, assrt: –…‹…);
+    €—€‹
+      PopEDX;
+      OutCode("85D2751368");
+      OutInt(¬“β¨«μ.αβΰ®ª  * 16 + 1);
+      PushInt(¬“β¨«μ.ξ­¨β + 2);
+      …‘‹ proc = ¬®­αβ._stASSERT ’ƒ„€
+        OutCode("6A026A")
+      €—…
+        OutCode("6A016A")
+      …–;
+      OutByte(assrt);
+      jmplong(¬®­αβ._JMP, ¬®­αβ._ASSRT)
+    …– Assert;
+
+–…„“€ StFunc*(func: –…‹…);
+    €—€‹
+      ‚›€’ func ‡
+      |¬®­αβ._stABS:    PopEDX; OutCode("85D27D02F7DA"); PushEDX
+      |¬®­αβ._stFABS:   OutCode("D9E1")
+      |¬®­αβ._stFLT:    OutCode("DB0424"); PopEAX; Incfpu;
+      |¬®­αβ._stFLOOR:  OutCode("83EC06D93C2466812424FFF366810C24FFF7D92C2483C402D9FCDB1C24"); „…(fpu)
+      |¬®­αβ._stODD:    OutCode("83242401")
+      |¬®­αβ._stROR:    PopECX; OutCode("58D3C8"); PushEAX
+      |¬®­αβ._stASR:    PopECX; OutCode("58D3F8"); PushEAX
+      |¬®­αβ._stLSL:    PopECX; OutCode("58D3E0"); PushEAX
+      |¬®­αβ._stLSR:    PopECX; OutCode("58D3E8"); PushEAX
+      |¬®­αβ._stORD:    PopEDX; OutCode("85D274036A015A"); PushEDX
+      |¬®­αβ._stLENGTH: CallRTL(¬®­αβ._length); PushEAX
+      |¬®­αβ._sysBIT:   PopEDX; OutCode("5933C08A010FA3D072046A00EB026A01")
+      €—…
+      …–
+    …– StFunc;
+
+–…„“€ Load*(T: –…‹…);
+    …… lastcmd: β€α¬“§¥«; offset: –…‹…;
+
+      –…„“€ del;
+      €—€‹
+        lastcmd.tcmd := 0;
+        offset := lastcmd.varadr;
+        lastcmd := lastcmd.―ΰ¥¤λ¤γι(β€α¬“§¥«);
+        € lastcmd.tcmd # ¬®­αβ._ECMD „…‹€’
+          lastcmd.clen := 0;
+          lastcmd.tcmd := 0;
+          lastcmd := lastcmd.―ΰ¥¤λ¤γι(β€α¬“§¥«)
+        …–;
+        lastcmd.tcmd := 0
+      …– del;
+
+    €—€‹
+  lastcmd := current;
+  ‚›€’ T ‡
+  |¬®­αβ._β–¥«®¥, ¬®­αβ._TSET, ¬®­αβ._β“ª § β¥«μ, ¬®­αβ._TPROC:
+    …‘‹ lastcmd.tcmd = ¬®­αβ._ECMD ’ƒ„€
+      del;
+      IntByte("8B55", "8B95", offset);
+      PushEDX
+    €—…
+      PopEDX;
+      OutCode("FF32")
+    …–
+  |¬®­αβ._β‘¨¬Ά®«, ¬®­αβ._βγ«¥Ά®:
+    …‘‹ lastcmd.tcmd = ¬®­αβ._ECMD ’ƒ„€
+      del;
+      OutCode("33D28A");
+      IntByte("55", "95", offset);
+      PushEDX
+    €—…
+      PopEDX;
+      OutCode("33C98A0A");
+      PushECX
+    …–
+  |¬®­αβ._β„«¨­‚¥ι:
+    …‘‹ lastcmd.tcmd = ¬®­αβ._ECMD ’ƒ„€
+      del;
+      IntByte("DD45", "DD85", offset)
+    €—…
+      PopEDX;
+      OutCode("DD02")
+    …–;
+    Incfpu
+  |¬®­αβ._β‚¥ι¥αβΆ:
+    …‘‹ lastcmd.tcmd = ¬®­αβ._ECMD ’ƒ„€
+      del;
+      IntByte("D945", "D985", offset)
+    €—…
+      PopEDX;
+      OutCode("D902")
+    …–;
+    Incfpu
+  |¬®­αβ._TCARD16:
+    …‘‹ lastcmd.tcmd = ¬®­αβ._ECMD ’ƒ„€
+      del;
+      OutCode("33D2668B");
+      IntByte("55", "95", offset);
+      PushEDX
+    €—…
+      PopEDX;
+      OutCode("33C9668B0A");
+      PushECX
+    …–
+  €—…
+  …–
+    …– Load;
+
+–…„“€ Save*(T: –…‹…);
+    €—€‹
+      ‚›€’ T ‡
+      |¬®­αβ._β–¥«®¥, ¬®­αβ._TSET, ¬®­αβ._β“ª § β¥«μ, ¬®­αβ._TPROC:
+        PopEDX;
+        OutCode("588910")
+      |¬®­αβ._β‘¨¬Ά®«, ¬®­αβ._β‘βΰ®ª , ¬®­αβ._βγ«¥Ά®:
+        PopEDX;
+        OutCode("588810")
+      |¬®­αβ._TCARD16:
+        PopEDX;
+        OutCode("58668910")
+      |¬®­αβ._β„«¨­‚¥ι:
+        PopEDX;
+        OutCode("DD1A");
+        „…(fpu)
+      |¬®­αβ._β‚¥ι¥αβΆ:
+        PopEDX;
+        OutCode("D91A");
+        „…(fpu)
+      |¬®­αβ._β‡ ―¨αμ:
+        CallRTL(¬®­αβ._saverec);
+        OutCode("83F800750A");
+        OnError(4)
+      |¬®­αβ._β αα¨Ά:
+        CallRTL(¬®­αβ._savearr)
+      €—…
+      …–
+    …– Save;
+
+–…„“€ OpenArray*(A: tIdx; n: –…‹…);
+    …… i: –…‹…;
+    €—€‹
+      PopEDX;
+      „‹ i := n - 1 „ 0  -1 „…‹€’
+        PushConst(A[i])
+      …–;
+      PushEDX
+    …– OpenArray;
+
+–…„“€ OpenIdx*(n: –…‹…);
+    €—€‹
+      OutByte(54H);
+      …‘‹ n > 1 ’ƒ„€
+        PushConst(n);
+        CallRTL(¬®­αβ._arrayidx)
+      €—…
+        CallRTL(¬®­αβ._arrayidx1)
+      …–;
+      PopEDX;
+      OutCode("85D2750A");
+      OnError(5);
+      PushEDX;
+    …– OpenIdx;
+
+–…„“€ FixIdx*(len, size: –…‹…);
+    €—€‹
+      PopEDX;
+      IntByte("5983FA", "5981FA", len);
+      OutCode("720A");
+      OnError(5);
+      …‘‹ size > 1 ’ƒ„€
+        IntByte("6BD2", "69D2", size)
+      …–;
+      OutCode("03D1");
+      PushEDX
+    …– FixIdx;
+
+–…„“€ Idx*;
+    €—€‹
+      PopEDX;
+      PopECX;
+      OutCode("03D1");
+      PushEDX
+    …– Idx;
+
+–…„“€ DupLoadCheck*;
+    €—€‹
+      PopEDX;
+      OutCode("528B125285D2750A");
+      OnError(6)
+    …– DupLoadCheck;
+
+–…„“€ DupLoad*;
+    €—€‹
+      PopEDX;
+      OutCode("528B12");
+      PushEDX;
+    …– DupLoad;
+
+–…„“€ CheckNIL*;
+    €—€‹
+      PopEDX;
+      OutCode("85D2750A");
+      OnError(6);
+      PushEDX;
+    …– CheckNIL;
+
+–…„“€ ExtArray*(A: tIdx; n, m: –…‹…);
+    …… i: –…‹…;
+    €—€‹
+      „‹ i := n - 1 „ 0  -1 „…‹€’
+        PushConst(A[i])
+      …–;
+      OutByte(54H);
+      PushConst(n);
+      PushConst(m);
+      CallRTL(¬®­αβ._arrayrot)
+    …– ExtArray;
+
+–…„“€ ADR*(dim: –…‹…);
+    €—€‹
+      …‘‹ dim > 0 ’ƒ„€
+        PopEDX;
+        OutCode("83C4");
+        OutByte(dim * 4);
+        PushEDX
+      …–
+    …– ADR;
+
+–…„“€ Len*(dim: –…‹…);
+    €—€‹
+      PopEDX;
+      …‘‹ dim < 0 ’ƒ„€
+        PushConst(-dim)
+      ‹…‘‹ dim > 1 ’ƒ„€
+        PopEDX;
+        OutCode("83C4");
+        OutByte((dim - 1) * 4);
+        PushEDX
+      …–
+    …– Len;
+
+–…„“€ For*(inc: “‹…‚; …… LBeg, LEnd: –…‹…);
+    €—€‹
+      LEnd := NewLabel();
+      LBeg := NewLabel();
+      Label(LBeg);
+      OutCode("8B14248B4424043910");
+      …‘‹ inc ’ƒ„€
+        jmp(¬®­αβ._JG, LEnd)
+      €—…
+        jmp(¬®­αβ._JL, LEnd)
+      …–
+    …– For;
+
+–…„“€ NextFor*(step, LBeg, LEnd: –…‹…);
+    €—€‹
+      OutCode("8B542404");
+      …‘‹ step = 1 ’ƒ„€
+        OutCode("FF02")
+      ‹…‘‹ step = -1 ’ƒ„€
+        OutCode("FF0A")
+      €—…
+        IntByte("8302", "8102", step)
+      …–;
+      jmp(¬®­αβ._JMP, LBeg);
+      Label(LEnd);
+      OutCode("83C408")
+    …– NextFor;
+
+–…„“€ CaseLabel*(a, b, LBeg: –…‹…);
+    …… L: –…‹…;
+    €—€‹
+      L := NewLabel();
+      IntByte("83FA", "81FA", a);
+      …‘‹ a = b ’ƒ„€
+        jmp(¬®­αβ._JNE, L)
+      €—…
+        jmp(¬®­αβ._JL, L);
+        IntByte("83FA", "81FA", b);
+        jmp(¬®­αβ._JG, L)
+      …–;
+      jmp(¬®­αβ._JMP, LBeg);
+      Label(L)
+    …– CaseLabel;
+
+–…„“€ Drop*;
+    €—€‹
+      PopEDX
+    …– Drop;
+
+–…„“€ strcmp*(Op, LR: –…‹…);
+    €—€‹
+      ‚›€’ Op ‡
+      |¬®­αβ._®― Ά­®: PushConst(0)
+      |¬®­αβ._®―¥ Ά­®: PushConst(1)
+      |¬®­αβ._®―¥­μθ¥: PushConst(2)
+      |¬®­αβ._®―®«μθ¥: PushConst(3)
+      |¬®­αβ._lexLE: PushConst(4)
+      |¬®­αβ._lexGE: PushConst(5)
+      €—…
+      …–;
+      ‚›€’ LR ‡
+      |-1: CallRTL(¬®­αβ._lstrcmp)
+      | 0: CallRTL(¬®­αβ._strcmp)
+      | 1: CallRTL(¬®­αβ._rstrcmp)
+      €—…
+      …–;
+      PushEAX
+    …– strcmp;
+
+–…„“€ Optimization;
+    …… cur: β€α¬“§¥«; flag: “‹…‚;
+    €—€‹
+      cur := asmlist.―¥ΰΆλ©(β€α¬“§¥«);
+      € cur # “‘’ „…‹€’
+        flag := ‹†;
+        ‚›€’ cur.tcmd ‡
+        |¬®­αβ._PUSHEAX:
+          flag := cur.α«¥¤γξι(β€α¬“§¥«).tcmd = ¬®­αβ._POPEAX
+        |¬®­αβ._PUSHECX:
+          flag := cur.α«¥¤γξι(β€α¬“§¥«).tcmd = ¬®­αβ._POPECX
+        |¬®­αβ._PUSHEDX:
+          flag := cur.α«¥¤γξι(β€α¬“§¥«).tcmd = ¬®­αβ._POPEDX
+        €—…
+        …–;
+        …‘‹ flag ’ƒ„€
+          cur.clen := 0;
+          cur.tcmd := 0;
+          cur := cur.α«¥¤γξι(β€α¬“§¥«);
+          cur.clen := 0;
+          cur.tcmd := 0
+        …–;
+        cur := cur.α«¥¤γξι(β€α¬“§¥«)
+      …–
+    …– Optimization;
+
+–…„“€ WriteKOS(FName: €‘‘‚ ‡ ‘‚; stk, size, datasize, gsize: –…‹…; obj: “‹…‚);
+    ‘’ strsize = 2048;
+    …… Header: β‡ £®«®Ά®ª®«¨΅ΰ¨; F, i, filesize, filebuf, a, sec, adr, size2: –…‹…; cur: β€α¬“§¥«;
+        Coff: β‡ £®«®Ά®ª‚¨­; sym: €‘‘‚ 18 * 4 ‡ ‘‚; FileName: ¬‘βΰ.β‘βΰ®ª ;
+    €—€‹
+        F := ¬” ©«.‘®§¤ βμ(FName);
+        …‘‹ F <= 0 ’ƒ„€
+            Err(1)
+        …–;
+        OutFilePos := ¬“β¨«μ. ¬οβμ®Ά_®«γη(Align(size, 4) + datasize + 1000H);
+        filebuf := OutFilePos;
+        ¬θ.MemErr(OutFilePos = 0);
+
+        …‘‹ ~obj ’ƒ„€
+            Header.menuet01 := "MENUET01";
+            Header.ver := 1;
+            Header.start := sys.SIZE(β‡ £®«®Ά®ª®«¨΅ΰ¨);
+            Header.size := Align(size, 4) + datasize;
+            Header.mem := Header.size + stk + gsize + strsize * 2 + 1000H;
+            Header.sp := Header.size + gsize + stk;
+            Header.param := Header.sp;
+            Header.path := Header.param + strsize;
+
+            Write(sys.ADR(Header), sys.SIZE(β‡ £®«®Ά®ª®«¨΅ΰ¨));
+
+            cur := asmlist.―¥ΰΆλ©(β€α¬“§¥«);
+            € cur # “‘’ „…‹€’
+                Write(sys.ADR(Code[cur.cmd]), cur.clen);
+                cur := cur.α«¥¤γξι(β€α¬“§¥«)
+            …–;
+            Fill(Align(size, 4) - size, 0X);
+            Write(sys.ADR(Data), datasize);
+            WriteF(F, filebuf, OutFilePos - filebuf)
+        €—…
+            size2 := size;
+            size := Align(size, 4) - sys.SIZE(β‡ £®«®Ά®ª®«¨΅ΰ¨);
+            Coff.Machine := IntToCard16(014CH);
+            Coff.α¥ªζ¨¨_η¨α«® := IntToCard16(3);
+            Coff.¤ β ‚ΰ¥¬ο_θβ ¬― := ¬®­αβ._¤ β ;
+            Coff.SizeOfOptionalHeader := IntToCard16(0);
+            Coff.Characteristics := IntToCard16(0184H);
+
+            Coff.text.α¥ªζ_¨¬ο := ".flat";
+            Coff.text.size := 0;
+            Coff.text.adr := 0;
+            Coff.text.sizealign := size;
+            Coff.text.OAPfile := 8CH;
+            Coff.text.reserved6 := size + datasize + 8CH;
+            Coff.text.reserved7 := 0;
+            Coff.text.attrflags := 40300020H;
+
+            Coff.data.α¥ªζ_¨¬ο := ".data";
+            Coff.data.size := 0;
+            Coff.data.adr := 0;
+            Coff.data.sizealign := datasize;
+            Coff.data.OAPfile := size + 8CH;
+            Coff.data.reserved6 := 0;
+            Coff.data.reserved7 := 0;
+            Coff.data.reserved8 := 0;
+            Coff.data.attrflags := 0C0300040H;
+
+            Coff.bss.α¥ªζ_¨¬ο := ".bss";
+            Coff.bss.size := 0;
+            Coff.bss.adr := 0;
+            Coff.bss.sizealign := gsize;
+            Coff.bss.OAPfile := 0;
+            Coff.bss.reserved6 := 0;
+            Coff.bss.reserved7 := 0;
+            Coff.bss.reserved8 := 0;
+            Coff.bss.attrflags := 0C03000C0H;
+
+            size := Align(size2, 4);
+            rcount := 0;
+            cur := asmlist.―¥ΰΆλ©(β€α¬“§¥«);
+            € cur # “‘’ „…‹€’
+                …‘‹ cur.tcmd ‚•„’ {¬®­αβ._OCMD, ¬®­αβ._GCMD} ’ƒ„€
+                    sys.GET(sys.ADR(Code[cur.cmd]), a);
+                    …‘‹ a < size ’ƒ„€
+                        a := a - sys.SIZE(β‡ £®«®Ά®ª®«¨΅ΰ¨);
+                        sec := 1
+                    ‹…‘‹ a < size + datasize ’ƒ„€
+                        a := a - size;
+                        sec := 2
+                    €—…
+                        a := a - size - datasize;
+                        sec := 3
+                    …–;
+                    sys.PUT(sys.ADR(Code[cur.cmd]), a);
+                    sys.PUT(sys.ADR(Reloc[rcount]), cur. ¤ΰ - sys.SIZE(β‡ £®«®Ά®ª®«¨΅ΰ¨));
+                    (rcount, 4);
+                    sys.PUT(sys.ADR(Reloc[rcount]), sec);
+                    (rcount, 4);
+                    sys.PUT(sys.ADR(Reloc[rcount]), 06X); (rcount);
+                    sys.PUT(sys.ADR(Reloc[rcount]), 00X); (rcount);
+                …–;
+                Write(sys.ADR(Code[cur.cmd]), cur.clen);
+                cur := cur.α«¥¤γξι(β€α¬“§¥«)
+            …–;
+            size := size2;
+            Fill(Align(size, 4) - size2, 0X);
+            Write(sys.ADR(Data), datasize);
+            Coff.text.reserved8 := rcount DIV 10;
+            Coff.PointerToSymbolTable := Coff.text.reserved6 + rcount;
+            Coff.NumberOfSymbols := 4;
+
+            WriteF(F, sys.ADR(Coff), sys.SIZE(β‡ £®«®Ά®ª‚¨­));
+            WriteF(F, filebuf, OutFilePos - filebuf);
+            WriteF(F, sys.ADR(Reloc), rcount);
+
+            adr := sys.ADR(sym);
+            InitArray(adr, "4558504F52545300000000000100000002002E666C617400000000000000010000000300");
+            InitArray(adr, "2E64617461000000000000000200000003002E6273730000000000000000030000000300");
+            sys.PUT(sys.ADR(sym) + 8, Labels[¬®­αβ._Exports] - sys.SIZE(β‡ £®«®Ά®ª®«¨΅ΰ¨));
+
+            WriteF(F, sys.ADR(sym), LEN(sym));
+            i := 4;
+            WriteF(F, sys.ADR(i), 4)
+        …–;
+        ¬” ©«.‡ ªΰλβμ(F)
+    …– WriteKOS;
+
+–…„“€ WriteELF(FName: €‘‘‚ ‡ ‘‚; code, data, glob: –…‹…);
+    ……
+        F, res, delta, filebuf: –…‹…;
+        cur: β€α¬“§¥«;
+        bytes: €‘‘‚ 817H + 55FH + 4900 ‡ ‘‚;
+
+    –…„“€ Add(offset: –…‹…);
+        …… m: –…‹…;
+        €—€‹
+                sys.GET(sys.ADR(bytes[offset]), m);
+                sys.PUT(sys.ADR(bytes[offset]), m + delta)
+        …– Add;
+
+    –…„“€ Sub(offset: –…‹…);
+        …… m: –…‹…;
+        €—€‹
+            sys.GET(sys.ADR(bytes[offset]), m);
+            sys.PUT(sys.ADR(bytes[offset]), m - delta)
+        …– Sub;
+
+    €—€‹
+        F := ¬” ©«.βªΰλβμ(felf, 0);
+        …‘‹ F = 0 ’ƒ„€
+            Err(3)
+        …–;
+        …‘‹ ¬” ©«.—¨β βμ(F, sys.ADR(bytes), 817H + 55FH + 4900) # 817H + 55FH + 4900 ’ƒ„€
+            Err(4)
+        …–;
+        ¬” ©«.‡ ªΰλβμ(F);
+        bytes[0] := 7FX;
+
+        „…(code, 13);
+
+        delta := Align(data, 1000H) - 100000H;
+        Add(0020H); Add(00A4H); Add(00A8H); Add(0258H); Add(02B8H); Add(0308H); Add(0494H); Add(049CH);
+        Add(04A4H); Add(0679H); Add(0681H); Add(06A4H); Add(06B0H); Add(06BAH); Add(0703H); Add(0762H);
+        Add(0774H); Add(0786H); Add(0819H); Add(0823H); Add(17C5H); Add(17E5H); Add(17E9H); Add(1811H);
+        Add(1839H); Add(1861H); Add(1889H); Add(1A25H); Add(1A95H); Add(1AA5H); Add(1C05H); Add(1C55H);
+        Add(1CE5H); Add(1D09H); Add(1D15H); Add(1D25H); Add(1D35H); Add(1D55H);
+
+        delta := Align(glob, 1000H) - 3200000H;
+        Add(00A8H); Add(17EDH); Add(1C09H); Add(1D25H);
+
+        delta := Align(code, 1000H) - 100000H;
+        Add(0020H); Add(0084H); Add(0088H); Add(0098H); Add(009CH); Add(00A0H); Add(00B8H); Add(00BCH);
+        Add(00C0H); Add(0118H); Add(011CH); Add(0120H); Add(0258H); Add(0278H); Add(02B8H); Add(0308H);
+        Add(048CH); Add(0494H); Add(049CH); Add(04A4H); Add(04ACH); Add(04B4H); Add(04BCH); Add(04C4H);
+        Add(04CCH); Add(04D4H); Add(04DCH); Add(04E4H); Add(04ECH); Add(04F4H); Add(04FCH); Add(0504H);
+        Add(050CH); Add(0514H); Add(052BH); Add(0544H); Add(054EH); Add(0554H); Add(055EH); Add(056EH);
+        Add(057EH); Add(058EH); Add(059EH); Add(05AEH); Add(05BEH); Add(05CEH); Add(05DEH); Add(05EEH);
+        Add(05FEH); Add(060EH); Add(061EH); Add(062EH); Add(064CH); Add(0651H); Add(0679H); Add(0681H);
+        Add(0686H); Add(068CH); Add(06A4H); Add(06ABH); Add(06B0H); Add(06BAH); Add(06D7H); Add(06EBH);
+        Add(0703H); Add(0762H); Add(0774H); Add(0786H); Add(0819H); Add(0823H); Add(0828H); Add(082DH);
+        Sub(0845H); Sub(087BH); Add(08DEH); Add(08E8H); Sub(0916H); Add(0C52H); Add(0C8AH); Add(0D0AH);
+        Add(1635H); Add(1655H); Add(1659H); Add(167DH); Add(1681H); Add(16A5H); Add(16A9H); Add(16CDH);
+        Add(16D1H); Add(16F5H); Add(16F9H); Add(171DH); Add(1721H); Add(1745H); Add(1749H); Add(176DH);
+        Add(1771H); Add(1795H); Add(1799H); Add(17BDH); Add(17C1H); Add(17E5H); Add(17E9H); Add(1811H);
+        Add(1839H); Add(1861H); Add(1889H); Add(1985H); Add(1995H); Add(19A5H); Add(19B5H); Add(19C5H);
+        Add(19D5H); Add(19E5H); Add(19F5H); Add(1A05H); Add(1A15H); Add(1A25H); Add(1A55H); Add(1A65H);
+        Add(1A75H); Add(1A95H); Add(1AA5H); Add(1AD5H); Add(1AE5H); Add(1AF5H); Add(1B05H); Add(1B25H);
+        Add(1B35H); Add(1B45H); Add(1B55H); Add(1B65H); Add(1B75H); Add(1BB5H); Add(1BC5H); Add(1BE5H);
+        Add(1C05H); Add(1C15H); Add(1C55H); Add(1C75H); Add(1CA5H); Add(1CB5H); Add(1CE5H); Add(1D05H);
+        Add(1D15H); Add(1D25H); Add(1D35H); Add(1D55H); Add(1D75H); Add(1D89H);
+
+        OutFilePos := ¬“β¨«μ. ¬οβμ®Ά_®«γη(code + data + 8000H);
+        filebuf := OutFilePos;
+        ¬θ.MemErr(OutFilePos = 0);
+
+        Write(sys.ADR(bytes), 817H);
+        Fill(2DDH, 90X);
+        cur := asmlist.―¥ΰΆλ©(β€α¬“§¥«);
+        € cur # “‘’ „…‹€’
+            Write(sys.ADR(Code[cur.cmd]), cur.clen);
+            cur := cur.α«¥¤γξι(β€α¬“§¥«)
+        …–;
+        Fill(Align(code, 1000H) - code, 90X);
+        Write(sys.ADR(bytes[817H]), 55FH);
+        Write(sys.ADR(Data), data);
+        Fill(Align(data, 1000H) - data, 0X);
+        Write(sys.ADR(bytes[817H + 55FH + 55FH]), 0DC5H);
+
+        F := ¬” ©«.‘®§¤ βμ(FName);
+        …‘‹ F <= 0 ’ƒ„€
+            Err(1)
+        …–;
+        WriteF(F, filebuf, OutFilePos - filebuf);
+        ¬” ©«.‡ ªΰλβμ(F)
+    …– WriteELF;
+
+–…„“€ FixLabels(FName: €‘‘‚ ‡ ‘‚; stk, gsize, glob: –…‹…);
+    ……
+        size, asize, i, rdatasize, RCount, n, temp, temp2, temp3: –…‹…;
+        cur: β€α¬“§¥«;
+        R: β‘¬¥ι¥­¨¥;
+        c: ‘‚;
+    €—€‹
+        dcount := Align(dcount, 4);
+        …‘‹ dll ’ƒ„€
+            LoadAdr := 10000000H;
+            PackExport(ExecName)
+        ‹…‘‹ con ‹ gui ’ƒ„€
+            LoadAdr := 400000H
+        ‹…‘‹ kos ‹ obj ’ƒ„€
+            LoadAdr := sys.SIZE(β‡ £®«®Ά®ª®«¨΅ΰ¨)
+        ‹…‘‹ elf ’ƒ„€
+            LoadAdr := 134514420 + 1024;
+            (gsize, 1024)
+        …–;
+
+        …‘‹ dll ‹ con ‹ gui ’ƒ„€
+            rdatasize := 0DAH + etable.size;
+            size := 1000H + LoadAdr;
+        ‹…‘‹ kos ‹ elf ‹ obj ’ƒ„€
+            rdatasize := 0;
+            size := LoadAdr
+        …–;
+
+        Optimization;
+        temp2 := size;
+        cur := asmlist.―¥ΰΆλ©(β€α¬“§¥«);
+        € cur # “‘’ „…‹€’
+            cur. ¤ΰ := size;
+            …‘‹ cur.tcmd = ¬®­αβ._LCMD ’ƒ„€
+                sys.PUT(cur.varadr, size)
+            …–;
+            size := size + cur.clen;
+            cur := cur.α«¥¤γξι(β€α¬“§¥«)
+        …–;
+
+        size := temp2;
+        cur := asmlist.―¥ΰΆλ©(β€α¬“§¥«);
+        € cur # “‘’ „…‹€’
+            cur. ¤ΰ := size;
+            …‘‹ cur.tcmd = ¬®­αβ._LCMD ’ƒ„€
+                sys.PUT(cur.varadr, size)
+            ‹…‘‹ (cur.tcmd = ¬®­αβ._JCMD) & cur.short ’ƒ„€
+                sys.GET(cur.varadr, i);
+                temp3 := i - cur.α«¥¤γξι(β€α¬“§¥«). ¤ΰ;
+                …‘‹ (-131 <= temp3) & (temp3 <= 123) ’ƒ„€
+                    sys.GET(cur(β€α¬“§¥«).codeadr - 1, c);
+                    …‘‹ c = ¬®­αβ._JMP ’ƒ„€
+                        sys.PUT(cur(β€α¬“§¥«).codeadr - 1, 0EBX)
+                    €—… (*JE, JNE, JLE, JGE, JG, JL*)
+                        sys.PUT(cur(β€α¬“§¥«).codeadr - 2, ORD(c) - 16);
+                        sys.PUT(cur(β€α¬“§¥«).codeadr - 1, temp3);
+                        „…(cur(β€α¬“§¥«).codeadr)
+                    …–;
+                    cur.clen := 2
+                …–
+            …–;
+            size := size + cur.clen;
+            cur := cur.α«¥¤γξι(β€α¬“§¥«)
+        …–;
+
+        …‘‹ dll ‹ con ‹ gui ’ƒ„€
+            asize := Align(size, 1000H)
+        ‹…‘‹ kos ‹ obj ’ƒ„€
+            asize := Align(size, 4)
+        ‹…‘‹ elf ’ƒ„€
+            asize := 134514420 + 6508 + Align(size - 13 - LoadAdr, 1000H)
+        …–;
+
+        „‹ i := 0 „ Lcount „…‹€’
+            …‘‹ Labels[i] < 0 ’ƒ„€
+                Labels[i] := -Labels[i] + asize + Align(rdatasize, 1000H)
+            …–
+        …–;
+
+        temp := dcount;
+        …‘‹ elf ’ƒ„€
+            asize := asize + Align(dcount, 1000H) + 64 + 1024;
+            sys.PUT(sys.ADR(Code[glob + 1]), asize - 1024);
+            dcount := 0
+        …–;
+
+        …‘‹ dll ’ƒ„€
+            asize := asize - LoadAdr + 0DAH;
+            „‹ i := 0 „ etable.namecount - 1 „…‹€’
+                etable.arradr[i] := Labels[etable.arradr[i]] - LoadAdr;
+                etable.arrnameptr[i] := etable.arrnameptr[i] + asize
+            …–;
+            etable.arradroffset := etable.arradroffset + asize;
+            etable.arrnameptroffset := etable.arrnameptroffset + asize;
+            etable.arrnumoffset := etable.arrnumoffset + asize;
+            etable.dllnameoffset := etable.dllnameoffset + asize;
+            asize := asize + LoadAdr - 0DAH
+        …–;
+        …‘‹ dll ‹ con ‹ gui ’ƒ„€
+            Labels[¬®­αβ._LoadLibrary] := asize + 4;
+            Labels[¬®­αβ._GetProcAddress] := asize;
+            R.Page := 0;
+            R.Size := 0;
+            RCount := 0;
+        …–;
+        cur := asmlist.―¥ΰΆλ©(β€α¬“§¥«);
+
+        „‹ i := 0 „ LEN(RtlProc) - 1 „…‹€’
+            RtlProc[i] := Labels[RtlProc[i]]
+        …–;
+
+        temp3 := asize + Align(rdatasize, 1000H) + dcount;
+        € cur # “‘’ „…‹€’
+            ‚›€’ cur.tcmd ‡
+                |¬®­αβ._JCMD:
+                    sys.GET(cur.varadr, i);
+                    sys.PUT(cur.codeadr, i - cur.α«¥¤γξι(β€α¬“§¥«). ¤ΰ)
+                |¬®­αβ._GCMD:
+                    sys.GET(cur.codeadr, i);
+                    sys.PUT(cur.codeadr, i + temp3)
+                |¬®­αβ._OCMD:
+                    sys.MOVE(cur.varadr, cur.codeadr, 4)
+            €—…
+            …–;
+            …‘‹ dll & (cur.tcmd ‚•„’ {¬®­αβ._GCMD, ¬®­αβ._OCMD}) ’ƒ„€
+                n := cur. ¤ΰ - LoadAdr;
+                …‘‹ ASR(n, 12) = ASR(R.Page, 12) ’ƒ„€
+                    R.reloc[RCount] := IntToCard16(n MOD 1000H + 3000H);
+                    (RCount);
+                    (R.Size, 2)
+                €—…
+                    …‘‹ R.Size # 0 ’ƒ„€
+                        PutReloc(R)
+                    …–;
+                    R.Page := ASR(n, 12) * 1000H;
+                    R.Size := 10;
+                    R.reloc[0] := IntToCard16(n MOD 1000H + 3000H);
+                    RCount := 1
+                …–
+            …–;
+            cur := cur.α«¥¤γξι(β€α¬“§¥«)
+        …–;
+        …‘‹ R.Size # 0 ’ƒ„€
+            PutReloc(R)
+        …–;
+        …‘‹ dll ‹ con ‹ gui ’ƒ„€
+            WritePE(FName, stk, size - 1000H - LoadAdr, dcount, rdatasize, gsize)
+        ‹…‘‹ kos ‹ obj ’ƒ„€
+            WriteKOS(FName, Align(stk, 4), size, dcount, gsize, obj)
+        ‹…‘‹ elf ’ƒ„€
+            WriteELF(FName, size - LoadAdr, temp, gsize)
+        …–
+    …– FixLabels;
+
+–…„“€ OutStringZ(str: €‘‘‚ ‡ ‘‚);
+    …… i: –…‹…;
+    €—€‹
+      New;
+      current.clen := LENGTH(str);
+      „‹ i := 0 „ current.clen - 1 „…‹€’
+        Code[ccount] := str[i];
+        (ccount)
+      …–;
+      Code[ccount] := 0X;
+      (ccount);
+      (current.clen)
+    …– OutStringZ;
+
+–…„“€ Epilog*(gsize: –…‹…; FName: €‘‘‚ ‡ ‘‚; stk: –…‹…);
+    …… i, glob: –…‹…;
+    €—€‹
+      glob := 0;
+      gsize := Align(gsize, 4) + 4;
+      COPY(FName, OutFile);
+      Labels[¬®­αβ._RTABLE] := -dcount;
+      dataint(recarray[0]);
+      „‹ i := 1 „ reccount „…‹€’
+        dataint(recarray[i])
+      …–;
+      current := start;
+      …‘‹ con ‹ gui ‹ dll ’ƒ„€
+        PushInt(¬®­αβ._LoadLibrary);
+        PushInt(¬®­αβ._GetProcAddress);
+        OutCode("5859FF31FF3054")
+      ‹…‘‹ elf ’ƒ„€
+        OutCode("6800000000");
+        glob := current.cmd;
+      ‹…‘‹ kos ‹ obj ’ƒ„€
+        OutByte(54H)
+      …–;
+      GlobalAdr(0);
+      PushConst(ASR(gsize, 2));
+      PushInt(¬®­αβ._RTABLE);
+      PushInt(¬®­αβ._SELFNAME);
+      CallRTL(¬®­αβ._init);
+      current := asmlist.―®α«¥¤­¨©(β€α¬“§¥«);
+      …‘‹ dll ’ƒ„€
+        OutCode("B801000000C9C20C00")
+      …–;
+      …‘‹ obj ’ƒ„€
+        OutCode("B801000000C9C20400")
+      …–;
+      OutCode("EB05");
+      Label(¬®­αβ._ASSRT);
+      CallRTL(¬®­αβ._assrt);
+      OutCode("EB09");
+      Label(¬®­αβ._HALT);
+      OutCode("6A006A00");
+      CallRTL(¬®­αβ._assrt);
+      OutCode("6A00");
+      CallRTL(¬®­αβ._halt);
+      OutByte(90H);
+      …‘‹ obj ’ƒ„€
+        Label(¬®­αβ._Exports);
+        CmdN(¬®­αβ._szSTART); CmdN(¬®­αβ._START);
+        CmdN(¬®­αβ._szversion); OutInt(stk);
+        „‹ i := 0 „ kosexpcount - 1 „…‹€’
+          CmdN(kosexp[i].NameLabel); CmdN(kosexp[i].Adr)
+        …–;
+        OutInt(0);
+        Label(¬®­αβ._szSTART); OutStringZ("START");
+        Label(¬®­αβ._szversion); OutStringZ("version");
+        „‹ i := 0 „ kosexpcount - 1 „…‹€’
+          Label(kosexp[i].NameLabel);
+          OutStringZ(kosexp[i].Name.¨¬ο_γ§« )
+        …–
+      …–;
+      FixLabels(FName, stk, gsize, glob)
+    …– Epilog;
+
+…– X86.
