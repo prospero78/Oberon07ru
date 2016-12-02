@@ -36,7 +36,7 @@
 
 ’›
 
-  tLabel = “€‡€’…‹ € ‡€‘ (¬‘―¨α.β“§¥«)
+  β¥βª  = “€‡€’…‹ € ‡€‘ (¬‘―¨α.β“§¥«)
     a, b: –…‹…
   …–;
 
@@ -1281,11 +1281,11 @@
     …– ―„«ο_“αβ;
 
 –…„“€ CheckLabel(a, b: –…‹…; Labels: ¬‘―¨α.βγ‘―¨α®ª): “‹…‚;
-    …… cur: tLabel;
+    …… cur: β¥βª ;
     €—€‹
-      cur := Labels.―¥ΰΆλ©(tLabel);
+      cur := Labels.―¥ΰΆλ©(β¥βª );
       € (cur # “‘’) & ((b < cur.a) ‹ (a > cur.b)) „…‹€’
-        cur := cur.α«¥¤γξι(tLabel)
+        cur := cur.α«¥¤γξι(β¥βª )
       …–
       ‚…“’ cur = “‘’
     …– CheckLabel;
@@ -1307,7 +1307,7 @@
     …– LabelVal;
 
 –…„“€ Label(int: “‹…‚; Labels: ¬‘―¨α.βγ‘―¨α®ª; LBeg: –…‹…);
-    …… a, b: –…‹…; label: tLabel; line, col: –…‹…;
+    …… a, b: –…‹…; label: β¥βª ; line, col: –…‹…;
     €—€‹
       ¬”ª.®®ΰ¤_“αβ(line, col);
       LabelVal(a, int);
