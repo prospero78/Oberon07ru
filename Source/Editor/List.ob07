@@ -1,0 +1,145 @@
+﻿(*
+    Copyright 2013 Krotov Anton
+
+    This file is part of Editor.
+
+    Editor is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Editor is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Editor. If not, see <http://www.gnu.org/licenses/>.
+*)
+
+MODULE List;
+
+TYPE
+
+  ITEM* = POINTER TO rITEM;
+
+  rITEM* = RECORD
+    Next*, Prev*: ITEM;
+    Destroy*: PROCEDURE (this: ITEM)
+  END;
+
+  LIST* = POINTER TO rLIST;
+
+  rLIST* = RECORD
+    First*, Last*: ITEM;
+    Count*: INTEGER
+  END;
+
+PROCEDURE Index*(this: LIST; idx: INTEGER): ITEM;
+VAR cur: ITEM;
+BEGIN
+  IF idx > this.Count - 1 THEN
+    cur := NIL
+  ELSE
+    cur := this.First;
+    WHILE idx > 0 DO
+      cur := cur.Next;
+      DEC(idx)
+    END
+  END
+  RETURN cur
+END Index;
+
+PROCEDURE Push*(this: LIST; item: ITEM);
+BEGIN
+  IF this.Count = 0 THEN
+    this.First := item;
+    item.Prev := NIL
+  ELSE
+    this.Last.Next := item;
+    item.Prev := this.Last
+  END;
+  INC(this.Count);
+  this.Last := item;
+  item.Next := NIL
+END Push;
+
+PROCEDURE Destroy(this: ITEM);
+BEGIN
+  IF this.Destroy # NIL THEN
+    this.Destroy(this)
+  END;
+  DISPOSE(this)
+END Destroy;
+
+PROCEDURE Pop*(this: LIST);
+BEGIN
+  IF this.Count # 0 THEN
+    this.Last := this.Last.Prev;
+    IF this.Count = 1 THEN
+      Destroy(this.First);
+      this.Last := NIL;
+      this.First := NIL
+    ELSE
+      Destroy(this.Last.Next)
+    END;
+    DEC(this.Count);
+    IF this.Last # NIL THEN
+      this.Last.Next := NIL
+    END
+  END
+END Pop;
+
+PROCEDURE DelItem*(this: LIST; item: ITEM);
+BEGIN
+  IF (item # this.First) & (item # this.Last) THEN
+    item.Prev.Next := item.Next;
+    item.Next.Prev := item.Prev;
+    DEC(this.Count);
+    Destroy(item)
+  ELSIF this.Count = 1 THEN
+
+  ELSIF item = this.Last THEN
+    Pop(this)
+  ELSIF item = this.First THEN
+    item.Next.Prev := NIL;
+    this.First := item.Next;
+    DEC(this.Count);
+    Destroy(item)
+  END
+END DelItem;
+
+PROCEDURE Insert*(this: LIST; item, prev: ITEM);
+BEGIN
+  IF prev # this.Last THEN
+    item.Next := prev.Next;
+    item.Prev := prev;
+    prev.Next := item;
+    item.Next.Prev := item;
+    INC(this.Count)
+  ELSE
+    Push(this, item)
+  END
+END Insert;
+
+PROCEDURE CreateList*(nov: LIST);
+BEGIN
+  IF nov # NIL THEN
+    nov.First := NIL;
+    nov.Last := NIL;
+    nov.Count := 0
+  END
+END CreateList;
+
+PROCEDURE Clear*(this: LIST);
+BEGIN
+  WHILE this.Count > 0 DO Pop(this) END
+END Clear;
+
+PROCEDURE DestroyList*(this: LIST);
+BEGIN
+  Clear(this);
+  DISPOSE(this)
+END DestroyList;
+
+END List.

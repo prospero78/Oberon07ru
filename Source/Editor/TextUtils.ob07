@@ -1,0 +1,509 @@
+﻿(*
+    Copyright 2013 Krotov Anton
+
+    This file is part of Editor.
+
+    Editor is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Editor is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Editor. If not, see <http://www.gnu.org/licenses/>.
+*)
+
+MODULE TextUtils;
+
+IMPORT Line, sys := SYSTEM, API;
+
+CONST
+
+  cKey* = 0; cStId* = 1; cNum* = 2; cStr* = 3; cCom* = 4;
+  cText* = 5; cBkText* = 6; cBkSel* = 7; cTextSel* = 8;
+  cBkCur* = 9; cBkNum* = 10; cTextNum* = 11;
+
+  ssShift* = 0; ssAlt* = 1; ssCtrl* = 2; ssLeft* = 3; ssRight* = 4;
+  ssMiddle* = 5; ssDouble* = 6; ssTouch* = 7; ssPen* = 8;
+
+  OPEN_R* = 0; OPEN_W* = 1; OPEN_RW* = 2;
+  OFS_MAXPATHNAME* = 128;
+
+  R2_NOT* = 6;
+  R2_COPYPEN* = 13;
+
+  CF_UNICODETEXT = 13;
+
+TYPE
+
+  TRect* = RECORD Left*, Top*, Right*, Bottom*: INTEGER END;
+
+  TColors* = ARRAY 12 OF INTEGER;
+
+  STRING = ARRAY 260 OF CHAR;
+
+  STRING8* = ARRAY 2048 OF CHAR;
+
+  POverlapped = POINTER TO OVERLAPPED;
+
+  OVERLAPPED = RECORD
+    Internal: INTEGER;
+    InternalHigh: INTEGER;
+    Offset: INTEGER;
+    OffsetHigh: INTEGER;
+    hEvent: INTEGER
+  END;
+
+  OFSTRUCT = RECORD
+    cBytes: CHAR;
+    fFixedDisk: CHAR;
+    nErrCode: sys.CARD16;
+    Reserved1: sys.CARD16;
+    Reserved2: sys.CARD16;
+    szPathName: ARRAY OFS_MAXPATHNAME OF CHAR
+  END;
+
+VAR
+
+  Colors: TColors; mainwnd: INTEGER;
+
+  TextOut*: PROCEDURE [winapi] (hdc, X, Y, Str, Count: INTEGER): INTEGER;
+  TextOutA*: PROCEDURE [winapi] (hdc, X, Y, Str, Count: INTEGER): INTEGER;
+  LineTo*: PROCEDURE [winapi] (hdc, x, y: INTEGER): INTEGER;
+  MoveToEx*: PROCEDURE [winapi] (hdc, x, y, p: INTEGER): INTEGER;
+  SetTextColor*: PROCEDURE [winapi] (hdc, color: INTEGER);
+  SetBkColor*: PROCEDURE [winapi] (hdc, color: INTEGER);
+  CreateSolidBrush*: PROCEDURE [winapi] (p1: INTEGER): INTEGER;
+  FillRect*: PROCEDURE [winapi] (hdc: INTEGER; lprc: TRect; hbr: INTEGER): INTEGER;
+  CreateFileW*: PROCEDURE [winapi] (lpFileName, dwDesiredAccess, dwShareMode,
+    lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile: INTEGER): INTEGER;
+  CloseHandle*: PROCEDURE [winapi] (hObject: INTEGER): INTEGER;
+  ReadFile*, WriteFile*: PROCEDURE [winapi] (hFile, Buffer, nNumberOfBytesToRead, lpNumberOfBytesRead: INTEGER;
+    lpOverlapped: POverlapped): INTEGER;
+  CreatePen*: PROCEDURE [winapi] (PenStyle, Width, Color: INTEGER): INTEGER;
+  SelectObject*, SetROP2*: PROCEDURE [winapi] (hdc, p2: INTEGER): INTEGER;
+  MessageBox*: PROCEDURE [winapi] (hWnd, lpText, lpCaption, uType: INTEGER): INTEGER;
+  DeleteObject*: PROCEDURE [winapi] (hObject: INTEGER): BOOLEAN;
+  GetCommandLine*: PROCEDURE [winapi] (): INTEGER;
+  GlobalLock: PROCEDURE [winapi] (hMem: INTEGER): INTEGER;
+  GlobalUnlock: PROCEDURE [winapi] (hMem: INTEGER): BOOLEAN;
+  CloseClipboard: PROCEDURE [winapi] (): BOOLEAN;
+  EmptyClipboard: PROCEDURE [winapi] (): BOOLEAN;
+  GetClipboardData: PROCEDURE [winapi] (uFormat: INTEGER): INTEGER;
+  SetClipboardData: PROCEDURE [winapi] (uFormat, hMem: INTEGER): INTEGER;
+  OpenClipboard: PROCEDURE [winapi] (hWndNewOwner: INTEGER): BOOLEAN;
+  IsClipboardFormatAvailable: PROCEDURE [winapi] (format: INTEGER): BOOLEAN;
+
+PROCEDURE SetMain*(main: INTEGER);
+BEGIN
+  mainwnd := main
+END SetMain;
+
+PROCEDURE strlen*(str: ARRAY OF Line.WCHAR): INTEGER;
+VAR n, i: INTEGER;
+BEGIN
+  n := LEN(str);
+  i := 0;
+  WHILE (i < n) & Line.notzero(str[i]) DO INC(i) END
+  RETURN i
+END strlen;
+
+PROCEDURE IsClip*(): BOOLEAN;
+VAR hglb: INTEGER;
+BEGIN
+  hglb := 0;
+  IF IsClipboardFormatAvailable(CF_UNICODETEXT) & OpenClipboard(mainwnd) THEN
+    hglb := GetClipboardData(CF_UNICODETEXT);
+    CloseClipboard()
+  END
+  RETURN hglb # 0
+END IsClip;
+
+PROCEDURE GetClip*(VAR Len: INTEGER): INTEGER;
+VAR hglb, lptstr, a: INTEGER; c0, c1: CHAR;
+BEGIN
+  lptstr := 0;
+  a := 0;
+  Len := 0;
+  IF IsClipboardFormatAvailable(CF_UNICODETEXT) & OpenClipboard(mainwnd) THEN
+    hglb := GetClipboardData(CF_UNICODETEXT);
+    IF hglb # 0 THEN
+      lptstr := GlobalLock(hglb);
+      IF lptstr # 0 THEN
+        a := lptstr;
+        REPEAT
+          sys.GET(a, c0); INC(a);
+          sys.GET(a, c1); INC(a)
+        UNTIL (c0 = 0X) & (c1 = 0X);
+        Len := (a - lptstr) DIV 2 - 1;
+        a := API.Alloc(64, Len * 2 + 4096);
+        sys.MOVE(lptstr, a, Len * 2);
+        GlobalUnlock(hglb)
+      END
+    END;
+    CloseClipboard()
+  END
+  RETURN a
+END GetClip;
+
+PROCEDURE PutClip*(adr: INTEGER);
+BEGIN
+  IF OpenClipboard(mainwnd) THEN
+    EmptyClipboard();
+    SetClipboardData(CF_UNICODETEXT, adr);
+    CloseClipboard()
+  END
+END PutClip;
+
+PROCEDURE IntToStr*(x: INTEGER; VAR str: ARRAY OF CHAR);
+VAR i, pos: INTEGER; buf: ARRAY 11 OF INTEGER;
+BEGIN
+  i := 0;
+  pos := 0;
+  REPEAT
+    buf[i] := x MOD 10;
+    x := x DIV 10;
+    INC(i)
+  UNTIL x = 0;
+  REPEAT
+    DEC(i);
+    str[pos] := (CHR(buf[i] + ORD("0")));
+    INC(pos)
+  UNTIL i = 0;
+  str[pos] := 0X
+END IntToStr;
+
+PROCEDURE StrToInt*(str: ARRAY OF CHAR; VAR err: BOOLEAN): INTEGER;
+CONST maxINT = 7FFFFFFFH;
+VAR i, res, first: INTEGER;
+
+  PROCEDURE digit(ch: CHAR): BOOLEAN;
+    RETURN (ch >= "0") & (ch <= "9")
+  END digit;
+
+BEGIN
+  res := 0;
+  err := FALSE;
+  i := 0;
+  WHILE (str[i] <= 20X) & (str[i] # 0X) DO
+    INC(i)
+  END;
+  first := i;
+  WHILE ~err & digit(str[i]) DO
+    IF res > maxINT DIV 10 THEN
+      err := TRUE;
+      res := 0
+    ELSE
+      res := res * 10;
+      IF res > maxINT - (ORD(str[i]) - ORD("0")) THEN
+        err := TRUE;
+        res := 0
+      ELSE
+        res := res + (ORD(str[i]) - ORD("0"));
+        INC(i)
+      END;
+    END;
+  END;
+  err := err OR ~((str[i] <= 20X) & digit(str[first]))
+  RETURN res
+END StrToInt;
+
+PROCEDURE concat*(L, R: ARRAY OF CHAR; VAR Res: ARRAY OF CHAR);
+VAR i, j: INTEGER;
+BEGIN
+  i := 0;
+  WHILE (L[i] # 0X) & (i - 1 < LEN(Res)) DO
+    Res[i] := L[i];
+    INC(i)
+  END;
+  j := 0;
+  WHILE (R[j] # 0X) & (j + i - 1 < LEN(Res)) DO
+    Res[j + i] := R[j];
+    INC(j)
+  END;
+  Res[j + i] := 0X
+END concat;
+
+PROCEDURE Inv*(color: INTEGER): INTEGER;
+VAR s: SET;
+BEGIN
+  sys.GET(sys.ADR(color), s);
+  s := (-s) * {0..23};
+  sys.PUT(sys.ADR(color), s)
+  RETURN color
+END Inv;
+
+PROCEDURE RGB*(r, g, b: INTEGER): INTEGER;
+  RETURN r + LSL(g, 8) + LSL(b, 16)
+END RGB;
+
+PROCEDURE Lg*(n: INTEGER): INTEGER;
+VAR i: INTEGER;
+BEGIN
+  i := 2;
+  REPEAT
+    n := n DIV 10;
+    INC(i)
+  UNTIL n = 0
+  RETURN i
+END Lg;
+
+PROCEDURE min*(a, b: INTEGER): INTEGER;
+VAR res: INTEGER;
+BEGIN
+  IF a < b THEN
+    res := a
+  ELSE
+    res := b
+  END
+  RETURN res
+END min;
+
+PROCEDURE max*(a, b: INTEGER): INTEGER;
+VAR res: INTEGER;
+BEGIN
+  IF a > b THEN
+    res := a
+  ELSE
+    res := b
+  END
+  RETURN res
+END max;
+
+PROCEDURE GetColors*(VAR colors: TColors);
+BEGIN
+  colors := Colors
+END GetColors;
+
+PROCEDURE SetColors*(colors: TColors);
+BEGIN
+  Colors := colors
+END SetColors;
+
+PROCEDURE Utf16To8*(u16: Line.WCHAR; VAR n: INTEGER): INTEGER;
+VAR c: INTEGER;
+BEGIN
+  c := ORD(u16[0]) + LSL(ORD(u16[1]), 8);
+  IF c <= 7FH THEN
+    n := 1
+  ELSIF (c >= 80H) & (c <= 07FFH) THEN
+    c := ROR(LSL(c, 26), 18) + 8000H + ASR(c, 6) + 0C0H;
+    n := 2
+  ELSIF (c >= 800H) & (c <= 0FFFFH) THEN
+    c := LSL(ROR(LSL(c, 26), 26) + 80H, 16) + LSL(ROR(LSL(ASR(c, 6), 26), 26) + 80H, 8) + ASR(c, 12) + 0E0H;
+    n := 3
+  END
+  RETURN c
+END Utf16To8;
+
+PROCEDURE Utf8To16*(source: ARRAY OF CHAR; VAR dest: ARRAY OF CHAR): INTEGER;
+VAR i, j, L, u, N: INTEGER;
+BEGIN
+  L := LEN(source);
+  N := LEN(dest);
+  N := N - ORD(ODD(N)) - 1;
+  i := 0;
+  j := 0;
+  WHILE (i < L) & (j < N) & (source[i] # 0X) DO
+    CASE source[i] OF
+    |00X..7FX: u := ORD(source[i]);
+    |0C1X..0DFX:
+      u := LSL(ORD(source[i]) - 0C0H, 6);
+      IF i + 1 < L THEN
+        u := u + ROR(LSL(ORD(source[i + 1]), 26), 26);
+        INC(i)
+      END
+    |0E1X..0EFX:
+      u := LSL(ORD(source[i]) - 0E0H, 12);
+      IF i + 1 < L THEN
+        u := u + ROR(LSL(ORD(source[i + 1]), 26), 20);
+        INC(i)
+      END;
+      IF i + 1 < L THEN
+        u := u + ROR(LSL(ORD(source[i + 1]), 26), 26);
+        INC(i)
+        END
+(*  |0F1X..0F7X:
+    |0F9X..0FBX:
+    |0FDX:*)
+    ELSE
+    END;
+    INC(i);
+    sys.MOVE(sys.ADR(u), sys.ADR(dest[j]), 2);
+    INC(j, 2)
+  END;
+  IF j < N THEN
+    dest[j] := 0X;
+    dest[j + 1] := 0X
+  END
+  RETURN j DIV 2
+END Utf8To16;
+
+PROCEDURE Small*(ch: Line.WCHAR): BOOLEAN;
+  RETURN (ch[1] = 0X) & (ch[0] >= "a") & (ch[0] <= "z")
+END Small;
+
+PROCEDURE Capital*(ch: Line.WCHAR): BOOLEAN;
+  RETURN (ch[1] = 0X) & (ch[0] >= "A") & (ch[0] <= "Z")
+END Capital;
+
+PROCEDURE Digit*(ch: Line.WCHAR): BOOLEAN;
+  RETURN (ch[1] = 0X) & (ch[0] >= "0") & (ch[0] <= "9")
+END Digit;
+
+PROCEDURE Letter*(ch: Line.WCHAR): BOOLEAN;
+  RETURN Small(ch) OR Capital(ch)
+END Letter;
+
+PROCEDURE IdentChar*(ch: Line.WCHAR): BOOLEAN;
+  RETURN  Letter(ch) OR Digit(ch) OR (ch[0] = "_") & (ch[1] = 0X)
+END IdentChar;
+
+PROCEDURE CAP*(VAR ch: Line.WCHAR);
+BEGIN
+  IF Small(ch) THEN
+    ch[0] := CHR(ORD(ch[0]) - 32)
+  END
+END CAP;
+
+PROCEDURE LOW*(VAR ch: Line.WCHAR);
+BEGIN
+  IF Capital(ch) THEN
+    ch[0] := CHR(ORD(ch[0]) + 32)
+  END
+END LOW;
+
+PROCEDURE Close*(F: INTEGER);
+BEGIN
+  CloseHandle(F)
+END Close;
+
+PROCEDURE Write*(F, Buffer, Count: INTEGER): INTEGER;
+VAR res, n: INTEGER;
+BEGIN
+  IF WriteFile(F, Buffer, Count, sys.ADR(n), NIL) = 0 THEN
+    res := -1
+  ELSE
+    res := n
+  END
+  RETURN res
+END Write;
+
+PROCEDURE Read*(F, Buffer, Count: INTEGER): INTEGER;
+VAR res, n: INTEGER;
+BEGIN
+  IF ReadFile(F, Buffer, Count, sys.ADR(n), NIL) = 0 THEN
+    res := -1
+  ELSE
+    res := n
+  END
+  RETURN res
+END Read;
+
+PROCEDURE wcharNE(a, b: Line.WCHAR; Case: BOOLEAN): BOOLEAN;
+VAR res: BOOLEAN; a1, b1: Line.WCHAR;
+BEGIN
+  IF Case THEN
+    res := (a[0] # b[0]) OR (a[1] # b[1])
+  ELSE
+    a1 := a;
+    b1 := b;
+    CAP(a1);
+    CAP(b1);
+    res := (a1[0] # b1[0]) OR (a1[1] # b1[1])
+  END
+  RETURN res
+END wcharNE;
+
+PROCEDURE FindText*(haystack: ARRAY OF Line.WCHAR; hlen: INTEGER;
+  needle: ARRAY OF Line.WCHAR; nlen, hpos: INTEGER; Case, Frw: BOOLEAN): INTEGER;
+VAR res, i, j, c: INTEGER;
+BEGIN
+  i := hpos;
+  j := 0;
+  c := ORD(Frw) * 2 - 1;
+  IF Frw THEN
+    hlen := hlen - nlen + 1;
+  END;
+  WHILE ((i < hlen) & Frw OR (i >= 0) & ~Frw) & (j # nlen) DO
+    j := 0;
+    WHILE (j < nlen) DO
+      IF wcharNE(haystack[i + j], needle[j], Case) THEN
+        j := nlen
+      END;
+      INC(j)
+    END;
+    i := i + c
+  END;
+  IF j = nlen THEN
+    res := i - c
+  ELSE
+    res := -1
+  END
+  RETURN res
+END FindText;
+
+PROCEDURE GetProc(name: STRING; hMOD, adr: INTEGER);
+VAR H: INTEGER;
+BEGIN
+  H := API.GetProcAddress(hMOD, sys.ADR(name[0]));
+  ASSERT(H # 0);
+  sys.PUT(adr, H);
+END GetProc;
+
+PROCEDURE Init;
+VAR gdi32, user32, kernel32: INTEGER;
+BEGIN
+  gdi32 := API.LoadLibraryA(sys.ADR("gdi32.dll"));
+  ASSERT(gdi32 # 0);
+  GetProc("TextOutW", gdi32, sys.ADR(TextOut));
+  GetProc("TextOutA", gdi32, sys.ADR(TextOutA));
+  GetProc("LineTo", gdi32, sys.ADR(LineTo));
+  GetProc("MoveToEx", gdi32, sys.ADR(MoveToEx));
+  GetProc("SetTextColor", gdi32, sys.ADR(SetTextColor));
+  GetProc("SetBkColor", gdi32, sys.ADR(SetBkColor));
+  GetProc("CreateSolidBrush", gdi32, sys.ADR(CreateSolidBrush));
+  GetProc("CreatePen", gdi32, sys.ADR(CreatePen));
+  GetProc("SelectObject", gdi32, sys.ADR(SelectObject));
+  GetProc("SetROP2", gdi32, sys.ADR(SetROP2));
+  GetProc("DeleteObject", gdi32, sys.ADR(DeleteObject));
+  user32 := API.LoadLibraryA(sys.ADR("user32.dll"));
+  ASSERT(user32 # 0);
+  GetProc("FillRect", user32, sys.ADR(FillRect));
+  GetProc("MessageBoxW", user32, sys.ADR(MessageBox));
+  GetProc("OpenClipboard", user32, sys.ADR(OpenClipboard));
+  GetProc("CloseClipboard", user32, sys.ADR(CloseClipboard));
+  GetProc("EmptyClipboard", user32, sys.ADR(EmptyClipboard));
+  GetProc("GetClipboardData", user32, sys.ADR(GetClipboardData));
+  GetProc("SetClipboardData", user32, sys.ADR(SetClipboardData));
+  GetProc("IsClipboardFormatAvailable", user32, sys.ADR(IsClipboardFormatAvailable));
+  kernel32 := API.LoadLibraryA(sys.ADR("kernel32.dll"));
+  ASSERT(kernel32 # 0);
+  GetProc("CreateFileW", kernel32, sys.ADR(CreateFileW));
+  GetProc("CloseHandle", kernel32, sys.ADR(CloseHandle));
+  GetProc("ReadFile", kernel32, sys.ADR(ReadFile));
+  GetProc("WriteFile", kernel32, sys.ADR(WriteFile));
+  GetProc("GetCommandLineA", kernel32, sys.ADR(GetCommandLine));
+  GetProc("GlobalLock", kernel32, sys.ADR(GlobalLock));
+  GetProc("GlobalUnlock", kernel32, sys.ADR(GlobalUnlock))
+END Init;
+
+BEGIN
+  Init;
+  Colors[cText]    := RGB(  0,   0,   0);
+  Colors[cKey]     := RGB(  0,   0, 128);
+  Colors[cStId]    := RGB(  0, 128, 128);
+  Colors[cNum]     := RGB(128,   0,   0);
+  Colors[cStr]     := RGB(  0, 128,   0);
+  Colors[cCom]     := RGB(128,   0, 128);
+  Colors[cBkSel]   := RGB(  0,   0, 255);
+  Colors[cTextSel] := RGB(255, 255, 255);
+  Colors[cBkText]  := RGB(255, 255, 255);
+  Colors[cBkCur]   := RGB(255, 255, 200);
+  Colors[cTextNum] := RGB(  0,   0,   0);
+  Colors[cBkNum]   := RGB(230, 230, 230);
+END TextUtils.

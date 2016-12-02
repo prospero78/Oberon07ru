@@ -1,0 +1,1879 @@
+﻿(*
+    Copyright 2013 Krotov Anton
+
+    This file is part of Editor.
+
+    Editor is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Editor is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Editor. If not, see <http://www.gnu.org/licenses/>.
+*)
+
+MODULE Editor;
+
+IMPORT API, sys := SYSTEM, TE := TextEdit, TU := TextUtils,
+       Line, List, Text, Param, Dlg := Dialogs;
+
+CONST
+
+  wndclass = "editor";
+  wndcaption = "Oberon-07";
+
+  mfile = 100; snew = 101; sopen = 102; ssave = 103; ssaveas = 104; ssaveall = 105;
+  sclose = 106; scloseall = 107; sexit = 108;
+
+  medit = 200; sundo = 201; scut = 202; scopy = 203; spaste = 204; sdel = 205; sfind = 206;
+  ssearchagain = 207; sreplace = 208; sgoto = 209; sselectall = 210; scase = 211; supcase = 212;
+  slowcase = 213;
+
+  mview = 300; ssyntax = 301; snumbers = 302; soptions = 303;
+
+  mprog = 400; scompile = 401; srun = 402; sparam = 403; smain = 404; splatf = 405;
+  sstksize = 406; sstk1 = 407; sstk2 = 408; sstk4 = 409; sstk8 = 410; swin32con = 411;
+  swin32gui = 412; swin32dll = 413; slinux32 = 414; skolibri = 415; skolibridll = 416;
+
+  cundo = 501; ccut = 502; ccopy = 503; cpaste = 504; cdel = 505; cselectall = 506;
+
+  separator = 1;
+
+  mf_unchecked = 0;
+  mf_checked = 8;
+  mf_bycommand = 0;
+
+  mb_iconhand = 16;
+
+  WM_DESTROY = 2;
+  WM_COMMAND = 273;
+  WM_QUIT = 18;
+  WM_TIMER = 275;
+
+  cs_HRedraw = {1};
+  cs_VRedraw = {0};
+  CS_DBLCLKS = {3};
+  idi_Application = 32512;
+  IDC_ARROW = 32512;
+  IDC_IBEAM = 32513;
+  IDC_HAND = 32649;
+  color_window = 5;
+  ws_OverlappedWindow = 13565952;
+  SW_SHOWNORMAL = 1;
+  SW_HIDE = 0;
+
+  CBS_DROPDOWNLIST = {0, 1};
+
+  BS_DEFPUSHBUTTON = {0};
+  WS_VISIBLE = {28};
+  WS_CHILD = {30};
+  WS_CLIPCHILDREN = {25};
+  WS_CLIPSIBLINGS = {26};
+  WS_BORDER = 8388608;
+  WS_SYSMENU = 524288;
+  SBS_HORZ = {};
+  SBS_VERT = {0};
+  SBARS_SIZEGRIP = {8};
+  SB_HORZ = 0;
+  SB_VERT = 1;
+  SB_CTL = 2;
+  WM_HSCROLL = 276;
+  WM_VSCROLL = 277;
+  WM_PAINT = 15;
+  WM_SIZE = 5;
+  SB_THUMBPOSITION = 4;
+  SB_THUMBTRACK = 5;
+  SB_LINELEFT = 0;
+  SB_LINERIGHT = 1;
+  SB_PAGELEFT = 2;
+  SB_PAGERIGHT = 3;
+  TCIF_TEXT = 1;
+  TCM_INSERTITEM = 4926;
+  SIF_TRACKPOS = 16;
+  WM_SETFONT = 48;
+  WM_NOTIFY = 78;
+  WM_MOUSEMOVE = 512;
+  WM_LBUTTONDOWN = 513;
+  WM_LBUTTONUP = 514;
+  WM_MENUSELECT = 11FH;
+  WM_CLOSE = 16;
+  WM_MOUSEWHEEL = 522;
+  WM_LBUTTONDBLCLK = 515;
+  WM_CONTEXTMENU = 123;
+  WM_SETCURSOR = 32;
+  WM_SETTEXT = 12;
+  WM_GETTEXT = 13;
+  WM_GETTEXTLENGTH = 14;
+  SB_SETTEXT = 1035;
+  SW_SHOW = 5;
+  ES_AUTOHSCROLL = 128;
+  EM_SETSEL = 177;
+
+  TCM_FIRST = 1300H;
+  TCM_SETCURSEL = TCM_FIRST + 12;
+  TCM_GETCURSEL = TCM_FIRST + 11;
+  TCM_DELETEITEM = TCM_FIRST + 8;
+  TCN_SELCHANGE = -551;
+
+  CB_ADDSTRING = 323;
+  CB_SETCURSEL = 334;
+  CB_GETCURSEL = 327;
+
+  FW_NORMAL = 400;
+  ANSI_CHARSET = 0;
+  OUT_DEFAULT_PRECIS = 0;
+  CLIP_DEFAULT_PRECIS = 0;
+  DEFAULT_QUALITY = 0;
+  DEFAULT_PITCH = {};
+  FF_DONTCARE = {};
+
+  miim_state = {0};
+  miim_type = {4};
+  miim_submenu = {2};
+  miim_id = {1};
+  mft_string = 0;
+  mft_separator = 2048;
+  mfs_enabled = 0;
+
+  VK_LBUTTON = 1;
+
+  SRCCOPY = 0CC0020H;
+
+  StatusHeight = 25;
+
+  ParamTextH = 15;
+
+  hot_new = 0; hot_open = 1; hot_save = 2; hot_undo = 3; hot_cut = 4; hot_copy = 5;
+  hot_paste = 6; hot_find = 7; hot_searchagain = 8; hot_replace = 9; hot_goto = 10;
+  hot_selectall = 11; hot_upcase = 12; hot_lowcase = 13; hot_compile = 14; hot_run = 15;
+  hot_main = 16;
+
+  Inter = 2;
+
+  timer1 = 1; timer2 = 2;
+
+TYPE
+
+  STRING = ARRAY 2048 OF CHAR;
+
+  PRect = POINTER TO TU.TRect;
+
+  TPoint = RECORD
+    X, Y: INTEGER
+  END;
+
+  tagMSG = RECORD
+    hwnd, message, wParam, lParam, time: INTEGER;
+    pt: TPoint
+  END;
+
+  TWinProc = PROCEDURE [winapi] (Window, Message, WParam, LParam: INTEGER): INTEGER;
+
+  tagWNDCLASSEX = RECORD
+    cbSize, style: INTEGER; lpfnWndProc: TWinProc; cbClsExtra, cbWndExtra, hInstance, hIcon,
+    hCursor, hbrBackground, lpszMenuName, lpszClassName, hIconSm: INTEGER
+  END;
+
+  tagMENUITEMINFO = RECORD
+    cbSize, fMask, fType, fState, wID, hSubMenu, hbmpChecked,
+    hbmpUnchecked, dwItemData, dwTypeData, cch, hbmpItem: INTEGER
+  END;
+
+  tagTCITEM = RECORD
+    mask, dwState, dwStateMask, pszText, cchTextMax, iImage, lParam: INTEGER
+  END;
+
+  tagSCROLLINFO = RECORD
+    cbSize, fMask, nMin, nMax, nPage, nPos, nTrackPos: INTEGER
+  END;
+
+  TPaintStruct = RECORD
+    hdc, fErase: INTEGER; rcPaint: TU.TRect; fRestore, fIncUpdate: INTEGER; rgbReserved: ARRAY 32 OF CHAR
+  END;
+
+VAR
+
+  SendMessage: PROCEDURE [winapi] (hWnd, Msg, wParam, lParam: INTEGER): INTEGER;
+  DrawMenuBar: PROCEDURE [winapi] (hWnd: INTEGER): BOOLEAN;
+  PostQuitMessage: PROCEDURE [winapi] (nExitCode: INTEGER);
+  InsertMenuItem: PROCEDURE [winapi] (p1, p2: INTEGER; p3: BOOLEAN; p4: tagMENUITEMINFO): BOOLEAN;
+  CheckMenuItem: PROCEDURE [winapi] (hMenu, uIDCheckItem, uCheck: INTEGER): INTEGER;
+  CheckMenuRadioItem: PROCEDURE [winapi] (hMenu, nIDFirst, nIDLast, nIDItem, nFlags: INTEGER): BOOLEAN;
+  CreateMenu: PROCEDURE [winapi] (): INTEGER;
+  CreatePopupMenu: PROCEDURE [winapi] (): INTEGER;
+  GetModuleHandle: PROCEDURE [winapi] (lpModuleName: INTEGER): INTEGER;
+  LoadIcon: PROCEDURE [winapi] (hInstance, lpIconName: INTEGER): INTEGER;
+  LoadCursor: PROCEDURE [winapi] (hInstance, lpCursorName: INTEGER): INTEGER;
+  RegisterClassEx: PROCEDURE [winapi] (lpWndClass: tagWNDCLASSEX): sys.CARD16;
+  ShowWindow: PROCEDURE [winapi] (hWnd, nCmdShow: INTEGER): INTEGER;
+  GetMessage: PROCEDURE [winapi] (lpMsg: tagMSG; hWnd, wMsgFilterMin, wMsgFilterMax: INTEGER): BOOLEAN;
+  TranslateMessage: PROCEDURE [winapi] (lpMsg: tagMSG): INTEGER;
+  DispatchMessage: PROCEDURE [winapi] (lpMsg: tagMSG): INTEGER;
+  CreateWindowEx: PROCEDURE [winapi] (dwExStyle, lpClassName, lpWindowName, dwStyle, X, Y,
+    nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam: INTEGER): INTEGER;
+  SetScrollRange: PROCEDURE [winapi] (Wnd, Bar, MinPos, MaxPos: INTEGER; Redraw: BOOLEAN): BOOLEAN;
+  SetScrollPos: PROCEDURE [winapi] (Wnd, Bar, Pos: INTEGER; Redraw: BOOLEAN): INTEGER;
+  MoveWindow: PROCEDURE [winapi] (Wnd, X, Y, nWidth, nHeight: INTEGER; Repaint: BOOLEAN): BOOLEAN;
+  GetClientRect: PROCEDURE [winapi] (hWnd: INTEGER; lpRect: TU.TRect): INTEGER;
+  GetDC: PROCEDURE [winapi]  (hWnd: INTEGER): INTEGER;
+  SelectObject: PROCEDURE [winapi] (DC, p2: INTEGER): INTEGER;
+  SetCursor: PROCEDURE [winapi] (hCursor: INTEGER): INTEGER;
+  CreateCompatibleDC: PROCEDURE [winapi] (DC: INTEGER): INTEGER;
+  CreateCompatibleBitmap: PROCEDURE [winapi] (DC, Width, Height: INTEGER): INTEGER;
+  GetDesktopWindow: PROCEDURE [winapi] (): INTEGER;
+  ReleaseDC: PROCEDURE [winapi] (hWnd, hDC: INTEGER): INTEGER;
+  BitBlt: PROCEDURE [winapi] (DestDC, X, Y, Width, Height, SrcDC, XSrc, YSrc, Rop: INTEGER): INTEGER;
+  EnableMenuItem: PROCEDURE [winapi] (hMenu, uIDEnableItem, uEnable: INTEGER): BOOLEAN;
+  GetScrollInfo: PROCEDURE [winapi] (hWnd, Bar: INTEGER; Inf: tagSCROLLINFO);
+  SetFocus: PROCEDURE [winapi] (hWnd: INTEGER): INTEGER;
+  CreateStatusWindow: PROCEDURE [winapi] (style, lpszText, hwndParent, wID: INTEGER): INTEGER;
+  TrackPopupMenu: PROCEDURE [winapi] (Menu, Flags, x, y, Reserved, Wnd: INTEGER; Rect: INTEGER): BOOLEAN;
+  ScreenToClient: PROCEDURE [winapi] (hWnd: INTEGER; pt: TPoint): BOOLEAN;
+  UpdateWindow: PROCEDURE [winapi] (hWnd: INTEGER): BOOLEAN;
+  InvalidateRect: PROCEDURE [winapi] (hWnd: INTEGER; lpRect: PRect; bErase: BOOLEAN): INTEGER;
+  CloseHandle: PROCEDURE [winapi] (Handle: INTEGER): INTEGER;
+  SetTimer: PROCEDURE [winapi] (hWnd, nIDEvent, uElapse, lpTimerFunc: INTEGER): INTEGER;
+  KillTimer: PROCEDURE [winapi] (hWnd, nIDEvent: INTEGER): BOOLEAN;
+  GetCaretBlinkTime: PROCEDURE [winapi] (): INTEGER;
+  ShellExecute: PROCEDURE [winapi] (hWnd, Operation, FileName, Parameters, Directory, ShowCmd: INTEGER): INTEGER;
+  MoveFile: PROCEDURE [winapi] (OldName, NewName: INTEGER): BOOLEAN;
+  DeleteFile: PROCEDURE [winapi] (lpFileName: INTEGER): BOOLEAN;
+  CreateFont: PROCEDURE [winapi] (nHeight, nWidth, nEscapement, nOrientation, fnWeight, fdwItalic, fdwUnderline, fdwStrikeOut,
+    fdwCharSet, fdwOutputPrecision, fdwClipPrecision, fdwQuality, fdwPitchAndFamily, lpszFace: INTEGER): INTEGER;
+  GetCursorPos: PROCEDURE [winapi] (point: TPoint);
+  GetKeyState: PROCEDURE [winapi] (nVirtKey: INTEGER): INTEGER;
+  GetTextExtentPoint32: PROCEDURE [winapi] (hdc, lpString, cbString: INTEGER; lpSize: TPoint): BOOLEAN;
+  GetOpenFileName, GetSaveFileName: Dlg.PGetOpenSaveFileName;
+  ChooseColor: Dlg.PChooseColor;
+  FindTextW, ReplaceTextW: Dlg.PFindText;
+  GetCurrentDirectory: Dlg.PGetCurrentDirectory;
+  RegisterWindowMessage: PROCEDURE [winapi] (Str: INTEGER): INTEGER;
+
+  DefWindowProc: TWinProc;
+  wc: tagWNDCLASSEX;
+  msg: tagMSG;
+  mainwnd, HScroll, VScroll, Tab, wndSb, StatusPanel, optwnd, gotownd, gotoBtnOK, gotoBtnCncl, gotoEdit,
+  paramwnd, paramBtnOK, paramBtnCncl, paramEdit,
+  mainmenu, submenufile, submenuedit, submenuview, submenuprog,
+  submenucase, submenuplatf, submenustksize, context, hinstance,
+  hpos, vpos, hmax, vmax, hpage, vpage, font, font_num, font_size, Arial, Arial2, textW, textH, Width, Height,
+  Arrow, IBeam, Hand, MemDC, MemBMP, TabDC, ParamDC, BkColor, BtnOK, BtnCncl, ComboFont, ComboSize,
+  paramcolor, FINDMSGSTRING: INTEGER;
+  syncheck, numcheck, mousedown, Cursor, move, blocksel: BOOLEAN;
+  Shift, hotkeys: SET;
+  stk, platf, newname, AppPath, AppPath8: STRING;
+  Params: ARRAY 4096 OF Line.WCHAR;
+  Brushes: ARRAY 13 OF INTEGER;
+  Colors, Colors2: TU.TColors;
+
+PROCEDURE GetMemBMP(VAR DC: INTEGER; VAR BMP: INTEGER; w, h: INTEGER);
+VAR hWndCompatible, hDCCompatible: INTEGER;
+BEGIN
+  hWndCompatible := GetDesktopWindow();
+  hDCCompatible  := GetDC(hWndCompatible);
+  DC  := CreateCompatibleDC(hDCCompatible);
+  BMP := CreateCompatibleBitmap(hDCCompatible, w, h);
+  SelectObject(DC, BMP);
+  ReleaseDC(hWndCompatible, hDCCompatible)
+END GetMemBMP;
+
+PROCEDURE CreateWindow(lpClassName, lpWindowName: ARRAY OF CHAR;
+  dwStyle, X, Y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam: INTEGER): INTEGER;
+VAR n: INTEGER; class, window: STRING;
+BEGIN
+  n := TU.Utf8To16(lpClassName, class);
+  n := TU.Utf8To16(lpWindowName, window)
+  RETURN CreateWindowEx(0, sys.ADR(class), sys.ADR(window), dwStyle, X, Y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam)
+END CreateWindow;
+
+PROCEDURE [winapi] CreateMenuItem(hmenu, submenu: INTEGER; cap, hot: ARRAY OF CHAR; _wid: INTEGER): BOOLEAN;
+VAR mi: tagMENUITEMINFO; n: INTEGER; str, name: STRING;
+BEGIN
+  IF hot # "" THEN
+    TU.concat(cap, 9X, str);
+    TU.concat(str, hot, str)
+  ELSE
+    COPY(cap, str)
+  END;
+  n := TU.Utf8To16(str, name);
+  mi.cbSize := sys.SIZE(tagMENUITEMINFO);
+  mi.fMask := ORD(miim_state + miim_type + miim_submenu + miim_id);
+  mi.fType := mft_string;
+  mi.fState := mfs_enabled;
+  mi.wID := _wid;
+  mi.hSubMenu := submenu;
+  mi.dwItemData := 0;
+  mi.dwTypeData := sys.ADR(name);
+  mi.cch := n
+  RETURN InsertMenuItem(hmenu, 0, FALSE, mi)
+END CreateMenuItem;
+
+PROCEDURE [winapi] CreateMenuSep(hmenu: INTEGER): BOOLEAN;
+VAR mi: tagMENUITEMINFO;
+BEGIN
+  mi.cbSize := sys.SIZE(tagMENUITEMINFO);
+  mi.fMask := ORD(miim_state + miim_type + miim_submenu + miim_id);
+  mi.fType := mft_separator;
+  mi.fState := mfs_enabled;
+  mi.wID := separator;
+  mi.hSubMenu := 0;
+  mi.dwItemData := 0;
+  mi.dwTypeData := sys.ADR("");
+  mi.cch := 0
+  RETURN InsertMenuItem(hmenu, 0, FALSE, mi)
+END CreateMenuSep;
+
+PROCEDURE LowWord(n: INTEGER): INTEGER;
+  RETURN ASR(LSL(n, 16), 16)
+END LowWord;
+
+PROCEDURE HiWord(n: INTEGER): INTEGER;
+  RETURN ASR(LSL(ROR(n, 16), 16), 16)
+END HiWord;
+
+PROCEDURE ScrollChange(scroll, max, page, wparam: INTEGER; VAR pos: INTEGER);
+VAR scrollinfo: tagSCROLLINFO;
+BEGIN
+  CASE LowWord(wparam) OF
+  |SB_LINERIGHT: INC(pos)
+  |SB_LINELEFT:  DEC(pos)
+  |SB_PAGERIGHT: pos := pos + page
+  |SB_PAGELEFT:  pos := pos - page
+  |SB_THUMBPOSITION, SB_THUMBTRACK:
+    scrollinfo.cbSize := sys.SIZE(tagSCROLLINFO);
+    scrollinfo.fMask := SIF_TRACKPOS;
+    GetScrollInfo(scroll, SB_CTL, scrollinfo);
+    pos := scrollinfo.nTrackPos
+  ELSE
+  END;
+  IF pos > max THEN
+    pos := max
+  END;
+  IF pos < 0 THEN
+    pos := 0
+  END;
+  SetScrollPos(scroll, SB_CTL, pos, TRUE)
+END ScrollChange;
+
+PROCEDURE InsertTabItem(Text: ARRAY OF CHAR; Index: INTEGER);
+VAR I: tagTCITEM;
+    name: STRING;
+    n: INTEGER;
+BEGIN
+  n := TU.Utf8To16(Text, name);
+  I.mask := TCIF_TEXT;
+  I.pszText := sys.ADR(name);
+  I.cchTextMax := n;
+  I.iImage := -1;
+  SendMessage(Tab, TCM_INSERTITEM, Index, sys.ADR(I))
+END InsertTabItem;
+
+PROCEDURE InsertTabItemW(Text, Index: INTEGER);
+VAR I: tagTCITEM;
+BEGIN
+  I.mask := TCIF_TEXT;
+  I.pszText := Text;
+  I.cchTextMax := 1024;
+  I.iImage := -1;
+  SendMessage(Tab, TCM_INSERTITEM, Index, sys.ADR(I))
+END InsertTabItemW;
+
+PROCEDURE HotEnabled(hotkey: INTEGER; Enabled: BOOLEAN);
+BEGIN
+  IF Enabled THEN
+    hotkeys := hotkeys + {hotkey}
+  ELSE
+    hotkeys := hotkeys - {hotkey}
+  END
+END HotEnabled;
+
+PROCEDURE MenuEnabled(Enabled: BOOLEAN);
+VAR En, zero: INTEGER;
+BEGIN
+  zero := 0;
+  En := ORD(~Enabled);
+  EnableMenuItem(submenufile, ssave, En);
+  EnableMenuItem(submenufile, ssaveas, En);
+  EnableMenuItem(submenufile, ssaveall, En);
+  EnableMenuItem(submenufile, sclose, En);
+  EnableMenuItem(submenufile, scloseall, En);
+  EnableMenuItem(submenuedit, sundo, En);
+  EnableMenuItem(submenuedit, scut, En);
+  EnableMenuItem(submenuedit, scopy, En);
+  EnableMenuItem(submenuedit, spaste, En);
+  EnableMenuItem(submenuedit, sdel, En);
+  EnableMenuItem(submenuedit, sfind, En);
+  EnableMenuItem(submenuedit, ssearchagain, En);
+  EnableMenuItem(submenuedit, sreplace, En);
+  EnableMenuItem(submenuedit, sgoto, En);
+  EnableMenuItem(submenuedit, sselectall, En);
+  EnableMenuItem(submenuedit, scase, En);
+  EnableMenuItem(submenuview, ssyntax, En);
+  EnableMenuItem(submenuview, snumbers, En);
+  EnableMenuItem(submenuview, soptions, En);
+  EnableMenuItem(submenuprog, scompile, En);
+  EnableMenuItem(submenuprog, srun, En);
+  EnableMenuItem(submenuprog, sparam, En);
+  EnableMenuItem(submenuprog, smain, En);
+  EnableMenuItem(submenuprog, splatf, En);
+  EnableMenuItem(submenuprog, sstksize, En);
+  HotEnabled(hot_save, Enabled);
+  HotEnabled(hot_undo, Enabled);
+  HotEnabled(hot_cut, Enabled);
+  HotEnabled(hot_copy, Enabled);
+  HotEnabled(hot_paste, Enabled);
+  HotEnabled(hot_find, Enabled);
+  HotEnabled(hot_searchagain, Enabled);
+  HotEnabled(hot_replace, Enabled);
+  HotEnabled(hot_goto, Enabled);
+  HotEnabled(hot_selectall, Enabled);
+  HotEnabled(hot_compile, Enabled);
+  HotEnabled(hot_run, Enabled);
+  HotEnabled(hot_main, Enabled);
+  HotEnabled(hot_lowcase, Enabled);
+  HotEnabled(hot_upcase, Enabled);
+  IF Enabled THEN
+    ShowWindow(VScroll, SW_SHOWNORMAL);
+    ShowWindow(HScroll, SW_SHOWNORMAL)
+  ELSE
+    ShowWindow(VScroll, SW_HIDE);
+    ShowWindow(HScroll, SW_HIDE);
+    ShowWindow(optwnd, SW_HIDE);
+    ShowWindow(gotownd, SW_HIDE);
+    ShowWindow(paramwnd, SW_HIDE);
+    SetFocus(mainwnd);
+    SendMessage(wndSb, SB_SETTEXT, 0, sys.ADR(zero));
+    SendMessage(wndSb, SB_SETTEXT, 1, sys.ADR(zero));
+    SendMessage(wndSb, SB_SETTEXT, 2, sys.ADR(zero))
+  END
+END MenuEnabled;
+
+PROCEDURE [winapi] MessageBox(wnd: INTEGER; Caption, Text: STRING; typ: INTEGER): INTEGER;
+VAR n: INTEGER; str1, str2: STRING;
+BEGIN
+  n := TU.Utf8To16(Text, str2);
+  n := TU.Utf8To16(Caption, str1)
+  RETURN TU.MessageBox(wnd, sys.ADR(str2), sys.ADR(str1), typ)
+END MessageBox;
+
+PROCEDURE SaveAs(file: TE.EditFile; VAR err: BOOLEAN): BOOLEAN;
+VAR s, n: INTEGER; res: BOOLEAN;
+BEGIN
+  err := FALSE;
+  res := FALSE;
+  IF file # NIL THEN
+    n := TE.Index(file);
+    SendMessage(Tab, TCM_SETCURSEL, n, 0);
+    TE.ChangePage(n);
+    s := Dlg.SaveAsFile();
+    IF s # 0 THEN
+      TE.SetName(s);
+      res := TE.Save(file);
+      err := ~res;
+      SendMessage(Tab, TCM_DELETEITEM, n, 0);
+      InsertTabItemW(TE.ExtractFileName(s, "\"), n);
+      SendMessage(Tab, TCM_SETCURSEL, n, 0);
+      InvalidateRect(mainwnd, NIL, TRUE)
+    END
+  END
+  RETURN res
+END SaveAs;
+
+PROCEDURE Save(file: TE.EditFile; VAR err: BOOLEAN): BOOLEAN;
+VAR res: BOOLEAN; n: INTEGER; name, name2: TU.STRING8;
+BEGIN
+  res := FALSE;
+  err := FALSE;
+  IF file # NIL THEN
+    IF file.Saved THEN
+      TE.Utf16To8(name, sys.ADR(file.name));
+      TU.concat(name, "~", name);
+      n := TU.Utf8To16(name, name2);
+      DeleteFile(sys.ADR(name2));
+      MoveFile(sys.ADR(file.name), sys.ADR(name2));
+      res := TE.Save(file);
+      err := ~res
+    ELSE
+      res := SaveAs(file, err)
+    END
+  END
+  RETURN res
+END Save;
+
+PROCEDURE SaveErr(name: STRING);
+VAR str: STRING;
+BEGIN
+  TU.concat("ошибка записи файла", 0DX, str);
+  TU.concat(str, 0AX, str);
+  TU.concat(str, name, str);
+  MessageBox(mainwnd, wndcaption, str, 16)
+END SaveErr;
+
+PROCEDURE SaveAll;
+VAR file, errfile: TE.EditFile; cont, err: BOOLEAN; name, str: STRING;
+BEGIN
+  file := TE.FList.First(TE.EditFile);
+  cont := TRUE;
+  err := FALSE;
+  WHILE ~err & cont & (file # NIL) DO
+    IF file.txt.Modified THEN
+      cont := Save(file, err);
+      errfile := file
+    END;
+    file := file.Next(TE.EditFile)
+  END;
+  IF err THEN
+    TE.Utf16To8(name, sys.ADR(errfile.name));
+    SaveErr(name)
+  END
+END SaveAll;
+
+PROCEDURE Confirm(name: TE.STRING): INTEGER;
+VAR str1, str2: STRING; c, i, a, n: INTEGER;
+BEGIN
+  i := 0;
+  a := sys.ADR(str2);
+  REPEAT
+    c := TU.Utf16To8(name[i], n);
+    sys.MOVE(sys.ADR(c), a, n);
+    a := a + n;
+    INC(i)
+  UNTIL c = 0;
+  str1 := "Файл ";
+  TU.concat(str1, str2, str1);
+  TU.concat(str1, " изменен.", str1);
+  TU.concat(str1, 0DX, str1);
+  TU.concat(str1, 0AX, str1);
+  TU.concat(str1, "Сохранить изменения?", str1)
+  RETURN MessageBox(mainwnd, wndcaption, str1, 51)
+END Confirm;
+
+PROCEDURE Close(file: TE.EditFile): BOOLEAN;
+VAR res, err: BOOLEAN; n: INTEGER; name, str: STRING;
+BEGIN
+  err := FALSE;
+  res := file # NIL;
+  IF res & (file.txt.Modified) THEN
+    n := Confirm(file.name);
+    IF n = 2 THEN res := FALSE END;
+    IF n = 6 THEN
+      res := Save(file, err);
+      IF err THEN
+        TE.Utf16To8(name, sys.ADR(file.name));
+        SaveErr(name)
+      END
+    END;
+    IF n = 7 THEN res := TRUE END
+  END;
+  IF res & TE.Close() THEN
+    n := SendMessage(Tab, TCM_GETCURSEL, 0, 0);
+    SendMessage(Tab, TCM_DELETEITEM, n, 0);
+    DEC(n);
+    IF n = -1 THEN n := 0 END;
+    IF TE.FList.Count > 0 THEN
+      SendMessage(Tab, TCM_SETCURSEL, n, 0);
+    ELSE
+      MenuEnabled(FALSE)
+    END;
+    InvalidateRect(mainwnd, NIL, TRUE);
+  END
+  RETURN res
+END Close;
+
+PROCEDURE Exit;
+BEGIN
+  WHILE Close(TE.f) DO END;
+  IF TE.FList.Count = 0 THEN
+    PostQuitMessage(0)
+  END
+END Exit;
+
+PROCEDURE NewName;
+VAR temp: STRING; n, i: INTEGER; num: ARRAY 12 OF CHAR;
+BEGIN
+  i := 1;
+  REPEAT
+    TU.IntToStr(i, num);
+    TU.concat("File", num, newname);
+    TU.concat(newname, ".ob07", newname);
+    n := TU.Utf8To16(newname, temp);
+    newname := temp;
+    INC(i)
+  UNTIL TE.IndexName(sys.ADR(newname), TRUE) = -1
+END NewName;
+
+PROCEDURE sgn(x: INTEGER): INTEGER;
+VAR res: INTEGER;
+BEGIN
+  IF x > 0 THEN
+    res := 1
+  ELSIF x < 0 THEN
+    res := -1
+  ELSE
+    res := 0
+  END
+  RETURN res
+END sgn;
+
+PROCEDURE SetStatus(n: INTEGER; text: STRING; align: INTEGER);
+VAR text16, str1, str2: STRING; i: INTEGER;
+BEGIN
+  str1 := text;
+  IF align = 1 THEN
+    TU.concat(9X, str1, str2)
+  ELSIF align = 2 THEN
+    TU.concat(9X, str1, str2);
+    TU.concat(9X, str2, str1);
+    str2 := str1
+  ELSE
+    str2 := text
+  END;
+  i := TU.Utf8To16(str2, text16);
+  SendMessage(wndSb, SB_SETTEXT, n, sys.ADR(text16))
+END SetStatus;
+
+PROCEDURE Redraw;
+BEGIN
+  SendMessage(mainwnd, WM_PAINT, 0, 0)
+END Redraw;
+
+PROCEDURE Redraw1;
+VAR coord, str1, str2: STRING; line, col: INTEGER; ps: TPaintStruct;
+BEGIN
+  IF TE.FList.Count > 0 THEN
+    UpdateWindow(Tab);
+    IF TE.CurModified() THEN
+      SetStatus(1, "текст изменен", 1)
+    ELSE
+      SetStatus(1, "", 0)
+    END;
+    IF TE.f.Saved THEN
+      SendMessage(wndSb, SB_SETTEXT, 2, sys.ADR(TE.f.name))
+    ELSE
+      SetStatus(2, "", 0)
+    END;
+    TE.GetCursor(line, col);
+    TU.IntToStr(line + 1, str1);
+    TU.concat(str1, ": ", str1);
+    TU.IntToStr(col + 1, str2);
+    TU.concat(str1, str2, str1);
+    TU.concat(str1, "  ", str1);
+    SetStatus(0, str1, 2);
+    vmax := TE.Count() - 1;
+    Text.GetLinesCols(TE.f.txt, line, col);
+    hmax := (Line.MAXLEN + 2) - col;
+    SetScrollRange(VScroll, SB_CTL, 0, vmax, FALSE);
+    SetScrollRange(HScroll, SB_CTL, 0, hmax, FALSE);
+    TE.GetLinesCols(vpage, hpage);
+    DEC(vpage);
+    DEC(hpage);
+    TE.GetLineCol(vpos, hpos);
+    SetScrollPos(VScroll, SB_CTL, vpos, TRUE);
+    SetScrollPos(HScroll, SB_CTL, hpos, TRUE);
+    SelectObject(MemDC, font);
+    TE.Redraw(MemDC, Width, Height, Cursor);
+    BitBlt(TabDC, 3, 27, Width - 2, Height - 2, MemDC, 0, 0, SRCCOPY);
+    UpdateWindow(Tab);
+  END
+END Redraw1;
+
+PROCEDURE ResetTimer;
+BEGIN
+  SetTimer(mainwnd, timer1, GetCaretBlinkTime(), 0);
+  Cursor := TRUE
+END ResetTimer;
+
+PROCEDURE Resize;
+CONST ScrollW = 21;
+VAR rect: TU.TRect; FormW, FormH, TabW, TabH: INTEGER;
+BEGIN
+  GetClientRect(mainwnd, rect);
+  FormW := rect.Right - rect.Left + 1;
+  FormH := rect.Bottom - rect.Top + 1;
+  MoveWindow(StatusPanel, 0, 0, FormW, StatusHeight, TRUE);
+  MoveWindow(wndSb, 0, 0, FormW, StatusHeight, TRUE);
+  MoveWindow(Tab, 2, StatusHeight, FormW, FormH - StatusHeight, TRUE);
+  GetClientRect(Tab, rect);
+  TabW := rect.Right - rect.Left + 1;
+  TabH := rect.Bottom - rect.Top + 1;
+  Width := TabW - ScrollW - 8;
+  Height := TabH - ScrollW - 29;
+  MoveWindow(HScroll, 5, TabH - (ScrollW + 1) + StatusHeight - 3, TabW - (ScrollW + 1) - 5 - 3, ScrollW, TRUE);
+  MoveWindow(VScroll, TabW - (ScrollW + 1) - 4, 27 + StatusHeight, ScrollW, TabH - 31 - ScrollW, TRUE)
+END Resize;
+
+PROCEDURE OnContextMenu(hwnd, X, Y: INTEGER);
+VAR pt: TPoint; rc: TU.TRect; X1, Y1: INTEGER; sel: BOOLEAN;
+BEGIN
+  pt.X := X;
+  pt.Y := Y;
+  ScreenToClient(hwnd, pt);
+  X1 := pt.X;
+  Y1 := pt.Y;
+  IF (hwnd = mainwnd) & (X1 >= 3) & (X1 < 3 + Width) & (Y1 >= 28 + StatusHeight) &
+    (Y1 < 28 + Height + StatusHeight) & (TE.FList.Count > 0) THEN
+    sel := ~TE.Selected();
+    EnableMenuItem(context, ccut, ORD(sel));
+    EnableMenuItem(context, ccopy, ORD(sel));
+    EnableMenuItem(context, cdel, ORD(sel));
+    EnableMenuItem(context, cundo, ORD(TE.f.txt.Backup = NIL));
+    EnableMenuItem(context, cpaste, ORD(~TU.IsClip()));
+    TrackPopupMenu(context, 0, X, Y, 0, mainwnd, 0)
+  END
+END OnContextMenu;
+
+PROCEDURE SetMain(new, old: INTEGER);
+VAR s, n: INTEGER; res: BOOLEAN; str1, str2: TU.STRING8; newf, oldf: List.ITEM;
+BEGIN
+  newf := List.Index(TE.FList, new);
+  oldf := List.Index(TE.FList, old);
+  IF oldf # NIL THEN
+    s := TE.ExtractFileName(sys.ADR(oldf(TE.EditFile).name), "\");
+    SendMessage(Tab, TCM_DELETEITEM, old, 0);
+    InsertTabItemW(s, old);
+    SendMessage(Tab, TCM_SETCURSEL, old, 0)
+  END;
+  s := TE.ExtractFileName(sys.ADR(newf(TE.EditFile).name), "\");
+  TE.Utf16To8(str1, s);
+  TU.concat("*", str1, str2);
+  n := TU.Utf8To16(str2, str1);
+  SendMessage(Tab, TCM_DELETEITEM, new, 0);
+  InsertTabItemW(sys.ADR(str1), new);
+  SendMessage(Tab, TCM_SETCURSEL, new, 0);
+  InvalidateRect(mainwnd, NIL, TRUE)
+END SetMain;
+
+PROCEDURE MainModule(wnd: INTEGER);
+VAR str1, str2, str3: STRING;
+BEGIN
+  IF TE.f.Saved THEN
+    TE.Utf16To8(str1, TE.ExtractFileName(sys.ADR(TE.f.name[0]), "\"));
+    TE.Utf16To8(str3, TE.ExtractFileName(sys.ADR(TE.f.name[0]), "."));
+    IF str3 = "ob07" THEN
+      SetMain(TE.Index(TE.f), TE.Index(TE.main));
+      TU.concat("модуль ", str1, str2);
+      TU.concat(str2, " назначен главным", str2);
+      MessageBox(wnd, wndcaption, str2, 64);
+      TE.SetMain
+    ELSE
+      MessageBox(wnd, wndcaption, "расширение файла должно быть '.ob07'", 48)
+    END
+  ELSE
+    MessageBox(wnd, wndcaption, "необходимо сохранить файл", 48)
+  END
+END MainModule;
+
+PROCEDURE BrushInit;
+VAR i: INTEGER;
+BEGIN
+  FOR i := 0 TO 12 DO
+    TU.DeleteObject(Brushes[i])
+  END;
+  TU.GetColors(Colors);
+  FOR i := 0 TO 11 DO
+    Brushes[i] := TU.CreateSolidBrush(Colors[i])
+  END;
+  Brushes[12] := TU.CreateSolidBrush(BkColor)
+END BrushInit;
+
+PROCEDURE GetCharSize(hdc, font: INTEGER; VAR W, H: INTEGER);
+VAR size: TPoint;
+BEGIN
+  SelectObject(hdc, font);
+  GetTextExtentPoint32(hdc, sys.ADR("W"), 1, size);
+  W := size.X;
+  H := size.Y
+END GetCharSize;
+
+PROCEDURE WriteParams;
+VAR F, n, i: INTEGER; str: STRING; str8: TU.STRING8;
+BEGIN
+  TE.Utf16To8(str8, sys.ADR(AppPath));
+  TU.concat(str8, "\Color.dat", str8);
+  n := TU.Utf8To16(str8, str);
+  F := TU.CreateFileW(sys.ADR(str), 0C0000000H, 0, 0, 2, 80H, 0);
+  IF F > 0 THEN
+    font_num := SendMessage(ComboFont, CB_GETCURSEL, 0, 0);
+    font_size := SendMessage(ComboSize, CB_GETCURSEL, 0, 0) + 8;
+    IF TU.Write(F, sys.ADR(font_num), sys.SIZE(INTEGER)) = sys.SIZE(INTEGER) THEN END;
+    IF TU.Write(F, sys.ADR(font_size), sys.SIZE(INTEGER)) = sys.SIZE(INTEGER) THEN END;
+    FOR i := 0 TO 11 DO
+      IF TU.Write(F, sys.ADR(Colors[i]), sys.SIZE(INTEGER)) = sys.SIZE(INTEGER) THEN END
+    END;
+    TU.Close(F)
+  ELSE
+  END
+END WriteParams;
+
+PROCEDURE ReadParams;
+VAR F, i, n: INTEGER; str: STRING; str8: TU.STRING8;
+BEGIN
+  TE.Utf16To8(str8, sys.ADR(AppPath));
+  TU.concat(str8, "\Color.dat", str8);
+  n := TU.Utf8To16(str8, str);
+  F := TU.CreateFileW(sys.ADR(str), 80000000H, 0, 0, 3, 80H, 0);
+  IF F > 0 THEN
+    IF TU.Read(F, sys.ADR(font_num), sys.SIZE(INTEGER)) = sys.SIZE(INTEGER) THEN END;
+    IF TU.Read(F, sys.ADR(font_size), sys.SIZE(INTEGER)) = sys.SIZE(INTEGER) THEN END;
+    FOR i := 0 TO 11 DO
+      IF TU.Read(F, sys.ADR(Colors[i]), sys.SIZE(INTEGER)) = sys.SIZE(INTEGER) THEN END
+    END;
+    TU.Close(F);
+    TU.SetColors(Colors);
+    Text.GetColors;
+    CASE font_num OF
+    |0: n := TU.Utf8To16("Courier New", str)
+    |1: n := TU.Utf8To16("FixedSys", str);
+    |2: n := TU.Utf8To16("Lucida Console", str)
+    ELSE
+    END;
+  ELSE
+    font_num := 0; font_size := 11;
+    n := TU.Utf8To16("Courier New", str);
+    font := CreateFont(font_size * 3 DIV 2, 0, 0, 0, FW_NORMAL, 0, 0, 0, ANSI_CHARSET,
+      OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, ORD(DEFAULT_PITCH + FF_DONTCARE), sys.ADR(str));
+  END;
+  SendMessage(ComboFont, CB_SETCURSEL, font_num, 0);
+  SendMessage(ComboSize, CB_SETCURSEL, font_size - 8, 0);
+  textH := ((SendMessage(ComboSize, CB_GETCURSEL, 0, 0) + 8) * 3) DIV 2;
+  font := CreateFont(textH, 0, 0, 0, FW_NORMAL, 0, 0, 0, ANSI_CHARSET,
+    OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, ORD(DEFAULT_PITCH + FF_DONTCARE), sys.ADR(str));
+  GetCharSize(MemDC, font, textW, textH);
+  TE.SetFont(textH + Inter, textW)
+END ReadParams;
+
+PROCEDURE [winapi] WindowProc(wnd, msg, wparam, lparam: INTEGER): INTEGER;
+VAR n, s, X, Y, i, res, err, line, col, size: INTEGER; rect: TU.TRect; sel, saveerr: BOOLEAN; point: TPoint; str, name: STRING;
+    lpf: Dlg.LPFINDREPLACE;
+
+  PROCEDURE _NewFile;
+  BEGIN
+    TE.NewFile;
+    NewName;
+    TE.SetName(sys.ADR(newname));
+    TE.f.Saved := FALSE;
+    InsertTabItemW(sys.ADR(newname), TE.FList.Count);
+    SendMessage(Tab, TCM_SETCURSEL, TE.FList.Count - 1, 0);
+    MenuEnabled(TRUE);
+    TE.Mouse_Down(FALSE, 0, 0);
+    InvalidateRect(VScroll, NIL, TRUE);
+    InvalidateRect(HScroll, NIL, TRUE);
+    Redraw
+  END _NewFile;
+
+  PROCEDURE Load(name: INTEGER; VAR err: INTEGER): BOOLEAN;
+  VAR res, CR, LF: BOOLEAN;
+      F, pos, BOM, n, file, size, i, iter, eof, len: INTEGER;
+      line: Line.TEXTSTR; c: CHAR;
+      utf16: ARRAY Line.MAXLEN * 2 OF CHAR;
+      utf8: ARRAY Line.MAXLEN * 4 OF CHAR;
+
+    PROCEDURE Error(code: INTEGER);
+    BEGIN
+      iter := eof - 1;
+      res := FALSE;
+      err := code
+    END Error;
+
+  BEGIN
+    file := 0;
+    pos := 0;
+    CR := FALSE;
+    LF := FALSE;
+    iter := 0;
+    err := 0;
+    F := TU.CreateFileW(name, 80000000H, 0, 0, 3, 80H, 0);
+    res := (F # 0) & (F # -1);
+    IF res THEN
+      size := API.FileSize(F);
+      file := API.Alloc(64, size + 4096);
+      IF file # 0 THEN
+        iter := file;
+        res := TU.Read(F, iter, size) = size;
+        TU.CloseHandle(F);
+        IF res THEN
+          BOM := 0;
+          sys.MOVE(iter, sys.ADR(BOM), 3);
+          IF BOM = 0BFBBEFH THEN
+            DEC(size, 3);
+            INC(iter, 3);
+          ELSE
+            err := 1
+          END
+        ELSE
+          err := 2
+        END
+      ELSE
+        err := 3
+      END
+    ELSE
+      err := 4
+    END;
+    IF err # 0 THEN
+      size := 0;
+      res := FALSE
+    END;
+    eof := iter + size;
+    WHILE iter # eof DO
+      sys.GET(iter, c);
+      CASE c OF
+      |20X..0FFX:
+        IF CR THEN
+          Error(5)
+        ELSIF pos >= LEN(utf8) THEN
+          Error(6)
+        ELSE
+          LF := FALSE;
+          utf8[pos] := c;
+          INC(pos)
+        END
+      |0DX:
+        IF CR THEN
+          Error(5)
+        ELSE
+          utf8[pos] := 0X;
+          n := TU.Utf8To16(utf8, utf16) + 1;
+          IF n <= Line.MAXLEN THEN
+            sys.MOVE(sys.ADR(utf16), sys.ADR(line), n * sys.SIZE(Line.WCHAR));
+            TE.Add(line, n - 1);
+            pos := 0;
+            LF := FALSE;
+            CR := TRUE
+          ELSE
+            Error(6)
+          END
+        END
+      |0AX:
+        IF ~CR THEN
+          Error(5)
+        ELSE
+          CR := FALSE;
+          LF := TRUE
+        END
+      |09X:
+        IF CR THEN
+          Error(5)
+        ELSE
+          LF := FALSE;
+          FOR i := 1 TO Text.TABIN - (pos MOD Text.TABIN) DO
+            IF pos < LEN(utf8) THEN
+              utf8[pos] := 20X;
+              INC(pos)
+            ELSE
+              Error(6)
+            END
+          END
+        END
+      ELSE
+        Error(7)
+      END;
+      INC(iter)
+    END;
+    IF res & CR THEN
+      Error(5)
+    END;
+    IF res & ((pos > 0) OR LF) THEN
+      utf8[pos] := 0X;
+      n := TU.Utf8To16(utf8, utf16) + 1;
+      IF n <= Line.MAXLEN THEN
+        sys.MOVE(sys.ADR(utf16), sys.ADR(line), n * sys.SIZE(Line.WCHAR));
+        TE.Add(line, n - 1)
+      ELSE
+        Error(6)
+      END
+    END;
+    IF file # 0 THEN
+      API.Free(file)
+    END
+    RETURN res
+  END Load;
+
+  PROCEDURE _OpenFile;
+  VAR i, k, err: INTEGER; res: BOOLEAN; name, str: STRING;
+  BEGIN
+    IF Dlg.ExecuteOpen() THEN
+      k := Dlg.Files();
+      FOR i := 0 TO k - 1 DO
+        IF k = 1 THEN
+          s := Dlg.FileIdx(TRUE, -1)
+        ELSE
+          s := Dlg.FileIdx(TRUE, i)
+        END;
+        n := TE.IndexName(s, FALSE);
+        IF n = -1 THEN
+          TE.NewFile;
+          IF Load(s, err) THEN
+            TE.SetName(s);
+            IF TE.Count() > 1 THEN
+              TE.DelFirst
+            END;
+            InsertTabItemW(TE.ExtractFileName(s, "\"), TE.FList.Count);
+            SendMessage(Tab, TCM_SETCURSEL, TE.FList.Count - 1, 0);
+            MenuEnabled(TRUE);
+            TE.Mouse_Down(FALSE, 0, 0)
+          ELSE
+            res := TE.Close();
+            CASE err OF
+            |1, 5, 7: str := "неправильный формат файла"
+            |2:       str := "ошибка чтения файла"
+            |3:       str := "недостаточно памяти"
+            |4:       str := "ошибка доступа к файлу"
+            |6:       str := "файл содержит слишком длинные строки"
+            ELSE
+            END;
+            TE.Utf16To8(name, s);
+            TU.concat(str, 0DX, str);
+            TU.concat(str, 0AX, str);
+            TU.concat(str, name, str);
+            MessageBox(mainwnd, wndcaption, str, 16)
+          END
+        ELSE
+          SendMessage(Tab, TCM_SETCURSEL, n, 0);
+          TE.ChangePage(n)
+        END
+      END
+    END;
+    InvalidateRect(VScroll, NIL, TRUE);
+    InvalidateRect(HScroll, NIL, TRUE);
+    Redraw
+  END _OpenFile;
+
+  PROCEDURE _Goto;
+  VAR str1: TU.STRING8; n: INTEGER;
+  BEGIN
+    IF TE.FList.Count > 0 THEN
+      TU.IntToStr(TE.f.txt.CursorY + 1, str1);
+      n := TU.Utf8To16(str1, str);
+      SendMessage(gotoEdit, WM_SETTEXT, n, sys.ADR(str));
+      ShowWindow(gotownd, SW_SHOWNORMAL);
+      SendMessage(gotoEdit, EM_SETSEL, 0, -1);
+      SetFocus(gotoEdit)
+    END
+  END _Goto;
+
+  PROCEDURE chk_main(): BOOLEAN;
+  BEGIN
+    IF TE.main = NIL THEN
+      MessageBox(wnd, wndcaption, "не задан главный модуль", 48)
+    END
+    RETURN TE.main # NIL
+  END chk_main;
+
+  PROCEDURE _Compile;
+  VAR str1, str2, str3: TU.STRING8; n: INTEGER;
+  BEGIN
+    IF chk_main() THEN
+      SaveAll;
+      TE.Utf16To8(str1, sys.ADR(TE.main.name));
+      TU.concat(str1, 22X, str1);
+      TU.concat(str1, platf, str1);
+      TU.concat(str1, stk, str1);
+      TU.concat(22X, str1, str2);
+      n := TU.Utf8To16(str2, str1);
+      TE.Utf16To8(str3, sys.ADR(AppPath));
+      TU.concat(str3, "\Compile.cmd", str3);
+      n := TU.Utf8To16(str3, str2);
+      ShellExecute(0, 0, sys.ADR(str2), sys.ADR(str1), sys.ADR(AppPath), SW_SHOW)
+    END
+  END _Compile;
+
+  PROCEDURE _Run;
+  VAR n, ext: INTEGER; name, path: TE.STRING;
+  BEGIN
+    IF chk_main() THEN
+      SaveAll;
+      name := TE.main.name;
+      path := name;
+      ext := TE.ExtractFileName(sys.ADR(name), ".");
+      sys.PUT(ext - 1, 0X);
+      sys.PUT(ext - 2, 0X);
+      ShellExecute(0, 0, sys.ADR(name), sys.ADR(Params), 0, SW_SHOW)
+    END
+  END _Run;
+
+  PROCEDURE _Params;
+  BEGIN
+    IF TE.FList.Count > 0 THEN
+      SendMessage(paramEdit, WM_SETTEXT, LEN(Params), sys.ADR(Params));
+      ShowWindow(paramwnd, SW_SHOWNORMAL);
+      SetFocus(paramEdit)
+    END
+  END _Params;
+
+  PROCEDURE _Undo;
+  BEGIN
+    Text.Undo(TE.f.txt)
+  END _Undo;
+
+  PROCEDURE ParamPaint;
+  VAR X, Y: INTEGER; r: TU.TRect; text: STRING;
+
+    PROCEDURE proc1(str: ARRAY OF CHAR; brush: INTEGER);
+    BEGIN
+      TU.FillRect(ParamDC, r, Brushes[brush]);
+      Text.DrawLine(ParamDC, r.Left, r.Top, r.Right, r.Top);
+      Text.DrawLine(ParamDC, r.Right, r.Top, r.Right, r.Bottom);
+      Text.DrawLine(ParamDC, r.Right, r.Bottom, r.Left, r.Bottom);
+      Text.DrawLine(ParamDC, r.Left, r.Bottom, r.Left, r.Top);
+      TU.TextOut(ParamDC, X, Y + 3, sys.ADR(text), TU.Utf8To16(str, text));
+      INC(Y, ParamTextH + 20);
+      INC(r.Top, ParamTextH + 20);
+      INC(r.Bottom, ParamTextH + 20)
+    END proc1;
+
+  BEGIN
+    GetClientRect(optwnd, r);
+    TU.FillRect(ParamDC, r, Brushes[12]);
+    InvalidateRect(BtnOK, NIL, TRUE);
+    InvalidateRect(BtnCncl, NIL, TRUE);
+    InvalidateRect(ComboFont, NIL, TRUE);
+    InvalidateRect(ComboSize, NIL, TRUE);
+    r.Left := 20; r.Right := 90; r.Top := 70; r.Bottom := r.Top + ParamTextH + 5;
+    X := r.Right + 10;
+    Y := r.Top;
+    SelectObject(ParamDC, Arial2);
+    TU.SetBkColor(ParamDC, BkColor);
+    proc1("Ключевые слова", TU.cKey);
+    proc1("Стандартные идентификаторы", TU.cStId);
+    proc1("Числа", TU.cNum);
+    proc1("Строки", TU.cStr);
+    proc1("Комментарии", TU.cCom);
+    proc1("Остальной текст", TU.cText);
+    proc1("Фон", TU.cBkText);
+    proc1("Выделение (фон)", TU.cBkSel);
+    proc1("Выделение (текст)", TU.cTextSel);
+    proc1("Фон текущей строки", TU.cBkCur);
+    proc1("Номера строк (фон)", TU.cBkNum);
+    proc1("Номера строк (текст)", TU.cTextNum)
+  END ParamPaint;
+
+  PROCEDURE _Options;
+  BEGIN
+    TU.GetColors(Colors);
+    Colors2 := Colors;
+    BrushInit;
+    font_num := SendMessage(ComboFont, CB_GETCURSEL, 0, 0);
+    font_size := SendMessage(ComboSize, CB_GETCURSEL, 0, 0) + 8;
+    ShowWindow(optwnd, SW_SHOWNORMAL);
+    ParamPaint;
+    SetFocus(optwnd)
+  END _Options;
+
+  PROCEDURE InputMsg(InputWnd, BtnOK, BtnCncl, Edit: INTEGER);
+  VAR n, x, y: INTEGER; str1, str2: STRING; err: BOOLEAN;
+  BEGIN
+    CASE msg OF
+    |WM_CLOSE:
+      ShowWindow(InputWnd, SW_HIDE);
+      SetFocus(mainwnd)
+    |WM_COMMAND:
+      IF lparam = BtnCncl THEN
+        ShowWindow(InputWnd, SW_HIDE);
+        SetFocus(mainwnd)
+      ELSIF lparam = BtnOK THEN
+        IF InputWnd = gotownd THEN
+          n := SendMessage(Edit, WM_GETTEXTLENGTH, 0, 0) + 1;
+          SendMessage(Edit, WM_GETTEXT, TU.max(n, LEN(str)), sys.ADR(str));
+          TE.Utf16To8(str1, sys.ADR(str));
+          n := TU.StrToInt(str1, err);
+          IF ~err & (n > 0) & (n <= TE.f.txt.Count) THEN
+            ShowWindow(InputWnd, SW_HIDE);
+            SetFocus(mainwnd);
+            Text.GoToLine(TE.f.txt, n - 1);
+            Redraw
+          ELSE
+            str1 := "введите правильный номер строки от 1 до ";
+            TU.IntToStr(TE.f.txt.Count, str2);
+            TU.concat(str1, str2, str1);
+            MessageBox(mainwnd, wndcaption, str1, 48)
+          END
+        ELSIF InputWnd = paramwnd THEN
+          ShowWindow(InputWnd, SW_HIDE);
+          SetFocus(mainwnd);
+          n := SendMessage(Edit, WM_GETTEXTLENGTH, 0, 0) + 1;
+          SendMessage(Edit, WM_GETTEXT, TU.max(n, LEN(Params)), sys.ADR(Params))
+        END
+      END
+    ELSE
+    END;
+    IF msg # WM_CLOSE THEN
+      res := DefWindowProc(wnd, msg, wparam, lparam)
+    ELSE
+      res := 0
+    END;
+    msg := -1
+  END InputMsg;
+
+BEGIN
+  IF wnd = gotownd THEN
+    InputMsg(gotownd, gotoBtnOK, gotoBtnCncl, gotoEdit)
+  ELSIF wnd = paramwnd THEN
+    InputMsg(paramwnd, paramBtnOK, paramBtnCncl, paramEdit)
+  ELSIF wnd = optwnd THEN
+    CASE msg OF
+    |WM_LBUTTONDOWN, WM_LBUTTONUP, WM_MOUSEMOVE:
+      X := LowWord(lparam);
+      Y := HiWord(lparam);
+      IF (X >= 20) & (X <= 90) THEN
+        i := 0;
+        WHILE i <= 11 DO
+          IF (Y >= 70 + (20 + ParamTextH) * i) &
+            (Y <= 70 + ParamTextH + 5 + (20 + ParamTextH) * i) THEN
+            IF msg = WM_LBUTTONDOWN THEN
+              paramcolor := i
+            ELSIF msg = WM_LBUTTONUP THEN
+              IF i = paramcolor THEN
+                Colors[i] := Dlg.ExecuteColor(Colors[i]);
+                TU.DeleteObject(Brushes[i]);
+                Brushes[i] := TU.CreateSolidBrush(Colors[i]);
+                TU.SetColors(Colors);
+                Text.GetColors;
+                ParamPaint;
+                SetFocus(mainwnd);
+                Redraw
+              END;
+              paramcolor := -1
+            ELSIF msg = WM_MOUSEMOVE THEN
+              SetCursor(Hand);
+            END;
+            i := 11
+          END;
+          INC(i)
+        END
+      END
+    |WM_CLOSE:
+      TU.SetColors(Colors2);
+      Text.GetColors;
+      SendMessage(ComboFont, CB_SETCURSEL, font_num, 0);
+      SendMessage(ComboSize, CB_SETCURSEL, font_size - 8, 0);
+      CASE font_num OF
+      |0: n := TU.Utf8To16("Courier New", str)
+      |1: n := TU.Utf8To16("FixedSys", str);
+      |2: n := TU.Utf8To16("Lucida Console", str)
+      ELSE
+      END;
+      textH := font_size * 3 DIV 2;
+      TU.DeleteObject(font);
+      font := CreateFont(textH, 0, 0, 0, FW_NORMAL, 0, 0, 0, ANSI_CHARSET,
+        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, ORD(DEFAULT_PITCH + FF_DONTCARE), sys.ADR(str));
+      GetCharSize(MemDC, font, textW, textH);
+      TE.SetFont(textH + Inter, textW);
+      ShowWindow(optwnd, SW_HIDE);
+      SetFocus(mainwnd);
+      Redraw
+    |WM_PAINT:
+      ParamPaint
+    |WM_COMMAND:
+      IF lparam = BtnCncl THEN
+        SendMessage(optwnd, WM_CLOSE, 0, 0)
+      ELSIF lparam = BtnOK THEN
+        ShowWindow(optwnd, SW_HIDE);
+        SetFocus(mainwnd);
+        Redraw;
+        WriteParams
+      ELSIF (lparam = ComboFont) OR (lparam = ComboSize) THEN
+        CASE SendMessage(ComboFont, CB_GETCURSEL, 0, 0) OF
+        |0: n := TU.Utf8To16("Courier New", str)
+        |1: n := TU.Utf8To16("FixedSys", str);
+        |2: n := TU.Utf8To16("Lucida Console", str)
+        ELSE
+        END;
+        textH := ((SendMessage(ComboSize, CB_GETCURSEL, 0, 0) + 8) * 3) DIV 2;
+        TU.DeleteObject(font);
+        font := CreateFont(textH, 0, 0, 0, FW_NORMAL, 0, 0, 0, ANSI_CHARSET,
+          OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, ORD(DEFAULT_PITCH + FF_DONTCARE), sys.ADR(str));
+        GetCharSize(MemDC, font, textW, textH);
+        TE.SetFont(textH + Inter, textW);
+        Redraw
+      END
+    |258:
+      IF wparam = 27 THEN
+        SendMessage(optwnd, WM_CLOSE, 0, 0)
+      END
+    ELSE
+    END;
+    IF msg # WM_CLOSE THEN
+      res := DefWindowProc(wnd, msg, wparam, lparam)
+    ELSE
+      res := 0
+    END;
+    msg := -1
+  END;
+  CASE msg OF
+  |WM_TIMER:
+    IF wparam = timer1 THEN
+      Cursor := ~Cursor;
+      Redraw
+    ELSIF wparam = timer2 THEN
+      move := TRUE
+    END
+  |WM_LBUTTONDOWN:
+    X := LowWord(lparam);
+    Y := HiWord(lparam);
+    IF (X >= 3) & (X < 3 + Width) & (Y >= 28 + StatusHeight) & (Y < 28 + Height + StatusHeight) & (TE.FList.Count > 0) THEN
+      IF X > TE.TextLeft() THEN
+        SetCursor(IBeam)
+      END;
+      mousedown := TRUE;
+      SetTimer(mainwnd, timer2, 150, 0);
+      move := FALSE;
+      TE.Mouse_Down(2 IN BITS(wparam), X - 4, Y - 28 - StatusHeight);
+      Redraw
+    END
+  |WM_LBUTTONUP:
+    mousedown := FALSE;
+    X := LowWord(lparam);
+    Y := HiWord(lparam);
+    IF (X > TE.TextLeft()) & (X < 3 + Width) & (Y >= 28 + StatusHeight) & (Y < 28 + Height + StatusHeight) & (TE.FList.Count > 0) THEN
+      SetCursor(IBeam)
+    END
+  |WM_SETCURSOR:
+    GetCursorPos(point);
+    ScreenToClient(mainwnd, point);
+    sys.MOVE(sys.ADR(point.X), sys.ADR(n), 2);
+    sys.MOVE(sys.ADR(point.Y), sys.ADR(n) + 2, 2);
+    SendMessage(mainwnd, WM_MOUSEMOVE, ORD(15 IN BITS(GetKeyState(VK_LBUTTON))), n)
+  |WM_MOUSEMOVE:
+    X := LowWord(lparam);
+    Y := HiWord(lparam);
+    IF (X > TE.TextLeft()) & (X < 3 + Width) & (Y >= 28 + StatusHeight) & (Y < 28 + Height + StatusHeight) & (TE.FList.Count > 0) THEN
+      SetCursor(IBeam)
+    END;
+    IF move THEN
+      IF (0 IN BITS(wparam)) & mousedown THEN
+        TE.Mouse_Move(X - 3, Y - 28 - StatusHeight);
+        Redraw
+      ELSE
+        mousedown := FALSE
+      END
+    END
+  |WM_LBUTTONDBLCLK:
+    X := LowWord(lparam);
+    Y := HiWord(lparam);
+    IF (X >= 3) & (X < 3 + Width) & (Y >= 28 + StatusHeight) & (Y < 28 + Height + StatusHeight) & (TE.FList.Count > 0) THEN
+      IF X > TE.TextLeft() THEN
+        SetCursor(IBeam)
+      END;
+      TE.WordSel;
+      Redraw
+    END
+  |WM_MOUSEWHEEL:
+    IF TE.FList.Count > 0 THEN
+      ScrollChange(VScroll, vmax, sgn(ASR(wparam, 16)) * 3, SB_PAGELEFT, vpos);
+      TE.SetLineCol(vpos, hpos);
+      Redraw
+    END
+  |WM_CONTEXTMENU:
+    OnContextMenu(wnd, LowWord(lparam), HiWord(lparam))
+  |WM_SIZE:
+    Resize
+  |WM_HSCROLL:
+    ScrollChange(HScroll, hmax, hpage, wparam, hpos);
+    TE.SetLineCol(vpos, hpos);
+    Redraw
+  |WM_VSCROLL:
+    ScrollChange(VScroll, vmax, vpage, wparam, vpos);
+    TE.SetLineCol(vpos, hpos);
+    Redraw
+  |WM_DESTROY:
+    PostQuitMessage(0)
+  |WM_CLOSE:
+    Exit
+  |256:
+    CASE wparam OF
+    |16: INCL(Shift, TU.ssShift)
+    |17: INCL(Shift, TU.ssCtrl)
+    ELSE
+    END;
+    IF TE.FList.Count > 0 THEN
+      HotEnabled(hot_save, TE.f.txt.Modified);
+      HotEnabled(hot_undo, TE.f.txt.Backup # NIL);
+      sel := TE.Selected();
+      HotEnabled(hot_cut, sel);
+      HotEnabled(hot_copy, sel);
+      HotEnabled(hot_paste, TU.IsClip())
+    END;
+    IF Shift = {TU.ssCtrl} THEN
+      CASE wparam OF
+      |ORD("N"): IF hot_new IN hotkeys THEN _NewFile; Shift := {} END
+      |ORD("O"): IF hot_open IN hotkeys THEN _OpenFile; Shift := {} END
+      |ORD("S"): IF hot_save IN hotkeys THEN
+                   IF ~Save(TE.f, saveerr) & saveerr THEN
+                     TE.Utf16To8(name, sys.ADR(TE.f.name));
+                     SaveErr(name)
+                   END;
+                   Shift := {}
+                 END
+      |ORD("X"): IF hot_cut IN hotkeys THEN TE.Copy; TE.DelSelect END
+      |ORD("C"),
+       45:       IF hot_copy IN hotkeys THEN TE.Copy END
+      |ORD("V"): IF hot_paste IN hotkeys THEN TE.Paste END
+      |ORD("Z"): IF hot_undo IN hotkeys THEN _Undo END
+      |ORD("F"): IF hot_find IN hotkeys THEN Dlg.ExecuteFind; Shift := {} END
+      |ORD("H"): IF hot_replace IN hotkeys THEN Dlg.ExecuteReplace; Shift := {} END
+      |ORD("G"): IF hot_goto IN hotkeys THEN _Goto; Shift := {} END
+      |ORD("A"): IF hot_selectall IN hotkeys THEN
+                   TE.KeyDown(36, {TU.ssCtrl});
+                   TE.KeyDown(35, {TU.ssShift, TU.ssCtrl})
+                 END
+      |ORD("U"): IF hot_upcase IN hotkeys THEN TE.ChCase(TRUE) END
+      |ORD("L"): IF hot_lowcase IN hotkeys THEN TE.ChCase(FALSE) END
+      |ORD("M"): IF hot_main IN hotkeys THEN MainModule(mainwnd); Shift := {} END
+      |120:      IF hot_compile IN hotkeys THEN _Compile; Shift := {} END
+      ELSE
+        TE.KeyDown(wparam, Shift)
+      END
+    ELSIF Shift = {} THEN
+      CASE wparam OF
+      |114: IF hot_searchagain IN hotkeys THEN Dlg.FindNext(Dlg.Find) END
+      |120: IF hot_run IN hotkeys THEN _Run END
+      ELSE
+        TE.KeyDown(wparam, Shift)
+      END
+    ELSIF Shift = {TU.ssShift} THEN
+      CASE wparam OF
+      |45: IF hot_paste IN hotkeys THEN TE.Paste END
+      |46: IF hot_cut IN hotkeys THEN TE.Copy; TE.DelSelect END
+      ELSE
+        TE.KeyDown(wparam, Shift)
+      END
+    ELSE
+      TE.KeyDown(wparam, Shift)
+    END;
+    Redraw
+  |257:
+    CASE wparam OF
+    |16: EXCL(Shift, TU.ssShift)
+    |17: EXCL(Shift, TU.ssCtrl)
+    ELSE
+    END
+  |258:
+    TE.Input(wparam);
+    Redraw
+  |WM_PAINT:
+    Redraw1
+  |WM_NOTIFY:
+    sys.GET(lparam + 8, n);
+    IF n = TCN_SELCHANGE THEN
+      TE.ChangePage(SendMessage(Tab, TCM_GETCURSEL, 0, 0));
+      Redraw
+    ELSE
+      SetFocus(mainwnd)
+    END
+  |WM_MENUSELECT:
+    IF TE.f # NIL THEN
+      EnableMenuItem(submenufile, ssave, ORD(~TE.f.txt.Modified));
+      EnableMenuItem(submenufile, ssaveall, ORD(~TE.Modified()));
+      sel := ~TE.Selected();
+      EnableMenuItem(submenuedit, scut, ORD(sel));
+      EnableMenuItem(submenuedit, scopy, ORD(sel));
+      EnableMenuItem(submenuedit, sdel, ORD(sel));
+      EnableMenuItem(submenuedit, sundo, ORD(TE.f.txt.Backup = NIL));
+      EnableMenuItem(submenuedit, spaste, ORD(~TU.IsClip()));
+      syncheck := TE.f.syntax;
+      numcheck := TE.f.numbers;
+      IF syncheck THEN
+        CheckMenuItem(submenuview, ssyntax, mf_checked)
+      ELSE
+        CheckMenuItem(submenuview, ssyntax, mf_unchecked)
+      END;
+      IF numcheck THEN
+        CheckMenuItem(submenuview, snumbers, mf_checked)
+      ELSE
+        CheckMenuItem(submenuview, snumbers, mf_unchecked)
+      END
+    END
+  |WM_COMMAND:
+    CASE LowWord(wparam) OF
+    |snew: _NewFile
+    |sopen: _OpenFile
+    |ssave:
+      IF ~Save(TE.f, saveerr) & saveerr THEN
+        TE.Utf16To8(name, sys.ADR(TE.f.name));
+        SaveErr(name)
+      END;
+      Redraw
+    |ssaveas:
+      IF ~SaveAs(TE.f, saveerr) & saveerr THEN
+        TE.Utf16To8(name, sys.ADR(TE.f.name));
+        SaveErr(name)
+      END;
+      Redraw
+    |ssaveall: SaveAll; Redraw
+    |sclose: IF Close(TE.f) THEN END
+    |scloseall: WHILE Close(TE.f) DO END
+    |sexit:  Exit
+    |sundo, cundo: _Undo
+    |scut, ccut:   TE.Copy; TE.DelSelect; Redraw
+    |scopy, ccopy:  TE.Copy; Redraw
+    |spaste, cpaste: TE.Paste; Redraw
+    |sdel, cdel:   TE.DelSelect; Redraw
+    |sfind: Dlg.ExecuteFind; Redraw
+    |ssearchagain: Dlg.FindNext(Dlg.Find); Redraw
+    |sreplace: Dlg.ExecuteReplace; Redraw
+    |sgoto: _Goto
+    |sselectall, cselectall:
+      TE.KeyDown(36, {TU.ssCtrl});
+      TE.KeyDown(35, {TU.ssShift, TU.ssCtrl});
+      Redraw
+    |supcase:  TE.ChCase(TRUE); Redraw
+    |slowcase: TE.ChCase(FALSE); Redraw
+    |ssyntax:
+      IF syncheck THEN
+        CheckMenuItem(submenuview, ssyntax, mf_unchecked)
+      ELSE
+        CheckMenuItem(submenuview, ssyntax, mf_checked)
+      END;
+      syncheck := ~syncheck;
+      TE.Syntax(syncheck);
+      Redraw
+    |snumbers:
+      IF numcheck THEN
+        CheckMenuItem(submenuview, snumbers, mf_unchecked)
+      ELSE
+        CheckMenuItem(submenuview, snumbers, mf_checked)
+      END;
+      numcheck := ~numcheck;
+      TE.Numbers(numcheck);
+      Redraw;
+      Redraw
+    |soptions:  _Options
+    |scompile:  _Compile
+    |srun:      _Run
+    |sparam:    _Params
+    |smain:     MainModule(mainwnd)
+    |sstk1:     stk := " 1 ";     CheckMenuRadioItem(submenustksize, sstk1, sstk8, sstk1, mf_bycommand)
+    |sstk2:     stk := " 2 ";     CheckMenuRadioItem(submenustksize, sstk1, sstk8, sstk2, mf_bycommand)
+    |sstk4:     stk := " 4 ";     CheckMenuRadioItem(submenustksize, sstk1, sstk8, sstk4, mf_bycommand)
+    |sstk8:     stk := " 8 ";     CheckMenuRadioItem(submenustksize, sstk1, sstk8, sstk8, mf_bycommand)
+    |swin32con: platf := " con "; CheckMenuRadioItem(submenuplatf, swin32con, skolibridll, swin32con, mf_bycommand)
+    |swin32gui: platf := " gui "; CheckMenuRadioItem(submenuplatf, swin32con, skolibridll, swin32gui, mf_bycommand)
+    |swin32dll: platf := " dll "; CheckMenuRadioItem(submenuplatf, swin32con, skolibridll, swin32dll, mf_bycommand)
+    |slinux32:  platf := " elf "; CheckMenuRadioItem(submenuplatf, swin32con, skolibridll, slinux32, mf_bycommand)
+    |skolibri:  platf := " kos "; CheckMenuRadioItem(submenuplatf, swin32con, skolibridll, skolibri, mf_bycommand)
+    |skolibridll:
+                platf := " obj "; CheckMenuRadioItem(submenuplatf, swin32con, skolibridll, skolibridll, mf_bycommand)
+    ELSE
+    END
+  ELSE
+    IF msg = FINDMSGSTRING THEN
+      sys.PUT(sys.ADR(lpf), lparam);
+      Dlg.FRProc(lpf)
+    END
+  END;
+  IF (msg # WM_CLOSE) & (msg # WM_SIZE) & (msg # -1) THEN
+    res := DefWindowProc(wnd, msg, wparam, lparam)
+  ELSIF (wnd # optwnd) & (wnd # gotownd) & (wnd # paramwnd) THEN
+    res := 0
+  END
+  RETURN res
+END WindowProc;
+
+PROCEDURE Status;
+CONST SB_SETPARTS = 1028;
+VAR pParts: ARRAY 3 OF INTEGER;
+BEGIN
+  wndSb := CreateStatusWindow(ORD(WS_CHILD + WS_VISIBLE), sys.ADR(""), StatusPanel, 4000);
+  pParts[0] := 100;
+  pParts[1] := 200;
+  pParts[2] := 10000;
+  SendMessage(wndSb, SB_SETPARTS, 3, sys.ADR(pParts))
+END Status;
+
+PROCEDURE CreateInputBox(Caption: STRING; VAR wnd, BtnOK, BtnCncl, Edit: INTEGER);
+VAR n: INTEGER; wndcaptionW: STRING;
+BEGIN
+  n := TU.Utf8To16(Caption, wndcaptionW);
+  wnd := CreateWindow(wndclass, Caption, ORD(BITS(WS_BORDER) + BITS(WS_SYSMENU)), 200, 200, 225, 115, mainwnd, 0, hinstance, 0);
+  n := TU.Utf8To16("OK", wndcaptionW);
+  BtnOK := CreateWindow("BUTTON", "OK", ORD(WS_VISIBLE + WS_CHILD), 10 + 30, 50, 60, 25, wnd, 0, hinstance, 0);
+  n := TU.Utf8To16("Cancel", wndcaptionW);
+  BtnCncl := CreateWindow("BUTTON", "Cancel", ORD(WS_VISIBLE + WS_CHILD), 80 + 30, 50, 60, 25, wnd, 0, hinstance, 0);
+  n := TU.Utf8To16("", wndcaptionW);
+  Edit := CreateWindow("EDIT", "", ORD(WS_CHILD + WS_VISIBLE + BITS(WS_BORDER) + BITS(ES_AUTOHSCROLL)), 10, 15, 200, 20, wnd, 0, hinstance, 0);
+  SendMessage(BtnOK, WM_SETFONT, Arial, 1);
+  SendMessage(BtnCncl, WM_SETFONT, Arial, 1);
+  SendMessage(Edit, WM_SETFONT, Arial, 1)
+END CreateInputBox;
+
+PROCEDURE Main;
+VAR
+  wndclassW, str: STRING; num: ARRAY 10 OF CHAR;
+  n, memdc, i: INTEGER;
+BEGIN
+  hinstance := GetModuleHandle(0);
+  Param.ParamStr(AppPath8, 0);
+  n := TU.Utf8To16(AppPath8, AppPath);
+  n := TE.ExtractFileName(sys.ADR(AppPath), "\");
+  sys.PUT(n, 0X);
+  sys.PUT(n + 1, 0X);
+  n := TU.Utf8To16(wndclass, wndclassW);
+  mainmenu := CreateMenu();
+  context := CreatePopupMenu();
+  wc.cbSize := sys.SIZE(tagWNDCLASSEX);
+  wc.style := ORD(cs_HRedraw + cs_VRedraw + CS_DBLCLKS);
+  wc.lpfnWndProc := WindowProc;
+  wc.cbClsExtra := 0;
+  wc.cbWndExtra := 0;
+  wc.hInstance := hinstance;
+  wc.hIcon := LoadIcon(0, idi_Application);
+  wc.hCursor := LoadCursor(0, IDC_ARROW);
+  Arrow := wc.hCursor;
+  IBeam := LoadCursor(0, IDC_IBEAM);
+  Hand := LoadCursor(0, IDC_HAND);
+  wc.hbrBackground := color_window;
+  wc.lpszMenuName := sys.ADR(mainmenu);
+  wc.lpszClassName := sys.ADR(wndclassW);
+  RegisterClassEx(wc);
+  mainwnd := CreateWindow(wndclass, wndcaption, ws_OverlappedWindow, 0, 0, 800, 600, 0, mainmenu, hinstance, 0);
+  optwnd := CreateWindow(wndclass, "Настройки", ORD(BITS(WS_BORDER) + BITS(WS_SYSMENU)), 20, 20, 340, 590, mainwnd, 0, hinstance, 0);
+  BtnOK := CreateWindow("BUTTON", "применить", ORD(WS_VISIBLE + WS_CHILD + BS_DEFPUSHBUTTON), 20, 510, 130, 35, optwnd, 0, hinstance, 0);
+  BtnCncl := CreateWindow("BUTTON", "отмена", ORD(WS_VISIBLE + WS_CHILD + BS_DEFPUSHBUTTON), 182, 510, 130, 35, optwnd, 0, hinstance, 0);
+  ComboFont := CreateWindow("COMBOBOX", "combobox", ORD(WS_CHILD + WS_VISIBLE + CBS_DROPDOWNLIST), 20, 20, 130, 800, optwnd, 0, hinstance, 0);
+  ComboSize := CreateWindow("COMBOBOX", "combobox", ORD(WS_CHILD + WS_VISIBLE + CBS_DROPDOWNLIST), 182, 20, 130, 800, optwnd, 0, hinstance, 0);
+
+  n := TU.Utf8To16("Courier New", str);
+  SendMessage(ComboFont, CB_ADDSTRING, 0, sys.ADR(str));
+  n := TU.Utf8To16("FixedSys", str);
+  SendMessage(ComboFont, CB_ADDSTRING, 1, sys.ADR(str));
+  n := TU.Utf8To16("Lucida Console", str);
+  SendMessage(ComboFont, CB_ADDSTRING, 2, sys.ADR(str));
+
+  FOR i := 8 TO 24 DO
+    TU.IntToStr(i, num);
+    n := TU.Utf8To16(num, str);
+    SendMessage(ComboSize, CB_ADDSTRING, i - 8, sys.ADR(str));
+  END;
+
+  StatusPanel := CreateWindow("SysTabControl32", "", ORD(WS_CHILD + WS_VISIBLE), 0, 0, 300, 300, mainwnd, 0, hinstance, 0);
+  Tab := CreateWindow("SysTabControl32", "", ORD(WS_CHILD + WS_VISIBLE), 0, 0, 300, 300, mainwnd, 0, hinstance, 0);
+  Status;
+
+  n := TU.Utf8To16("Arial", str);
+  Arial := CreateFont(-12, 0, 0, 0, FW_NORMAL, 0, 0, 0, ANSI_CHARSET,
+    OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, ORD(DEFAULT_PITCH + FF_DONTCARE), sys.ADR(str));
+  SendMessage(Tab, WM_SETFONT, Arial, 1);
+  SendMessage(wndSb, WM_SETFONT, Arial, 1);
+  SendMessage(BtnOK, WM_SETFONT, Arial, 1);
+  SendMessage(BtnCncl, WM_SETFONT, Arial, 1);
+  SendMessage(ComboFont, WM_SETFONT, Arial, 1);
+  SendMessage(ComboSize, WM_SETFONT, Arial, 1);
+
+  n := TU.Utf8To16("Arial", str);
+  Arial2 := CreateFont(-12, 0, 0, 0, FW_NORMAL, 0, 0, 0, ANSI_CHARSET,
+    OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, ORD(DEFAULT_PITCH + FF_DONTCARE), sys.ADR(str));
+
+  hpos := 0; vpos := 0; hmax := 1; vmax := 1; hpage := 1; vpage := 1;
+  HScroll := CreateWindow("SCROLLBAR", "", ORD(WS_CHILD + WS_VISIBLE + SBS_HORZ), 20, 160, 200, 25, mainwnd, 0, hinstance, 0);
+  SetScrollRange(HScroll, SB_CTL, 0, hmax, TRUE);
+  SetScrollPos(HScroll, SB_CTL, 0, TRUE);
+  VScroll := CreateWindow("SCROLLBAR", "", ORD(WS_CHILD + WS_VISIBLE + SBS_VERT), 230, 10, 25, 200, mainwnd, 0, hinstance, 0);
+  SetScrollRange(VScroll, SB_CTL, 0, vmax, TRUE);
+  SetScrollPos(VScroll, SB_CTL, 0, TRUE);
+
+  submenufile := CreatePopupMenu();
+  submenuedit := CreatePopupMenu();
+  submenuview := CreatePopupMenu();
+  submenuprog := CreatePopupMenu();
+  submenucase := CreatePopupMenu();
+  submenuplatf := CreatePopupMenu();
+  submenustksize := CreatePopupMenu();
+
+  CreateMenuItem(mainmenu, submenufile, "Файл", "", mfile);
+    CreateMenuItem(submenufile, 0, "Новый", "Ctrl+N", snew);
+    CreateMenuItem(submenufile, 0, "Открыть", "Ctrl+O", sopen);
+    CreateMenuItem(submenufile, 0, "Сохранить", "Ctrl+S", ssave);
+    CreateMenuItem(submenufile, 0, "Сохранить как", "", ssaveas);
+    CreateMenuItem(submenufile, 0, "Сохранить все", "", ssaveall);
+    CreateMenuItem(submenufile, 0, "Закрыть", "", sclose);
+    CreateMenuItem(submenufile, 0, "Закрыть все", "", scloseall);
+    CreateMenuSep(submenufile);
+    CreateMenuItem(submenufile, 0, "Выход", "", sexit);
+  CreateMenuItem(mainmenu, submenuedit, "Правка", "", mfile);
+    CreateMenuItem(submenuedit, 0, "Отменить", "Ctrl+Z", sundo);
+    CreateMenuSep(submenuedit);
+    CreateMenuItem(submenuedit, 0, "Вырезать", "Ctrl+X", scut);
+    CreateMenuItem(submenuedit, 0, "Копировать", "Ctrl+C", scopy);
+    CreateMenuItem(submenuedit, 0, "Вставить", "Ctrl+V", spaste);
+    CreateMenuItem(submenuedit, 0, "Удалить", "", sdel);
+    CreateMenuSep(submenuedit);
+    CreateMenuItem(submenuedit, 0, "Найти", "Ctrl+F", sfind);
+    CreateMenuItem(submenuedit, 0, "Найти далее", "F3", ssearchagain);
+    CreateMenuItem(submenuedit, 0, "Заменить", "Ctrl+H", sreplace);
+    CreateMenuItem(submenuedit, 0, "Перейти", "Ctrl+G", sgoto);
+    CreateMenuSep(submenuedit);
+    CreateMenuItem(submenuedit, 0, "Выделить все", "Ctrl+A", sselectall);
+    CreateMenuSep(submenuedit);
+    CreateMenuItem(submenuedit, submenucase, "Регистр", "", scase);
+      CreateMenuItem(submenucase, 0, "Верхний", "Ctrl+U", supcase);
+      CreateMenuItem(submenucase, 0, "Нижний", "Ctrl+L", slowcase);
+  CreateMenuItem(mainmenu, submenuview, "Вид", "", mfile);
+    CreateMenuItem(submenuview, 0, "Синтаксис", "", ssyntax);
+    CreateMenuItem(submenuview, 0, "Номера строк", "", snumbers);
+    CreateMenuItem(submenuview, 0, "Настройки...", "", soptions);
+  CreateMenuItem(mainmenu, submenuprog, "Программа", "", mfile);
+    CreateMenuItem(submenuprog, 0, "Компилировать", "Ctrl+F9", scompile);
+    CreateMenuItem(submenuprog, 0, "Выполнить", "F9", srun);
+    CreateMenuItem(submenuprog, 0, "Параметры...", "", sparam);
+    CreateMenuItem(submenuprog, 0, "Главный модуль", "Ctrl+M", smain);
+    CreateMenuItem(submenuprog, submenuplatf, "Платформа", "", splatf);
+      CreateMenuItem(submenuplatf, 0, "Win32 Console", "", swin32con);
+      CreateMenuItem(submenuplatf, 0, "Win32 GUI", "", swin32gui);
+      CreateMenuItem(submenuplatf, 0, "Win32 DLL", "", swin32dll);
+      CreateMenuItem(submenuplatf, 0, "Linux32", "", slinux32);
+      CreateMenuItem(submenuplatf, 0, "KolibriOS", "", skolibri);
+      CreateMenuItem(submenuplatf, 0, "KolibriOS DLL", "", skolibridll);
+    CreateMenuItem(submenuprog, submenustksize, "Размер стека (Мб)", "", sstksize);
+      CreateMenuItem(submenustksize, 0, "1", "", sstk1);
+      CreateMenuItem(submenustksize, 0, "2", "", sstk2);
+      CreateMenuItem(submenustksize, 0, "4", "", sstk4);
+      CreateMenuItem(submenustksize, 0, "8", "", sstk8);
+
+  CreateMenuItem(context, 0, "Отменить", "", cundo);
+  CreateMenuSep(context);
+  CreateMenuItem(context, 0, "Вырезать", "", ccut);
+  CreateMenuItem(context, 0, "Копировать", "", ccopy);
+  CreateMenuItem(context, 0, "Вставить", "", cpaste);
+  CreateMenuItem(context, 0, "Удалить", "", cdel);
+  CreateMenuSep(context);
+  CreateMenuItem(context, 0, "Выделить все", "", cselectall);
+
+  DrawMenuBar(mainwnd);
+  ShowWindow(mainwnd, SW_SHOWNORMAL);
+  MenuEnabled(FALSE);
+
+  CreateInputBox("перейти на строку", gotownd, gotoBtnOK, gotoBtnCncl, gotoEdit);
+  CreateInputBox("параметры", paramwnd, paramBtnOK, paramBtnCncl, paramEdit);
+
+  CheckMenuRadioItem(submenustksize, sstk1, sstk8, sstk1, mf_bycommand);
+  stk := " 1 ";
+  CheckMenuRadioItem(submenuplatf, swin32con, skolibri, swin32con, mf_bycommand);
+  platf := " con ";
+  CheckMenuItem(submenuview, snumbers, mf_checked);
+  CheckMenuItem(submenuview, ssyntax, mf_checked);
+  numcheck := TRUE;
+  syncheck := TRUE;
+  GetMemBMP(MemDC, MemBMP, 2000, 2000);
+  GetCharSize(MemDC, font, textW, textH);
+  TE.SetFont(textH + Inter, textW);
+  TabDC := GetDC(Tab);
+  ParamDC := GetDC(optwnd);
+  BkColor := TU.RGB(240, 240, 240);
+  ReadParams;
+  SendMessage(ComboFont, CB_SETCURSEL, font_num, 0);
+  SendMessage(ComboSize, CB_SETCURSEL, font_size - 8, 0);
+  FINDMSGSTRING := RegisterWindowMessage(sys.ADR("commdlg_FindReplace"));
+  TU.SetMain(mainwnd);
+  Dlg.Init(Redraw, GetCurrentDirectory, mainwnd, hinstance);
+  Dlg.InitOpen(GetOpenFileName);
+  Dlg.InitSave(GetSaveFileName);
+  Dlg.InitColor(ChooseColor);
+  Dlg.InitFind(FindTextW);
+  Dlg.InitReplace(ReplaceTextW);
+  SetTimer(mainwnd, timer1, GetCaretBlinkTime(), 0);
+  KillTimer(mainwnd, timer1);
+  SetTimer(mainwnd, timer2, 800, 0);
+  WHILE GetMessage(msg, 0, 0, 0) DO
+    TranslateMessage(msg);
+    DispatchMessage(msg)
+  END;
+  KillTimer(mainwnd, timer1);
+  KillTimer(mainwnd, timer2)
+END Main;
+
+PROCEDURE Init;
+VAR user32, kernel32, gdi32, comctl32, comdlg32, shell32: INTEGER;
+
+  PROCEDURE GetProc(name: STRING; hMOD, adr: INTEGER);
+  VAR H: INTEGER;
+  BEGIN
+    H := API.GetProcAddress(hMOD, sys.ADR(name));
+    ASSERT(H # 0);
+    sys.PUT(adr, H);
+  END GetProc;
+
+BEGIN
+  blocksel := FALSE;
+  paramcolor := -1;
+  Shift := {};
+  hotkeys := {hot_new, hot_open};
+  Text.Init(ResetTimer);
+  user32 := API.LoadLibraryA(sys.ADR("user32.dll"));
+  ASSERT(user32 # 0);
+  kernel32 := API.LoadLibraryA(sys.ADR("kernel32.dll"));
+  ASSERT(kernel32 # 0);
+  gdi32 := API.LoadLibraryA(sys.ADR("gdi32.dll"));
+  ASSERT(gdi32 # 0);
+  comctl32 := API.LoadLibraryA(sys.ADR("comctl32.dll"));
+  ASSERT(comctl32 # 0);
+  comdlg32 := API.LoadLibraryA(sys.ADR("comdlg32.dll"));
+  ASSERT(comdlg32 # 0);
+  shell32 := API.LoadLibraryA(sys.ADR("shell32.dll"));
+  ASSERT(comctl32 # 0);
+  GetProc("ShellExecuteW", shell32, sys.ADR(ShellExecute));
+  GetProc("MoveFileW", kernel32, sys.ADR(MoveFile));
+  GetProc("DeleteFileW", kernel32, sys.ADR(DeleteFile));
+  GetProc("CloseHandle", kernel32, sys.ADR(CloseHandle));
+  GetProc("GetCurrentDirectoryW", kernel32, sys.ADR(GetCurrentDirectory));
+  GetProc("DefWindowProcW", user32, sys.ADR(DefWindowProc));
+  GetProc("LoadCursorW", user32, sys.ADR(LoadCursor));
+  GetProc("LoadIconW", user32, sys.ADR(LoadIcon));
+  GetProc("RegisterClassExW", user32, sys.ADR(RegisterClassEx));
+  GetProc("DispatchMessageW", user32, sys.ADR(DispatchMessage));
+  GetProc("GetMessageW", user32, sys.ADR(GetMessage));
+  GetProc("SendMessageW", user32, sys.ADR(SendMessage));
+  GetProc("InsertMenuItemW", user32, sys.ADR(InsertMenuItem));
+  GetProc("GetModuleHandleW", kernel32, sys.ADR(GetModuleHandle));
+  GetProc("MoveWindow", user32, sys.ADR(MoveWindow));
+  GetProc("CreateWindowExW", user32, sys.ADR(CreateWindowEx));
+  GetProc("PostQuitMessage", user32, sys.ADR(PostQuitMessage));
+  GetProc("ShowWindow", user32, sys.ADR(ShowWindow));
+  GetProc("TranslateMessage", user32, sys.ADR(TranslateMessage));
+  GetProc("CheckMenuItem", user32, sys.ADR(CheckMenuItem));
+  GetProc("EnableMenuItem", user32, sys.ADR(EnableMenuItem));
+  GetProc("CheckMenuRadioItem", user32, sys.ADR(CheckMenuRadioItem));
+  GetProc("CreateMenu", user32, sys.ADR(CreateMenu));
+  GetProc("CreatePopupMenu", user32, sys.ADR(CreatePopupMenu));
+  GetProc("DrawMenuBar", user32, sys.ADR(DrawMenuBar));
+  GetProc("SetScrollPos", user32, sys.ADR(SetScrollPos));
+  GetProc("GetScrollInfo", user32, sys.ADR(GetScrollInfo));
+  GetProc("SetScrollRange", user32, sys.ADR(SetScrollRange));
+  GetProc("GetClientRect", user32, sys.ADR(GetClientRect));
+  GetProc("GetDC", user32, sys.ADR(GetDC));
+  GetProc("SetTimer", user32, sys.ADR(SetTimer));
+  GetProc("KillTimer", user32, sys.ADR(KillTimer));
+  GetProc("CreateFontW", gdi32, sys.ADR(CreateFont));
+  GetProc("SelectObject", gdi32, sys.ADR(SelectObject));
+  GetProc("SetCursor", user32, sys.ADR(SetCursor));
+  GetProc("CreateCompatibleDC", gdi32, sys.ADR(CreateCompatibleDC));
+  GetProc("CreateCompatibleBitmap", gdi32, sys.ADR(CreateCompatibleBitmap));
+  GetProc("GetDesktopWindow", user32, sys.ADR(GetDesktopWindow));
+  GetProc("ReleaseDC", user32, sys.ADR(ReleaseDC));
+  GetProc("SetFocus", user32, sys.ADR(SetFocus));
+  GetProc("TrackPopupMenu", user32, sys.ADR(TrackPopupMenu));
+  GetProc("ScreenToClient", user32, sys.ADR(ScreenToClient));
+  GetProc("UpdateWindow", user32, sys.ADR(UpdateWindow));
+  GetProc("InvalidateRect", user32, sys.ADR(InvalidateRect));
+  GetProc("GetCaretBlinkTime", user32, sys.ADR(GetCaretBlinkTime));
+  GetProc("GetCursorPos", user32, sys.ADR(GetCursorPos));
+  GetProc("GetKeyState", user32, sys.ADR(GetKeyState));
+  GetProc("RegisterWindowMessageA", user32, sys.ADR(RegisterWindowMessage));
+  GetProc("CreateStatusWindow", comctl32, sys.ADR(CreateStatusWindow));
+  GetProc("BitBlt", gdi32, sys.ADR(BitBlt));
+  GetProc("GetTextExtentPoint32A", gdi32, sys.ADR(GetTextExtentPoint32));
+  GetProc("GetOpenFileNameW", comdlg32, sys.ADR(GetOpenFileName));
+  GetProc("GetSaveFileNameW", comdlg32, sys.ADR(GetSaveFileName));
+  GetProc("ChooseColorW", comdlg32, sys.ADR(ChooseColor));
+  GetProc("FindTextW", comdlg32, sys.ADR(FindTextW));
+  GetProc("ReplaceTextW", comdlg32, sys.ADR(ReplaceTextW));
+END Init;
+
+BEGIN
+  Init;
+  Main
+END Editor.

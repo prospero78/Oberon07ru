@@ -1,0 +1,385 @@
+﻿(*
+    Copyright 2013 Krotov Anton
+
+    This file is part of Editor.
+
+    Editor is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Editor is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Editor. If not, see <http://www.gnu.org/licenses/>.
+*)
+
+MODULE Dialogs;
+
+IMPORT sys := SYSTEM, TU := TextUtils, TE := TextEdit, Line, Text;
+
+CONST
+
+    frDown = 0;
+    frWholeWord = 1;
+    frMatchCase = 2;
+
+TYPE
+
+  STRING = ARRAY 2048 OF CHAR;
+
+  OPENFILENAME = RECORD
+    lStructSize,
+    hwndOwner,
+    hInstance,
+    lpstrFilter,
+    lpstrCustomFilter,
+    nMaxCustFilter,
+    nFilterIndex,
+    lpstrFile,
+    nMaxFile,
+    lpstrFileTitle,
+    nMaxFileTitle,
+    lpstrInitialDir,
+    lpstrTitle,
+    flags: INTEGER;
+    nFileOffset,
+    nFileExtension: sys.CARD16;
+    lpstrDefExt,
+    lCustData,
+    lpfnHook,
+    lpTemplateName: INTEGER
+  END;
+
+  PGetOpenSaveFileName* = PROCEDURE [winapi] (Open: OPENFILENAME): INTEGER;
+
+  LPCHOOSECOLOR = RECORD
+    lStructSize,
+    hwndOwner,
+    hInstance,
+    rgbResult,
+    lpCustColors,
+    Flags,
+    lCustData,
+    lpfnHook,
+    lpTemplateName: INTEGER
+  END;
+
+  PChooseColor* = PROCEDURE [winapi] (lpcc: LPCHOOSECOLOR): BOOLEAN;
+
+  LPFINDREPLACE* = POINTER TO FINDREPLACE;
+
+  FINDREPLACE* = RECORD
+    lStructSize,
+    hwndOwner,
+    hInstance: INTEGER;
+    Flags: SET;
+    lpstrFindWhat,
+    lpstrReplaceWith: INTEGER;
+    wFindWhatLen,
+    wReplaceWithLen: sys.CARD16;
+    lCustData: INTEGER;
+    lpfnHook: INTEGER;
+    lpTemplateName: INTEGER
+  END;
+
+  TFile = ARRAY 10240 OF Line.WCHAR;
+  TFileName = ARRAY 1024 OF Line.WCHAR;
+
+  TOpenSave = RECORD
+    Filter: STRING;
+    File: TFile;
+    FileName, InitDir: TFileName
+  END;
+
+  TFindReplace = RECORD
+    sFind, sReplace: Line.TEXTSTR
+  END;
+
+  PFindText* = PROCEDURE [winapi] (lpfr: LPFINDREPLACE): INTEGER;
+
+  PGetCurrentDirectory* = PROCEDURE [winapi] (nBufferLength, lpBuffer: INTEGER): INTEGER;
+
+  PRedraw = PROCEDURE;
+
+VAR
+
+  OpenProc, SaveProc: PGetOpenSaveFileName;
+  Open, Save: OPENFILENAME;
+  rOpen, rSave: TOpenSave;
+
+  Color: LPCHOOSECOLOR;
+  ColorProc: PChooseColor;
+  CustColors: ARRAY 16 OF INTEGER;
+
+  Find*, Replace: LPFINDREPLACE;
+  FindProc, ReplaceProc: PFindText;
+  rFind, rReplace: TFindReplace;
+
+  Redraw: PROCEDURE;
+  GetCurrentDirectory: PGetCurrentDirectory;
+  Window, hInstance: INTEGER;
+
+PROCEDURE Files*(): INTEGER;
+VAR i, length, a, n: INTEGER;
+BEGIN
+  i := 0;
+  a := 0;
+  n := -1;
+  length := LEN(rOpen.File);
+  WHILE (i < length) & (a < 2) DO
+    IF Line.iszero(rOpen.File[i]) THEN
+      IF a = 0 THEN
+        INC(n)
+      END;
+      INC(a)
+    ELSE
+      a := 0
+    END;
+    INC(i)
+  END
+  RETURN n
+END Files;
+
+PROCEDURE FileIdx2(VAR FileName: TFileName; File: TFile; idx: INTEGER): INTEGER;
+VAR i, length, n, dirlen: INTEGER;
+BEGIN
+  dirlen := GetCurrentDirectory(LEN(FileName), sys.ADR(FileName));
+  FileName[dirlen][0] := "\";
+  FileName[dirlen][1] := 0X;
+  INC(dirlen);
+  FileName[dirlen][0] := 0X;
+  FileName[dirlen][1] := 0X;
+  i := 0;
+  n := -1;
+  length := LEN(File);
+  WHILE (i < length) & (n < idx) DO
+    IF Line.iszero(File[i]) THEN
+      INC(n)
+    END;
+    INC(i)
+  END;
+  WHILE Line.notzero(File[i]) DO
+    FileName[dirlen] := File[i];
+    INC(i); INC(dirlen);
+  END;
+  FileName[dirlen] := File[i]
+  RETURN sys.ADR(FileName)
+END FileIdx2;
+
+PROCEDURE FileIdx*(open: BOOLEAN; idx: INTEGER): INTEGER;
+VAR res: INTEGER;
+BEGIN
+  IF open THEN
+    res := FileIdx2(rOpen.FileName, rOpen.File, idx)
+  ELSE
+    res := FileIdx2(rSave.FileName, rSave.File, idx)
+  END
+  RETURN res
+END FileIdx;
+
+PROCEDURE ClearFile(VAR F: TFile);
+VAR i: INTEGER;
+BEGIN
+  FOR i := 0 TO LEN(F) - 1 DO
+    F[i][0] := 0X; F[i][1] := 0X
+  END
+END ClearFile;
+
+PROCEDURE SaveAsFile*(): INTEGER;
+VAR i, res: INTEGER;
+BEGIN
+  res := 0;
+  ClearFile(rSave.File);
+  IF SaveProc(Save) # 0 THEN
+    res := FileIdx(FALSE, -1)
+  END
+  RETURN res
+END SaveAsFile;
+
+PROCEDURE ExecuteOpen*(): BOOLEAN;
+VAR i: INTEGER;
+BEGIN
+  ClearFile(rOpen.File)
+  RETURN OpenProc(Open) # 0
+END ExecuteOpen;
+
+PROCEDURE InitOpenSave(VAR r: OPENFILENAME; VAR r2: TOpenSave);
+VAR tempFilter: STRING; n, i: INTEGER;
+BEGIN
+  r.lpstrFilter := sys.ADR(r2.Filter);
+  r.lpstrFile := sys.ADR(r2.File);
+  r.nMaxFile := LEN(r2.File);
+  r.lpstrInitialDir := sys.ADR(r2.InitDir);
+  r.lStructSize := sys.SIZE(OPENFILENAME);
+  r.hwndOwner := Window;
+  r.hInstance := hInstance;
+  tempFilter := "Oberon Module (*.ob07)";  TU.concat(tempFilter, 1X, tempFilter);
+  TU.concat(tempFilter, "*.ob07", tempFilter); TU.concat(tempFilter, 1X, tempFilter);
+  TU.concat(tempFilter, "Все файлы (*.*)", tempFilter); TU.concat(tempFilter, 1X, tempFilter);
+  TU.concat(tempFilter, "*.*", tempFilter); TU.concat(tempFilter, 1X, tempFilter); TU.concat(tempFilter, 1X, tempFilter);
+  n := TU.Utf8To16(tempFilter, r2.Filter);
+  FOR i := 0 TO n * 2 - 1 BY 2 DO
+    IF (r2.Filter[i] = 1X) & (r2.Filter[i + 1] = 0X) THEN
+      r2.Filter[i] := 0X
+    END
+  END;
+  r.nFilterIndex := 1;
+  r.lpstrFileTitle := r.lpstrFile;
+  r.nMaxFileTitle := r.nMaxFile;
+  r.lpstrTitle := 0
+END InitOpenSave;
+
+PROCEDURE InitOpen*(proc: PGetOpenSaveFileName);
+BEGIN
+  OpenProc := proc;
+  Open.flags := ORD({2, 9, 19});
+  InitOpenSave(Open, rOpen)
+END InitOpen;
+
+PROCEDURE InitSave*(proc: PGetOpenSaveFileName);
+VAR tempFilter: STRING; n, i: INTEGER;
+BEGIN
+  SaveProc := proc;
+  Save.flags := ORD({1, 2, 19});
+  InitOpenSave(Save, rSave)
+END InitSave;
+
+PROCEDURE ExecuteColor*(color: INTEGER): INTEGER;
+BEGIN
+  Color.rgbResult := color;
+  ColorProc(Color)
+  RETURN Color.rgbResult
+END ExecuteColor;
+
+PROCEDURE InitColor*(proc: PChooseColor);
+BEGIN
+  ColorProc := proc;
+  Color.lStructSize := sys.SIZE(LPCHOOSECOLOR);
+  Color.hwndOwner := Window;
+  Color.hInstance := hInstance;
+  Color.lpCustColors := sys.ADR(CustColors);
+  Color.lCustData := sys.ADR(Color);
+  Color.lpfnHook := 0;
+  Color.lpTemplateName := 0;
+  Color.Flags := 1
+END InitColor;
+
+PROCEDURE ExecuteFind*;
+BEGIN
+  FindProc(Find)
+END ExecuteFind;
+
+PROCEDURE ExecuteReplace*;
+BEGIN
+  ReplaceProc(Replace)
+END ExecuteReplace;
+
+PROCEDURE FindText(str: ARRAY OF Line.WCHAR; VAR pos: INTEGER; Case, Whole, Frw: BOOLEAN): Line.LINE;
+VAR res: Line.LINE;
+BEGIN
+  IF (TE.f # NIL) & (TE.f.txt # NIL) THEN
+    res := Text.Find(TE.f.txt, str, pos, Case, Whole, Frw)
+  END;
+  Redraw
+  RETURN res
+END FindText;
+
+PROCEDURE ReplaceText(find, repl: ARRAY OF Line.WCHAR; All, Case, Whole: BOOLEAN): INTEGER;
+VAR res: INTEGER;
+BEGIN
+  IF (TE.f # NIL) & (TE.f.txt # NIL) THEN
+    res := Text.Replace(TE.f.txt, find, repl, All, Case, Whole)
+  END;
+  Redraw
+  RETURN res
+END ReplaceText;
+
+PROCEDURE FindFail(pFind: INTEGER);
+VAR str1, str2, str3: TU.STRING8; n: INTEGER;
+BEGIN
+  TE.Utf16To8(str3, pFind);
+  n := TU.Utf8To16("Oberon-07", str1);
+  str2 := "не удается найти ";
+  TU.concat(str2, 22X, str2);
+  TU.concat(str2, str3, str2);
+  TU.concat(str2, 22X, str2);
+  n := TU.Utf8To16(str2, str3);
+  TU.MessageBox(Window, sys.ADR(str3), sys.ADR(str1), 64)
+END FindFail;
+
+PROCEDURE FindNext*(lpf: LPFINDREPLACE);
+VAR pos: INTEGER; res: Line.LINE; sFind: Line.TEXTSTR;
+BEGIN
+  sys.MOVE(lpf.lpstrFindWhat, sys.ADR(sFind), sys.SIZE(Line.TEXTSTR) DIV 2);
+  res := FindText(sFind, pos, frMatchCase IN lpf.Flags, frWholeWord IN lpf.Flags, frDown IN lpf.Flags);
+  IF res = NIL THEN
+    FindFail(lpf.lpstrFindWhat)
+  END
+END FindNext;
+
+PROCEDURE FRProc*(lpfr: LPFINDREPLACE);
+VAR n: INTEGER; all: BOOLEAN; int: ARRAY 11 OF CHAR; str1, str2: TU.STRING8;
+BEGIN
+  n := -1;
+  all := FALSE;
+  IF 3 IN lpfr.Flags THEN
+    FindNext(lpfr)
+  ELSIF 4 IN lpfr.Flags THEN
+    n := ReplaceText(rReplace.sFind, rReplace.sReplace, FALSE, frMatchCase IN Replace.Flags, frWholeWord IN Replace.Flags)
+  ELSIF 5 IN lpfr.Flags THEN
+    n := ReplaceText(rReplace.sFind, rReplace.sReplace, TRUE, frMatchCase IN Replace.Flags, frWholeWord IN Replace.Flags);
+    all := TRUE
+  END;
+  IF n = 0 THEN
+    FindFail(sys.ADR(rReplace.sFind))
+  ELSIF all THEN
+    TU.IntToStr(n, int);
+    str1 := "сделано замен: ";
+    TU.concat(str1, int, str1);
+    n := TU.Utf8To16(str1, str2);
+    n := TU.Utf8To16("Oberon-07", str1);
+    TU.MessageBox(Window, sys.ADR(str2), sys.ADR(str1), 64)
+  END
+END FRProc;
+
+PROCEDURE InitFR(r: LPFINDREPLACE; r2: TFindReplace);
+BEGIN
+  r.lStructSize := sys.SIZE(FINDREPLACE);
+  r.hwndOwner := Window;
+  r.hInstance := hInstance;
+  r.Flags := {frDown};
+  r.lpstrFindWhat := sys.ADR(r2.sFind);
+  r.lpstrReplaceWith := sys.ADR(r2.sReplace);
+  sys.PUT(sys.ADR(r.wFindWhatLen), LEN(r2.sFind));
+  r.wReplaceWithLen := r.wFindWhatLen;
+  r.lCustData := 0;
+  r.lpfnHook := 0;
+  r.lpTemplateName := 0
+END InitFR;
+
+PROCEDURE InitFind*(proc: PFindText);
+BEGIN
+  InitFR(Find, rFind);
+  FindProc := proc
+END InitFind;
+
+PROCEDURE InitReplace*(proc: PFindText);
+BEGIN
+  InitFR(Replace, rReplace);
+  ReplaceProc := proc
+END InitReplace;
+
+PROCEDURE Init*(pRedraw: PRedraw; GetCurDir: PGetCurrentDirectory; wnd, hinst: INTEGER);
+BEGIN
+  NEW(Find); NEW(Replace);
+  Redraw := pRedraw;
+  GetCurrentDirectory := GetCurDir;
+  Window := wnd;
+  hInstance := hinst
+END Init;
+
+END Dialogs.

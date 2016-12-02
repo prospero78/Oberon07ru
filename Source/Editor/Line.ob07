@@ -1,0 +1,347 @@
+﻿(*
+    Copyright 2013 Krotov Anton
+
+    This file is part of Editor.
+
+    Editor is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Editor is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Editor. If not, see <http://www.gnu.org/licenses/>.
+*)
+
+MODULE Line;
+
+IMPORT List;
+
+CONST MAXLEN* = 512;
+
+TYPE
+
+  WCHAR* = ARRAY 2 OF CHAR;
+
+  TEXTSTR* = ARRAY MAXLEN OF WCHAR;
+
+  LINE* = POINTER TO rLINE;
+
+  ComItem* = POINTER TO RECORD (List.rITEM) comin*, comout*: INTEGER END;
+
+  rLINE* = RECORD (List.rITEM)
+    str*: TEXTSTR;
+    length*, comin*, comout*, dif*: INTEGER;
+    Modified*: BOOLEAN;
+    ComTab*: List.LIST
+  END;
+
+  PROC = PROCEDURE (L: LINE);
+
+VAR zero: WCHAR; Lst: List.LIST; CommentTable: PROC;
+
+PROCEDURE SetList*(L: List.LIST);
+BEGIN
+  Lst := L
+END SetList;
+
+PROCEDURE Init*(p: PROC);
+BEGIN
+  CommentTable := p
+END Init;
+
+PROCEDURE iszero*(ch: WCHAR): BOOLEAN;
+  RETURN (ch[0] = 0X) & (ch[1] = 0X)
+END iszero;
+
+PROCEDURE notzero*(ch: WCHAR): BOOLEAN;
+  RETURN (ch[0] # 0X) OR (ch[1] # 0X)
+END notzero;
+
+PROCEDURE concat(L, R: ARRAY OF WCHAR; VAR Res: ARRAY OF WCHAR);
+VAR i, j: INTEGER;
+BEGIN
+  i := 0;
+  WHILE notzero(L[i]) & (i < LEN(Res) - 1) DO
+    Res[i] := L[i];
+    INC(i)
+  END;
+  j := 0;
+  WHILE notzero(R[j]) & (j + i < LEN(Res) - 1) DO
+    Res[j + i] := R[j];
+    INC(j)
+  END;
+  Res[j + i] := zero
+END concat;
+
+PROCEDURE Clear*(this: LINE);
+BEGIN
+  this.str[0] := zero;
+  this.length := 0;
+  this.Modified := TRUE
+END Clear;
+
+PROCEDURE ShiftRight1(VAR str: TEXTSTR; pos, count: INTEGER);
+VAR i: INTEGER;
+BEGIN
+  FOR i := pos + count - 1 TO pos BY -1 DO
+    str[i + 1] := str[i]
+  END
+END ShiftRight1;
+
+PROCEDURE ShiftRight*(VAR str: TEXTSTR; pos, count, shift: INTEGER);
+VAR i: INTEGER;
+BEGIN
+  FOR i := pos + count - 1 TO pos BY -1 DO
+    str[i + shift] := str[i]
+  END
+END ShiftRight;
+
+PROCEDURE ShiftLeft*(VAR str: TEXTSTR; pos, count, shift: INTEGER);
+VAR i: INTEGER;
+BEGIN
+  FOR i := pos TO pos + count - 1 DO
+    str[i - shift] := str[i]
+  END
+END ShiftLeft;
+
+PROCEDURE TrimRight*(this: LINE);
+VAR i: INTEGER;
+BEGIN
+  i := this.length - 1;
+  WHILE (i >= 0) & (this.str[i][0] = 20X) & (this.str[i][1] = 0X) DO
+    DEC(i)
+  END;
+  INC(i);
+  this.str[i] := zero;
+  this.length := i;
+  CommentTable(this);
+  this.Modified := FALSE
+END TrimRight;
+
+PROCEDURE Concat*(this, next: LINE): BOOLEAN;
+VAR Len, t: INTEGER; res: BOOLEAN;
+BEGIN
+  concat(this.str, next.str, this.str);
+  t := this.length + next.length;
+  IF t > (MAXLEN - 1) THEN
+    Len := MAXLEN - 1 - this.length;
+    ShiftLeft(next.str, Len, next.length - Len, Len);
+    next.length := next.length - Len;
+    next.str[next.length] := zero;
+    next.Modified := TRUE;
+    this.length := MAXLEN - 1;
+    res := FALSE
+  ELSE
+    this.length := t;
+    res := TRUE
+  END;
+  this.Modified := TRUE
+  RETURN res
+END Concat;
+
+PROCEDURE Spaces*(this: LINE; n: INTEGER);
+VAR i: INTEGER;
+BEGIN
+  FOR i := this.length TO this.length + n - 1 DO
+    this.str[i][0] := 20X;
+    this.str[i][1] := 0X
+  END;
+  this.length := this.length + n;
+  IF n > 0 THEN
+    this.Modified := TRUE
+  END;
+  this.str[this.length] := zero
+END Spaces;
+
+PROCEDURE DestroyLine(this: List.ITEM);
+BEGIN
+  List.DestroyList(this(LINE).ComTab)
+END DestroyLine;
+
+PROCEDURE CreateLine*(str: TEXTSTR; length: INTEGER): LINE;
+VAR nov: LINE;
+BEGIN
+  NEW(nov);
+  IF nov # NIL THEN
+    nov.Destroy := DestroyLine;
+    NEW(nov.ComTab);
+    List.CreateList(nov.ComTab);
+    nov.str := str;
+    nov.length := length;
+    TrimRight(nov)
+  END
+  RETURN nov
+END CreateLine;
+
+PROCEDURE FrwInput(this: LINE; ch: WCHAR; VAR last: WCHAR; VAR next: LINE): BOOLEAN;
+VAR str: TEXTSTR; res: BOOLEAN;
+BEGIN
+  res := FALSE;
+  IF this = NIL THEN
+    str[0] := zero;
+    this := CreateLine(str, 0);
+    List.Push(Lst, this)
+  END;
+  IF this.length = MAXLEN - 1 THEN
+    last := this.str[MAXLEN - 2];
+    DEC(this.length);
+    this.str[MAXLEN - 2] := zero;
+    res := TRUE;
+    next := this.Next(LINE)
+  END;
+  ShiftRight1(this.str, 0, this.length + 1);
+  this.str[0] := ch;
+  INC(this.length);
+  this.Modified := TRUE
+  RETURN res
+END FrwInput;
+
+PROCEDURE Input*(this: LINE; pos: INTEGER; ch: WCHAR): BOOLEAN;
+VAR res: BOOLEAN;
+
+  PROCEDURE proc1(this: LINE; ch: WCHAR);
+  VAR res: BOOLEAN; last, first: WCHAR; next, line: LINE;
+  BEGIN
+    first := ch;
+    line := this;
+    REPEAT
+      res := FrwInput(line, first, last, next);
+      line := next;
+      first := last
+    UNTIL ~res
+  END proc1;
+
+BEGIN
+  res := FALSE;
+  IF pos <= this.length THEN
+    IF this.length = MAXLEN - 1 THEN
+      IF pos = this.length THEN
+        proc1(this.Next(LINE), ch);
+        res := TRUE
+      ELSE
+        proc1(this.Next(LINE), this.str[MAXLEN - 2])
+      END;
+      DEC(this.length)
+    END;
+    ShiftRight1(this.str, pos, this.length - pos + 1);
+    INC(this.length);
+    this.Modified := TRUE;
+    IF pos # MAXLEN - 1 THEN
+      this.str[pos] := ch
+    END
+  ELSE
+    IF pos < MAXLEN - 1 THEN
+      Spaces(this, pos - this.length);
+      this.length := pos + 1;
+      this.str[this.length] := zero;
+      this.Modified := TRUE;
+      this.str[pos] := ch
+    ELSE
+      proc1(this.Next(LINE), ch);
+      res := TRUE
+    END
+  END
+  RETURN res
+END Input;
+
+PROCEDURE Delete*(this: LINE; pos: INTEGER): BOOLEAN;
+VAR Res: BOOLEAN;
+BEGIN
+  Res := pos >= this.length;
+  IF Res THEN
+    Spaces(this, pos - this.length);
+    this.length := pos
+  ELSE
+    ShiftLeft(this.str, pos + 1, this.length - pos, 1);
+    DEC(this.length)
+  END;
+  this.Modified := TRUE
+  RETURN Res
+END Delete;
+
+PROCEDURE FirstSymbol*(this: LINE): INTEGER;
+VAR i: INTEGER;
+BEGIN
+  i := 0;
+  IF this # NIL THEN
+    WHILE (this.str[i][0] = 20X) & (this.str[i][1] = 0X) DO
+      INC(i)
+    END;
+    IF iszero(this.str[i]) THEN
+      i := -1
+    END
+  END
+  RETURN i
+END FirstSymbol;
+
+PROCEDURE BkSpace*(this: LINE; pos: INTEGER): INTEGER;
+VAR n, m: INTEGER; cur: LINE;
+BEGIN
+  n := 0;
+  IF pos > 0 THEN
+    n := FirstSymbol(this);
+    IF n = -1 THEN
+      n := pos;
+      TrimRight(this)
+    END;
+    IF (n = 0) OR (n # pos) THEN
+      n := 1
+    ELSE
+      cur := this.Prev(LINE);
+      m := FirstSymbol(cur);
+      WHILE (cur # NIL) & ((m = -1) OR (m >= n)) DO
+        cur := cur.Prev(LINE);
+        m := FirstSymbol(cur)
+      END;
+      IF cur # NIL THEN
+        n := n - m
+      END
+    END;
+    IF pos <= this.length THEN
+      ShiftLeft(this.str, pos, this.length - pos + 1, n);
+      this.length := this.length - n;
+      this.Modified := TRUE
+    END
+  END
+  RETURN n
+END BkSpace;
+
+PROCEDURE FrwSpaces*(this: LINE; n: INTEGER);
+VAR space: WCHAR;
+BEGIN
+  space[0] := 20X;
+  space[1] := 0X;
+  WHILE n > 0 DO
+    IF Input(this, 0, space) THEN END;
+    DEC(n)
+  END
+END FrwSpaces;
+
+PROCEDURE Enter*(this: LINE; pos: INTEGER): LINE;
+VAR str: TEXTSTR; i, length: INTEGER;
+BEGIN
+  IF pos > this.length THEN
+    Spaces(this, pos - this.length)
+  END;
+  FOR i := pos TO this.length DO
+    str[i - pos] := this.str[i]
+  END;
+  length := this.length - pos;
+  IF length < 0 THEN
+    length := 0
+  END;
+  this.str[pos] := zero;
+  this.length := pos;
+  this.Modified := TRUE
+  RETURN CreateLine(str, length)
+END Enter;
+
+BEGIN
+  zero[0] := 0X;
+  zero[1] := 0X
+END Line.

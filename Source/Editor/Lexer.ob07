@@ -1,0 +1,422 @@
+﻿(*
+    Copyright 2013 Krotov Anton
+
+    This file is part of Editor.
+
+    Editor is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Editor is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Editor. If not, see <http://www.gnu.org/licenses/>.
+*)
+
+MODULE Lexer;
+
+IMPORT Line, TU := TextUtils, List;
+
+VAR
+
+  Colors: TU.TColors; TextColor: INTEGER;
+  str: Line.TEXTSTR; pos, length, comin: INTEGER; kw: ARRAY 64, 20 OF Line.WCHAR; kwcount, stpos: INTEGER;
+  CurLine: Line.LINE; comstr: BOOLEAN;
+
+PROCEDURE SetLine*(L: Line.LINE);
+BEGIN
+  CurLine := L;
+  str := L.str;
+  length := L.length;
+  pos := -1;
+  comin := L.comin;
+  L.comout := 0;
+END SetLine;
+
+PROCEDURE EnterKW(key: ARRAY OF CHAR);
+VAR i: INTEGER;
+BEGIN
+  WHILE key[i] # 0X DO
+    kw[kwcount][i][0] := key[i];
+    kw[kwcount][i][1] := 0X;
+    INC(i)
+  END;
+  kw[kwcount][i][0] := 0X;
+  kw[kwcount][i][1] := 0X;
+  INC(kwcount)
+END EnterKW;
+
+PROCEDURE Cap(ch: CHAR; reg: BOOLEAN): CHAR;
+BEGIN
+  IF ~reg & (ch >= "a") & (ch <= "z") THEN
+    ch := CHR(ORD(ch) - 32)
+  END
+  RETURN ch
+END Cap;
+
+PROCEDURE CheckKW(pos, len, a, b: INTEGER; reg: BOOLEAN): BOOLEAN;
+VAR i, j: INTEGER; res: BOOLEAN;
+BEGIN
+  i := a;
+  res := FALSE;
+  WHILE (i <= b) & ~res DO
+    j := 0;
+    WHILE (j <= len) & (kw[i][j][0] = Cap(str[j + pos][0], reg)) & (kw[i][j][1] = str[j + pos][1]) DO
+      INC(j)
+    END;
+    res := (j > len) & (kw[i][j][0] = 0X) & (kw[i][j][1] = 0X);
+    INC(i)
+  END
+  RETURN res
+END CheckKW;
+
+PROCEDURE GetChar(): INTEGER;
+BEGIN
+  INC(pos)
+  RETURN ORD(str[pos][0]) + LSL(ORD(str[pos][1]), 8)
+END GetChar;
+
+PROCEDURE Ident;
+VAR flag: BOOLEAN;
+BEGIN
+  DEC(pos);
+  REPEAT
+    CASE GetChar() OF
+    |41H..5AH, 61H..7AH, 5FH, 30H..39H: flag := FALSE
+    ELSE
+      flag := TRUE
+    END
+  UNTIL flag
+END Ident;
+
+PROCEDURE Num(): BOOLEAN;
+VAR flag, hexchar, hex, r, scale: BOOLEAN;
+BEGIN
+  r := FALSE;
+  hex := FALSE;
+  hexchar := FALSE;
+  DEC(pos);
+  REPEAT
+    flag := TRUE;
+    CASE GetChar() OF
+    |30H..39H: flag := FALSE
+    |41H..46H: hex := TRUE; flag := FALSE
+    |48H: INC(pos)
+    |58H: INC(pos); hexchar := TRUE
+    |2EH: r := GetChar() # 2EH; DEC(pos)
+    ELSE
+    END
+  UNTIL flag;
+  IF r THEN
+    scale := FALSE;
+    REPEAT
+      flag := TRUE;
+      CASE GetChar() OF
+      |30H..39H: flag := FALSE
+      |44H, 45H: scale := TRUE; IF ~((GetChar() - 20H) IN {0BH, 0DH}) THEN DEC(pos) END;
+      ELSE
+      END
+    UNTIL flag
+  END;
+  IF scale THEN
+    REPEAT
+      CASE GetChar() OF
+      |30H..39H: flag := FALSE
+      ELSE
+        flag := TRUE
+      END
+    UNTIL flag
+  END
+  RETURN hexchar
+END Num;
+
+PROCEDURE String(): BOOLEAN;
+VAR flag, eol: BOOLEAN;
+BEGIN
+  eol := FALSE;
+  flag := FALSE;
+  REPEAT
+    CASE GetChar() OF
+    | 0H: flag := TRUE; eol := TRUE
+    |22H: flag := TRUE
+    ELSE
+    END
+  UNTIL flag
+  RETURN eol
+END String;
+
+PROCEDURE Comment(VAR deep: INTEGER): BOOLEAN;
+VAR flag, eol: BOOLEAN;
+BEGIN
+  eol := FALSE;
+  flag := FALSE;
+  REPEAT
+    CASE GetChar() OF
+    | 0H: flag := TRUE; eol := TRUE
+    |2AH:
+      IF GetChar() = 29H THEN
+        DEC(deep);
+        flag := deep = 0
+      ELSE
+        DEC(pos)
+      END
+    |28H:
+      IF GetChar() = 2AH THEN
+        INC(deep)
+      ELSE
+        DEC(pos)
+      END
+    ELSE
+    END
+  UNTIL flag
+  RETURN eol
+END Comment;
+
+PROCEDURE GetLex*(VAR col, len: INTEGER): INTEGER;
+VAR c, color, deep: INTEGER; flag, s, eol: BOOLEAN;
+BEGIN
+  IF comin = 0 THEN
+    flag := FALSE;
+    color := TextColor;
+    col := pos;
+    len := 0;
+    c := GetChar();
+  ELSE
+    col := 0;
+    eol := Comment(comin);
+    len := pos - col;
+    color := Colors[TU.cCom];
+    IF ~eol THEN
+      INC(len);
+      INC(pos)
+    ELSE
+      CurLine.comout := comin;
+      comstr := TRUE
+    END;
+    c := -1
+  END;
+  flag := TRUE;
+  CASE c OF
+  |0FFFFFFFFH: comin := 0;
+  |41H..5AH, 61H..7AH, 5FH:
+    col := pos;
+    Ident;
+    len := pos - col;
+    IF CheckKW(col, len - 1, 0, stpos - 1, TRUE) THEN
+      color := Colors[TU.cKey]
+    ELSIF CheckKW(col, len - 1, stpos, kwcount - 1, TRUE) THEN
+      color := Colors[TU.cStId]
+    END;
+  |0H: color := -1;
+  |22H:
+    col := pos;
+    eol := String();
+    len := pos - col;
+    color := Colors[TU.cStr];
+    IF ~eol THEN
+      INC(len);
+      INC(pos)
+    ELSE
+      comstr := TRUE
+    END
+  |28H:
+    IF GetChar() = 2AH THEN
+      col := pos - 1;
+      deep := 1;
+      eol := Comment(deep);
+      len := pos - col;
+      color := Colors[TU.cCom];
+      IF ~eol THEN
+        INC(len);
+        INC(pos)
+      ELSE
+        CurLine.comout := deep;
+        comstr := TRUE
+      END
+    ELSE
+      flag := FALSE;
+      DEC(pos)
+    END
+  |30H..39H:
+    col := pos;
+    s := Num();
+    len := pos - col;
+    IF s THEN
+      color := Colors[TU.cStr]
+    ELSE
+      color := Colors[TU.cNum]
+    END;
+  |2FH:
+    IF GetChar() = 2FH THEN
+      col := pos - 1;
+      len := 1;
+      REPEAT
+        INC(len)
+      UNTIL GetChar() = 0H;
+      color := Colors[TU.cCom];
+      comstr := TRUE
+    ELSE
+      flag := FALSE;
+      DEC(pos)
+    END
+  ELSE
+    flag := FALSE
+  END;
+  IF ~flag THEN len := 1; col := pos ELSE DEC(pos) END
+  RETURN color
+END GetLex;
+
+PROCEDURE CommentTable*(L: Line.LINE);
+VAR lexcol, lexlen, i, dif1, dif2, n, m: INTEGER; nov: Line.ComItem;
+BEGIN
+  n := L.comin;
+  m := L.comout;
+  List.Clear(L.ComTab);
+  i := -1;
+  REPEAT
+    INC(i);
+    L.comin := i;
+    SetLine(L);
+    WHILE GetLex(lexcol, lexlen) # -1 DO END;
+    NEW(nov);
+    nov.comout := L.comout;
+    nov.comin := L.comin;
+    List.Push(L.ComTab, nov);
+    IF i > 0 THEN
+      dif2 := dif1
+    END;
+    dif1 := nov.comout - nov.comin;
+  UNTIL (i > 0) & (dif1 = dif2);
+  List.Pop(L.ComTab);
+  List.Pop(L.ComTab);
+  L.dif := dif1;
+  L.comin := n;
+  L.comout := m
+END CommentTable;
+
+PROCEDURE Upper(this: Line.LINE; pos: INTEGER);
+VAR n, i: INTEGER;
+BEGIN
+  n := pos;
+  WHILE (n >= 0) & TU.Small(this.str[n]) DO
+    DEC(n);
+  END;
+  IF (n < 0) OR ~TU.IdentChar(this.str[n]) THEN
+    INC(n);
+    str := this.str;
+    IF CheckKW(n, pos - n, 0, 63, FALSE) THEN
+      FOR i := n TO pos DO
+        TU.CAP(this.str[i])
+      END
+    END
+  END
+END Upper;
+
+PROCEDURE autocaps(ch: Line.WCHAR): BOOLEAN;
+  RETURN (ch[1] = 0X) & (
+    (ch[0] = " ") OR (ch[0] = "(") OR (ch[0] = ")") OR
+    (ch[0] = ",") OR (ch[0] = ";") OR (ch[0] = "|") )
+END autocaps;
+
+PROCEDURE incomstr(pos: INTEGER): BOOLEAN;
+VAR line, col: INTEGER;
+BEGIN
+  str[pos][0] := 0X;
+  str[pos][1] := 0X;
+  line := 0;
+  col := 0;
+  comstr := FALSE;
+  WHILE GetLex(line, col) # -1 DO END;
+  RETURN comstr
+END incomstr;
+
+PROCEDURE Caps*(this: Line.LINE; pos: INTEGER; ch: Line.WCHAR);
+BEGIN
+  SetLine(this);
+  IF (pos > 0) & (pos <= this.length) & autocaps(ch) & ~incomstr(pos - 1) THEN
+    Upper(this, pos - 1)
+  END
+END Caps;
+
+PROCEDURE GetColors*;
+BEGIN
+  TU.GetColors(Colors);
+  TextColor := Colors[TU.cText];
+END GetColors;
+
+BEGIN
+  EnterKW("MOD");
+  EnterKW("ELSE");
+  EnterKW("RETURN");
+  EnterKW("CASE");
+  EnterKW("IF");
+  EnterKW("POINTER");
+  EnterKW("TYPE");
+  EnterKW("BEGIN");
+  EnterKW("DIV");
+  EnterKW("FALSE");
+  EnterKW("IN");
+  EnterKW("NIL");
+  EnterKW("RECORD");
+  EnterKW("TO");
+  EnterKW("VAR");
+  EnterKW("ARRAY");
+  EnterKW("DO");
+  EnterKW("END");
+  EnterKW("IS");
+  EnterKW("OF");
+  EnterKW("PROCEDURE");
+  EnterKW("THEN");
+  EnterKW("WHILE");
+  EnterKW("BY");
+  EnterKW("CONST");
+  EnterKW("ELSIF");
+  EnterKW("IMPORT");
+  EnterKW("MODULE");
+  EnterKW("OR");
+  EnterKW("REPEAT");
+  EnterKW("TRUE");
+  EnterKW("UNTIL");
+  EnterKW("FOR");
+
+  stpos := kwcount;
+
+  EnterKW("ABS");
+  EnterKW("ASR");
+  EnterKW("ASSERT");
+  EnterKW("BITS");
+  EnterKW("BOOLEAN");
+  EnterKW("CHAR");
+  EnterKW("CHR");
+  EnterKW("COPY");
+  EnterKW("DEC");
+  EnterKW("DISPOSE");
+  EnterKW("EXCL");
+  EnterKW("FLOOR");
+  EnterKW("FLT");
+  EnterKW("INC");
+  EnterKW("INCL");
+  EnterKW("INTEGER");
+  EnterKW("LEN");
+  EnterKW("LENGTH");
+  EnterKW("LSL");
+  EnterKW("LSR");
+  EnterKW("LONG");
+  EnterKW("LONGREAL");
+  EnterKW("NEW");
+  EnterKW("ODD");
+  EnterKW("ORD");
+  EnterKW("PACK");
+  EnterKW("REAL");
+  EnterKW("ROR");
+  EnterKW("SET");
+  EnterKW("SHORT");
+  EnterKW("UNPK");
+
+  GetColors;
+  Line.Init(CommentTable)
+END Lexer.

@@ -1,0 +1,411 @@
+﻿(*
+    Copyright 2013 Krotov Anton
+
+    This file is part of Editor.
+
+    Editor is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Editor is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Editor. If not, see <http://www.gnu.org/licenses/>.
+*)
+
+MODULE TextEdit;
+
+IMPORT Text, List, Line, SYSTEM, TU := TextUtils;
+
+TYPE
+
+  STRING* = ARRAY 2048 OF Line.WCHAR;
+
+  EditFile* = POINTER TO RECORD (List.rITEM)
+    txt*: Text.TEXT;
+    name*: STRING;
+    syntax*, numbers*, Saved*: BOOLEAN
+  END;
+
+VAR
+
+  f*, main*: EditFile; FList*: List.LIST;
+  textW, textH, stksize, pen: INTEGER;
+  Params, platf: STRING;
+
+PROCEDURE Assigned(): BOOLEAN;
+  RETURN (f # NIL) & (f.txt # NIL)
+END Assigned;
+
+PROCEDURE CurModified*(): BOOLEAN;
+VAR res: BOOLEAN;
+BEGIN
+  IF Assigned() THEN
+    res := f.txt.Modified
+  ELSE
+    res := FALSE
+  END
+  RETURN res
+END CurModified;
+
+PROCEDURE Selected*(): BOOLEAN;
+VAR res: BOOLEAN;
+BEGIN
+  IF Assigned() THEN
+    res := Text.Select(f.txt)
+  ELSE
+    res := FALSE
+  END
+  RETURN res
+END Selected;
+
+PROCEDURE Syntax*(syn: BOOLEAN);
+BEGIN
+  IF Assigned() THEN
+    f.syntax := syn;
+    Text.SetMode(f.txt, f.syntax, f.numbers)
+  END
+END Syntax;
+
+PROCEDURE Numbers*(num: BOOLEAN);
+BEGIN
+  IF Assigned() THEN
+    f.numbers := num;
+    Text.SetMode(f.txt, f.syntax, f.numbers)
+  END
+END Numbers;
+
+PROCEDURE GetCursor*(VAR line, col: INTEGER);
+BEGIN
+  IF Assigned() THEN
+    Text.GetCursor(f.txt, col, line)
+  END
+END GetCursor;
+
+PROCEDURE TextLeft*(): INTEGER;
+VAR res: INTEGER;
+BEGIN
+  IF Assigned() THEN
+    res := f.txt.TextLeft
+  ELSE
+    res := 0
+  END
+  RETURN res
+END TextLeft;
+
+PROCEDURE WordSel*;
+BEGIN
+  IF Assigned() THEN
+    Text.WordSelect(f.txt)
+  END
+END WordSel;
+
+PROCEDURE Index*(file: EditFile): INTEGER;
+VAR cur: EditFile; res: INTEGER;
+BEGIN
+  res := 0;
+  cur := FList.First(EditFile);
+  WHILE cur # file DO
+    cur := cur.Next(EditFile);
+    INC(res)
+  END
+  RETURN res
+END Index;
+
+PROCEDURE Utf16To8*(VAR str: ARRAY OF CHAR; name: INTEGER);
+VAR a, n, c: INTEGER; w: Line.WCHAR;
+BEGIN
+  a := SYSTEM.ADR(str);
+  REPEAT
+    SYSTEM.MOVE(name, SYSTEM.ADR(w), 2);
+    INC(name, 2);
+    c := TU.Utf16To8(w, n);
+    SYSTEM.MOVE(SYSTEM.ADR(c), a, n);
+    a := a + n
+  UNTIL c = 0
+END Utf16To8;
+
+PROCEDURE ExtractFileName*(str: INTEGER; ch: CHAR): INTEGER;
+VAR w: Line.WCHAR; res: INTEGER;
+BEGIN
+  res := str;
+  REPEAT
+    SYSTEM.GET(str, w[0]);
+    SYSTEM.GET(str + 1, w[1]);
+    INC(str, 2);
+    IF (w[0] = ch) & (w[1] = 0X) THEN
+      res := str
+    END
+  UNTIL (w[0] = 0X) & (w[1] = 0X)
+  RETURN res
+END ExtractFileName;
+
+PROCEDURE WStrEQ(a, b: INTEGER): BOOLEAN;
+VAR i, Len, n: INTEGER; c, d: ARRAY 2048 OF CHAR;
+BEGIN
+  Utf16To8(c, a);
+  Utf16To8(d, b)
+  RETURN c = d
+END WStrEQ;
+
+PROCEDURE IndexName*(name: INTEGER; extr: BOOLEAN): INTEGER;
+VAR cur: EditFile; cont: BOOLEAN; res, curname: INTEGER;
+BEGIN
+  cont := TRUE;
+  res := -1;
+  cur := FList.First(EditFile);
+  WHILE (cur # NIL) & cont DO
+    IF extr THEN
+      curname := ExtractFileName(SYSTEM.ADR(cur.name), "\")
+    ELSE
+      curname := SYSTEM.ADR(cur.name)
+    END;
+    cont := ~WStrEQ(name, curname);
+    cur := cur.Next(EditFile);
+    INC(res)
+  END;
+  IF cont THEN
+    res := -1
+  END
+  RETURN res
+END IndexName;
+
+PROCEDURE Modified*(): BOOLEAN;
+VAR cur: EditFile; res: BOOLEAN;
+BEGIN
+  res := FALSE;
+  cur := FList.First(EditFile);
+  WHILE ~res & (cur # NIL) DO
+    res := cur.txt.Modified;
+    cur := cur.Next(EditFile)
+  END
+  RETURN res
+END Modified;
+
+PROCEDURE Add*(str: Line.TEXTSTR; length: INTEGER);
+BEGIN
+  IF Assigned() THEN
+    Text.Add(f.txt, str, length)
+  END
+END Add;
+
+PROCEDURE Close*(): BOOLEAN;
+VAR f1: EditFile; res: BOOLEAN;
+BEGIN
+  res := FALSE;
+  IF Assigned() THEN
+    Text.Close(f.txt);
+    IF main = f THEN
+      main := NIL
+    END;
+    f1 := f;
+    IF f1.Prev # NIL THEN
+      f := f1.Prev(EditFile)
+    ELSE
+      f := f1.Next(EditFile)
+    END;
+    IF FList.Count = 1 THEN
+      List.Pop(FList)
+    ELSE
+      List.DelItem(FList, f1)
+    END;
+    IF f # NIL THEN
+      Line.SetList(f.txt)
+    ELSE
+      Line.SetList(NIL)
+    END;
+    res := TRUE
+  END
+  RETURN res
+END Close;
+
+PROCEDURE ChangePage*(index: INTEGER);
+VAR item: List.ITEM;
+BEGIN
+  item := List.Index(FList, index);
+  f := item(EditFile);
+  IF f # NIL THEN
+    Line.SetList(f.txt)
+  ELSE
+    Line.SetList(NIL)
+  END
+END ChangePage;
+
+PROCEDURE SetFont*(H, W: INTEGER);
+VAR cur: EditFile;
+BEGIN
+  textH := H;
+  textW := W;
+  cur := FList.First(EditFile);
+  WHILE cur # NIL DO
+    Text.SetFont(cur.txt, H, W);
+    cur := cur.Next(EditFile)
+  END
+END SetFont;
+
+PROCEDURE SetMain*;
+BEGIN
+  main := f
+END SetMain;
+
+PROCEDURE SetName*(str: INTEGER);
+VAR w: Line.WCHAR; i: INTEGER;
+BEGIN
+  i := 0;
+  REPEAT
+    SYSTEM.GET(str, w[0]);
+    SYSTEM.GET(str + 1, w[1]);
+    f.name[i] := w;
+    INC(i);
+    INC(str, 2);
+    f.Saved := TRUE
+  UNTIL (w[0] = 0X) & (w[1] = 0X)
+END SetName;
+
+PROCEDURE Save*(file: EditFile): BOOLEAN;
+  RETURN (file # NIL) & (file.txt # NIL) & Text.Save(file.txt, file.name)
+END Save;
+
+PROCEDURE Mouse_Move*(X, Y: INTEGER);
+VAR line, col: INTEGER;
+BEGIN
+  IF Assigned() THEN
+    Text.GetLineCol(f.txt, line, col);
+    Text.Mouse_Move(f.txt, (X - f.txt.TextLeft + textW DIV 2) DIV textW + col, Y DIV textH + line)
+  END
+END Mouse_Move;
+
+PROCEDURE Mouse_Down*(Shift: BOOLEAN; X, Y: INTEGER);
+VAR line, col: INTEGER;
+BEGIN
+  IF Assigned() THEN
+    Text.GetLineCol(f.txt, line, col);
+    IF Shift THEN
+      Text.Mouse_Move(f.txt, (X - f.txt.TextLeft + textW DIV 2) DIV textW + col, Y DIV textH + line)
+    ELSE
+      Text.CancelSelect(f.txt, (X - f.txt.TextLeft + textW DIV 2) DIV textW + col, Y DIV textH + line)
+    END
+  END
+END Mouse_Down;
+
+PROCEDURE NewFile*;
+VAR wline: Line.TEXTSTR;
+BEGIN
+  wline[0][0] := 0X;
+  wline[0][1] := 0X;
+  NEW(f);
+  f.Saved := FALSE;
+  f.name[0] := wline[0];
+  List.Push(FList, f);
+  f.txt := Text.CreateText(textW, textH);
+  Text.SetMode(f.txt, TRUE, TRUE);
+  Text.Add(f.txt, wline, 0);
+  f.syntax := TRUE;
+  f.numbers := TRUE;
+  Line.SetList(f.txt)
+END NewFile;
+
+PROCEDURE Redraw*(hdc, Width, Height: INTEGER; Cursor: BOOLEAN);
+BEGIN
+  IF Assigned() THEN
+    Text.Print(f.txt, hdc, Height DIV textH + 1, (Width - f.txt.TextLeft) DIV textW + 2, Cursor);
+    TU.SelectObject(hdc, pen);
+    DEC(Width, 3);
+    DEC(Height, 3);
+    Text.DrawLine(hdc, 0, 0, Width, 0);
+    Text.DrawLine(hdc, 0, 0, 0, Height);
+    Text.DrawLine(hdc, Width, 0, Width, Height);
+    Text.DrawLine(hdc, 0, Height, Width, Height);
+  END
+END Redraw;
+
+PROCEDURE KeyDown*(key: INTEGER; Shift: SET);
+BEGIN
+  IF Assigned() THEN
+    Text.KeyDown(f.txt, key, Shift)
+  END
+END KeyDown;
+
+PROCEDURE Copy*;
+BEGIN
+  IF Assigned() THEN
+    Text.Copy(f.txt)
+  END
+END Copy;
+
+PROCEDURE Paste*;
+BEGIN
+  IF Assigned() THEN
+    Text.Paste(f.txt)
+  END
+END Paste;
+
+PROCEDURE DelSelect*;
+BEGIN
+  IF Assigned() & Text.DelSelect(f.txt) THEN END
+END DelSelect;
+
+PROCEDURE ChCase*(up: BOOLEAN);
+BEGIN
+  IF Assigned() THEN
+    Text.ChCase(f.txt, up)
+  END
+END ChCase;
+
+PROCEDURE Input*(key: INTEGER);
+VAR w: Line.WCHAR;
+BEGIN
+  IF Assigned() & ((key > 31) & (key # 127) OR (key = 9)) THEN
+    w[0] := CHR(key MOD 256);
+    w[1] := CHR(key DIV 256);
+    Text.Input(f.txt, w)
+  END
+END Input;
+
+PROCEDURE SetLineCol*(line, col: INTEGER);
+BEGIN
+  IF Assigned() THEN
+    Text.SetLineCol(f.txt, line, col)
+  END
+END SetLineCol;
+
+PROCEDURE GetLineCol*(VAR line, col: INTEGER);
+BEGIN
+  IF Assigned() THEN
+    Text.GetLineCol(f.txt, line, col)
+  END
+END GetLineCol;
+
+PROCEDURE GetLinesCols*(VAR lines, cols: INTEGER);
+BEGIN
+  IF Assigned() THEN
+    Text.GetLinesCols(f.txt, lines, cols)
+  END
+END GetLinesCols;
+
+PROCEDURE Count*(): INTEGER;
+VAR res: INTEGER;
+BEGIN
+  res := 0;
+  IF Assigned() THEN
+    res := f.txt.Count
+  END
+  RETURN res
+END Count;
+
+PROCEDURE DelFirst*;
+BEGIN
+  IF Assigned() THEN
+    List.DelItem(f.txt, f.txt.First)
+  END
+END DelFirst;
+
+BEGIN
+  NEW(FList);
+  List.CreateList(FList);
+  pen := TU.CreatePen(0, 1, TU.RGB(128, 128, 128))
+END TextEdit.

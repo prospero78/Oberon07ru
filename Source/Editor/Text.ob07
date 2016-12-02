@@ -1,0 +1,1200 @@
+﻿(*
+    Copyright 2013 Krotov Anton
+
+    This file is part of Editor.
+
+    Editor is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Editor is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Editor. If not, see <http://www.gnu.org/licenses/>.
+*)
+
+MODULE Text;
+
+IMPORT List, Line, Lexer, TU := TextUtils, API, sys := SYSTEM;
+
+CONST
+
+  LTEXT = 3;
+  TABOUT = 2;
+  TABIN* = 8;
+  sizewchar = 2;
+
+TYPE
+
+  TEXT* = POINTER TO rTEXT;
+
+  TPOINT = RECORD x, y: INTEGER END;
+
+  TSELECT = RECORD beg, end: TPOINT END;
+
+  TFIND = RECORD x1, x2, y: INTEGER END;
+
+  rTEXT* = RECORD (List.rLIST)
+    Current: Line.LINE;
+    FindSel: TFIND;
+    Select: TSELECT;
+    textW, textH, CursorX, CursorY*, line, col, lines, cols, TextLeft*: INTEGER;
+    Found, Modified*, Numbers, Syntax: BOOLEAN;
+    Backup*: TEXT
+  END;
+
+  TPROC = PROCEDURE;
+
+VAR
+
+  hBr0, hBr1, hBr2, hBr3, hBr4, pen0: INTEGER;
+  Colors: TU.TColors; TextColor: INTEGER;
+  Chcrs, Goto: BOOLEAN;
+  ResetTimer: TPROC;
+  Space: Line.WCHAR;
+  OutBuffer: ARRAY 100000 OF CHAR;
+  tab: INTEGER;
+
+PROCEDURE SetFont*(this: TEXT; h, w: INTEGER);
+BEGIN
+  this.textW := w;
+  this.textH := h
+END SetFont;
+
+PROCEDURE GetColors*;
+BEGIN
+  TU.GetColors(Colors);
+  TextColor := Colors[TU.cText];
+  TU.DeleteObject(hBr0);
+  TU.DeleteObject(hBr1);
+  TU.DeleteObject(hBr2);
+  TU.DeleteObject(hBr3);
+  TU.DeleteObject(hBr4);
+  TU.DeleteObject(pen0);
+  hBr0 := TU.CreateSolidBrush(Colors[TU.cBkText]);
+  hBr1 := TU.CreateSolidBrush(Colors[TU.cBkNum]);
+  hBr2 := TU.CreateSolidBrush(Colors[TU.cBkCur]);
+  hBr3 := TU.CreateSolidBrush(Colors[TU.cBkSel]);
+  hBr4 := TU.CreateSolidBrush(TU.Inv(Colors[TU.cBkText]));
+  pen0 := TU.CreatePen(0, 1, Colors[TU.cTextNum]);
+  Lexer.GetColors
+END GetColors;
+
+PROCEDURE CreateW(FName: ARRAY OF Line.WCHAR): INTEGER;
+  RETURN TU.CreateFileW(sys.ADR(FName), 0C0000000H, 0, 0, 2, 80H, 0)
+END CreateW;
+
+PROCEDURE Save*(this: TEXT; name: ARRAY OF Line.WCHAR): BOOLEAN;
+VAR F, i, c, n, BOM, EOL, buf, count: INTEGER; L, last: Line.LINE; res: BOOLEAN;
+BEGIN
+  F := CreateW(name);
+  BOM := 0BFBBEFH;
+  EOL := 0A0DH;
+  L := this.First(Line.LINE);
+  last := this.Last(Line.LINE);
+  buf := sys.ADR(OutBuffer);
+  sys.MOVE(sys.ADR(BOM), buf, 3);
+  INC(buf, 3);
+  count := 3;
+  res := TRUE;
+  WHILE (L # NIL) & res DO
+    IF L.Modified THEN
+      Line.TrimRight(L)
+    END;
+    i := 0;
+    WHILE i < L.length DO
+      c := TU.Utf16To8(L.str[i], n);
+      sys.MOVE(sys.ADR(c), buf, n);
+      buf := buf + n;
+      count := count + n;
+      INC(i)
+    END;
+    IF L # last THEN
+      sys.MOVE(sys.ADR(EOL), buf, 2);
+      INC(buf, 2);
+      INC(count, 2)
+    END;
+    IF count > LEN(OutBuffer) - 4096 THEN
+      res := TU.Write(F, sys.ADR(OutBuffer), count) = count;
+      buf := sys.ADR(OutBuffer);
+      count := 0;
+    END;
+    L := L.Next(Line.LINE)
+  END;
+  res := res & (TU.Write(F, sys.ADR(OutBuffer), count) = count);
+  TU.Close(F);
+  this.Modified := ~res;
+  IF this.Backup # NIL THEN
+    List.DestroyList(this.Backup);
+    this.Backup := NIL
+  END
+  RETURN res
+END Save;
+
+PROCEDURE Comment(L: Line.LINE);
+VAR lexcol, lexlen: INTEGER;
+BEGIN
+  IF L.Prev # NIL THEN
+    L.comin := L.Prev(Line.LINE).comout
+  ELSE
+    L.comin := 0
+  END;
+  Lexer.SetLine(L);
+  WHILE Lexer.GetLex(lexcol, lexlen) # -1 DO END
+END Comment;
+
+PROCEDURE Bkup(src, dst: TEXT);
+VAR line, cur: Line.LINE;
+BEGIN
+  dst^ := src^;
+  List.CreateList(dst);
+  dst.Backup := NIL;
+  cur := src.First(Line.LINE);
+  WHILE cur # NIL DO
+    line := Line.CreateLine(cur.str, cur.length);
+    List.Push(dst, line);
+    Comment(line);
+    IF cur = src.Current THEN
+      dst.Current := line
+    END;
+    cur := cur.Next(Line.LINE)
+  END
+END Bkup;
+
+PROCEDURE Backup(this: TEXT);
+VAR line, cur: Line.LINE; bk: TEXT;
+BEGIN
+  IF this.Backup # NIL THEN
+    List.DestroyList(this.Backup)
+  END;
+  NEW(this.Backup);
+  Bkup(this, this.Backup)
+END Backup;
+
+PROCEDURE Undo*(VAR this: TEXT);
+VAR a, b: TEXT;
+BEGIN
+  a := this.Backup;
+  b := this;
+  this := a;
+  this.textW := b.textW;
+  this.textH := b.textH;
+  this.lines := b.lines;
+  this.cols := b.cols;
+  this.Backup := b
+END Undo;
+
+PROCEDURE Close*(VAR this: TEXT);
+BEGIN
+  IF this.Backup # NIL THEN
+    List.DestroyList(this.Backup)
+  END;
+  List.DestroyList(this);
+  this := NIL
+END Close;
+
+PROCEDURE SetMode*(this: TEXT; Syntax, Numbers: BOOLEAN);
+BEGIN
+  this.Syntax := Syntax;
+  this.Numbers := Numbers
+END SetMode;
+
+PROCEDURE SetLineCol*(this: TEXT; line, col: INTEGER);
+BEGIN
+  this.line := line;
+  this.col := col
+END SetLineCol;
+
+PROCEDURE GetLineCol*(this: TEXT; VAR line, col: INTEGER);
+BEGIN
+  line := this.line;
+  col := this.col
+END GetLineCol;
+
+PROCEDURE GetLinesCols*(this: TEXT; VAR lines, cols: INTEGER);
+BEGIN
+  lines := this.lines;
+  cols := this.cols
+END GetLinesCols;
+
+PROCEDURE GetCursor*(this: TEXT; VAR x, y: INTEGER);
+BEGIN
+  x := this.CursorX;
+  y := this.CursorY
+END GetCursor;
+
+PROCEDURE SetCursor*(this: TEXT; x, y: INTEGER);
+VAR cur: Line.LINE; n: INTEGER;
+BEGIN
+  this.Found := FALSE;
+  IF x < 0 THEN
+    x := 0
+  ELSIF x >= Line.MAXLEN THEN
+    x := Line.MAXLEN - 1
+  END;
+  IF (this.Current # NIL) & this.Current.Modified THEN
+    Line.TrimRight(this.Current)
+  END;
+  this.CursorX := x;
+  IF (y >= 0) & (y < this.Count) THEN
+    cur := this.First(Line.LINE);
+    n := 0;
+    WHILE n < y DO
+      cur := cur.Next(Line.LINE);
+      INC(n)
+    END;
+    this.Current := cur;
+    this.CursorY := y
+  ELSIF y >= this.Count THEN
+    this.Current := this.Last(Line.LINE);
+    this.CursorY := this.Count - 1
+  ELSE (* y < 0 *)
+    this.Current := this.First(Line.LINE);
+    this.CursorY := 0
+  END;
+  IF this.line + this.lines - 2 < this.CursorY THEN
+    this.line := this.CursorY - this.lines + 2 + ORD(Goto) * 2 * this.lines DIV 3
+  END;
+  IF this.line > this.CursorY THEN
+    this.line := this.CursorY - ((this.lines DIV 3) - 2) * ORD(Goto);
+    IF this.line < 0 THEN
+      this.line := 0
+    END
+  END;
+  IF this.col + this.cols - 3 < this.CursorX THEN
+    this.col := this.CursorX - this.cols + 3
+  END;
+  IF this.col > this.CursorX THEN
+    this.col := this.CursorX
+  END;
+  Chcrs := TRUE
+END SetCursor;
+
+PROCEDURE CancelSelect*(this: TEXT; x, y: INTEGER);
+BEGIN
+  SetCursor(this, x, y);
+  this.Select.beg.x := this.CursorX;
+  this.Select.beg.y := this.CursorY;
+  this.Select.end := this.Select.beg;
+  this.Found := FALSE
+END CancelSelect;
+
+PROCEDURE GoToLine*(this: TEXT; n: INTEGER);
+BEGIN
+  Goto := TRUE;
+  Text.CancelSelect(this, this.CursorX, n);
+  Goto := FALSE
+END GoToLine;
+
+PROCEDURE WholeWord(cur: Line.LINE; x, y: INTEGER): BOOLEAN;
+  RETURN (((x >= 0) & ~TU.IdentChar(cur.str[x])) OR (x < 0)) &
+         (((y < Line.MAXLEN) & ~TU.IdentChar(cur.str[y])) OR (y >= Line.MAXLEN))
+END WholeWord;
+
+PROCEDURE Find*(this: TEXT; str: ARRAY OF Line.WCHAR; VAR pos: INTEGER; Case, Whole, Frw: BOOLEAN): Line.LINE;
+VAR y, x, c, lenstr: INTEGER; first: List.ITEM; cur: Line.LINE;
+BEGIN
+  lenstr := TU.strlen(str);
+  IF lenstr > 0 THEN
+    first := List.Index(this, this.CursorY);
+    cur := first(Line.LINE);
+    pos := -1;
+    c := ORD(Frw) * 2 - 1;
+    y := this.CursorY - c;
+    x := this.CursorX - ORD(~Frw);
+    WHILE (cur # NIL) & (pos = -1) DO
+      y := y + c;
+      pos := TU.FindText(cur.str, cur.length, str, lenstr, x, Case, Frw);
+      IF (pos >= 0) & Whole & ~WholeWord(cur, pos - 1, pos + lenstr) THEN
+        pos := -2 * pos - 2
+      END;
+      IF pos = -1 THEN
+        IF Frw THEN
+          cur := cur.Next(Line.LINE);
+          x := 0
+        ELSE
+          cur := cur.Prev(Line.LINE);
+          IF cur # NIL THEN
+            x := cur.length - lenstr
+          END
+        END
+      ELSIF pos < 0 THEN
+        x := -(pos + 2) DIV 2 + ORD(Frw) * lenstr - ORD(~Frw);
+        y := y - c;
+        pos := -1
+      END
+    END;
+    IF pos # -1 THEN
+      Goto := TRUE;
+      SetCursor(this, pos + lenstr * ORD(~Frw), y);
+      Goto := FALSE;
+      CancelSelect(this, pos + lenstr * ORD(Frw), y);
+      this.Found := TRUE;
+      this.FindSel.x1 := pos;
+      this.FindSel.x2 := pos + lenstr;
+      this.FindSel.y := this.CursorY
+    ELSE
+      this.Found := FALSE
+    END
+  ELSE
+    this.Found := FALSE;
+    cur := this.Current
+  END
+  RETURN cur
+END Find;
+
+PROCEDURE Update(this: TEXT);
+VAR com: List.ITEM; cur: Line.LINE;
+BEGIN
+  cur := this.First(Line.LINE);
+  cur.comin := 0;
+  IF cur.ComTab.Count = 0 THEN
+    cur.comout := cur.dif
+  ELSE
+    com := cur.ComTab.First;
+    cur.comout := com(Line.ComItem).comout
+  END;
+  cur := cur.Next(Line.LINE);
+  WHILE cur # NIL DO
+    cur.comin := cur.Prev(Line.LINE).comout;
+    IF cur.comin >= cur.ComTab.Count THEN
+      cur.comout := cur.comin + cur.dif
+    ELSE
+      com := List.Index(cur.ComTab, cur.comin);
+      cur.comout := com(Line.ComItem).comout
+    END;
+    cur := cur.Next(Line.LINE)
+  END
+END Update;
+
+PROCEDURE Replace*(this: TEXT; find, repl: ARRAY OF Line.WCHAR; All, Case, Whole: BOOLEAN): INTEGER;
+VAR cur: Line.LINE; pos, y, x, i, d, flen, rlen, n: INTEGER; first: List.ITEM; Bk: BOOLEAN;
+BEGIN
+  flen := TU.strlen(find);
+  rlen := TU.strlen(repl);
+  n := 0;
+  Bk := FALSE;
+  REPEAT
+    IF this.Found THEN
+      cur := this.Current;
+      pos := this.CursorX - flen
+    ELSE
+      cur := Find(this, find, pos, Case, Whole, TRUE)
+    END;
+    IF cur # NIL THEN
+      cur.Modified := TRUE;
+      this.Modified := TRUE;
+      IF ~Bk THEN
+        Backup(this);
+        Bk := TRUE
+      END;
+      d := flen - rlen;
+      IF cur.length - d < Line.MAXLEN THEN
+        IF d > 0 THEN
+          Line.ShiftLeft(cur.str, pos + flen, cur.length - pos - flen, d)
+        ELSE
+          Line.ShiftRight(cur.str, pos, cur.length - pos, -d)
+        END;
+        cur.length := cur.length - d;
+        FOR i := pos TO pos + rlen - 1 DO
+          cur.str[i] := repl[i - pos]
+        END;
+        SetCursor(this, pos + rlen, this.CursorY)
+      ELSE
+        Line.ShiftLeft(cur.str, pos + flen, cur.length - pos - flen, flen);
+        cur.length := cur.length - flen;
+        this.CursorX := pos;
+        FOR i := 0 TO rlen - 1 DO
+          IF Line.Input(cur, this.CursorX, repl[i]) THEN
+            cur := cur.Next(Line.LINE);
+            INC(this.CursorY);
+            this.CursorX := 1
+          ELSE
+            INC(this.CursorX)
+          END
+        END;
+        SetCursor(this, this.CursorX, this.CursorY)
+      END;
+      INC(n)
+    END
+  UNTIL (cur = NIL) OR ~All;
+  Update(this)
+  RETURN n
+END Replace;
+
+PROCEDURE ChCase*(this: TEXT; up: BOOLEAN);
+VAR pos, a, i: INTEGER;
+BEGIN
+  a := this.CursorX - 1;
+  pos := a;
+  WHILE (pos >= 0) & TU.Letter(this.Current.str[pos]) DO
+    DEC(pos)
+  END;
+  INC(pos);
+  IF pos <= a THEN
+    Backup(this)
+  END;
+  FOR i := pos TO a DO
+    IF up THEN
+      IF TU.Small(this.Current.str[i]) THEN
+        TU.CAP(this.Current.str[i]);
+        this.Modified := TRUE
+      END
+    ELSE
+      IF TU.Capital(this.Current.str[i]) THEN
+        TU.LOW(this.Current.str[i]);
+        this.Modified := TRUE
+      END
+    END
+  END
+END ChCase;
+
+PROCEDURE WordSelect*(this: TEXT);
+VAR pos, a, b, i: INTEGER; str: Line.TEXTSTR; sel: BOOLEAN;
+BEGIN
+  pos := this.CursorX;
+  str := this.Current.str;
+  FOR i := this.Current.length + 1 TO Line.MAXLEN - 1 DO
+    str[i][0] := 0X;
+    str[i][1] := 0X
+  END;
+  IF TU.IdentChar(str[pos]) THEN
+    b := pos + 1;
+    WHILE TU.IdentChar(str[b]) DO INC(b) END;
+    a := pos;
+    WHILE (a >= 0) & TU.IdentChar(str[a]) DO DEC(a) END;
+    INC(a);
+  ELSE
+    b := pos;
+    WHILE (b >= 0) & ~TU.IdentChar(str[b]) DO DEC(b) END;
+    a := b;
+    INC(b);
+    WHILE (a >= 0) & TU.IdentChar(str[a]) DO DEC(a) END;
+    INC(a);
+    IF b = 0 THEN
+      a := pos;
+      WHILE (a < this.Current.length) & ~TU.IdentChar(str[a]) DO INC(a) END;
+      b := a;
+      WHILE (b < this.Current.length) & TU.IdentChar(str[b]) DO INC(b) END;
+    END
+  END;
+  IF (a >= 0) & (b > 0) & (a # b) THEN
+    SetCursor(this, b, this.CursorY);
+    this.Select.beg.x := a;
+    this.Select.end.x := b;
+    this.Select.beg.y := this.CursorY;
+    this.Select.end.y := this.CursorY;
+  END
+END WordSelect;
+
+PROCEDURE OrdSelect(VAR x1, y1, x2, y2: INTEGER);
+VAR x, y: INTEGER;
+BEGIN
+  IF (y1 > y2) OR (y1 = y2) & (x1 > x2) THEN
+    x := x1;
+    y := y1;
+    x1 := x2;
+    y1 := y2;
+    x2 := x;
+    y2 := y;
+  END
+END OrdSelect;
+
+PROCEDURE Select*(this: TEXT): BOOLEAN;
+  RETURN (this.Select.beg.x # this.Select.end.x) OR (this.Select.beg.y # this.Select.end.y)
+END Select;
+
+PROCEDURE NotEmptySelect(this: TEXT): BOOLEAN;
+  RETURN ~((this.Select.beg.y = this.Select.end.y) &
+            (this.Select.beg.x >= this.Current.length) &
+              (this.Select.end.x >= this.Current.length))
+END NotEmptySelect;
+
+PROCEDURE DelSelect*(this: TEXT): BOOLEAN;
+VAR res: BOOLEAN; n, max, min, miny, maxy, i: INTEGER; cur, temp, first, last: List.ITEM;
+
+  PROCEDURE proc1(line: Line.LINE; x1, x2: INTEGER);
+  VAR n: INTEGER;
+  BEGIN
+    n := TU.max(line.length - x1, 0) - TU.max(line.length - x2, 0);
+    Line.ShiftLeft(line.str, TU.min(x2, line.length), TU.max(line.length - x2 + 1, 0), n);
+    line.length := line.length - n
+  END proc1;
+
+BEGIN
+  res := Select(this);
+  IF res THEN
+    IF NotEmptySelect(this) THEN
+      this.Modified := TRUE;
+      Backup(this)
+    END;
+    min := this.Select.beg.x;
+    miny := this.Select.beg.y;
+    max := this.Select.end.x;
+    maxy := this.Select.end.y;
+    OrdSelect(min, miny, max, maxy);
+    IF miny = maxy THEN
+      first := this.Current;
+      min := TU.min(min, first(Line.LINE).length);
+      max := TU.min(max, first(Line.LINE).length);
+      proc1(this.Current, min, max)
+    ELSE
+      first := List.Index(this, miny);
+      min := TU.min(min, first(Line.LINE).length);
+      proc1(first(Line.LINE), min, first(Line.LINE).length);
+      last := List.Index(this, maxy);
+      max := TU.min(max, last(Line.LINE).length);
+      proc1(last(Line.LINE), 0, max);
+      cur := List.Index(this, miny + 1);
+      FOR i := 2 TO maxy - miny DO
+        temp := cur;
+        cur := cur.Next;
+        List.DelItem(this, temp)
+      END;
+      IF Line.Concat(first(Line.LINE), last(Line.LINE)) THEN
+        List.DelItem(this, last)
+      END
+    END;
+    this.Current := first(Line.LINE);
+    CancelSelect(this, min, miny)
+  END
+  RETURN res
+END DelSelect;
+
+PROCEDURE Tab(this: TEXT; line: Line.LINE);
+VAR i: INTEGER;
+BEGIN
+  FOR i := 1 TO tab - (this.CursorX MOD tab) DO
+    IF Line.Input(line, this.CursorX, Space) THEN
+      INC(this.CursorY);
+      this.CursorX := 1
+    ELSE
+      INC(this.CursorX)
+    END
+  END
+END Tab;
+
+PROCEDURE Input*(this: TEXT; ch: Line.WCHAR);
+VAR res: BOOLEAN;
+BEGIN
+  res := DelSelect(this);
+  IF (ch[0] = 9X) & (ch[1] = 0X) THEN
+    tab := TABOUT;
+    Tab(this, this.Current)
+  ELSE
+    IF Line.Input(this.Current, this.CursorX, ch) THEN
+      INC(this.CursorY);
+      this.CursorX := 1
+    ELSE
+      Lexer.Caps(this.Current, this.CursorX, ch);
+      INC(this.CursorX)
+    END
+  END;
+  SetCursor(this, this.CursorX, this.CursorY);
+  this.Modified := TRUE
+END Input;
+
+PROCEDURE Enter(this: TEXT);
+VAR line: Line.LINE; n: INTEGER; ch: Line.WCHAR; res: BOOLEAN;
+BEGIN
+  res := DelSelect(this);
+  ch[0] := 20X; ch[1] := 0X;
+  Lexer.Caps(this.Current, this.CursorX, ch);
+  List.Insert(this, Line.Enter(this.Current, this.CursorX), this.Current);
+  line := this.Current;
+  n := Line.FirstSymbol(line);
+  WHILE (line # NIL) & (n = -1) DO
+    line := line.Prev(Line.LINE);
+    n := Line.FirstSymbol(line)
+  END;
+  SetCursor(this, n, this.CursorY + 1);
+  Line.FrwSpaces(this.Current, n - Line.FirstSymbol(this.Current));
+  SetCursor(this, this.CursorX, this.CursorY);
+END Enter;
+
+PROCEDURE Paste*(this: TEXT);
+VAR i, size, adr: INTEGER; ch: Line.WCHAR; res: BOOLEAN; line: Line.LINE;
+BEGIN
+  Backup(this);
+  res := DelSelect(this);
+  SetCursor(this, this.CursorX, this.CursorY);
+  line := this.Current;
+  adr := TU.GetClip(size);
+  FOR i := adr TO adr + size * 2 - 2 BY 2 DO
+    sys.MOVE(i, sys.ADR(ch), 2);
+    IF (ch[0] = 0DX) & (ch[1] = 0X) THEN
+      Comment(line);
+      List.Insert(this, Line.Enter(line, this.CursorX), line);
+      Line.TrimRight(line);
+      INC(this.CursorY);
+      this.CursorX := 0;
+      line := line.Next(Line.LINE)
+    ELSIF (ch[0] < 20X) & (ch[1] = 0X) THEN
+      IF ch[0] = 9X THEN
+        tab := TABIN;
+        Tab(this, line)
+      END
+    ELSE
+      IF Line.Input(line, this.CursorX, ch) THEN
+        line := line.Next(Line.LINE);
+        INC(this.CursorY);
+        this.CursorX := 1
+      ELSE
+        INC(this.CursorX)
+      END
+    END
+  END;
+  IF size > 0 THEN
+    this.Modified := TRUE
+  END;
+  IF adr # 0 THEN
+    API.Free(adr)
+  END;
+  SetCursor(this, this.CursorX, this.CursorY)
+END Paste;
+
+PROCEDURE Copy*(this: TEXT);
+VAR max, min, miny, maxy, Clip, ClipSize, MemSize, i: INTEGER; cur, last: List.ITEM;
+
+  PROCEDURE EOL;
+  BEGIN
+    sys.PUT(Clip + ClipSize * sizewchar, 0DX);
+    sys.PUT(Clip + ClipSize * sizewchar + 1, 0X);
+    INC(ClipSize);
+    sys.PUT(Clip + ClipSize * sizewchar, 0AX);
+    sys.PUT(Clip + ClipSize * sizewchar + 1, 0X);
+    INC(ClipSize);
+  END EOL;
+
+BEGIN
+  IF Select(this) THEN
+    min := this.Select.beg.x;
+    miny := this.Select.beg.y;
+    max := this.Select.end.x;
+    maxy := this.Select.end.y;
+    OrdSelect(min, miny, max, maxy);
+    MemSize := 0;
+    cur := List.Index(this, miny);
+    last := List.Index(this, maxy + 1);
+    WHILE cur # last DO
+      MemSize := MemSize + cur(Line.LINE).length * sizewchar + 4;
+      cur := cur.Next
+    END;
+    Clip := API.Alloc(64, MemSize + 4096);
+    ClipSize := 0;
+    cur := List.Index(this, miny);
+    min := TU.min(min, cur(Line.LINE).length);
+    IF miny = maxy THEN
+      max := TU.min(max, cur(Line.LINE).length);
+      sys.MOVE(sys.ADR(cur(Line.LINE).str[min]), Clip, (max - min) * sizewchar);
+      ClipSize := max - min
+    ELSE
+      sys.MOVE(sys.ADR(cur(Line.LINE).str[min]), Clip, (cur(Line.LINE).length - min) * sizewchar);
+      ClipSize := cur(Line.LINE).length - min;
+      EOL;
+      cur := List.Index(this, miny + 1);
+      last := List.Index(this, maxy);
+      WHILE cur # last DO
+        sys.MOVE(sys.ADR(cur(Line.LINE).str), Clip + ClipSize * sizewchar, cur(Line.LINE).length * sizewchar);
+        ClipSize := ClipSize + cur(Line.LINE).length;
+        EOL;
+        cur := cur.Next
+      END;
+      max := TU.min(max, cur(Line.LINE).length);
+      sys.MOVE(sys.ADR(cur(Line.LINE).str), Clip + ClipSize * sizewchar, max * sizewchar);
+      ClipSize := ClipSize + max;
+    END;
+    sys.PUT(Clip + ClipSize * sizewchar, 0X);
+    sys.PUT(Clip + ClipSize * sizewchar + 1, 0X);
+    TU.PutClip(Clip)
+  END
+END Copy;
+
+PROCEDURE Delete(this: TEXT);
+BEGIN
+  IF ~DelSelect(this) THEN
+    IF Line.Delete(this.Current, this.CursorX) & (this.Current # this.Last) THEN
+      IF Line.Concat(this.Current, this.Current.Next(Line.LINE)) THEN
+        List.DelItem(this, this.Current.Next)
+      END
+    END;
+    SetCursor(this, this.CursorX, this.CursorY)
+  END
+END Delete;
+
+PROCEDURE BkSpace(this: TEXT);
+VAR n: INTEGER;
+BEGIN
+  IF ~DelSelect(this) THEN
+    n := Line.BkSpace(this.Current, this.CursorX);
+    IF n = 0 THEN
+      IF this.Current # this.First THEN
+        DEC(this.CursorY);
+        this.CursorX := this.Current.Prev(Line.LINE).length;
+        IF Line.Concat(this.Current.Prev(Line.LINE), this.Current) THEN
+          this.Current := this.Current.Prev(Line.LINE);
+          List.DelItem(this, this.Current.Next)
+        ELSE
+          this.Current := this.Current.Prev(Line.LINE)
+        END
+      END
+    ELSE
+      this.CursorX := this.CursorX - n
+    END;
+    SetCursor(this, this.CursorX, this.CursorY)
+  END
+END BkSpace;
+
+PROCEDURE Mouse_Move*(this: TEXT; x, y: INTEGER);
+BEGIN
+  IF ~Select(this) THEN
+    this.Select.beg.x := this.CursorX;
+    this.Select.beg.y := this.CursorY;
+  END;
+  SetCursor(this, x, y);
+  this.Select.end.x := this.CursorX;
+  this.Select.end.y := this.CursorY;
+END Mouse_Move;
+
+PROCEDURE Add*(this: TEXT; str: Line.TEXTSTR; length: INTEGER);
+VAR nov: Line.LINE;
+BEGIN
+  nov := Line.CreateLine(str, length);
+  List.Push(this, nov);
+  Comment(nov);
+  SetCursor(this, this.CursorX, this.CursorY)
+END Add;
+
+PROCEDURE KeyDown*(this: TEXT; key: INTEGER; Shift: SET);
+VAR x, y, l: INTEGER; sel: BOOLEAN; temp: Line.LINE;
+
+  PROCEDURE proc1(dx, dy: INTEGER);
+  BEGIN
+    IF TU.ssShift IN Shift THEN
+      Mouse_Move(this, x + dx, y + dy)
+    ELSE
+      CancelSelect(this, x + dx, y + dy)
+    END
+  END proc1;
+
+BEGIN
+  x := this.CursorX;
+  y := this.CursorY;
+  sel := Select(this);
+  CASE key OF
+  | 8: IF Select(this) THEN
+         IF NotEmptySelect(this) THEN
+           this.Modified := TRUE
+         END
+       ELSE
+         IF (x <= this.Current.length) & ((x # 0) OR (y # 0)) THEN
+           this.Modified := TRUE
+         END
+       END;
+       BkSpace(this)
+  |13: Enter(this); this.Modified := TRUE
+  |33: IF TU.ssCtrl IN Shift THEN
+         proc1(0, this.line - y)
+       ELSE
+         l := this.line;
+         this.line := l - this.lines + 2;
+         IF this.line < 0 THEN
+           this.line := 0
+         END;
+         proc1(0, 2 - this.lines)
+       END
+  |34: IF TU.ssCtrl IN Shift THEN
+         proc1(0, this.line + this.lines - 2 - y)
+       ELSE
+         l := this.line;
+         this.line := l + this.lines - 2;
+         IF this.line < 0 THEN
+           this.line := 0
+         END;
+         proc1(0, this.lines - 2)
+       END
+  |35: IF TU.ssCtrl IN Shift THEN
+         proc1(-x, this.Count - 1 - y)
+       END;
+       Line.TrimRight(this.Current);
+       proc1(this.Current.length - x, this.CursorY - y)
+  |36: IF TU.ssCtrl IN Shift THEN
+         proc1(-x, -y)
+       ELSE
+         proc1(-x, 0)
+       END
+  |37: proc1(-1,  0)
+  |39: proc1( 1,  0)
+  |38: proc1( 0, -1)
+  |40: proc1( 0,  1)
+  |46: IF Shift = {} THEN
+         IF Select(this) THEN
+           IF NotEmptySelect(this) THEN
+             this.Modified := TRUE
+           END
+         ELSE
+           IF ~((y = this.Count - 1) & (x >= this.Current.length)) THEN
+             this.Modified := TRUE
+           END
+         END;
+         Delete(this)
+       END
+  |89: IF Shift = {TU.ssCtrl} THEN
+         temp := this.Current;
+         IF temp.Prev # NIL THEN
+           Backup(this);
+           this.Current := temp.Prev(Line.LINE);
+           List.DelItem(this, temp);
+           this.Modified := TRUE
+         ELSIF temp.Next # NIL THEN
+           Backup(this);
+           this.Current := temp.Next(Line.LINE);
+           List.DelItem(this, temp);
+           this.Modified := TRUE
+         ELSE
+           IF temp.length # 0 THEN
+             Backup(this);
+             this.Modified := TRUE
+           END;
+           Line.Clear(temp)
+         END;
+         CancelSelect(this, 0, this.CursorY)
+       END
+  ELSE
+  END
+END KeyDown;
+
+PROCEDURE Int(hdc, n, x, y: INTEGER);
+VAR i, j: INTEGER; buf: ARRAY 11 OF CHAR; t: CHAR;
+BEGIN
+  i := 10;
+  REPEAT
+    buf[i] := CHR(n MOD 10 + 30H);
+    n := n DIV 10;
+    DEC(i)
+  UNTIL n = 0;
+  TU.TextOutA(hdc, x, y, sys.ADR(buf[i + 1]), 10 - i)
+END Int;
+
+PROCEDURE DrawLine*(hdc, x1, y1, x2, y2: INTEGER);
+BEGIN
+  TU.MoveToEx(hdc, x1, y1, 0);
+  TU.LineTo(hdc, x2, y2)
+END DrawLine;
+
+PROCEDURE LineNum(this: TEXT; hdc, a, b: INTEGER);
+VAR i, y, textW2, textH2, Right, textW, textH: INTEGER; r: TU.TRect;
+BEGIN
+  textW := this.textW;
+  textH := this.textH;
+  y := 0;
+  textW2 := textW DIV 2;
+  textH2 := textH DIV 2;
+  Right := this.TextLeft;
+  r.Top := 0; r.Left := 0; r.Right := Right - LTEXT + 1; r.Bottom := this.lines * textH;
+  TU.FillRect(hdc, r, hBr1);
+  TU.SetBkColor(hdc, Colors[TU.cBkNum]);
+  FOR i := a + 1 TO b + 1 DO
+    IF i MOD 10 = 0 THEN
+      Int(hdc, i, Right + (1 - TU.Lg(i)) * textW, y)
+    ELSIF i MOD 5 = 0 THEN
+      DrawLine(hdc, Right - 2 * textW, y + textH2, Right - textW, y + textH2)
+    ELSE
+      DrawLine(hdc, Right - 2 * textW + textW2, y + textH2, Right - textW, y + textH2)
+    END;
+    y := y + textH
+  END;
+  Int(hdc, this.CursorY + 1, Right + (1 - TU.Lg(this.CursorY + 1)) * textW, (this.CursorY - this.line) * textH);
+  TU.SetBkColor(hdc, Colors[TU.cBkText])
+END LineNum;
+
+PROCEDURE Clear(hdc, Left, Right, Bottom: INTEGER);
+VAR r: TU.TRect;
+BEGIN
+  r.Top := 0; r.Left := Left; r.Right := Right; r.Bottom := Bottom;
+  TU.FillRect(hdc, r, hBr0)
+END Clear;
+
+PROCEDURE Index(this: TEXT; idx: INTEGER): Line.LINE;
+VAR cur: List.ITEM;
+BEGIN
+  cur := List.Index(this, idx)
+  RETURN cur(Line.LINE)
+END Index;
+
+PROCEDURE OutBlack(this: TEXT; hdc, x, textH: INTEGER);
+VAR lines, line, col, y, n: INTEGER; cur, last: Line.LINE;
+
+  PROCEDURE Selected(): BOOLEAN;
+    RETURN (n < this.Select.end.y) & (n > this.Select.beg.y) OR (n < this.Select.beg.y) & (n > this.Select.end.y)
+  END Selected;
+
+  PROCEDURE proc1;
+  BEGIN
+    IF Select(this) & Selected() THEN
+      TU.SetTextColor(hdc, Colors[TU.cTextSel]);
+      TU.SetBkColor(hdc, Colors[TU.cBkSel]);
+      TU.TextOut(hdc, x,  y, sys.ADR(cur.str), cur.length);
+      TU.SetTextColor(hdc, Colors[TU.cText]);
+      TU.SetBkColor(hdc, Colors[TU.cBkText]);
+    ELSE
+      TU.TextOut(hdc, x, y, sys.ADR(cur.str), cur.length)
+    END
+  END proc1;
+
+BEGIN
+  lines := this.lines;
+  line := this.line;
+  col := this.col;
+  y := 0;
+  IF lines > 0 THEN
+    n := line;
+    cur  := Index(this, line);
+    last := Index(this, line + lines - 1);
+    WHILE cur # last DO
+      proc1;
+      INC(n);
+      y := y + textH;
+      cur := cur.Next(Line.LINE)
+    END;
+    IF cur # NIL THEN
+      proc1
+    END
+  END
+END OutBlack;
+
+PROCEDURE OutColor(this: TEXT; hdc, x: INTEGER);
+VAR y, lines, line, col, color, lexcol, lexlen, n, textW, textH: INTEGER; cur, last: Line.LINE; com: List.ITEM;
+
+  PROCEDURE Selected(): BOOLEAN;
+    RETURN (n < this.Select.end.y) & (n > this.Select.beg.y) OR (n < this.Select.beg.y) & (n > this.Select.end.y)
+  END Selected;
+
+  PROCEDURE proc1(L: Line.LINE; y: INTEGER);
+  BEGIN
+    IF Select(this) & Selected() THEN
+      TU.SetTextColor(hdc, Colors[TU.cTextSel]);
+      TU.SetBkColor(hdc, Colors[TU.cBkSel]);
+      TU.TextOut(hdc, x - textW * col, y, sys.ADR(cur.str), cur.length);
+      TU.SetTextColor(hdc, Colors[TU.cText]);
+      TU.SetBkColor(hdc, Colors[TU.cBkText]);
+    ELSE
+      IF L.Modified THEN
+        Line.TrimRight(L)
+      END;
+      IF L.Prev # NIL THEN
+        L.comin := L.Prev(Line.LINE).comout
+      ELSE
+        L.comin := 0
+      END;
+      Lexer.SetLine(L);
+      REPEAT
+        color := Lexer.GetLex(lexcol, lexlen);
+        IF (color # -1) & (color # TextColor) THEN
+          TU.SetTextColor(hdc, color);
+          TU.TextOut(hdc, x + textW * (lexcol - col), y, sys.ADR(L.str[lexcol]), lexlen)
+        END
+      UNTIL color = -1
+    END
+  END proc1;
+
+BEGIN
+  textW := this.textW;
+  textH := this.textH;
+  lines := this.lines;
+  line := this.line;
+  col := this.col;
+  y := 0;
+  IF lines > 0 THEN
+    n := line;
+    cur  := Index(this, line);
+    last := Index(this, line + lines - 1);
+    WHILE cur # last DO
+      proc1(cur, y);
+      INC(n);
+      y := y + textH;
+      cur := cur.Next(Line.LINE)
+    END;
+    IF cur # NIL THEN
+      proc1(cur, y);
+      cur := cur.Next(Line.LINE);
+      WHILE cur # NIL DO
+        cur.comin := cur.Prev(Line.LINE).comout;
+        IF cur.comin >= cur.ComTab.Count THEN
+          cur.comout := cur.comin + cur.dif
+        ELSE
+          com := List.Index(cur.ComTab, cur.comin);
+          cur.comout := com(Line.ComItem).comout
+        END;
+        cur := cur.Next(Line.LINE)
+      END
+    END;
+    IF this.Numbers & ~Select(this) THEN
+      TU.SetBkColor(hdc, Colors[TU.cBkCur]);
+      proc1(this.Current, (this.CursorY - line) * textH);
+      TU.SetBkColor(hdc, Colors[TU.cBkText])
+    END
+  END
+END OutColor;
+
+PROCEDURE OutSelect(this: TEXT; hdc, TextLeft, cols: INTEGER);
+VAR line, col, x1, y1, x2, y2, textW, textH: INTEGER; r: TU.TRect; L: Line.LINE;
+BEGIN
+  IF Select(this) THEN
+    textW := this.textW;
+    textH := this.textH;
+    x1 := this.Select.beg.x;
+    x2 := this.Select.end.x;
+    y1 := this.Select.beg.y;
+    y2 := this.Select.end.y;
+    OrdSelect(x1, y1, x2, y2);
+    TU.SetTextColor(hdc, Colors[TU.cTextSel]);
+    TU.SetBkColor(hdc, Colors[TU.cBkSel]);
+    line := this.line;
+    col := this.col;
+    r.Top := (y2 - line) * textH;
+    r.Bottom := r.Top + textH;
+    IF y1 # y2 THEN
+      r.Left := TextLeft;
+      r.Right := TextLeft + (x2 - col) * textW + 1;
+      TU.FillRect(hdc, r, hBr3);
+      DEC(r.Right);
+      L := Index(this, y2);
+      TU.TextOut(hdc, TextLeft - textW * col, r.Top, sys.ADR(L.str), TU.min(L.length, x2));
+      r.Top := (y1 - line) * textH;
+      r.Bottom := r.Top + textH;
+      r.Left := TextLeft + (x1 - col) * textW - 1;
+      r.Right := TextLeft + cols * textW + 1;
+      TU.FillRect(hdc, r, hBr3);
+      INC(r.Left);
+      DEC(r.Right);
+      L := Index(this, y1);
+      TU.TextOut(hdc, r.Left, r.Top, sys.ADR(L.str[x1]), TU.max(L.length - x1, 0));
+    ELSE
+      r.Left := TextLeft + (x1 - col) * textW - 1;
+      r.Right := TextLeft + (x2 - col) * textW + 1;
+      TU.FillRect(hdc, r, hBr3);
+      INC(r.Left);
+      DEC(r.Right);
+      L := Index(this, y2);
+      TU.TextOut(hdc, r.Left, r.Top, sys.ADR(L.str[x1]), TU.min(L.length - x1, x2 - x1));
+    END;
+    TU.SetTextColor(hdc, Colors[TU.cText]);
+    TU.SetBkColor(hdc, Colors[TU.cBkText]);
+  END
+END OutSelect;
+
+PROCEDURE Print*(this: TEXT; hdc, lines, cols: INTEGER; Cursor: BOOLEAN);
+VAR curX, curY, line, col, TextLeft, x1, y1, x2, y2, textW, textH: INTEGER; r: TU.TRect;
+BEGIN
+  textW := this.textW;
+  textH := this.textH;
+  x1 := this.Select.beg.x;
+  x2 := this.Select.end.x;
+  y1 := this.Select.beg.y;
+  y2 := this.Select.end.y;
+  OrdSelect(x1, y1, x2, y2);
+  TU.SetTextColor(hdc, TextColor);
+  TU.SetBkColor(hdc, Colors[TU.cBkText]);
+  IF this.Numbers THEN
+    TextLeft := textW * TU.Lg(this.Count) + LTEXT
+  ELSE
+    TextLeft := LTEXT
+  END;
+  this.TextLeft := TextLeft;
+  this.lines := lines;
+  this.cols := cols;
+  line := this.line;
+  col := this.col;
+
+  Clear(hdc, TextLeft, TextLeft + cols * textW, lines * textH);
+
+  IF y2 - y1 > 1 THEN
+    r.Top := (y1 + 1 - line) * textH;
+    r.Bottom := (y2 - line) * textH;
+    r.Left := TextLeft;
+    r.Right := TextLeft + cols * textW;
+    TU.FillRect(hdc, r, hBr3);
+  END;
+
+  OutBlack(this, hdc, TextLeft - textW * col, textH);
+
+  IF this.Numbers & ~Select(this) THEN
+    r.Top := (this.CursorY - line) * textH;
+    r.Left := TextLeft;
+    r.Right := TextLeft + cols * textW;
+    r.Bottom := r.Top + textH;
+    TU.FillRect(hdc, r, hBr2);
+    TU.SetBkColor(hdc, Colors[TU.cBkCur]);
+    TU.TextOut(hdc, TextLeft - textW * col, (this.CursorY - line) * textH, sys.ADR(this.Current.str), this.Current.length);
+    TU.SetBkColor(hdc, Colors[TU.cBkText])
+  END;
+
+  IF this.Syntax THEN
+    OutColor(this, hdc, TextLeft)
+  END;
+
+  OutSelect(this, hdc, TextLeft, cols);
+
+  r.Top := 0; r.Left := this.TextLeft - LTEXT; r.Right := this.TextLeft; r.Bottom := this.lines * textH;
+  TU.FillRect(hdc, r, hBr0);
+
+  IF this.Found THEN
+    r.Top := (this.FindSel.y - line) * textH;
+    r.Bottom := r.Top + textH;
+    r.Left := TextLeft + (this.FindSel.x1 - col) * textW - 1;
+    r.Right := TextLeft + (this.FindSel.x2 - col) * textW + 1;
+    TU.FillRect(hdc, r, hBr4);
+    TU.SetTextColor(hdc, TU.Inv(Colors[TU.cText]));
+    TU.SetBkColor(hdc, TU.Inv(Colors[TU.cBkText]));
+    TU.TextOut(hdc, this.FindSel.x1 * textW - textW * col + this.TextLeft, (this.CursorY - line) * textH,
+      sys.ADR(this.Current.str) + this.FindSel.x1 * sizewchar, this.FindSel.x2 - this.FindSel.x1);
+    TU.SetTextColor(hdc, Colors[TU.cText]);
+    TU.SetBkColor(hdc, Colors[TU.cBkText])
+  END;
+
+  IF Cursor OR Chcrs THEN
+    IF Chcrs THEN
+      Chcrs := FALSE;
+      ResetTimer
+    END;
+    TU.SetROP2(hdc, TU.R2_NOT);
+    curX := (this.CursorX - col) * textW + TextLeft;
+    curY := (this.CursorY - line) * textH + 1;
+    DrawLine(hdc, curX, curY, curX, curY + textH - 3);
+    DEC(curX);
+    DrawLine(hdc, curX, curY, curX, curY + textH - 3);
+    TU.SetROP2(hdc, TU.R2_COPYPEN)
+  END;
+
+  IF this.Numbers THEN
+    TU.SetTextColor(hdc, Colors[TU.cTextNum]);
+    TU.SelectObject(hdc, pen0);
+    LineNum(this, hdc, this.line, TU.min(this.line + lines, this.Count - 1))
+  END
+
+END Print;
+
+PROCEDURE CreateText*(textW, textH: INTEGER): TEXT;
+VAR nov: TEXT;
+BEGIN
+  NEW(nov);
+  nov.textH := textH;
+  nov.textW := textW;
+  List.CreateList(nov)
+  RETURN nov
+END CreateText;
+
+PROCEDURE Init*(ResetTimerProc: TPROC);
+BEGIN
+  ResetTimer := ResetTimerProc
+END Init;
+
+BEGIN
+  GetColors;
+  Space[0] := 20X; Space[1] := 0X
+END Text.
