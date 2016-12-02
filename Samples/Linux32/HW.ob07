@@ -1,0 +1,32 @@
+﻿MODULE HW;
+
+IMPORT sys := SYSTEM, LINAPI;
+
+VAR puts: PROCEDURE [cdecl] (pchar: INTEGER);
+
+PROCEDURE main;
+VAR dll, p, i: INTEGER;
+BEGIN
+  dll := LINAPI.dlopen("libc.so.6", 1);
+  ASSERT(dll # 0);
+  p := LINAPI.dlsym(dll, "puts");
+  ASSERT(p # 0);
+  sys.PUT(sys.ADR(puts), p);
+
+  puts(sys.ADR("Hello, world!"));
+
+  (*вывод параметров программы*)
+  FOR i := 0 TO LINAPI.ParamCount - 1 DO
+    puts(LINAPI.ParamStr(i))
+  END;
+
+  (*вывод переменных окружения*)
+  FOR i := 0 TO LINAPI.EnvCount - 1 DO
+    puts(LINAPI.EnvStr(i))
+  END;
+
+END main;
+
+BEGIN
+  main
+END HW.

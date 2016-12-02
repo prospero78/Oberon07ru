@@ -1,0 +1,63 @@
+﻿MODULE HW;
+
+IMPORT sys := SYSTEM, KOSAPI;
+
+PROCEDURE WindowRedrawStatus(p1: INTEGER);
+VAR res: INTEGER;
+BEGIN
+  res := KOSAPI.sysfunc2(0CH, p1)
+END WindowRedrawStatus;
+
+PROCEDURE DefineAndDrawWindow(x, y, w, h, color, style, hcolor, hstyle, htext: INTEGER);
+VAR res: INTEGER;
+BEGIN
+  res := KOSAPI.sysfunc6(0, LSL(x, 16) + w, LSL(y, 16) + h, color + LSL(style, 24), hcolor + LSL(hstyle, 24), htext)
+END DefineAndDrawWindow;
+
+PROCEDURE WriteTextToWindow(x, y, color, textflags, text: INTEGER);
+VAR res: INTEGER;
+BEGIN
+  res := KOSAPI.sysfunc5(4, LSL(x, 16) + y, color + LSL(textflags, 28), text, 0)
+END WriteTextToWindow;
+
+PROCEDURE WaitForEvent(): INTEGER;
+  RETURN KOSAPI.sysfunc1(10)
+END WaitForEvent;
+
+PROCEDURE GetKey(VAR keyCode: CHAR);
+VAR res: INTEGER;
+BEGIN
+  res := KOSAPI.sysfunc1(2)
+END GetKey;
+
+PROCEDURE ExitApp;
+VAR res: INTEGER;
+BEGIN
+  res := KOSAPI.sysfunc1(-1)
+END ExitApp;
+
+PROCEDURE draw_window(header, text: ARRAY OF CHAR);
+BEGIN
+  WindowRedrawStatus(1);
+  DefineAndDrawWindow(200, 200, 200, 100, 0FFFFFFH, LSL(ORD({0,1}), 4) + 3, 0, 0, sys.ADR(header));
+  WriteTextToWindow(10, 10, 0, 8, sys.ADR(text));
+  WindowRedrawStatus(2);
+END draw_window;
+
+PROCEDURE Main(header, text: ARRAY OF CHAR);
+VAR keyCode: CHAR;
+BEGIN
+  draw_window(header, text);
+  WHILE TRUE DO
+    CASE WaitForEvent() OF
+    |1: draw_window(header, text)
+    |2: GetKey(keyCode)
+    |3: ExitApp
+    ELSE
+    END
+  END
+END Main;
+
+BEGIN
+  Main("HW", "Hello, world!")
+END HW.
