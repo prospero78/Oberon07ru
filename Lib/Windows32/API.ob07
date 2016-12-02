@@ -1,0 +1,137 @@
+﻿(*
+    Copyright 2013 Krotov Anton
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*)
+
+MODULE API;
+
+IMPORT sys := SYSTEM;
+
+CONST
+
+  OS* = "WIN";
+  Slash* = "\";
+
+  OFS_MAXPATHNAME = 128;
+
+TYPE
+
+  OFSTRUCT* = RECORD
+    cBytes: CHAR;
+    fFixedDisk: CHAR;
+    nErrCode: sys.CARD16;
+    Reserved1: sys.CARD16;
+    Reserved2: sys.CARD16;
+    szPathName: ARRAY OFS_MAXPATHNAME OF CHAR
+  END;
+
+VAR
+
+  sec*, dsec*: INTEGER;
+
+  GetStdHandle*: PROCEDURE [winapi] (nStdHandle: INTEGER): INTEGER;
+  CloseHandle*: PROCEDURE [winapi] (hObject: INTEGER): INTEGER;
+  CreateFile*: PROCEDURE [winapi] (lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes,
+    dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile: INTEGER): INTEGER;
+  OpenFile*: PROCEDURE [winapi] (lpFileName: INTEGER; lpReOpenBuff: OFSTRUCT; uStyle: INTEGER): INTEGER;
+  ReadFile*, WriteFile*: PROCEDURE [winapi] (hFile, Buffer, nNumberOfBytesToRead, lpNumberOfBytesRead, lpOverlapped: INTEGER): INTEGER;
+  GetCommandLine*: PROCEDURE [winapi] (): INTEGER;
+  GetTickCount*: PROCEDURE [winapi] (): INTEGER;
+  Alloc*: PROCEDURE [winapi] (uFlags, dwBytes: INTEGER): INTEGER;
+  Free*: PROCEDURE [winapi] (hMem: INTEGER): INTEGER;
+  MessageBoxA*: PROCEDURE [winapi] (hWnd, lpText, lpCaption, uType: INTEGER): INTEGER;
+  ExitProcess*: PROCEDURE [winapi] (code: INTEGER);
+  SetFilePointer*: PROCEDURE [winapi] (hFile, lDistanceToMove, lpDistanceToMoveHigh, dwMoveMethod: INTEGER): INTEGER;
+  strncmp*: PROCEDURE [cdecl] (a, b, n: INTEGER): INTEGER;
+
+  GetProcAddress*: PROCEDURE [winapi] (hModule, name: INTEGER): INTEGER;
+  LoadLibraryA*: PROCEDURE [winapi] (name: INTEGER): INTEGER;
+
+  kos_OCFile*: PROCEDURE (FName: ARRAY OF CHAR; mode: INTEGER; VAR memerr: BOOLEAN): INTEGER;
+  GetName*: PROCEDURE (): INTEGER;
+  lnx_CreateFile*: PROCEDURE (FName: ARRAY OF CHAR): INTEGER;
+  lnx_OpenFile*: PROCEDURE (FName: ARRAY OF CHAR): INTEGER;
+
+PROCEDURE zeromem*(size, adr: INTEGER);
+END zeromem;
+
+PROCEDURE DebugMsg*(lpText, lpCaption: INTEGER);
+BEGIN
+  MessageBoxA(0, lpText, lpCaption, 16)
+END DebugMsg;
+
+PROCEDURE FileSize*(F: INTEGER): INTEGER;
+VAR res: INTEGER;
+BEGIN
+  res := SetFilePointer(F, 0, 0, 2);
+  SetFilePointer(F, 0, 0, 0)
+  RETURN res
+END FileSize;
+
+PROCEDURE GetProc(name: ARRAY OF CHAR; hMOD, adr: INTEGER);
+VAR H: INTEGER;
+BEGIN
+  H := GetProcAddress(hMOD, sys.ADR(name[0]));
+  ASSERT(H # 0);
+  sys.PUT(adr, H);
+END GetProc;
+
+PROCEDURE Time*(VAR sec, dsec: INTEGER);
+VAR t: INTEGER;
+BEGIN
+  t := GetTickCount() DIV 10;
+  sec := t DIV 100;
+  dsec := t MOD 100
+END Time;
+
+PROCEDURE _NEW*(size: INTEGER): INTEGER;
+  RETURN Alloc(64, size)
+END _NEW;
+
+PROCEDURE _DISPOSE*(p: INTEGER): INTEGER;
+  RETURN Free(p)
+END _DISPOSE;
+
+PROCEDURE init* (esp: INTEGER);
+VAR lib, p: INTEGER;
+BEGIN
+  sys.MOVE(esp, sys.ADR(GetProcAddress), 4);
+  sys.MOVE(esp + 4, sys.ADR(LoadLibraryA), 4);
+
+  lib := LoadLibraryA(sys.ADR("kernel32.dll"));
+  GetProc("GetTickCount", lib, sys.ADR(GetTickCount));
+
+  Time(sec, dsec);
+
+  GetProc("GetStdHandle", lib, sys.ADR(GetStdHandle));
+  GetProc("CreateFileA", lib, sys.ADR(CreateFile));
+  GetProc("CloseHandle", lib, sys.ADR(CloseHandle));
+  GetProc("OpenFile", lib, sys.ADR(OpenFile));
+  GetProc("ReadFile", lib, sys.ADR(ReadFile));
+  GetProc("WriteFile", lib, sys.ADR(WriteFile));
+  GetProc("GetCommandLineA", lib, sys.ADR(GetCommandLine));
+  GetProc("ExitProcess", lib, sys.ADR(ExitProcess));
+  GetProc("GlobalAlloc", lib, sys.ADR(Alloc));
+  GetProc("GlobalFree", lib, sys.ADR(Free));
+  GetProc("SetFilePointer", lib, sys.ADR(SetFilePointer));
+
+  lib := LoadLibraryA(sys.ADR("msvcrt.dll"));
+  GetProc("strncmp", lib, sys.ADR(strncmp));
+
+  lib := LoadLibraryA(sys.ADR("user32.dll"));
+  GetProc("MessageBoxA", lib, sys.ADR(MessageBoxA));
+END init;
+
+END API.

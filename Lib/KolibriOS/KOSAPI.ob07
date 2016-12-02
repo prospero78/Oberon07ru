@@ -1,0 +1,185 @@
+﻿(*
+    Copyright 2013 Krotov Anton
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*)
+
+MODULE KOSAPI;
+
+IMPORT sys := SYSTEM, API;
+
+PROCEDURE [stdcall] sysfunc1*(arg1: INTEGER): INTEGER;
+BEGIN
+  sys.CODE("8B4508");           (* mov     eax, [ebp + 08h] *)
+  sys.CODE("CD40");             (* int     40h              *)
+  sys.CODE("C9");               (* leave                    *)
+  sys.CODE("C20400");           (* ret     04h              *)
+  RETURN 0
+END sysfunc1;
+
+PROCEDURE [stdcall] sysfunc2*(arg1, arg2: INTEGER): INTEGER;
+BEGIN
+  sys.CODE("53");               (* push    ebx              *)
+  sys.CODE("8B4508");           (* mov     eax, [ebp + 08h] *)
+  sys.CODE("8B5D0C");           (* mov     ebx, [ebp + 0Ch] *)
+  sys.CODE("CD40");             (* int     40h              *)
+  sys.CODE("5B");               (* pop     ebx              *)
+  sys.CODE("C9");               (* leave                    *)
+  sys.CODE("C20800");           (* ret     08h              *)
+  RETURN 0
+END sysfunc2;
+
+PROCEDURE [stdcall] sysfunc3*(arg1, arg2, arg3: INTEGER): INTEGER;
+BEGIN
+  sys.CODE("53");               (* push    ebx              *)
+  sys.CODE("8B4508");           (* mov     eax, [ebp + 08h] *)
+  sys.CODE("8B5D0C");           (* mov     ebx, [ebp + 0Ch] *)
+  sys.CODE("8B4D10");           (* mov     ecx, [ebp + 10h] *)
+  sys.CODE("CD40");             (* int     40h              *)
+  sys.CODE("5B");               (* pop     ebx              *)
+  sys.CODE("C9");               (* leave                    *)
+  sys.CODE("C20C00");           (* ret     0Ch              *)
+  RETURN 0
+END sysfunc3;
+
+PROCEDURE [stdcall] sysfunc4*(arg1, arg2, arg3, arg4: INTEGER): INTEGER;
+BEGIN
+  sys.CODE("53");               (* push    ebx              *)
+  sys.CODE("8B4508");           (* mov     eax, [ebp + 08h] *)
+  sys.CODE("8B5D0C");           (* mov     ebx, [ebp + 0Ch] *)
+  sys.CODE("8B4D10");           (* mov     ecx, [ebp + 10h] *)
+  sys.CODE("8B5514");           (* mov     edx, [ebp + 14h] *)
+  sys.CODE("CD40");             (* int     40h              *)
+  sys.CODE("5B");               (* pop     ebx              *)
+  sys.CODE("C9");               (* leave                    *)
+  sys.CODE("C21000");           (* ret     10h              *)
+  RETURN 0
+END sysfunc4;
+
+PROCEDURE [stdcall] sysfunc5*(arg1, arg2, arg3, arg4, arg5: INTEGER): INTEGER;
+BEGIN
+  sys.CODE("53");               (* push    ebx              *)
+  sys.CODE("56");               (* push    esi              *)
+  sys.CODE("8B4508");           (* mov     eax, [ebp + 08h] *)
+  sys.CODE("8B5D0C");           (* mov     ebx, [ebp + 0Ch] *)
+  sys.CODE("8B4D10");           (* mov     ecx, [ebp + 10h] *)
+  sys.CODE("8B5514");           (* mov     edx, [ebp + 14h] *)
+  sys.CODE("8B7518");           (* mov     esi, [ebp + 18h] *)
+  sys.CODE("CD40");             (* int     40h              *)
+  sys.CODE("5E");               (* pop     esi              *)
+  sys.CODE("5B");               (* pop     ebx              *)
+  sys.CODE("C9");               (* leave                    *)
+  sys.CODE("C21400");           (* ret     14h              *)
+  RETURN 0
+END sysfunc5;
+
+PROCEDURE [stdcall] sysfunc6*(arg1, arg2, arg3, arg4, arg5, arg6: INTEGER): INTEGER;
+BEGIN
+  sys.CODE("53");               (* push    ebx              *)
+  sys.CODE("56");               (* push    esi              *)
+  sys.CODE("57");               (* push    edi              *)
+  sys.CODE("8B4508");           (* mov     eax, [ebp + 08h] *)
+  sys.CODE("8B5D0C");           (* mov     ebx, [ebp + 0Ch] *)
+  sys.CODE("8B4D10");           (* mov     ecx, [ebp + 10h] *)
+  sys.CODE("8B5514");           (* mov     edx, [ebp + 14h] *)
+  sys.CODE("8B7518");           (* mov     esi, [ebp + 18h] *)
+  sys.CODE("8B7D1C");           (* mov     edi, [ebp + 1Ch] *)
+  sys.CODE("CD40");             (* int     40h              *)
+  sys.CODE("5F");               (* pop     edi              *)
+  sys.CODE("5E");               (* pop     esi              *)
+  sys.CODE("5B");               (* pop     ebx              *)
+  sys.CODE("C9");               (* leave                    *)
+  sys.CODE("C21800");           (* ret     18h              *)
+  RETURN 0
+END sysfunc6;
+
+PROCEDURE [stdcall] sysfunc7*(arg1, arg2, arg3, arg4, arg5, arg6, arg7: INTEGER): INTEGER;
+BEGIN
+  sys.CODE("53");               (* push    ebx              *)
+  sys.CODE("56");               (* push    esi              *)
+  sys.CODE("57");               (* push    edi              *)
+  sys.CODE("55");               (* push    ebp              *)
+  sys.CODE("8B4508");           (* mov     eax, [ebp + 08h] *)
+  sys.CODE("8B5D0C");           (* mov     ebx, [ebp + 0Ch] *)
+  sys.CODE("8B4D10");           (* mov     ecx, [ebp + 10h] *)
+  sys.CODE("8B5514");           (* mov     edx, [ebp + 14h] *)
+  sys.CODE("8B7518");           (* mov     esi, [ebp + 18h] *)
+  sys.CODE("8B7D1C");           (* mov     edi, [ebp + 1Ch] *)
+  sys.CODE("8B6D20");           (* mov     ebp, [ebp + 20h] *)
+  sys.CODE("CD40");             (* int     40h              *)
+  sys.CODE("5D");               (* pop     ebp              *)
+  sys.CODE("5F");               (* pop     edi              *)
+  sys.CODE("5E");               (* pop     esi              *)
+  sys.CODE("5B");               (* pop     ebx              *)
+  sys.CODE("C9");               (* leave                    *)
+  sys.CODE("C21C00");           (* ret     1Ch              *)
+  RETURN 0
+END sysfunc7;
+
+PROCEDURE [stdcall] sysfunc22*(arg1, arg2: INTEGER; VAR res2: INTEGER): INTEGER;
+BEGIN
+  sys.CODE("53");               (* push    ebx              *)
+  sys.CODE("8B4508");           (* mov     eax, [ebp + 08h] *)
+  sys.CODE("8B5D0C");           (* mov     ebx, [ebp + 0Ch] *)
+  sys.CODE("CD40");             (* int     40h              *)
+  sys.CODE("8B4D10");           (* mov     ecx, [ebp + 10h] *)
+  sys.CODE("8919");             (* mov     [ecx], ebx       *)
+  sys.CODE("5B");               (* pop     ebx              *)
+  sys.CODE("C9");               (* leave                    *)
+  sys.CODE("C20C00");           (* ret     0Ch              *)
+  RETURN 0
+END sysfunc22;
+
+PROCEDURE LoadLib*(name: ARRAY OF CHAR): INTEGER;
+  RETURN sysfunc3(68, 19, sys.ADR(name[0]))
+END LoadLib;
+
+PROCEDURE GetProcAdr*(name: ARRAY OF CHAR; lib: INTEGER): INTEGER;
+VAR cur, procname, adr: INTEGER;
+
+  PROCEDURE streq(str1, str2: INTEGER): BOOLEAN;
+  VAR c1, c2: CHAR;
+  BEGIN
+    REPEAT
+      sys.GET(str1, c1);
+      sys.GET(str2, c2);
+      INC(str1);
+      INC(str2)
+    UNTIL (c1 # c2) OR (c1 = 0X)
+    RETURN c1 = c2
+  END streq;
+
+BEGIN
+  cur := lib;
+  REPEAT
+    sys.GET(cur, procname);
+    INC(cur, 8)
+  UNTIL (procname = 0) OR streq(procname, sys.ADR(name[0]));
+  IF procname # 0 THEN
+    sys.GET(cur - 4, adr)
+  ELSE
+    adr := 0
+  END
+  RETURN adr
+END GetProcAdr;
+
+PROCEDURE GetCommandLine*(): INTEGER;
+  RETURN API.param
+END GetCommandLine;
+
+PROCEDURE GetName*(): INTEGER;
+  RETURN API.name
+END GetName;
+
+END KOSAPI.

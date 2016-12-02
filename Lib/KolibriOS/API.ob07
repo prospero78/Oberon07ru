@@ -1,0 +1,343 @@
+﻿(*
+    Copyright 2013 Krotov Anton
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*)
+
+MODULE API;
+
+IMPORT sys := SYSTEM;
+
+CONST
+
+  OS* = "KOS";
+  Slash* = "/";
+
+  MAX_SIZE  = 16 * 400H;
+  HEAP_SIZE =  1 * 100000H;
+
+TYPE
+
+  FILENAME = ARRAY 2048 OF CHAR;
+
+  OFSTRUCT* = RECORD
+    subfunc, pos, hpos, bytes, buf: INTEGER;
+    name: FILENAME
+  END;
+
+VAR
+
+  param*, name*, fsize, sec*, dsec*: INTEGER;
+
+  heap, endheap: INTEGER;
+  pockets: ARRAY MAX_SIZE DIV 32 + 1 OF INTEGER;
+
+  CreateFile*: PROCEDURE (p1, p2, p3, p4, p5, p6, p7: INTEGER): INTEGER;
+  OpenFile*: PROCEDURE (p1: INTEGER; p2: OFSTRUCT; p3: INTEGER): INTEGER;
+  GetStdHandle*: PROCEDURE (p1: INTEGER): INTEGER;
+  lnx_CreateFile*: PROCEDURE (FName: ARRAY OF CHAR): INTEGER;
+  lnx_OpenFile*: PROCEDURE (FName: ARRAY OF CHAR): INTEGER;
+
+PROCEDURE [stdcall] zeromem*(size, adr: INTEGER);
+BEGIN
+  sys.CODE("578B7D0C8B4D0833C09CFCF3AB9D5F")
+END zeromem;
+
+PROCEDURE strncmp*(a, b, n: INTEGER): INTEGER;
+VAR A, B: CHAR; Res: INTEGER;
+BEGIN
+  Res := 0;
+  WHILE n > 0 DO
+    sys.GET(a, A); INC(a);
+    sys.GET(b, B); INC(b);
+    DEC(n);
+    IF A # B THEN
+      Res := ORD(A) - ORD(B);
+      n := 0
+    ELSIF A = 0X THEN
+      n := 0
+    END
+  END
+  RETURN Res
+END strncmp;
+
+PROCEDURE [stdcall] sysfunc1(arg1: INTEGER): INTEGER;
+BEGIN
+  sys.CODE("8B4508");           (* mov     eax, [ebp + 08h] *)
+  sys.CODE("CD40");             (* int     40h              *)
+  sys.CODE("C9");               (* leave                    *)
+  sys.CODE("C20400");           (* ret     04h              *)
+  RETURN 0
+END sysfunc1;
+
+PROCEDURE [stdcall] sysfunc2(arg1, arg2: INTEGER): INTEGER;
+BEGIN
+  sys.CODE("53");               (* push    ebx              *)
+  sys.CODE("8B4508");           (* mov     eax, [ebp + 08h] *)
+  sys.CODE("8B5D0C");           (* mov     ebx, [ebp + 0Ch] *)
+  sys.CODE("CD40");             (* int     40h              *)
+  sys.CODE("5B");               (* pop     ebx              *)
+  sys.CODE("C9");               (* leave                    *)
+  sys.CODE("C20800");           (* ret     08h              *)
+  RETURN 0
+END sysfunc2;
+
+PROCEDURE [stdcall] sysfunc3(arg1, arg2, arg3: INTEGER): INTEGER;
+BEGIN
+  sys.CODE("53");               (* push    ebx              *)
+  sys.CODE("8B4508");           (* mov     eax, [ebp + 08h] *)
+  sys.CODE("8B5D0C");           (* mov     ebx, [ebp + 0Ch] *)
+  sys.CODE("8B4D10");           (* mov     ecx, [ebp + 10h] *)
+  sys.CODE("CD40");             (* int     40h              *)
+  sys.CODE("5B");               (* pop     ebx              *)
+  sys.CODE("C9");               (* leave                    *)
+  sys.CODE("C20C00");           (* ret     0Ch              *)
+  RETURN 0
+END sysfunc3;
+
+PROCEDURE [stdcall] sysfunc22*(arg1, arg2: INTEGER; VAR res2: INTEGER): INTEGER;
+BEGIN
+  sys.CODE("53");               (* push    ebx              *)
+  sys.CODE("8B4508");           (* mov     eax, [ebp + 08h] *)
+  sys.CODE("8B5D0C");           (* mov     ebx, [ebp + 0Ch] *)
+  sys.CODE("CD40");             (* int     40h              *)
+  sys.CODE("8B4D10");           (* mov     ecx, [ebp + 10h] *)
+  sys.CODE("8919");             (* mov     [ecx], ebx       *)
+  sys.CODE("5B");               (* pop     ebx              *)
+  sys.CODE("C9");               (* leave                    *)
+  sys.CODE("C20C00");           (* ret     0Ch              *)
+  RETURN 0
+END sysfunc22;
+
+PROCEDURE _NEW*(size: INTEGER): INTEGER;
+VAR res, idx, temp: INTEGER;
+BEGIN
+  IF size <= MAX_SIZE THEN
+    idx := ASR(size, 5);
+    res := pockets[idx];
+    IF res # 0 THEN
+      sys.GET(res, pockets[idx]);
+      sys.PUT(res, size);
+      INC(res, 4)
+    ELSE
+      IF heap + size >= endheap THEN
+        IF sysfunc2(18, 16) > ASR(HEAP_SIZE, 10) THEN
+          heap := sysfunc3(68, 12, HEAP_SIZE);
+          endheap := heap + HEAP_SIZE
+        ELSE
+          heap := 0
+        END
+      END;
+      IF heap # 0 THEN
+        sys.PUT(heap, size);
+        res := heap + 4;
+        heap := heap + size
+      ELSE
+        endheap := 0;
+        res := 0
+      END
+    END
+  ELSE
+    IF sysfunc2(18, 16) > ASR(size, 10) THEN
+      res := sysfunc3(68, 12, size);
+      sys.PUT(res, size);
+      INC(res, 4)
+    ELSE
+      res := 0
+    END
+  END;
+  IF res # 0 THEN
+    zeromem(ASR(size, 2) - 1, res)
+  END
+  RETURN res
+END _NEW;
+
+PROCEDURE _DISPOSE*(ptr: INTEGER): INTEGER;
+VAR size, idx: INTEGER;
+BEGIN
+  DEC(ptr, 4);
+  sys.GET(ptr, size);
+  IF size <= MAX_SIZE THEN
+    idx := ASR(size, 5);
+    sys.PUT(ptr, pockets[idx]);
+    pockets[idx] := ptr
+  ELSE
+    size := sysfunc3(68, 13, ptr)
+  END
+  RETURN 0
+END _DISPOSE;
+
+PROCEDURE Alloc*(flags, size: INTEGER): INTEGER;
+  RETURN sysfunc3(68, 12, size)
+END Alloc;
+
+PROCEDURE Free*(ptr: INTEGER): INTEGER;
+BEGIN
+  ptr := sysfunc3(68, 13, ptr)
+  RETURN 0
+END Free;
+
+PROCEDURE OCFile(FileName: ARRAY OF CHAR; VAR FS: OFSTRUCT; mode: INTEGER; VAR fsize: INTEGER): INTEGER;
+VAR buf: ARRAY 40 OF CHAR; res: INTEGER;
+BEGIN
+  FS.subfunc := mode;
+  FS.pos := 0;
+  FS.hpos := 0;
+  FS.bytes := 0;
+  FS.buf := sys.ADR(buf);
+  COPY(FileName, FS.name);
+  IF sysfunc22(70, sys.ADR(FS), res) = 0 THEN
+    res := sys.ADR(FS);
+    sys.GET(sys.ADR(buf) + 32, fsize)
+  ELSE
+    res := 0
+  END
+  RETURN res
+END OCFile;
+
+PROCEDURE FileSize*(F: INTEGER): INTEGER;
+  RETURN fsize
+END FileSize;
+
+PROCEDURE IOFile(VAR FS: OFSTRUCT; Buffer, bytes, io: INTEGER): INTEGER;
+VAR res1, res: INTEGER;
+BEGIN
+  FS.subfunc := io;
+  FS.bytes := bytes;
+  FS.buf := Buffer;
+  res1 := sysfunc22(70, sys.ADR(FS), res);
+  IF res = -1 THEN
+    res := 0
+  END;
+  FS.pos := FS.pos + res
+  RETURN res
+END IOFile;
+
+PROCEDURE kos_OCFile*(FName: ARRAY OF CHAR; mode: INTEGER; VAR memerr: BOOLEAN): INTEGER;
+VAR FS: OFSTRUCT; pFS: POINTER TO OFSTRUCT; res: INTEGER;
+BEGIN
+  memerr := FALSE;
+  IF OCFile(FName, FS, mode, fsize) # 0 THEN
+    NEW(pFS);
+    IF pFS = NIL THEN
+      memerr := TRUE;
+      res := 0
+    ELSE
+      sys.GET(sys.ADR(pFS), res);
+      pFS^ := FS
+    END
+  ELSE
+    res := 0
+  END
+  RETURN res
+END kos_OCFile;
+
+PROCEDURE ReadFile*(hFile, Buffer, nNumberOfBytesToRead, lpNumberOfBytesRead, lpOverlapped: INTEGER);
+VAR pFS: POINTER TO OFSTRUCT; res: INTEGER;
+BEGIN
+  IF hFile # 0 THEN
+    sys.PUT(sys.ADR(pFS), hFile);
+    res := IOFile(pFS^, Buffer, nNumberOfBytesToRead, 0)
+  ELSE
+    res := 0
+  END;
+  sys.PUT(lpNumberOfBytesRead, res)
+END ReadFile;
+
+PROCEDURE WriteFile*(hFile, Buffer, nNumberOfBytesToWrite, lpNumberOfBytesWritten, lpOverlapped: INTEGER);
+VAR pFS: POINTER TO OFSTRUCT; res: INTEGER;
+BEGIN
+  IF hFile # 0 THEN
+    sys.PUT(sys.ADR(pFS), hFile);
+    res := IOFile(pFS^, Buffer, nNumberOfBytesToWrite, 3)
+  ELSE
+    res := 0
+  END;
+  sys.PUT(lpNumberOfBytesWritten, res)
+END WriteFile;
+
+PROCEDURE CloseHandle*(hObject: INTEGER);
+VAR pFS: POINTER TO OFSTRUCT;
+BEGIN
+  sys.PUT(sys.ADR(pFS), hObject);
+  DISPOSE(pFS)
+END CloseHandle;
+
+PROCEDURE ExitProcess*(p1: INTEGER);
+BEGIN
+  p1 := sysfunc1(-1)
+END ExitProcess;
+
+PROCEDURE GetCommandLine*(): INTEGER;
+  RETURN param
+END GetCommandLine;
+
+PROCEDURE GetName*(): INTEGER;
+  RETURN name
+END GetName;
+
+PROCEDURE OutChar(c: CHAR);
+VAR res: INTEGER;
+BEGIN
+  res := sysfunc3(63, 1, ORD(c))
+END OutChar;
+
+PROCEDURE DebugMsg*(lpText, lpCaption: INTEGER);
+VAR c: CHAR;
+BEGIN
+  IF lpCaption # 0 THEN
+    OutChar(0DX);
+    OutChar(0AX);
+    REPEAT
+      sys.GET(lpCaption, c);
+      IF c # 0X THEN
+        OutChar(c)
+      END;
+      INC(lpCaption)
+    UNTIL c = 0X;
+    OutChar(":");
+    OutChar(0DX);
+    OutChar(0AX)
+  END;
+  REPEAT
+    sys.GET(lpText, c);
+    IF c # 0X THEN
+      OutChar(c)
+    END;
+    INC(lpText)
+  UNTIL c = 0X;
+  IF lpCaption # 0 THEN
+    OutChar(0DX);
+    OutChar(0AX)
+  END
+END DebugMsg;
+
+PROCEDURE Time*(VAR sec, dsec: INTEGER);
+VAR t: INTEGER;
+BEGIN
+  t := sysfunc2(26, 9);
+  sec := t DIV 100;
+  dsec := t MOD 100
+END Time;
+
+PROCEDURE init* (p1: INTEGER);
+VAR p: INTEGER;
+BEGIN
+  p := sysfunc2(68, 11);
+  Time(sec, dsec);
+  sys.GET(28, param);
+  sys.GET(32, name)
+END init;
+
+END API.

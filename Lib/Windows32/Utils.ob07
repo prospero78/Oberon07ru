@@ -1,0 +1,148 @@
+﻿(*
+    Copyright 2013 Krotov Anton
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*)
+
+MODULE Utils;
+
+IMPORT sys := SYSTEM, WINAPI;
+
+CONST
+
+  MAX_PARAM = 1024;
+
+VAR
+
+  Params: ARRAY MAX_PARAM, 2 OF INTEGER;
+  ParamCount*: INTEGER;
+
+PROCEDURE PutSeed*(seed: INTEGER);
+BEGIN
+  WINAPI.srand(seed)
+END PutSeed;
+
+PROCEDURE Rnd*(range : INTEGER): INTEGER;
+  RETURN WINAPI.rand() MOD range
+END Rnd;
+
+PROCEDURE GetChar(adr: INTEGER): CHAR;
+VAR res: CHAR;
+BEGIN
+  sys.GET(adr, res)
+  RETURN res
+END GetChar;
+
+PROCEDURE ParamParse;
+VAR p, count: INTEGER; c: CHAR; cond: INTEGER;
+
+  PROCEDURE ChangeCond(A, B, C: INTEGER);
+  BEGIN
+    IF (c <= 20X) & (c # 0X) THEN
+      cond := A
+    ELSIF c = 22X THEN
+      cond := B
+    ELSIF c = 0X THEN
+      cond := 6
+    ELSE
+      cond := C
+    END
+  END ChangeCond;
+
+BEGIN
+  p := WINAPI.GetCommandLine();
+  cond := 0;
+  count := 0;
+  WHILE (count < MAX_PARAM) & (cond # 6) DO
+    c := GetChar(p);
+    CASE cond OF
+    |0: ChangeCond(0, 4, 1); IF cond = 1 THEN Params[count, 0] := p END
+    |1: ChangeCond(0, 3, 1); IF cond IN {0, 6} THEN Params[count, 1] := p - 1; INC(count) END
+    |3: ChangeCond(3, 1, 3); IF cond = 6 THEN Params[count, 1] := p - 1; INC(count) END
+    |4: ChangeCond(5, 0, 5); IF cond = 5 THEN Params[count, 0] := p END
+    |5: ChangeCond(5, 1, 5); IF cond = 6 THEN Params[count, 1] := p - 1; INC(count) END
+    ELSE
+    END;
+    INC(p)
+  END;
+  ParamCount := count - 1
+END ParamParse;
+
+PROCEDURE Utf8To16*(source: ARRAY OF CHAR; VAR dest: ARRAY OF CHAR): INTEGER;
+VAR i, j, L, u, N: INTEGER;
+BEGIN
+  L := LEN(source);
+  N := LEN(dest);
+  N := N - ORD(ODD(N)) - 1;
+  i := 0;
+  j := 0;
+  WHILE (i < L) & (j < N) & (source[i] # 0X) DO
+    CASE source[i] OF
+    |00X..7FX: u := ORD(source[i]);
+    |0C1X..0DFX:
+      u := LSL(ORD(source[i]) - 0C0H, 6);
+      IF i + 1 < L THEN
+        u := u + ROR(LSL(ORD(source[i + 1]), 26), 26);
+        INC(i)
+      END
+    |0E1X..0EFX:
+      u := LSL(ORD(source[i]) - 0E0H, 12);
+      IF i + 1 < L THEN
+        u := u + ROR(LSL(ORD(source[i + 1]), 26), 20);
+        INC(i)
+      END;
+      IF i + 1 < L THEN
+        u := u + ROR(LSL(ORD(source[i + 1]), 26), 26);
+        INC(i)
+      END
+(*    |0F1X..0F7X:
+    |0F9X..0FBX:
+    |0FDX:*)
+    ELSE
+    END;
+    INC(i);
+    dest[j] := CHR(u MOD 256);
+    INC(j);
+    dest[j] := CHR(u DIV 256);
+    INC(j);
+  END;
+  IF j < N THEN
+    dest[j] := 0X;
+    dest[j + 1] := 0X
+  END
+  RETURN j DIV 2
+END Utf8To16;
+
+PROCEDURE ParamStr*(VAR str: ARRAY OF CHAR; n: INTEGER);
+VAR i, j, len: INTEGER; c: CHAR;
+BEGIN
+  j := 0;
+  IF n < ParamCount + 1 THEN
+    len := LEN(str) - 1;
+    i := Params[n, 0];
+    WHILE (j < len) & (i <= Params[n, 1]) DO
+      c := GetChar(i);
+      IF c # 22X THEN
+        str[j] := c;
+        INC(j)
+      END;
+      INC(i);
+    END;
+  END;
+  str[j] := 0X
+END ParamStr;
+
+BEGIN
+  ParamParse
+END Utils.

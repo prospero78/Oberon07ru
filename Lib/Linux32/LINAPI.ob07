@@ -1,0 +1,78 @@
+﻿(*
+    Copyright 2013 Krotov Anton
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*)
+
+MODULE LINAPI;
+
+IMPORT API, sys := SYSTEM;
+
+VAR
+
+  ParamCount*, EnvCount*, stdin*, stdout*, stderr*: INTEGER;
+
+PROCEDURE GetStr(n, offset: INTEGER): INTEGER;
+VAR p: INTEGER;
+BEGIN
+  IF n < EnvCount THEN
+    sys.GET(API.GetCommandLine() + offset, p);
+    sys.GET(p + 4 * n, p)
+  ELSE
+    p := 0
+  END
+  RETURN p
+END GetStr;
+
+PROCEDURE EnvStr* (n: INTEGER): INTEGER;
+  RETURN GetStr(n, 8)
+END EnvStr;
+
+PROCEDURE ParamStr* (n: INTEGER): INTEGER;
+  RETURN GetStr(n, 4)
+END ParamStr;
+
+PROCEDURE dlopen* (filename: ARRAY OF CHAR; flag: INTEGER): INTEGER;
+  RETURN API.dlopen(sys.ADR(filename), flag)
+END dlopen;
+
+PROCEDURE dlsym* (handle: INTEGER; symbol: ARRAY OF CHAR): INTEGER;
+  RETURN API.dlsym(handle, sys.ADR(symbol))
+END dlsym;
+
+PROCEDURE exit* (code: INTEGER);
+BEGIN
+  API.exit(code)
+END exit;
+
+PROCEDURE Init;
+VAR p, str: INTEGER;
+BEGIN
+  sys.GET(API.GetCommandLine(), ParamCount);
+  EnvCount := 0;
+  sys.GET(API.GetCommandLine() + 8, p);
+  sys.GET(p, str);
+  WHILE str # 0 DO
+    INC(p, 4);
+    sys.GET(p, str);
+    INC(EnvCount)
+  END;
+  stdin := API.stdin;
+  stdout := API.stdout;
+  stderr := API.stderr;
+END Init;
+
+BEGIN
+  Init
+END LINAPI.

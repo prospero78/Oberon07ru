@@ -1,0 +1,198 @@
+﻿(*
+    Copyright 2013 Krotov Anton
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*)
+
+MODULE WINAPI;
+
+IMPORT sys := SYSTEM, API;
+
+CONST
+
+  OFS_MAXPATHNAME* = 128;
+
+TYPE
+
+  STRING = ARRAY 260 OF CHAR;
+
+  TCoord* = RECORD
+    X*, Y*: sys.CARD16
+  END;
+
+  TSmallRect* = RECORD
+    Left*, Top*, Right*, Bottom*: sys.CARD16
+  END;
+
+  TConsoleScreenBufferInfo* = RECORD
+    dwSize*: TCoord;
+    dwCursorPosition*: TCoord;
+    wAttributes*: sys.CARD16;
+    srWindow*: TSmallRect;
+    dwMaximumWindowSize*: TCoord
+  END;
+
+  TSystemTime* = RECORD
+    Year*: sys.CARD16;
+    Month*: sys.CARD16;
+    DayOfWeek*: sys.CARD16;
+    Day*: sys.CARD16;
+    Hour*: sys.CARD16;
+    Min*: sys.CARD16;
+    Sec*: sys.CARD16;
+    MSec*: sys.CARD16
+  END;
+
+  PSecurityAttributes* = POINTER TO TSecurityAttributes;
+
+  TSecurityAttributes* = RECORD
+    nLength*: INTEGER;
+    lpSecurityDescriptor*: INTEGER;
+    bInheritHandle*: INTEGER
+  END;
+
+  TFileTime* = RECORD
+    dwLowDateTime*, dwHighDateTime*: INTEGER
+  END;
+
+  TWin32FindData* = RECORD
+    dwFileAttributes*: SET;
+    ftCreationTime*: TFileTime;
+    ftLastAccessTime*: TFileTime;
+    ftLastWriteTime*: TFileTime;
+    nFileSizeHigh*: INTEGER;
+    nFileSizeLow*: INTEGER;
+    dwReserved0*: INTEGER;
+    dwReserved1*: INTEGER;
+    cFileName*: STRING;
+    cAlternateFileName*: ARRAY 14 OF CHAR
+  END;
+
+  OFSTRUCT* = RECORD
+    cBytes*: CHAR;
+    fFixedDisk*: CHAR;
+    nErrCode*: sys.CARD16;
+    Reserved1*: sys.CARD16;
+    Reserved2*: sys.CARD16;
+    szPathName*: ARRAY OFS_MAXPATHNAME OF CHAR
+  END;
+
+  POverlapped* = POINTER TO OVERLAPPED;
+
+  OVERLAPPED* = RECORD
+    Internal*: INTEGER;
+    InternalHigh*: INTEGER;
+    Offset*: INTEGER;
+    OffsetHigh*: INTEGER;
+    hEvent*: INTEGER
+  END;
+
+VAR
+
+  SetConsoleCursorPosition*: PROCEDURE [winapi] (hConsoleOutput, dwCursorPosition: INTEGER): INTEGER;
+  GetConsoleScreenBufferInfo*: PROCEDURE [winapi] (hConsoleOutput: INTEGER; ConsoleScreenBufferInfo: TConsoleScreenBufferInfo): INTEGER;
+  FillConsoleOutputCharacter*: PROCEDURE [winapi] (hConsoleOutput, cCaracter, nLength, dwWriteCoord, lpNumberOfCharsWritten: INTEGER): INTEGER;
+  FillConsoleOutputAttribute*: PROCEDURE [winapi] (hConsoleOutput, wAttribute, nLength, dwWriteCoord, lpNumberOfAttrsWritten: INTEGER): INTEGER;
+  SetConsoleTextAttribute*: PROCEDURE [winapi] (hConsoleOutput, wAttributes: INTEGER): INTEGER;
+  GetStdHandle*: PROCEDURE [winapi] (nStdHandle: INTEGER): INTEGER;
+  GetLocalTime*: PROCEDURE [winapi] (T: TSystemTime);
+  RemoveDirectory*: PROCEDURE [winapi] (lpPathName: INTEGER): INTEGER;
+  GetFileAttributes*: PROCEDURE [winapi] (lpPathName: INTEGER): SET;
+  CreateDirectory*: PROCEDURE [winapi] (lpPathName: INTEGER; lpSecurityAttributes: PSecurityAttributes): INTEGER;
+  FindFirstFile*: PROCEDURE [winapi] (lpFileName: INTEGER; lpFindFileData: TWin32FindData): INTEGER;
+  DeleteFile*: PROCEDURE [winapi] (lpFileName: INTEGER): INTEGER;
+  FindClose*: PROCEDURE [winapi] (hFindFile: INTEGER): INTEGER;
+  CloseHandle*: PROCEDURE [winapi] (hObject: INTEGER): INTEGER;
+  CreateFile*: PROCEDURE [winapi] (lpFileName, dwDesiredAccess, dwShareMode: INTEGER;
+    lpSecurityAttributes: PSecurityAttributes;
+      dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile: INTEGER): INTEGER;
+  OpenFile*: PROCEDURE [winapi] (lpFileName: INTEGER; lpReOpenBuff: OFSTRUCT; uStyle: INTEGER): INTEGER;
+  SetFilePointer*: PROCEDURE [winapi] (hFile, lDistanceToMove, lpDistanceToMoveHigh, dwMoveMethod: INTEGER): INTEGER;
+  ReadFile*, WriteFile*: PROCEDURE [winapi] (hFile, Buffer, nNumberOfBytesToRead, lpNumberOfBytesRead: INTEGER;
+    lpOverlapped: POverlapped): INTEGER;
+  ReadConsole*: PROCEDURE [winapi] (hConsoleInput, lpBuffer, nNumberOfCharsToRead,
+    lpNumberOfCharsRead, lpReserved: INTEGER): INTEGER;
+  GetCommandLine*: PROCEDURE [winapi] (): INTEGER;
+  CreateWindowEx*: PROCEDURE [winapi] (dwExStyle, lpClassName, lpWindowName, dwStyle, X, Y,
+    nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam: INTEGER): INTEGER;
+  GlobalAlloc*: PROCEDURE [winapi] (uFlags, dwBytes: INTEGER): INTEGER;
+  GlobalFree*: PROCEDURE [winapi] (hMem: INTEGER): INTEGER;
+  MessageBox*: PROCEDURE [winapi] (hWnd, lpText, lpCaption, uType: INTEGER): INTEGER;
+  WriteConsoleW*: PROCEDURE [winapi] (hConsoleOutput, lpBuffer, nNumberOfCharsToWrite, lpNumberOfCharsWritten, lpReserved: INTEGER): INTEGER;
+  ExitProcess*: PROCEDURE [winapi] (code: INTEGER);
+  WriteConsole*: PROCEDURE [winapi] (hConsoleOutput, lpBuffer, nNumberOfCharsToWrite,
+    lpNumberOfCharsWritten, lpReserved: INTEGER): INTEGER;
+  GetTickCount*: PROCEDURE [winapi] (): INTEGER;
+  MessageBoxA*: PROCEDURE [winapi] (hWnd, lpText, lpCaption, uType: INTEGER): INTEGER;
+  FreeLibrary*: PROCEDURE [winapi] (hLibModule: INTEGER): INTEGER;
+  GetProcAddress*: PROCEDURE [winapi] (hModule, name: INTEGER): INTEGER;
+  LoadLibraryA*: PROCEDURE [winapi] (name: INTEGER): INTEGER;
+  rand*: PROCEDURE [cdecl] (): INTEGER;
+  srand*: PROCEDURE [cdecl] (seed: INTEGER);
+
+PROCEDURE GetProc(name: STRING; hMOD, adr: INTEGER);
+VAR H: INTEGER;
+BEGIN
+  H := GetProcAddress(hMOD, sys.ADR(name[0]));
+  ASSERT(H # 0);
+  sys.PUT(adr, H);
+END GetProc;
+
+PROCEDURE init*;
+VAR lib: INTEGER;
+BEGIN
+  LoadLibraryA := API.LoadLibraryA;
+  GetProcAddress := API.GetProcAddress;
+  GetTickCount := API.GetTickCount;
+  MessageBoxA := API.MessageBoxA;
+  ExitProcess := API.ExitProcess;
+  CloseHandle := API.CloseHandle;
+  sys.MOVE(sys.ADR(API.OpenFile), sys.ADR(OpenFile), 4);
+  sys.MOVE(sys.ADR(API.ReadFile), sys.ADR(ReadFile), 4);
+  sys.MOVE(sys.ADR(API.WriteFile), sys.ADR(WriteFile), 4);
+  SetFilePointer := API.SetFilePointer;
+  GetStdHandle := API.GetStdHandle;
+  lib := LoadLibraryA(sys.ADR("kernel32.dll"));
+  GetProc("SetConsoleCursorPosition", lib, sys.ADR(SetConsoleCursorPosition));
+  GetProc("GetConsoleScreenBufferInfo", lib, sys.ADR(GetConsoleScreenBufferInfo));
+  GetProc("FillConsoleOutputCharacterA", lib, sys.ADR(FillConsoleOutputCharacter));
+  GetProc("FillConsoleOutputAttribute", lib, sys.ADR(FillConsoleOutputAttribute));
+  GetProc("SetConsoleTextAttribute", lib, sys.ADR(SetConsoleTextAttribute));
+  GetProc("GetLocalTime", lib, sys.ADR(GetLocalTime));
+  GetProc("RemoveDirectoryA", lib, sys.ADR(RemoveDirectory));
+  GetProc("GetFileAttributesA", lib, sys.ADR(GetFileAttributes));
+  GetProc("CreateDirectoryA", lib, sys.ADR(CreateDirectory));
+  GetProc("FindFirstFileA", lib, sys.ADR(FindFirstFile));
+  GetProc("FindClose", lib, sys.ADR(FindClose));
+  GetProc("DeleteFileA", lib, sys.ADR(DeleteFile));
+  GetProc("CreateFileA", lib, sys.ADR(CreateFile));
+  GetProc("ReadConsoleA", lib, sys.ADR(ReadConsole));
+  GetProc("GetCommandLineA", lib, sys.ADR(GetCommandLine));
+  GetProc("WriteConsoleW", lib, sys.ADR(WriteConsoleW));
+  GetProc("GlobalAlloc", lib, sys.ADR(GlobalAlloc));
+  GetProc("GlobalFree", lib, sys.ADR(GlobalFree));
+  GetProc("WriteConsoleA", lib, sys.ADR(WriteConsole));
+  GetProc("FreeLibrary", lib, sys.ADR(FreeLibrary));
+
+  lib := LoadLibraryA(sys.ADR("user32.dll"));
+  GetProc("CreateWindowExA", lib, sys.ADR(CreateWindowEx));
+
+  lib := LoadLibraryA(sys.ADR("msvcrt.dll"));
+  GetProc("rand", lib, sys.ADR(rand));
+  GetProc("srand", lib, sys.ADR(srand));
+END init;
+
+BEGIN
+  init
+END WINAPI.

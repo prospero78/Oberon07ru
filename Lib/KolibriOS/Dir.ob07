@@ -1,0 +1,71 @@
+﻿(*
+    Copyright 2013 Krotov Anton
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*)
+
+MODULE Dir;
+
+IMPORT FSys, sys := SYSTEM, KOSAPI;
+
+VAR fd: FSys.rFD;
+
+PROCEDURE Exists*(FName: ARRAY OF CHAR): BOOLEAN;
+BEGIN
+  RETURN FSys.GetFileInfo(FName, fd) & (4 IN BITS(fd.attr))
+END Exists;
+
+PROCEDURE Create*(DirName: ARRAY OF CHAR): BOOLEAN;
+VAR F: FSys.FS; res, res2: INTEGER;
+BEGIN
+  NEW(F);
+  IF F # NIL THEN
+    F.subfunc := 9;
+    F.pos := 0;
+    F.hpos := 0;
+    F.bytes := 0;
+    F.buffer := 0;
+    COPY(DirName, F.name);
+    res := KOSAPI.sysfunc22(70, sys.ADR(F^), res2);
+    DISPOSE(F)
+  ELSE
+    res := -1
+  END
+  RETURN res = 0
+END Create;
+
+PROCEDURE Remove*(DirName: ARRAY OF CHAR): BOOLEAN;
+VAR F: FSys.FS; res, res2: INTEGER;
+BEGIN
+  IF Exists(DirName) THEN
+    NEW(F);
+    IF F # NIL THEN
+      F.subfunc := 8;
+      F.pos := 0;
+      F.hpos := 0;
+      F.bytes := 0;
+      F.buffer := 0;
+      COPY(DirName, F.name);
+      res := KOSAPI.sysfunc22(70, sys.ADR(F^), res2);
+      DISPOSE(F)
+    ELSE
+      res := -1
+    END
+  ELSE
+    res := -1
+  END
+  RETURN res = 0
+END Remove;
+
+END Dir.
