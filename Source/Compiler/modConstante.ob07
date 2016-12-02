@@ -128,11 +128,11 @@
     _sysCODE* = _sysPUT + 1;
     _sysTYPEID* = _sysCODE + 1;
     _sysMOVE* = _sysTYPEID + 1;
-    
+
    (* PUSHEAX = 6; PUSHECX = 7; PUSHEDX = 8; POPEAX = 9; POPECX = 10; POPEDX = 11; *)
-    
+
    (*ICMP1 = 13; ICMP2 = 14; *)
-    
+
    (* Это дело тоже лучше НЕ ТРОГАТЬ!!  *)
     _JCMD* = 1;
     _LCMD* = 2;
@@ -147,7 +147,7 @@
     _POPEDX* = 11;
     _ICMP1* = 13;
     _ICMP2* = 14;
-    
+
    (* Коды лексических ошибок. МЕНЯТЬ НЕЛЬЗЯ!!! *)
     _lexERR0* = 100;
     _lexERR1* = 101;
@@ -171,7 +171,7 @@
      _record* = 0;
      _union* = 1;
      _noalign* = 2;
-    
+
    (* Типы. Номера менять НЕЛЬЗЯ!! *)
     _тЦелое* = 1;
     _тВеществ* = 2;
@@ -196,7 +196,7 @@
     _eSYSPROC* = 6;
 
    (* eVAR = 1; eCONST = 2; eEXP = 3; ePROC = 4; eSTPROC = 5; eSYSPROC = 6; *)
-    
+
    (* этот блок тоже трогать НЕЛЬЗЯ!! *)
     _IDMOD* = 1;
     _имяКонст* = 2;
@@ -227,7 +227,7 @@
     _JGE* = 8DX;
     _JG* = 8FX;
     _JL* = 8CX;
-   
+
    (* _rset* = 0; _inset* = 1; _saverec* = 2; _length* = 3; _checktype* = 4; _strcmp* = 5; *)
     _rset* = 0;
     _inset* = 1;
@@ -259,7 +259,7 @@
     _START* = 27;
     _szversion* = 28;
     _HALT* = 29;
-    
+
     (* FREGS = 8; *)
     _FREGS* = 8;
 
@@ -406,6 +406,5 @@
     _русНовый* = "НОВ";
 
 КОНЕЦ modConstante.
-
 
 

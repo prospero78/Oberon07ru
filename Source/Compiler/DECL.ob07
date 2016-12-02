@@ -313,62 +313,62 @@
         Guard;
         PushStProc(мКонст._ангАбсолютный,      мКонст._stABS);
         PushStProc(мКонст._русАбсолютный,      мКонст._stABS);
-        
+
         PushStProc("ASR",      мКонст._stASR);
-        
+
         PushStProc(мКонст._ангПроверить,   мКонст._stASSERT);
         PushStProc(мКонст._русПроверить,   мКонст._stASSERT);
-        
+
         PushStType(мКонст._ангБулево,  мКонст._тБулево);
         PushStType(мКонст._русБулево,  мКонст._тБулево);
-        
+
         PushStType(мКонст._ангСимвол,     мКонст._тСимвол);
         PushStType(мКонст._русСимвол,     мКонст._тСимвол);
-        
+
         PushStProc("CHR",      мКонст._stCHR);
         PushStProc("COPY",     мКонст._stCOPY);
-        
+
         PushStProc(мКонст._ангДекремент,      мКонст._stDEC);
         PushStProc(мКонст._русДекремент,      мКонст._stDEC);
-        
+
         PushStProc("DISPOSE",  мКонст._stDISPOSE);
         PushStProc("EXCL",     мКонст._stEXCL);
         PushStProc("FLOOR",    мКонст._stFLOOR);
         PushStProc("FLT",      мКонст._stFLT);
-        
+
         PushStProc(мКонст._ангИнкремент,      мКонст._stINC);
         PushStProc(мКонст._русИнкремент,      мКонст._stINC);
-        
+
         PushStProc("INCL",     мКонст._stINCL);
-        
+
         PushStType(мКонст._ангЦелое,  мКонст._тЦелое);
         PushStType(мКонст._русЦелое,  мКонст._тЦелое);
-        
+
         PushStProc("LEN",      мКонст._stLEN);
         PushStProc("LSL",      мКонст._stLSL);
-        
+
         PushStProc(мКонст._ангДлинное,     мКонст._stLONG);
         PushStProc(мКонст._русДлинное,     мКонст._stLONG);
-        
+
         PushStType(мКонст._ангДлинВещ, мКонст._тДлинВещ);
         PushStType(мКонст._русДлинВещ, мКонст._тДлинВещ);
-        
+
         PushStProc(мКонст._ангНовый,      мКонст._stNEW);
         PushStProc(мКонст._русНовый,      мКонст._stNEW);
-        
+
         PushStProc("ODD",      мКонст._stODD);
         PushStProc("ORD",      мКонст._stORD);
         PushStProc("PACK",     мКонст._stPACK);
-        
+
         PushStType(мКонст._ангВещ,     мКонст._тВеществ);
         PushStType(мКонст._русВещ,     мКонст._тВеществ);
-        
+
         PushStProc("ROR",      мКонст._stROR);
         PushStType("SET",      мКонст._TSET);
-        
+
         PushStProc(мКонст._ангУкоротить,    мКонст._stSHORT);
         PushStProc(мКонст._русУкоротить,    мКонст._stSHORT);
-        
+
         PushStProc("UNPK",     мКонст._stUNPK);
         PushStProc("BITS",     мКонст._stBITS);
         PushStProc("LSR",      мКонст._stLSR);
