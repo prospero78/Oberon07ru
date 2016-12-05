@@ -338,6 +338,7 @@
 
         PushStProc(мКонст._ангИнкремент,      мКонст._stINC);
         PushStProc(мКонст._русИнкремент,      мКонст._stINC);
+        PushStProc("ДОБ",      мКонст._stINC);
 
         PushStProc("INCL",     мКонст._stINCL);
 
