@@ -1498,7 +1498,8 @@
     КОНЕЦ delfirstchar;
 
 ПРОЦЕДУРА Компилировать*(platform, stksize: ЦЕЛОЕ);
-    ПЕРЕМ full, path, name, ext, temp, path2: мСтр.тСтрока;
+    ПЕРЕМ
+        full, path, name, ext, temp, path2: мСтр.тСтрока;
     НАЧАЛО
       платформа := platform;
       main := ЛОЖЬ;
@@ -1512,7 +1513,7 @@
       ЕСЛИ ~Модуль_Прочитать(Path, Main, ExtMain) ТОГДА
         path2 := Path;
         мУтиль.СтрПарам_Уст(full, 0);
-        мУтиль.ФайлПуть_разделить(full, path, name, ext);
+        мУтиль.ФайлПуть_Разделить(full, path, name, ext);
         ЕСЛИ path[0] # 0X ТОГДА
           path[LENGTH(path) - 1] := 0X
         КОНЕЦ;
