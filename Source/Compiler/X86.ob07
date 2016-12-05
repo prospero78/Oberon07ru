@@ -148,9 +148,9 @@
     €—€‹
       ‚›—(di);
       ‚’’
-        (di);
+        „(di);
         Dest[di] := Source[si];
-        (si)
+        „(si)
       ‘‚€ Dest[di] = 0X
     …– CopyStr;
 
@@ -181,7 +181,7 @@
         R := RB;
         ‚’’
           € (L < RB) & strle(NamePtr[L], NamePtr[LB]) „…‹€’
-            (L)
+            „(L)
           …–;
           € (R > LB) & strle(NamePtr[LB], NamePtr[R]) „…‹€’
             ‚›—(R)
@@ -213,7 +213,7 @@
       etable.arrnumoffset := etable.arrnameptroffset + etable.namecount * 4;
       etable.dllnameoffset := etable.size + etable.textlen;
       CopyStr(etable.text, Name, etable.textlen, 0);
-      (etable.textlen);
+      „(etable.textlen);
       „‹ i := 0 „ etable.namecount - 1 „…‹€’
         etable.arrnameptr[i] := etable.arrnameptr[i] + etable.size
       …–;
@@ -224,16 +224,16 @@
     €—€‹
       …‘‹ dll ’ƒ„€
         etable.arradr[etable.adrcount] := Number;
-        (etable.adrcount);
+        „(etable.adrcount);
         etable.arrnameptr[etable.namecount] := etable.textlen;
-        (etable.namecount);
+        „(etable.namecount);
         CopyStr(etable.text, Name.¨¬ο_γ§« , etable.textlen, 0);
-        (etable.textlen)
+        „(etable.textlen)
       ‹…‘‹ obj ’ƒ„€
         kosexp[kosexpcount].Name := Name;
         kosexp[kosexpcount].Adr := Number;
         kosexp[kosexpcount].NameLabel := NameLabel;
-        (kosexpcount)
+        „(kosexpcount)
       …–
     …– ProcExport;
 
@@ -258,12 +258,12 @@
     …… i: –…‹…;
     €—€‹
       sys.PUT(sys.ADR(Reloc[rcount]), R.Page);
-      (rcount, 4);
+      „(rcount, 4);
       sys.PUT(sys.ADR(Reloc[rcount]), R.Size);
-      (rcount, 4);
+      „(rcount, 4);
       „‹ i := 0 „ ASR(R.Size - 8, 1) - 1 „…‹€’
         sys.PUT(sys.ADR(Reloc[rcount]), R.reloc[i]);
-        (rcount, 2)
+        „(rcount, 2)
       …–
     …– PutReloc;
 
@@ -275,8 +275,8 @@
       € (i < n) & (chars[i] # 0X) „…‹€’
         x := SCAN.‘¨¬Ά2hex(chars[i]) * 16 + SCAN.‘¨¬Ά2hex(chars[i + 1]);
         sys.PUT(adr, CHR(x));
-        (adr);
-        (i, 2)
+        „(adr);
+        „(i, 2)
       …–
     …– InitArray;
 
@@ -469,7 +469,7 @@
       New;
       current.clen := 1;
       Code[ccount] := CHR(byte);
-      (ccount)
+      „(ccount)
     …– OutByte;
 
 –…„“€ OutInt(int: –…‹…);
@@ -477,7 +477,7 @@
       New;
       current.clen := 4;
       sys.PUT(sys.ADR(Code[ccount]), int);
-      (ccount, 4)
+      „(ccount, 4)
     …– OutInt;
 
 –…„“€ PushEAX;
@@ -538,7 +538,7 @@
 
 –…„“€ NewLabel*(): –…‹…;
     €—€‹
-      (Lcount)
+      „(Lcount)
       ‚…“’ Lcount
     …– NewLabel;
 
@@ -547,7 +547,7 @@
       New;
       callstk[topstk][0] := asmline;
       callstk[topstk][1] := current;
-      (topstk)
+      „(topstk)
     …– PushCall;
 
 –…„“€ Param*;
@@ -588,17 +588,17 @@
       n := LEN(str);
       € (i < n) & (str[i] # 0X) „…‹€’
         Data[dcount] := str[i];
-        (dcount);
-        (i)
+        „(dcount);
+        „(i)
       …–;
       Data[dcount] := 0X;
-      (dcount)
+      „(dcount)
     …– datastr;
 
 –…„“€ dataint(n: –…‹…);
     €—€‹
       sys.PUT(sys.ADR(Data[dcount]), n);
-      (dcount, 4)
+      „(dcount, 4)
     …– dataint;
 
 –…„“€ jmp*(jamp: ‘‚; label: –…‹…);
@@ -610,18 +610,18 @@
         n := 5
       |¬®­αβ._JE, ¬®­αβ._JLE, ¬®­αβ._JGE, ¬®­αβ._JG, ¬®­αβ._JL, ¬®­αβ._JNE:
         Code[ccount] := 0FX;
-        (ccount);
+        „(ccount);
         n := 6
       €—…
       …–;
       current.clen := n;
       Code[ccount] := jamp;
-      (ccount);
+      „(ccount);
       current.codeadr := sys.ADR(Code[ccount]);
       current.varadr := sys.ADR(Labels[label]);
       current.tcmd := ¬®­αβ._JCMD;
       current.short := ‘’€;
-      (ccount, 4)
+      „(ccount, 4)
     …– jmp;
 
 –…„“€ jmplong(jamp: ‘‚; label: –…‹…);
@@ -644,7 +644,7 @@
       current.codeadr := sys.ADR(Code[ccount]);
       current.varadr := sys.ADR(Labels[Number]);
       current.tcmd := ¬®­αβ._OCMD;
-      (ccount, 4)
+      „(ccount, 4)
     …– CmdN;
 
 –…„“€ IntByte(bytecode, intcode: ¬‘βΰ.β‘βΰ®ª ; n: –…‹…);
@@ -700,7 +700,7 @@
             ¬“β¨«μ.θ¨΅®§_¥η βμ(SCAN.αβΰ®ª _­®¬, SCAN.―®§¨ζ_£«®΅, 97);
             ¬ΰ®ζ.‚λε®¤(1)
         …–;
-        (fpu);
+        „(fpu);
         isfpu := ‘’€
     …– Incfpu;
 
@@ -738,11 +738,11 @@
       New;
       current.clen := 5;
       Code[ccount] := ¬®­αβ._CALL;
-      (ccount);
+      „(ccount);
       current.codeadr := sys.ADR(Code[ccount]);
       current.varadr := sys.ADR(RtlProc[Proc]);
       current.tcmd := ¬®­αβ._JCMD;
-      (ccount, 4)
+      „(ccount, 4)
     …– CallRTL;
 
 –…„“€ PushInt*(n: –…‹…);
@@ -771,7 +771,7 @@
 
 –…„“€ AddRec*(base: –…‹…);
     €—€‹
-      (reccount);
+      „(reccount);
       recarray[reccount] := base
     …– AddRec;
 
@@ -783,7 +783,7 @@
         …‘‹ ODD(c) ’ƒ„€
           ‚›—(c)
         €—…
-          (c)
+          „(c)
         …–
       …–;
       cur := current;
@@ -1640,11 +1640,11 @@
                     …–;
                     sys.PUT(sys.ADR(Code[cur.cmd]), a);
                     sys.PUT(sys.ADR(Reloc[rcount]), cur. ¤ΰ - sys.SIZE(β‡ £®«®Ά®ª®«¨΅ΰ¨));
-                    (rcount, 4);
+                    „(rcount, 4);
                     sys.PUT(sys.ADR(Reloc[rcount]), sec);
-                    (rcount, 4);
-                    sys.PUT(sys.ADR(Reloc[rcount]), 06X); (rcount);
-                    sys.PUT(sys.ADR(Reloc[rcount]), 00X); (rcount);
+                    „(rcount, 4);
+                    sys.PUT(sys.ADR(Reloc[rcount]), 06X); „(rcount);
+                    sys.PUT(sys.ADR(Reloc[rcount]), 00X); „(rcount);
                 …–;
                 Write(sys.ADR(Code[cur.cmd]), cur.clen);
                 cur := cur.α«¥¤γξι(β€α¬“§¥«)
@@ -1778,7 +1778,7 @@
             LoadAdr := sys.SIZE(β‡ £®«®Ά®ª®«¨΅ΰ¨)
         ‹…‘‹ elf ’ƒ„€
             LoadAdr := 134514420 + 1024;
-            (gsize, 1024)
+            „(gsize, 1024)
         …–;
 
         …‘‹ dll ‹ con ‹ gui ’ƒ„€
@@ -1889,8 +1889,8 @@
                 n := cur. ¤ΰ - LoadAdr;
                 …‘‹ ASR(n, 12) = ASR(R.Page, 12) ’ƒ„€
                     R.reloc[RCount] := IntToCard16(n MOD 1000H + 3000H);
-                    (RCount);
-                    (R.Size, 2)
+                    „(RCount);
+                    „(R.Size, 2)
                 €—…
                     …‘‹ R.Size # 0 ’ƒ„€
                         PutReloc(R)
@@ -1922,11 +1922,11 @@
       current.clen := LENGTH(str);
       „‹ i := 0 „ current.clen - 1 „…‹€’
         Code[ccount] := str[i];
-        (ccount)
+        „(ccount)
       …–;
       Code[ccount] := 0X;
-      (ccount);
-      (current.clen)
+      „(ccount);
+      „(current.clen)
     …– OutStringZ;
 
 –…„“€ Epilog*(gsize: –…‹…; FName: €‘‘‚ ‡ ‘‚; stk: –…‹…);

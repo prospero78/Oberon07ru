@@ -146,16 +146,16 @@
     €—€‹
       cr := ‹†;
       sys.GET(bufpos, ch);
-      (ccol);
+      „(ccol);
       ‚›€’ ch ‡
-      |0AX: …‘‹ ~CR ’ƒ„€ (cline) …–; ccol := 0
-      |0DX: (cline); ccol := 0; cr := ‘’€
+      |0AX: …‘‹ ~CR ’ƒ„€ „(cline) …–; ccol := 0
+      |0DX: „(cline); ccol := 0; cr := ‘’€
       |09X: ‚›—(ccol); ccol := ccol + ¬®­αβ._Tab - (ccol - 1) MOD ¬®­αβ._Tab - 1
       |80X..0BFX: …‘‹ UTF8 ’ƒ„€ ‚›—(ccol) …–
       €—…
       …–;
       CR := cr;
-      (bufpos)
+      „(bufpos)
     …– Next;
 
 –…„“€ ” ©«_ΰ®η¨β βμ*(FName: €‘‘‚ ‡ ‘‚; …… FHandle: –…‹…): “‹…‚;
@@ -182,7 +182,7 @@
           …‘‹ c = 0BBX ’ƒ„€
             sys.GET(buf + 2, c);
             …‘‹ c = 0BFX ’ƒ„€
-              (bufpos, 3);
+              „(bufpos, 3);
               UTF8 := ‘’€
             …–
           …–
@@ -217,7 +217,7 @@
     €—€‹
       «¥ªα_£«®΅[count] := ch;
       …‘‹ ch # 0X ’ƒ„€
-        (count)
+        „(count)
       …–
     …– PutChar;
 
@@ -258,17 +258,17 @@
       i := 0;
       n := 0;
       € str[i] = "0" „…‹€’
-        (i)
+        „(i)
       …–;
       flag := ‘’€;
       € flag & (str[i] # "X") & (str[i] # "H") „…‹€’
-        (n);
+        „(n);
         …‘‹ n > 8 ’ƒ„€
           «¥ªα_β¨― := ¬®­αβ._lexERR5;
           flag := ‹†
         €—…
           res := LSL(res, 4) + ‘¨¬Ά2hex(str[i]);
-          (i)
+          „(i)
         …–
       …–
       ‚…“’ res
@@ -304,7 +304,7 @@
             res := 0
           €—…
             res := res + (ORD(str[i]) - ORD("0"));
-            (i)
+            „(i)
           …–
         …–
       …–
@@ -326,7 +326,7 @@
             …‘‹ ¬“β¨«μ.…α«¨¥αª®­¥η(res) ’ƒ„€
               Error(¬®­αβ._lexERR7, cont)
             …–;
-            (i)
+            „(i)
           …– Inf;
 
       –…„“€ part1(): “‹…‚;
@@ -348,7 +348,7 @@
       –…„“€ part2(): “‹…‚;
           …… cont: “‹…‚;
           €—€‹
-            (i);
+            „(i);
             cont := ‘’€;
             € cont & …α«¨–¨δΰ (str[i]) „…‹€’
               nez := nez ‹ (str[i] # "0");
@@ -379,14 +379,14 @@
             …‘‹ str[i] = "D" ’ƒ„€
               «¥ªα_β¨― := ¬®­αβ._«¥ª„«¨­‚¥ι
             …–;
-            (i);
+            „(i);
             m := 10.0D0;
             minus := ‹†;
             …‘‹ str[i] = "+" ’ƒ„€
-                (i)
+                „(i)
             ‹…‘‹ str[i] = "-" ’ƒ„€
               minus := ‘’€;
-              (i);
+              „(i);
               m := 0.1D0
             …–;
             scale := 0;
@@ -400,7 +400,7 @@
                   Error(¬®­αβ._lexERR8, cont)
                 €—…
                   scale := scale + (ORD(str[i]) - ORD("0"));
-                  (i)
+                  „(i)
                 …–
               …–
             …–
@@ -528,7 +528,7 @@
         ‚›€’ ch ‡
         |"(": c := 2
         |")": …‘‹ c = 3 ’ƒ„€ ‚›—(level) …–; c := 1
-        |"*": …‘‹ c = 2 ’ƒ„€ (level); c := 1 €—… c := 3 …–
+        |"*": …‘‹ c = 2 ’ƒ„€ „(level); c := 1 €—… c := 3 …–
         |0X : cont := ‹†
         €—…
               c := 1
@@ -573,7 +573,7 @@
           «¥ªα_β¨― := ¬®­αβ._lexERR3
         …–;
         PutChar(0X);
-        (count);
+        „(count);
         …‘‹ count > ¬®­αβ._STRLENGTH ’ƒ„€
           «¥ªα_β¨― := ¬®­αβ._lexERR11
         …–
