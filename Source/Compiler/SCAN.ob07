@@ -150,8 +150,8 @@
       ‚›€’ ch ‡
       |0AX: …‘‹ ~CR ’ƒ„€ (cline) …–; ccol := 0
       |0DX: (cline); ccol := 0; cr := ‘’€
-      |09X: „…(ccol); ccol := ccol + ¬®­αβ._Tab - (ccol - 1) MOD ¬®­αβ._Tab - 1
-      |80X..0BFX: …‘‹ UTF8 ’ƒ„€ „…(ccol) …–
+      |09X: ‚›—(ccol); ccol := ccol + ¬®­αβ._Tab - (ccol - 1) MOD ¬®­αβ._Tab - 1
+      |80X..0BFX: …‘‹ UTF8 ’ƒ„€ ‚›—(ccol) …–
       €—…
       …–;
       CR := cr;
@@ -244,8 +244,8 @@
     €—€‹
       Res := ORD(ch);
       ‚›€’ ch ‡
-      |"0".."9": „…(Res, ORD("0"))
-      |"A".."F": „…(Res, ORD("A") - 10)
+      |"0".."9": ‚›—(Res, ORD("0"))
+      |"A".."F": ‚›—(Res, ORD("A") - 10)
       €—…
       …–
       ‚…“’ Res
@@ -527,7 +527,7 @@
         Next;
         ‚›€’ ch ‡
         |"(": c := 2
-        |")": …‘‹ c = 3 ’ƒ„€ „…(level) …–; c := 1
+        |")": …‘‹ c = 3 ’ƒ„€ ‚›—(level) …–; c := 1
         |"*": …‘‹ c = 2 ’ƒ„€ (level); c := 1 €—… c := 3 …–
         |0X : cont := ‹†
         €—…

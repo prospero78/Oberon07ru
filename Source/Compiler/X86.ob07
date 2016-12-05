@@ -146,7 +146,7 @@
 
 –…„“€ CopyStr(…… Dest: €‘‘‚ ‡ ‘‚; Source: €‘‘‚ ‡ ‘‚; …… di: –…‹…; si: –…‹…);
     €—€‹
-      „…(di);
+      ‚›—(di);
       ‚’’
         (di);
         Dest[di] := Source[si];
@@ -184,7 +184,7 @@
             (L)
           …–;
           € (R > LB) & strle(NamePtr[LB], NamePtr[R]) „…‹€’
-            „…(R)
+            ‚›—(R)
           …–;
           …‘‹ L < R ’ƒ„€
             exch(NamePtr[L], NamePtr[R]);
@@ -558,7 +558,7 @@
 –…„“€ EndCall*;
     €—€‹
       current := callstk[topstk - 1][1];
-      „…(topstk)
+      ‚›—(topstk)
     …– EndCall;
 
 –…„“€ Init*(mem: PROC; UI: –…‹…);
@@ -665,7 +665,7 @@
       €—…
         OutCode("83EC04D91C24")
       …–;
-      „…(fpu)
+      ‚›—(fpu)
     …– DropFpu;
 
 –…„“€ AfterRet(func, float: “‹…‚; callconv, parsize: –…‹…);
@@ -781,7 +781,7 @@
       c := ORD(Code[current.―ΰ¥¤λ¤γι.―ΰ¥¤λ¤γι(β€α¬“§¥«).cmd]);
       …‘‹ inv ’ƒ„€
         …‘‹ ODD(c) ’ƒ„€
-          „…(c)
+          ‚›—(c)
         €—…
           (c)
         …–
@@ -1036,7 +1036,7 @@
       €—…
       …–;
       OutByte(n);
-      „…(fpu)
+      ‚›—(fpu)
     …– farith;
 
 –…„“€ fcmp*(Op: –…‹…);
@@ -1052,7 +1052,7 @@
       |¬®­αβ._lexGE: n := 96H
       €—…
       …–;
-      „…(fpu, 2);
+      ‚›—(fpu, 2);
       OutByte(n);
       OutByte(0C1H);
       PushECX
@@ -1238,7 +1238,7 @@
       |¬®­αβ._stABS:    PopEDX; OutCode("85D27D02F7DA"); PushEDX
       |¬®­αβ._stFABS:   OutCode("D9E1")
       |¬®­αβ._stFLT:    OutCode("DB0424"); PopEAX; Incfpu;
-      |¬®­αβ._stFLOOR:  OutCode("83EC06D93C2466812424FFF366810C24FFF7D92C2483C402D9FCDB1C24"); „…(fpu)
+      |¬®­αβ._stFLOOR:  OutCode("83EC06D93C2466812424FFF366810C24FFF7D92C2483C402D9FCDB1C24"); ‚›—(fpu)
       |¬®­αβ._stODD:    OutCode("83242401")
       |¬®­αβ._stROR:    PopECX; OutCode("58D3C8"); PushEAX
       |¬®­αβ._stASR:    PopECX; OutCode("58D3F8"); PushEAX
@@ -1338,11 +1338,11 @@
       |¬®­αβ._β„«¨­‚¥ι:
         PopEDX;
         OutCode("DD1A");
-        „…(fpu)
+        ‚›—(fpu)
       |¬®­αβ._β‚¥ι¥αβΆ:
         PopEDX;
         OutCode("D91A");
-        „…(fpu)
+        ‚›—(fpu)
       |¬®­αβ._β‡ ―¨αμ:
         CallRTL(¬®­αβ._saverec);
         OutCode("83F800750A");
@@ -1703,7 +1703,7 @@
         ¬” ©«.‡ ªΰλβμ(F);
         bytes[0] := 7FX;
 
-        „…(code, 13);
+        ‚›—(code, 13);
 
         delta := Align(data, 1000H) - 100000H;
         Add(0020H); Add(00A4H); Add(00A8H); Add(0258H); Add(02B8H); Add(0308H); Add(0494H); Add(049CH);
@@ -1817,7 +1817,7 @@
                     €—… (*JE, JNE, JLE, JGE, JG, JL*)
                         sys.PUT(cur(β€α¬“§¥«).codeadr - 2, ORD(c) - 16);
                         sys.PUT(cur(β€α¬“§¥«).codeadr - 1, temp3);
-                        „…(cur(β€α¬“§¥«).codeadr)
+                        ‚›—(cur(β€α¬“§¥«).codeadr)
                     …–;
                     cur.clen := 2
                 …–
