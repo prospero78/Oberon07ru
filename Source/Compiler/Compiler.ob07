@@ -1542,7 +1542,7 @@
             |мКонст._sysCODE:
                 мПров.Проверить(мСкан.лекс_тип = мКонст._лекСтрока, line, col, мКо._ош130);
                 мСкан.GetLexStr(Lex);
-                CheckCode(Lex, мСкан.count - 1, line, col);
+                CheckCode(Lex, мСкан.стр_длина - 1, line, col);
                 X86.Asm(Lex);
                 мДец.Лексем_Дальше
             |мКонст._sysMOVE:
