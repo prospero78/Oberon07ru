@@ -192,11 +192,11 @@
                         мПров.Проверить(f.Export, строка_ном, позиция, мКо._ош90)
                     КОНЕЦ;
                     ЕСЛИ glob # -1 ТОГДА
-                        glob := glob + f.Offset
+                        glob := glob + f.смещение
                     ИНЕСЛ loc # -1 ТОГДА
-                        loc := loc + f.Offset
+                        loc := loc + f.смещение
                     ИНАЧЕ
-                        X86.Field(f.Offset)
+                        X86.Field(f.смещение)
                     КОНЕЦ;
                     выраж_.тип := f.тип;
                     выраж_.vparam := ЛОЖЬ;
