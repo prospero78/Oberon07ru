@@ -77,7 +77,7 @@
 
       туСтрКонст* = УКАЗАТЕЛЬ НА ЗАПИСЬ (мСпис.тУзел)
         строка*: мСтр.тСтрока;
-        длина*, Number*: ЦЕЛОЕ
+        длина*, номер*: ЦЕЛОЕ
       КОНЕЦ;
 
       тВыражение* = ЗАПИСЬ
@@ -137,9 +137,9 @@
       MemErr(nov = ПУСТО);
       COPY(str, nov.строка);
       nov.длина := SCAN.count - 1;
-      nov.Number := X86.NewLabel();
+      nov.номер := X86.NewLabel();
       мСпис.Добавить(Strings, nov);
-      X86.String(nov.Number, nov.длина, nov.строка)
+      X86.String(nov.номер, nov.длина, nov.строка)
       ВЕРНУТЬ nov
     КОНЕЦ AddString;
 
@@ -151,9 +151,9 @@
       nov.строка[0] := c;
       nov.строка[1] := 0X;
       nov.длина := 1;
-      nov.Number := X86.NewLabel();
+      nov.номер := X86.NewLabel();
       мСпис.Добавить(Strings, nov);
-      X86.String(nov.Number, nov.длина, nov.строка)
+      X86.String(nov.номер, nov.длина, nov.строка)
       ВЕРНУТЬ nov
     КОНЕЦ AddMono;
 
