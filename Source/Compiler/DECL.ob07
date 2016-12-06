@@ -21,7 +21,8 @@
 
 ’ SCAN,
     ¬“β¨«μ := UTILS,
-    X86, SYSTEM,
+    X86,
+    ‘‘ := SYSTEM,
     ¬®­αβ := modConstante,
     ¬‘βΰ := modString,
     ¬‘―¨α := modList,
@@ -118,7 +119,7 @@
     ……
         αβΰ®ª : βγ‘βΰ®­αβ;
     €—€‹
-      SYSTEM.PUT(SYSTEM.ADR(αβΰ®ª ), FLOOR(¤Ά‡­ η_))
+      ‘‘.PUT(‘‘.ADR(αβΰ®ª ), FLOOR(¤Ά‡­ η_))
       ‚…“’ αβΰ®ª 
     …– ‘βΰ_®«γη;
 
