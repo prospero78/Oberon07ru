@@ -92,11 +92,11 @@
       expPROC = ПРОЦЕДУРА (ПЕРЕМ e: тВыражение);
       assPROC = ПРОЦЕДУРА (e: DECL.тВыражение; T: мТипы.туТип; param: БУЛЕВО): БУЛЕВО;
 
-      stTYPES* = МАССИВ 11 ИЗ мТипы.туТип;
+      тСтрТип* = МАССИВ 11 ИЗ мТипы.туТип;
 
 ПЕРЕМ
 
-  sttypes: stTYPES;
+  sttypes: тСтрТип;
   модуль_текущ*, sys: туМодуль;
   curBlock*: туИмя;
   Path, Main, Std, ExtMain: мСтр.тСтрока;
@@ -1472,7 +1472,7 @@
     КОНЕЦ Модуль_Прочитать;
 
 ПРОЦЕДУРА Program*(StdPath, FilePath, NameFile, ExtFile: мСтр.тСтрока; windows: БУЛЕВО;
-  OpSeqProc: opPROC; ExprProc: expPROC; AssCompProc: assPROC; ПЕРЕМ stypes: stTYPES);
+  OpSeqProc: opPROC; ExprProc: expPROC; AssCompProc: assPROC; ПЕРЕМ stypes: тСтрТип);
     НАЧАЛО
       winplatf := windows;
       Path := FilePath;
