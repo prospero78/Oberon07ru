@@ -58,7 +58,7 @@
   КОНЕЦ;
 
   tpPtrBase = УКАЗАТЕЛЬ НА ЗАПИСЬ (мСпис.тУзел)
-    Name: SCAN.туУзел;
+    узел: SCAN.туУзел;
     строка, col: ЦЕЛОЕ;
     Ptr: мТипы.туТип
   КОНЕЦ;
@@ -915,7 +915,7 @@
     НАЧАЛО
       НОВ(nov);
       MemErr(nov = ПУСТО);
-      nov.Name := Name;
+      nov.узел := Name;
       nov.строка := line;
       nov.col := col;
       nov.Ptr := T;
@@ -1110,11 +1110,12 @@
     КОНЕЦ PopBlock;
 
 ПРОЦЕДУРА LinkPtr;
-    ПЕРЕМ cur: tpPtrBase; id: туИмя;
+    ПЕРЕМ
+        cur: tpPtrBase; id: туИмя;
     НАЧАЛО
       cur := PtrBases.первый(tpPtrBase);
       ПОКА cur # ПУСТО ДЕЛАТЬ
-        id := GetIdent(cur.Name);
+        id := GetIdent(cur.узел);
         мПров.Проверить(id # ПУСТО, cur.строка, cur.col, мКо._ош33);
         мПров.Проверить(id.тип.тип_узла = мКонст._тЗапись, cur.строка, cur.col, мКо._ош72);
         cur.Ptr.предок := id.тип;
