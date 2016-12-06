@@ -68,7 +68,7 @@
   КОНЕЦ;
 
   туПоле* = УКАЗАТЕЛЬ НА ЗАПИСЬ (мСпис.тУзел)
-    Name: SCAN.туУзел;
+    узел: SCAN.туУзел;
     тип*: мТипы.туТип;
     Offset*: ЦЕЛОЕ;
     ByRef*, Export*: БУЛЕВО;
@@ -674,7 +674,7 @@
     НАЧАЛО
       Res := ПУСТО;
       cur := T.поля.первый(туПоле);
-      ПОКА (cur # ПУСТО) & (cur.Name = Name) ДЕЛАТЬ
+      ПОКА (cur # ПУСТО) & (cur.узел = Name) ДЕЛАТЬ
         Res := cur;
         cur := ПУСТО
       ИНЕСЛ cur # ПУСТО ДЕЛАТЬ
@@ -714,7 +714,7 @@
         НОВ(field);
         MemErr(field = ПУСТО);
         мСпис.Добавить(T.поля, field);
-        field.Name := Name;
+        field.узел := Name;
         field.тип := ПУСТО;
         field.Export := ЛОЖЬ;
         field.модуль := модуль_текущ;
@@ -862,7 +862,7 @@
         НОВ(field);
         MemErr(field = ПУСТО);
         мСпис.Добавить(T.поля, field);
-        field.Name := Name;
+        field.узел := Name;
         field.тип := ПУСТО;
         field.ByRef := ByRef;
         ЕСЛИ proc ТОГДА
