@@ -1322,7 +1322,7 @@
       мПров.Проверить(a <= b, line, col, мКо._ош45);
       мПров.Проверить(CheckLabel(a, b, Labels), line, col, мКо._ош91);
       НОВ(label);
-      мОш.MemErr(label = ПУСТО);
+      мОш.Память(label = ПУСТО);
       label.a := a;
       label.b := b;
       мСпис.Добавить(Labels, label);
@@ -1365,7 +1365,7 @@
       мФк.Выражение_Загрузить(e);
       X86.Drop;
       Labels := мСпис.Создать();
-      мОш.MemErr(Labels = ПУСТО);
+      мОш.Память(Labels = ПУСТО);
       мДец.Лексем_Дальше;
       EndCase := X86.NewLabel();
       Variant(int, Labels, EndCase);
@@ -1821,7 +1821,7 @@
             мУтиль.ТриСтр_соединить(SelfPath, "Windows32", SelfPath)
         КОНЕЦ;
         мУтиль.ТриСтр_соединить(SelfPath, мКонст._слэш, SelfPath);
-        X86.Init(мОш.MemErr, ос_ном);
+        X86.Init(мОш.Память, ос_ном);
         X86.Prolog(temp);
         мДец.Program(SelfPath, Path, Name, Ext, ос_ном ВХОДИТ {1, 2, 3}, OpSeq, Expr, AssComp, sttypes);
         мДец.Компилировать(ос_ном, стэк_разм);

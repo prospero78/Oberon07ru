@@ -409,7 +409,7 @@
         …–;
         OutFilePos := ¬“β¨«μ. ¬οβμ®Ά_®«γη(filesize);
         filebuf := OutFilePos;
-        ¬θ.MemErr(OutFilePos = 0);
+        ¬θ. ¬οβμ(OutFilePos = 0);
 
         Write(sys.ADR(Header), sys.SIZE(β‡ £®«®Ά®ª));
         …‘‹ dll ’ƒ„€
@@ -1562,7 +1562,7 @@
         …–;
         OutFilePos := ¬“β¨«μ. ¬οβμ®Ά_®«γη(Align(size, 4) + datasize + 1000H);
         filebuf := OutFilePos;
-        ¬θ.MemErr(OutFilePos = 0);
+        ¬θ. ¬οβμ(OutFilePos = 0);
 
         …‘‹ ~obj ’ƒ„€
             Header.menuet01 := "MENUET01";
@@ -1738,7 +1738,7 @@
 
         OutFilePos := ¬“β¨«μ. ¬οβμ®Ά_®«γη(code + data + 8000H);
         filebuf := OutFilePos;
-        ¬θ.MemErr(OutFilePos = 0);
+        ¬θ. ¬οβμ(OutFilePos = 0);
 
         Write(sys.ADR(bytes), 817H);
         Fill(2DDH, 90X);
