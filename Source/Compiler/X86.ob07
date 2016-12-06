@@ -536,11 +536,11 @@
       current := last
     …– Del;
 
-–…„“€ NewLabel*(): –…‹…;
+–…„“€ ¥βª ο®Ά ο_®«γη*(): –…‹…;
     €—€‹
       „(Lcount)
       ‚…“’ Lcount
-    …– NewLabel;
+    …– ¥βª ο®Ά ο_®«γη;
 
 –…„“€ PushCall*(asmline: β€α¬“§¥«);
     €—€‹
@@ -820,7 +820,7 @@
 –…„“€ IfWhile*(L: –…‹…; orop: “‹…‚);
     …… c, L1: –…‹…;
     €—€‹
-      L1 := NewLabel();
+      L1 := ¥βª ο®Ά ο_®«γη();
       …‘‹ current.―ΰ¥¤λ¤γι(β€α¬“§¥«).tcmd = ¬®­αβ._ICMP2 ’ƒ„€
         c := CmpOpt(orop);
         OutCode("5A583BC2");
@@ -1014,7 +1014,7 @@
       …‘‹ x = 1.0D0 ’ƒ„€
         OutCode("D9E8")
       €—…
-        L := NewLabel();
+        L := ¥βª ο®Ά ο_®«γη();
         Labels[L] := -dcount;
         dataint(f[0]);
         dataint(f[1]);
@@ -1458,8 +1458,8 @@
 
 –…„“€ For*(inc: “‹…‚; …… LBeg, LEnd: –…‹…);
     €—€‹
-      LEnd := NewLabel();
-      LBeg := NewLabel();
+      LEnd := ¥βª ο®Ά ο_®«γη();
+      LBeg := ¥βª ο®Ά ο_®«γη();
       Label(LBeg);
       OutCode("8B14248B4424043910");
       …‘‹ inc ’ƒ„€
@@ -1487,7 +1487,7 @@
 –…„“€ CaseLabel*(a, b, LBeg: –…‹…);
     …… L: –…‹…;
     €—€‹
-      L := NewLabel();
+      L := ¥βª ο®Ά ο_®«γη();
       IntByte("83FA", "81FA", a);
       …‘‹ a = b ’ƒ„€
         jmp(¬®­αβ._JNE, L)
