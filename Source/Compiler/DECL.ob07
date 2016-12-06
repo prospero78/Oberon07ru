@@ -52,7 +52,7 @@
     модуль*: туМодуль;
     предок*: туИмя;
     двЗнач*: ДЛИНВЕЩ;
-    строка*, col*, Number*, iType*, StProc*, VarSize, ParamSize*,
+    строка*, col*, Number*, iType*, StProc*, VarSize, парам_размер*,
     LocalSize*, Offset*, VarKind*, уровень*, парам_число*: ЦЕЛОЕ;
     Export: БУЛЕВО
   КОНЕЦ;
@@ -785,7 +785,7 @@
           ProgSize := ProgSize + мУтиль.Выровнять(ProgSize)
         ИНАЧЕ
           ЕСЛИ cur.VarKind = 0 ТОГДА
-            cur.Offset := curBlock.ParamSize - curBlock.VarSize - n
+            cur.Offset := curBlock.парам_размер - curBlock.VarSize - n
           ИНАЧЕ
             cur.Offset := curBlock.VarSize - 8 + 4 * (cur.уровень + ORD((cur.VarKind = мКонст._param_var) & (T.тип_узла = мКонст._тЗапись)))
           КОНЕЦ
@@ -795,7 +795,7 @@
         мПров.Проверить2(curBlock.VarSize <= мКонст._maxINT - мУтиль.Выровнять(curBlock.VarSize), мКо._ош84);
         curBlock.VarSize := curBlock.VarSize + мУтиль.Выровнять(curBlock.VarSize);
         ЕСЛИ cur.VarKind # 0 ТОГДА
-          curBlock.ParamSize := curBlock.VarSize
+          curBlock.парам_размер := curBlock.VarSize
         КОНЕЦ;
         cur := cur.следующ(туИмя)
       КОНЕЦ
@@ -1225,7 +1225,7 @@
         Проверить(мКонст._опТчкЗпт);
         Лексем_Дальше;
         DeclSeq;
-        id.LocalSize := id.VarSize - id.ParamSize;
+        id.LocalSize := id.VarSize - id.парам_размер;
         X86.ProcBeg(id.Number, id.LocalSize, ЛОЖЬ);
         ЕСЛИ SCAN.лекс_тип = мКонст._лекНачать ТОГДА
           Лексем_Дальше;
@@ -1252,7 +1252,7 @@
         Лексем_Дальше;
         Проверить(мКонст._опТчкЗпт);
         Лексем_Дальше;
-        X86.ProcEnd(id.Number, (id.ParamSize + (id.уровень - 3) * 4) * ORD(curBlock.тип.вызов ВХОДИТ {мКонст._stdcall, мКонст._winapi, мКонст._defcall}),
+        X86.ProcEnd(id.Number, (id.парам_размер + (id.уровень - 3) * 4) * ORD(curBlock.тип.вызов ВХОДИТ {мКонст._stdcall, мКонст._winapi, мКонст._defcall}),
                 func, curBlock.тип.предок.тип_узла ВХОДИТ {мКонст._тВеществ, мКонст._тДлинВещ});
         PopBlock;
         curBlock := curBlock.предок
