@@ -53,7 +53,7 @@
     предок*: туИмя;
     двЗнач*: ДЛИНВЕЩ;
     строка*, col*, Number*, iType*, StProc*, VarSize, парам_размер*,
-    LocalSize*, Offset*, VarKind*, уровень*, парам_число*: ЦЕЛОЕ;
+    локаль_размер*, смещение*, VarKind*, уровень*, парам_число*: ЦЕЛОЕ;
     Export: БУЛЕВО
   КОНЕЦ;
 
@@ -778,16 +778,16 @@
           n := n + мУтиль.Выровнять(n)
         КОНЕЦ;
         ЕСЛИ cur.уровень = 3 ТОГДА
-          cur.Offset := ProgSize;
+          cur.смещение := ProgSize;
           мПров.Проверить2(ProgSize <= мКонст._maxINT - n, мКо._ош84);
           ProgSize := ProgSize + n;
           мПров.Проверить2(ProgSize <= мКонст._maxINT - мУтиль.Выровнять(ProgSize), мКо._ош84);
           ProgSize := ProgSize + мУтиль.Выровнять(ProgSize)
         ИНАЧЕ
           ЕСЛИ cur.VarKind = 0 ТОГДА
-            cur.Offset := curBlock.парам_размер - curBlock.VarSize - n
+            cur.смещение := curBlock.парам_размер - curBlock.VarSize - n
           ИНАЧЕ
-            cur.Offset := curBlock.VarSize - 8 + 4 * (cur.уровень + ORD((cur.VarKind = мКонст._param_var) & (T.тип_узла = мКонст._тЗапись)))
+            cur.смещение := curBlock.VarSize - 8 + 4 * (cur.уровень + ORD((cur.VarKind = мКонст._param_var) & (T.тип_узла = мКонст._тЗапись)))
           КОНЕЦ
         КОНЕЦ;
         мПров.Проверить2(curBlock.VarSize <= мКонст._maxINT - n, мКо._ош84);
@@ -1225,8 +1225,8 @@
         Проверить(мКонст._опТчкЗпт);
         Лексем_Дальше;
         DeclSeq;
-        id.LocalSize := id.VarSize - id.парам_размер;
-        X86.ProcBeg(id.Number, id.LocalSize, ЛОЖЬ);
+        id.локаль_размер := id.VarSize - id.парам_размер;
+        X86.ProcBeg(id.Number, id.локаль_размер, ЛОЖЬ);
         ЕСЛИ SCAN.лекс_тип = мКонст._лекНачать ТОГДА
           Лексем_Дальше;
           OpSeq
