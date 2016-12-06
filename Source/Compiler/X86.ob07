@@ -229,7 +229,7 @@
         „(etable.namecount);
         CopyStr(etable.text, Name.¨¬ο_γ§« , etable.textlen, 0);
         „(etable.textlen)
-      ‹…‘‹ obj ’ƒ„€
+      …‘‹ obj ’ƒ„€
         kosexp[kosexpcount].Name := Name;
         kosexp[kosexpcount].Adr := Number;
         kosexp[kosexpcount].NameLabel := NameLabel;
@@ -763,7 +763,7 @@
         OutCode("558BEC837D0C007507");
         CallRTL(¬®­αβ._close);
         OutCode("EB06837D0C017409B801000000C9C20C00")
-      ‹…‘‹ obj ’ƒ„€
+      …‘‹ obj ’ƒ„€
         OutCode("558BEC")
       …–;
       start := asmlist.―®α«¥¤­¨©(β€α¬“§¥«)
@@ -855,7 +855,7 @@
       Labels[Number] := -dcount;
       …‘‹ Len > 1 ’ƒ„€
         datastr(str)
-      ‹…‘‹ Len = 1 ’ƒ„€
+      …‘‹ Len = 1 ’ƒ„€
         dataint(ORD(str[0]))
       €—…
         dataint(0)
@@ -1011,7 +1011,7 @@
       Incfpu;
       …‘‹ x = 0.0D0 ’ƒ„€
         OutCode("D9EE")
-      ‹…‘‹ x = 1.0D0 ’ƒ„€
+      …‘‹ x = 1.0D0 ’ƒ„€
         OutCode("D9E8")
       €—…
         L := NewLabel();
@@ -1448,7 +1448,7 @@
       PopEDX;
       …‘‹ dim < 0 ’ƒ„€
         PushConst(-dim)
-      ‹…‘‹ dim > 1 ’ƒ„€
+      …‘‹ dim > 1 ’ƒ„€
         PopEDX;
         OutCode("83C4");
         OutByte((dim - 1) * 4);
@@ -1474,7 +1474,7 @@
       OutCode("8B542404");
       …‘‹ step = 1 ’ƒ„€
         OutCode("FF02")
-      ‹…‘‹ step = -1 ’ƒ„€
+      …‘‹ step = -1 ’ƒ„€
         OutCode("FF0A")
       €—…
         IntByte("8302", "8102", step)
@@ -1631,7 +1631,7 @@
                     …‘‹ a < size ’ƒ„€
                         a := a - sys.SIZE(β‡ £®«®Ά®ª®«¨΅ΰ¨);
                         sec := 1
-                    ‹…‘‹ a < size + datasize ’ƒ„€
+                    …‘‹ a < size + datasize ’ƒ„€
                         a := a - size;
                         sec := 2
                     €—…
@@ -1772,11 +1772,11 @@
         …‘‹ dll ’ƒ„€
             LoadAdr := 10000000H;
             PackExport(ExecName)
-        ‹…‘‹ con ‹ gui ’ƒ„€
+        …‘‹ con ‹ gui ’ƒ„€
             LoadAdr := 400000H
-        ‹…‘‹ kos ‹ obj ’ƒ„€
+        …‘‹ kos ‹ obj ’ƒ„€
             LoadAdr := sys.SIZE(β‡ £®«®Ά®ª®«¨΅ΰ¨)
-        ‹…‘‹ elf ’ƒ„€
+        …‘‹ elf ’ƒ„€
             LoadAdr := 134514420 + 1024;
             „(gsize, 1024)
         …–;
@@ -1784,7 +1784,7 @@
         …‘‹ dll ‹ con ‹ gui ’ƒ„€
             rdatasize := 0DAH + etable.size;
             size := 1000H + LoadAdr;
-        ‹…‘‹ kos ‹ elf ‹ obj ’ƒ„€
+        …‘‹ kos ‹ elf ‹ obj ’ƒ„€
             rdatasize := 0;
             size := LoadAdr
         …–;
@@ -1807,7 +1807,7 @@
             cur. ¤ΰ := size;
             …‘‹ cur.tcmd = ¬®­αβ._LCMD ’ƒ„€
                 sys.PUT(cur.varadr, size)
-            ‹…‘‹ (cur.tcmd = ¬®­αβ._JCMD) & cur.short ’ƒ„€
+            …‘‹ (cur.tcmd = ¬®­αβ._JCMD) & cur.short ’ƒ„€
                 sys.GET(cur.varadr, i);
                 temp3 := i - cur.α«¥¤γξι(β€α¬“§¥«). ¤ΰ;
                 …‘‹ (-131 <= temp3) & (temp3 <= 123) ’ƒ„€
@@ -1828,9 +1828,9 @@
 
         …‘‹ dll ‹ con ‹ gui ’ƒ„€
             asize := Align(size, 1000H)
-        ‹…‘‹ kos ‹ obj ’ƒ„€
+        …‘‹ kos ‹ obj ’ƒ„€
             asize := Align(size, 4)
-        ‹…‘‹ elf ’ƒ„€
+        …‘‹ elf ’ƒ„€
             asize := 134514420 + 6508 + Align(size - 13 - LoadAdr, 1000H)
         …–;
 
@@ -1908,9 +1908,9 @@
         …–;
         …‘‹ dll ‹ con ‹ gui ’ƒ„€
             WritePE(FName, stk, size - 1000H - LoadAdr, dcount, rdatasize, gsize)
-        ‹…‘‹ kos ‹ obj ’ƒ„€
+        …‘‹ kos ‹ obj ’ƒ„€
             WriteKOS(FName, Align(stk, 4), size, dcount, gsize, obj)
-        ‹…‘‹ elf ’ƒ„€
+        …‘‹ elf ’ƒ„€
             WriteELF(FName, size - LoadAdr, temp, gsize)
         …–
     …– FixLabels;
@@ -1945,10 +1945,10 @@
         PushInt(¬®­αβ._LoadLibrary);
         PushInt(¬®­αβ._GetProcAddress);
         OutCode("5859FF31FF3054")
-      ‹…‘‹ elf ’ƒ„€
+      …‘‹ elf ’ƒ„€
         OutCode("6800000000");
         glob := current.cmd;
-      ‹…‘‹ kos ‹ obj ’ƒ„€
+      …‘‹ kos ‹ obj ’ƒ„€
         OutByte(54H)
       …–;
       GlobalAdr(0);
