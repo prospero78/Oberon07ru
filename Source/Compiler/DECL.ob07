@@ -53,7 +53,7 @@
     предок*: туИмя;
     двЗнач*: ДЛИНВЕЩ;
     строка*, col*, Number*, iType*, StProc*, VarSize, ParamSize*,
-    LocalSize*, Offset*, VarKind*, уровень*, ParamCount*: ЦЕЛОЕ;
+    LocalSize*, Offset*, VarKind*, уровень*, парам_число*: ЦЕЛОЕ;
     Export: БУЛЕВО
   КОНЕЦ;
 
@@ -867,7 +867,7 @@
         field.ByRef := ByRef;
         ЕСЛИ proc ТОГДА
           PushIdent(Name, line, col, мКонст._имяПерем, ПУСТО, ПУСТО, ЛОЖЬ, 0);
-          ДОБ(curBlock.ParamCount);
+          ДОБ(curBlock.парам_число);
           fp := модуль_текущ.спис_имен.последний(туИмя);
           ЕСЛИ ByRef ТОГДА
             fp.VarKind := мКонст._param_var
