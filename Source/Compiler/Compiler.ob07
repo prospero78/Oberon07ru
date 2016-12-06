@@ -1307,7 +1307,10 @@
     КОНЕЦ LabelVal;
 
 ПРОЦЕДУРА Label(int: БУЛЕВО; Labels: мСпис.туСписок; LBeg: ЦЕЛОЕ);
-    ПЕРЕМ a, b: ЦЕЛОЕ; label: тМетка; line, col: ЦЕЛОЕ;
+    ПЕРЕМ
+        a, b: ЦЕЛОЕ;
+        label: тМетка;
+        line, col: ЦЕЛОЕ;
     НАЧАЛО
       мФк.Коорд_Уст(line, col);
       LabelVal(a, int);
@@ -1319,7 +1322,7 @@
       мПров.Проверить(a <= b, line, col, мКо._ош45);
       мПров.Проверить(CheckLabel(a, b, Labels), line, col, мКо._ош91);
       НОВ(label);
-      мДец.MemErr(label = ПУСТО);
+      мОш.MemErr(label = ПУСТО);
       label.a := a;
       label.b := b;
       мСпис.Добавить(Labels, label);
@@ -1347,7 +1350,11 @@
     КОНЕЦ Variant;
 
 ПРОЦЕДУРА ОпВыбрать_Уст;
-    ПЕРЕМ e: мДец.тВыражение; int: БУЛЕВО; line, col, EndCase: ЦЕЛОЕ; Labels: мСпис.туСписок;
+    ПЕРЕМ
+        e: мДец.тВыражение;
+        int: БУЛЕВО;
+        line, col, EndCase: ЦЕЛОЕ;
+        Labels: мСпис.туСписок;
     НАЧАЛО
       мФк.КоордСледующ_Уст(line, col);
       Expr(e);
@@ -1358,7 +1365,7 @@
       мФк.Выражение_Загрузить(e);
       X86.Drop;
       Labels := мСпис.Создать();
-      мДец.MemErr(Labels = ПУСТО);
+      мОш.MemErr(Labels = ПУСТО);
       мДец.Лексем_Дальше;
       EndCase := X86.NewLabel();
       Variant(int, Labels, EndCase);
@@ -1814,7 +1821,7 @@
             мУтиль.ТриСтр_соединить(SelfPath, "Windows32", SelfPath)
         КОНЕЦ;
         мУтиль.ТриСтр_соединить(SelfPath, мКонст._слэш, SelfPath);
-        X86.Init(мДец.MemErr, ос_ном);
+        X86.Init(мОш.MemErr, ос_ном);
         X86.Prolog(temp);
         мДец.Program(SelfPath, Path, Name, Ext, ос_ном ВХОДИТ {1, 2, 3}, OpSeq, Expr, AssComp, sttypes);
         мДец.Компилировать(ос_ном, стэк_разм);
