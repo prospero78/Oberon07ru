@@ -23,7 +23,7 @@
     _прОб* = 6;
     
    (* лексемы *)
-    _лекКонФл* = 500;
+    _лекКонФл* = 1;
     _лекЦел* = _лекКонФл + 1;
     _лекВеществ* = _лекЦел + 1;
     _лекСтрока* = _лекВеществ + 1;
@@ -154,18 +154,18 @@
 
    (* Коды лексических ошибок. МЕНЯТЬ НЕЛЬЗЯ!!! *)
     _lexERR0* = 100;
-    _lexERR1* = 101;
-    _lexERR2* = 102;
-    _lexERR3* = 103;
-    _lexERR4* = 104;
-    _lexERR5* = 105;
-    _lexERR6* = 106;
-    _lexERR7* = 107;
-    _lexERR8* = 108;
-    _lexERR9* = 109;
-    _lexERR10* = 110;
-    _lexERR11* = 111;
-    _lexERR20* = 120;
+    _lexERR1* = _lexERR0 + 1;
+    _lexERR2* = _lexERR1 + 1;
+    _lexERR3* = _lexERR2 + 1;
+    _lexERR4* = _lexERR3 + 1;
+    _lexERR5* = _lexERR4 + 1;
+    _lexERR6* = _lexERR5 + 1;
+    _lexERR7* = _lexERR6 + 1;
+    _lexERR8* = _lexERR7 + 1;
+    _lexERR9* = _lexERR8 + 1;
+    _lexERR10* = _lexERR9 + 1;
+    _lexERR11* = _lexERR10 + 1;
+    _lexERR20* = _lexERR11 + 1;
 
      _defcall* = 0;
      _stdcall* = 1;
