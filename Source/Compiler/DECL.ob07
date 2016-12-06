@@ -47,7 +47,7 @@
   КОНЕЦ;
 
   тИмя* = ЗАПИСЬ (мСпис.тУзел)
-    Name: SCAN.туУзел;
+    узел: SCAN.туУзел;
     тип*: мТипы.туТип;
     модуль*: туМодуль;
     предок*: туИмя;
@@ -222,7 +222,7 @@
         cur: туИмя;
     НАЧАЛО
       cur := модуль_текущ.спис_имен.последний(туИмя);
-      ПОКА (cur.iType # мКонст._IDGUARD) & (cur.Name # узел_) ДЕЛАТЬ
+      ПОКА (cur.iType # мКонст._IDGUARD) & (cur.узел # узел_) ДЕЛАТЬ
         cur := cur.предыдущ(туИмя)
       КОНЕЦ
       ВЕРНУТЬ cur.iType = мКонст._IDGUARD
@@ -233,7 +233,7 @@
     НАЧАЛО
       НОВ(ident);
       MemErr(ident = ПУСТО);
-      ident.Name := ПУСТО;
+      ident.узел := ПУСТО;
       ident.iType := мКонст._IDGUARD;
       ident.тип := sttypes[мКонст._TVOID];
       мСпис.Добавить(модуль_текущ.спис_имен, ident);
@@ -246,7 +246,7 @@
       мПров.Проверить(CheckIdent(Name), line, col, мКо._ош21);
       НОВ(ident);
       MemErr(ident = ПУСТО);
-      ident.Name := Name;
+      ident.узел := Name;
       ident.строка := line;
       ident.col := col;
       ЕСЛИ iType ВХОДИТ {мКонст._имяПроц, мКонст._IDMOD} ТОГДА
@@ -385,7 +385,7 @@
       Coord(line, col);
       cur := Unit.IdentBegin.следующ(туИмя);
       ПОКА (cur # ПУСТО) & (cur.iType # мКонст._IDGUARD) ДЕЛАТЬ
-        ЕСЛИ cur.Name = Name ТОГДА
+        ЕСЛИ cur.узел = Name ТОГДА
           ЕСЛИ (Unit # модуль_текущ) & ~cur.Export ТОГДА
             res := ПУСТО
           ИНАЧЕ
@@ -405,7 +405,7 @@
       res := ПУСТО;
       Coord(line, col);
       cur := модуль_текущ.спис_имен.последний(туИмя);
-      ПОКА (cur # ПУСТО) & (cur.Name = Name) ДЕЛАТЬ
+      ПОКА (cur # ПУСТО) & (cur.узел = Name) ДЕЛАТЬ
         res := cur;
         cur := ПУСТО
       ИНЕСЛ cur # ПУСТО ДЕЛАТЬ
@@ -1402,7 +1402,10 @@
 
 ПРОЦЕДУРА Модуль_Прочитать(Path, Name1, Ext: мСтр.тСтрока): БУЛЕВО;
     ПЕРЕМ
-        FHandle: ЦЕЛОЕ; name, Name, b: мСтр.тСтрока; idmod: туИмя; Res, temp: БУЛЕВО;
+        FHandle: ЦЕЛОЕ;
+        name, Name, b: мСтр.тСтрока;
+        idmod: туИмя;
+        Res, temp: БУЛЕВО;
     НАЧАЛО
         Res := ЛОЖЬ;
         name := Name1;
@@ -1445,7 +1448,7 @@
                 main := temp
             КОНЕЦ;
             мКонс.Стр_Печать("Компиляция "); мКонс.Стр_Печать(модуль_текущ.узел.имя_узла); мКонс.Стр_Нов;
-            X86.Module(idmod.Name.имя_узла, idmod.Number);
+            X86.Module(idmod.узел.имя_узла, idmod.Number);
             модуль_ном := idmod.Number;
             модуль_текущ.IdentBegin := модуль_текущ.спис_имен.последний(туИмя);
             curBlock := idmod;
