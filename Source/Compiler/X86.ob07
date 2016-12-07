@@ -145,15 +145,15 @@
       ВЕРНУТЬ w
     КОНЕЦ IntToCard16;
 
-ПРОЦЕДУРА CopyStr(ПЕРЕМ Dest: МАССИВ ИЗ СИМВ; Source: МАССИВ ИЗ СИМВ; ПЕРЕМ di: ЦЕЛОЕ; si: ЦЕЛОЕ);
+ПРОЦЕДУРА Строка_Копировать(ПЕРЕМ назнач_: МАССИВ ИЗ СИМВ; источник_: МАССИВ ИЗ СИМВ; ПЕРЕМ назн_итер_: ЦЕЛОЕ; ист_итер_: ЦЕЛОЕ);
     НАЧАЛО
-      ВЫЧ(di);
+      ВЫЧ(назн_итер_);
       ПОВТОРЯТЬ
-        ДОБ(di);
-        Dest[di] := Source[si];
-        ДОБ(si)
-      СНОВА Dest[di] = 0X
-    КОНЕЦ CopyStr;
+        ДОБ(назн_итер_);
+        назнач_[назн_итер_] := источник_[ист_итер_];
+        ДОБ(ист_итер_)
+      СНОВА назнач_[назн_итер_] = 0X
+    КОНЕЦ Строка_Копировать;
 
 ПРОЦЕДУРА exch(ПЕРЕМ a, b: ЦЕЛОЕ);
     ПЕРЕМ c: ЦЕЛОЕ;
@@ -170,9 +170,9 @@
           ПЕРЕМ S1, S2: МАССИВ 256 ИЗ СИМВ; i: ЦЕЛОЕ;
           НАЧАЛО
             i := 0;
-            CopyStr(S1, Text, i, s1);
+            Строка_Копировать(S1, Text, i, s1);
             i := 0;
-            CopyStr(S2, Text, i, s2)
+            Строка_Копировать(S2, Text, i, s2)
             ВЕРНУТЬ S1 <= S2
           КОНЕЦ strle;
 
@@ -213,7 +213,7 @@
       etable.arrnameptroffset := 40 + etable.adrcount * 4;
       etable.arrnumoffset := etable.arrnameptroffset + etable.namecount * 4;
       etable.dllnameoffset := etable.size + etable.textlen;
-      CopyStr(etable.text, Name, etable.textlen, 0);
+      Строка_Копировать(etable.text, Name, etable.textlen, 0);
       ДОБ(etable.textlen);
       ДЛЯ i := 0 ДО etable.namecount - 1 ДЕЛАТЬ
         etable.arrnameptr[i] := etable.arrnameptr[i] + etable.size
@@ -228,7 +228,7 @@
         ДОБ(etable.adrcount);
         etable.arrnameptr[etable.namecount] := etable.textlen;
         ДОБ(etable.namecount);
-        CopyStr(etable.text, Name.имя_узла, etable.textlen, 0);
+        Строка_Копировать(etable.text, Name.имя_узла, etable.textlen, 0);
         ДОБ(etable.textlen)
       АЕСЛИ obj ТОГДА
         kosexp[kosexpcount].Name := Name;
