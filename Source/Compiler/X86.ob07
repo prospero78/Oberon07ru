@@ -1930,62 +1930,63 @@
     …– OutStringZ;
 
 –…„“€ Epilog*(gsize: –…‹…; FName: €‘‘‚ ‡ ‘‚; stk: –…‹…);
-    …… i, glob: –…‹…;
+    ……
+        i, glob: –…‹…;
     €—€‹
-      glob := 0;
-      gsize := Align(gsize, 4) + 4;
-      COPY(FName, OutFile);
-      Labels[¬®­αβ._RTABLE] := -dcount;
-      dataint(recarray[0]);
-      „‹ i := 1 „ reccount „…‹€’
-        dataint(recarray[i])
-      …–;
-      current := start;
-      …‘‹ con ‹ gui ‹ dll ’ƒ„€
-        PushInt(¬®­αβ._LoadLibrary);
-        PushInt(¬®­αβ._GetProcAddress);
-        OutCode("5859FF31FF3054")
-      €…‘‹ elf ’ƒ„€
-        OutCode("6800000000");
-        glob := current.cmd;
-      €…‘‹ kos ‹ obj ’ƒ„€
-        OutByte(54H)
-      …–;
-      GlobalAdr(0);
-      PushConst(ASR(gsize, 2));
-      PushInt(¬®­αβ._RTABLE);
-      PushInt(¬®­αβ._SELFNAME);
-      CallRTL(¬®­αβ._init);
-      current := asmlist.―®α«¥¤­¨©(β€α¬“§¥«);
-      …‘‹ dll ’ƒ„€
-        OutCode("B801000000C9C20C00")
-      …–;
-      …‘‹ obj ’ƒ„€
-        OutCode("B801000000C9C20400")
-      …–;
-      OutCode("EB05");
-      Label(¬®­αβ._ASSRT);
-      CallRTL(¬®­αβ._assrt);
-      OutCode("EB09");
-      Label(¬®­αβ._HALT);
-      OutCode("6A006A00");
-      CallRTL(¬®­αβ._assrt);
-      OutCode("6A00");
-      CallRTL(¬®­αβ._halt);
-      OutByte(90H);
-      …‘‹ obj ’ƒ„€
-        Label(¬®­αβ._Exports);
-        CmdN(¬®­αβ._szSTART); CmdN(¬®­αβ._START);
-        CmdN(¬®­αβ._szversion); OutInt(stk);
+        glob := 0;
+        gsize := Align(gsize, 4) + 4;
+        COPY(FName, OutFile);
+        Labels[¬®­αβ._RTABLE] := -dcount;
+        dataint(recarray[0]);
+        „‹ i := 1 „ reccount „…‹€’
+            dataint(recarray[i])
+        …–;
+        current := start;
+        …‘‹ con ‹ gui ‹ dll ’ƒ„€
+            PushInt(¬®­αβ._LoadLibrary);
+            PushInt(¬®­αβ._GetProcAddress);
+            OutCode("5859FF31FF3054")
+        €…‘‹ elf ’ƒ„€
+            OutCode("6800000000");
+            glob := current.cmd;
+        €…‘‹ kos ‹ obj ’ƒ„€
+            OutByte(54H)
+        …–;
+        GlobalAdr(0);
+        PushConst(ASR(gsize, 2));
+        PushInt(¬®­αβ._RTABLE);
+        PushInt(¬®­αβ._SELFNAME);
+        CallRTL(¬®­αβ._init);
+        current := asmlist.―®α«¥¤­¨©(β€α¬“§¥«);
+        …‘‹ dll ’ƒ„€
+            OutCode("B801000000C9C20C00")
+        …–;
+        …‘‹ obj ’ƒ„€
+            OutCode("B801000000C9C20400")
+        …–;
+        OutCode("EB05");
+        Label(¬®­αβ._ASSRT);
+        CallRTL(¬®­αβ._assrt);
+        OutCode("EB09");
+        Label(¬®­αβ._HALT);
+        OutCode("6A006A00");
+        CallRTL(¬®­αβ._assrt);
+        OutCode("6A00");
+        CallRTL(¬®­αβ._halt);
+        OutByte(90H);
+        …‘‹ obj ’ƒ„€
+            Label(¬®­αβ._Exports);
+            CmdN(¬®­αβ._szSTART); CmdN(¬®­αβ._START);
+            CmdN(¬®­αβ._szversion); OutInt(stk);
         „‹ i := 0 „ kosexpcount - 1 „…‹€’
-          CmdN(kosexp[i].NameLabel); CmdN(kosexp[i].Adr)
+            CmdN(kosexp[i].NameLabel); CmdN(kosexp[i].Adr)
         …–;
         OutInt(0);
         Label(¬®­αβ._szSTART); OutStringZ("START");
         Label(¬®­αβ._szversion); OutStringZ("version");
         „‹ i := 0 „ kosexpcount - 1 „…‹€’
-          Label(kosexp[i].NameLabel);
-          OutStringZ(kosexp[i].Name.¨¬ο_γ§« )
+            Label(kosexp[i].NameLabel);
+            OutStringZ(kosexp[i].Name.¨¬ο_γ§« )
         …–
       …–;
       FixLabels(FName, stk, gsize, glob)

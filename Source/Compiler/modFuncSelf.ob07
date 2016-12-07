@@ -4,11 +4,11 @@
 
 ИМПОРТ DECL;
 
-ПРОЦЕДУРА Load*(e: DECL.EXPRESSION);
+ПРОЦЕДУРА Загрузить*(e: DECL.EXPRESSION);
     НАЧАТЬ
       ЕСЛИ e.eType = мКонст._eVAR ТОГДА
         X86.Load(e.T.tType)
       КОНЕЦ
-    КОНЕЦ Load;
+    КОНЕЦ Загрузить;
 
 КОНЕЦ modFuncSelf.
