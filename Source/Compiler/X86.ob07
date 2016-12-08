@@ -244,9 +244,9 @@
       КОНЕЦ
     КОНЕЦ ProcExport;
 
-ПРОЦЕДУРА Align*(n, m: ЦЕЛОЕ): ЦЕЛОЕ;
+ПРОЦЕДУРА Выровнять*(n, m: ЦЕЛОЕ): ЦЕЛОЕ;
       ВЕРНУТЬ n + (m - n MOD m) MOD m
-    КОНЕЦ Align;
+    КОНЕЦ Выровнять;
 
 ПРОЦЕДУРА PutReloc(R: тСмещение);
     ПЕРЕМ i: ЦЕЛОЕ;
@@ -318,9 +318,9 @@
         stkalloc := stksize;
         heapsize := 100000H;
         heapalloc := 100000H;
-        acodesize := Align(codesize, 1000H) + 1000H;
+        acodesize := Выровнять(codesize, 1000H) + 1000H;
         adr := sys.ADR(rdata);
-        filesize := acodesize + Align(rdatasize, 1000H) + Align(datasize, 1000H) + Align(rcount, 1000H);
+        filesize := acodesize + Выровнять(rdatasize, 1000H) + Выровнять(datasize, 1000H) + Выровнять(rcount, 1000H);
 
         Массив_Настроить(adr, "5000000040000000000000003400000000000000000000006200000000000000");
         Массив_Настроить(adr, "0000000000000000000000000000000000000000500000004000000000000000");
@@ -354,18 +354,18 @@
         Header.PEoptsize := IntToCard16(00E0H);
         Header.PEfile := IntToCard16(010BH);
         Header.compver := IntToCard16(compver);
-        Header.код_размер := Align(codesize, 200H);
-        Header.данные_размер := Align(datasize + gsize, 200H) + Align(rdatasize, 200H) + Align(rcount, 200H);
+        Header.код_размер := Выровнять(codesize, 200H);
+        Header.данные_размер := Выровнять(datasize + gsize, 200H) + Выровнять(rdatasize, 200H) + Выровнять(rcount, 200H);
         Header.startadr := 1000H;
         Header.codeadr := 1000H;
-        Header.rdataadr := Header.codeadr + Align(codesize, 1000H);
+        Header.rdataadr := Header.codeadr + Выровнять(codesize, 1000H);
         Header.loadadr := LoadAdr;
         Header.secalign := 1000H;
         Header.filealign := 0200H;
         Header.oldestver := 0004H;
         Header.version := version;
         Header.oldestverNT := 0004H;
-        Header.filesize := Align(codesize, 1000H) + Align(datasize + gsize, 1000H) + Align(rdatasize, 1000H) + Align(rcount, 1000H) + 1000H;
+        Header.filesize := Выровнять(codesize, 1000H) + Выровнять(datasize + gsize, 1000H) + Выровнять(rdatasize, 1000H) + Выровнять(rcount, 1000H) + 1000H;
         Header.headersize := 0400H;
         Header.UI := IntToCard16(ORD(con) + 2);
         Header.стэк_разм := stksize;
@@ -383,18 +383,18 @@
         Header.structs[12].adr := Header.rdataadr;
         Header.structs[12].size := 0CH;
 
-        SetSection(Header.sections[0], ".text", codesize, 1000H, Align(codesize, 200H), 400H,
+        SetSection(Header.sections[0], ".text", codesize, 1000H, Выровнять(codesize, 200H), 400H,
                 textattr);
-        SetSection(Header.sections[1], ".rdata", rdatasize, Align(codesize, 1000H) + 1000H,
-                Align(rdatasize, 200H), Align(codesize, 200H) + 400H, rdataattr);
-        SetSection(Header.sections[2], ".data", datasize + gsize, Align(codesize, 1000H) +
-                Align(rdatasize, 1000H) + 1000H, Align(datasize, 200H), Align(codesize, 200H) +
-                Align(rdatasize, 200H) + 400H, dataattr);
+        SetSection(Header.sections[1], ".rdata", rdatasize, Выровнять(codesize, 1000H) + 1000H,
+                Выровнять(rdatasize, 200H), Выровнять(codesize, 200H) + 400H, rdataattr);
+        SetSection(Header.sections[2], ".data", datasize + gsize, Выровнять(codesize, 1000H) +
+                Выровнять(rdatasize, 1000H) + 1000H, Выровнять(datasize, 200H), Выровнять(codesize, 200H) +
+                Выровнять(rdatasize, 200H) + 400H, dataattr);
 
         ЕСЛИ dll ТОГДА
-            SetSection(RelocSection, ".reloc", rcount, Header.sections[2].adr + Align(datasize +
-                    gsize, 1000H), Align(rcount, 200H), Header.sections[2].OAPfile +
-                    Align(datasize, 200H), relocattr);
+            SetSection(RelocSection, ".reloc", rcount, Header.sections[2].adr + Выровнять(datasize +
+                    gsize, 1000H), Выровнять(rcount, 200H), Header.sections[2].OAPfile +
+                    Выровнять(datasize, 200H), relocattr);
             Header.structs[5].adr := RelocSection.adr;
             Header.structs[5].size := rcount
         КОНЕЦ;
@@ -410,10 +410,10 @@
         Записать(sys.ADR(Header), sys.SIZE(тЗаголовок));
         ЕСЛИ dll ТОГДА
             Записать(sys.ADR(RelocSection), sys.SIZE(тСекция));
-            Заполнить(Align(sys.SIZE(тЗаголовок) + sys.SIZE(тСекция), 200H) - (sys.SIZE(тЗаголовок) +
+            Заполнить(Выровнять(sys.SIZE(тЗаголовок) + sys.SIZE(тСекция), 200H) - (sys.SIZE(тЗаголовок) +
                     sys.SIZE(тСекция)), 0X)
         ИНАЧЕ
-            Заполнить(Align(sys.SIZE(тЗаголовок), 200H) - sys.SIZE(тЗаголовок), 0X)
+            Заполнить(Выровнять(sys.SIZE(тЗаголовок), 200H) - sys.SIZE(тЗаголовок), 0X)
         КОНЕЦ;
 
         cur := asmlist.первый(тАсмУзел);
@@ -421,7 +421,7 @@
             Записать(sys.ADR(Code[cur.cmd]), cur.clen);
             cur := cur.следующ(тАсмУзел)
         КОНЕЦ;
-        Заполнить(Align(codesize, 200H) - codesize, 0X);
+        Заполнить(Выровнять(codesize, 200H) - codesize, 0X);
         Записать(sys.ADR(rdata), 0DAH);
         ЕСЛИ dll ТОГДА
             etable.time := Header.time;
@@ -431,12 +431,12 @@
             Записать(sys.ADR(etable.arrnum), etable.namecount * 2);
             Записать(sys.ADR(etable.text), etable.textlen)
         КОНЕЦ;
-        Заполнить(Align(rdatasize, 200H) - rdatasize, 0X);
+        Заполнить(Выровнять(rdatasize, 200H) - rdatasize, 0X);
         Записать(sys.ADR(Data), datasize);
-        Заполнить(Align(datasize, 200H) - datasize, 0X);
+        Заполнить(Выровнять(datasize, 200H) - datasize, 0X);
         ЕСЛИ dll ТОГДА
             Записать(sys.ADR(Reloc), rcount);
-            Заполнить(Align(rcount, 200H) - rcount, 0X)
+            Заполнить(Выровнять(rcount, 200H) - rcount, 0X)
         КОНЕЦ;
         Файл_Записать(F, filebuf, OutFilePos - filebuf);
         мФайл.Закрыть(F)
@@ -1556,7 +1556,7 @@
         ЕСЛИ F <= 0 ТОГДА
             мОш.Сообщ(мКонстОш._ош58); мКонс.Стр_Печать(OutFile)
         КОНЕЦ;
-        OutFilePos := мУтиль.ПамятьНов_Получ(Align(size, 4) + datasize + 1000H);
+        OutFilePos := мУтиль.ПамятьНов_Получ(Выровнять(size, 4) + datasize + 1000H);
         filebuf := OutFilePos;
         мОш.Память(OutFilePos = 0);
 
@@ -1564,7 +1564,7 @@
             Header.menuet01 := "MENUET01";
             Header.ver := 1;
             Header.start := sys.SIZE(тЗаголовокКолибри);
-            Header.size := Align(size, 4) + datasize;
+            Header.size := Выровнять(size, 4) + datasize;
             Header.mem := Header.size + stk + gsize + strsize * 2 + 1000H;
             Header.sp := Header.size + gsize + stk;
             Header.param := Header.sp;
@@ -1577,12 +1577,12 @@
                 Записать(sys.ADR(Code[cur.cmd]), cur.clen);
                 cur := cur.следующ(тАсмУзел)
             КОНЕЦ;
-            Заполнить(Align(size, 4) - size, 0X);
+            Заполнить(Выровнять(size, 4) - size, 0X);
             Записать(sys.ADR(Data), datasize);
             Файл_Записать(F, filebuf, OutFilePos - filebuf)
         ИНАЧЕ
             size2 := size;
-            size := Align(size, 4) - sys.SIZE(тЗаголовокКолибри);
+            size := Выровнять(size, 4) - sys.SIZE(тЗаголовокКолибри);
             Coff.Machine := IntToCard16(014CH);
             Coff.секции_число := IntToCard16(3);
             Coff.датаВремя_штамп := мКонст._дата;
@@ -1618,7 +1618,7 @@
             Coff.bss.reserved8 := 0;
             Coff.bss.attrflags := 0C03000C0H;
 
-            size := Align(size2, 4);
+            size := Выровнять(size2, 4);
             rcount := 0;
             cur := asmlist.первый(тАсмУзел);
             ПОКА cur # ПУСТО ДЕЛАТЬ
@@ -1646,7 +1646,7 @@
                 cur := cur.следующ(тАсмУзел)
             КОНЕЦ;
             size := size2;
-            Заполнить(Align(size, 4) - size2, 0X);
+            Заполнить(Выровнять(size, 4) - size2, 0X);
             Записать(sys.ADR(Data), datasize);
             Coff.text.reserved8 := rcount DIV 10;
             Coff.PointerToSymbolTable := Coff.text.reserved6 + rcount;
@@ -1701,17 +1701,17 @@
 
         ВЫЧ(code, 13);
 
-        delta := Align(data, 1000H) - 100000H;
+        delta := Выровнять(data, 1000H) - 100000H;
         Add(0020H); Add(00A4H); Add(00A8H); Add(0258H); Add(02B8H); Add(0308H); Add(0494H); Add(049CH);
         Add(04A4H); Add(0679H); Add(0681H); Add(06A4H); Add(06B0H); Add(06BAH); Add(0703H); Add(0762H);
         Add(0774H); Add(0786H); Add(0819H); Add(0823H); Add(17C5H); Add(17E5H); Add(17E9H); Add(1811H);
         Add(1839H); Add(1861H); Add(1889H); Add(1A25H); Add(1A95H); Add(1AA5H); Add(1C05H); Add(1C55H);
         Add(1CE5H); Add(1D09H); Add(1D15H); Add(1D25H); Add(1D35H); Add(1D55H);
 
-        delta := Align(glob, 1000H) - 3200000H;
+        delta := Выровнять(glob, 1000H) - 3200000H;
         Add(00A8H); Add(17EDH); Add(1C09H); Add(1D25H);
 
-        delta := Align(code, 1000H) - 100000H;
+        delta := Выровнять(code, 1000H) - 100000H;
         Add(0020H); Add(0084H); Add(0088H); Add(0098H); Add(009CH); Add(00A0H); Add(00B8H); Add(00BCH);
         Add(00C0H); Add(0118H); Add(011CH); Add(0120H); Add(0258H); Add(0278H); Add(02B8H); Add(0308H);
         Add(048CH); Add(0494H); Add(049CH); Add(04A4H); Add(04ACH); Add(04B4H); Add(04BCH); Add(04C4H);
@@ -1743,10 +1743,10 @@
             Записать(sys.ADR(Code[cur.cmd]), cur.clen);
             cur := cur.следующ(тАсмУзел)
         КОНЕЦ;
-        Заполнить(Align(code, 1000H) - code, 90X);
+        Заполнить(Выровнять(code, 1000H) - code, 90X);
         Записать(sys.ADR(bytes[817H]), 55FH);
         Записать(sys.ADR(Data), data);
-        Заполнить(Align(data, 1000H) - data, 0X);
+        Заполнить(Выровнять(data, 1000H) - data, 0X);
         Записать(sys.ADR(bytes[817H + 55FH + 55FH]), 0DC5H);
 
         F := мФайл.Создать(FName);
@@ -1764,7 +1764,7 @@
         R: тСмещение;
         c: СИМВ;
     НАЧАЛО
-        dcount := Align(dcount, 4);
+        dcount := Выровнять(dcount, 4);
         ЕСЛИ dll ТОГДА
             LoadAdr := 10000000H;
             PackExport(ExecName)
@@ -1823,22 +1823,22 @@
         КОНЕЦ;
 
         ЕСЛИ dll ИЛИ con ИЛИ gui ТОГДА
-            asize := Align(size, 1000H)
+            asize := Выровнять(size, 1000H)
         АЕСЛИ kos ИЛИ obj ТОГДА
-            asize := Align(size, 4)
+            asize := Выровнять(size, 4)
         АЕСЛИ elf ТОГДА
-            asize := 134514420 + 6508 + Align(size - 13 - LoadAdr, 1000H)
+            asize := 134514420 + 6508 + Выровнять(size - 13 - LoadAdr, 1000H)
         КОНЕЦ;
 
         ДЛЯ i := 0 ДО Lcount ДЕЛАТЬ
             ЕСЛИ Labels[i] < 0 ТОГДА
-                Labels[i] := -Labels[i] + asize + Align(rdatasize, 1000H)
+                Labels[i] := -Labels[i] + asize + Выровнять(rdatasize, 1000H)
             КОНЕЦ
         КОНЕЦ;
 
         temp := dcount;
         ЕСЛИ elf ТОГДА
-            asize := asize + Align(dcount, 1000H) + 64 + 1024;
+            asize := asize + Выровнять(dcount, 1000H) + 64 + 1024;
             sys.PUT(sys.ADR(Code[glob + 1]), asize - 1024);
             dcount := 0
         КОНЕЦ;
@@ -1868,7 +1868,7 @@
             RtlProc[i] := Labels[RtlProc[i]]
         КОНЕЦ;
 
-        temp3 := asize + Align(rdatasize, 1000H) + dcount;
+        temp3 := asize + Выровнять(rdatasize, 1000H) + dcount;
         ПОКА cur # ПУСТО ДЕЛАТЬ
             ВЫБРАТЬ cur.tcmd ИЗ
                 |мКонст._JCMD:
@@ -1905,7 +1905,7 @@
         ЕСЛИ dll ИЛИ con ИЛИ gui ТОГДА
             WritePE(FName, stk, size - 1000H - LoadAdr, dcount, rdatasize, gsize)
         АЕСЛИ kos ИЛИ obj ТОГДА
-            WriteKOS(FName, Align(stk, 4), size, dcount, gsize, obj)
+            WriteKOS(FName, Выровнять(stk, 4), size, dcount, gsize, obj)
         АЕСЛИ elf ТОГДА
             WriteELF(FName, size - LoadAdr, temp, gsize)
         КОНЕЦ
@@ -1930,7 +1930,7 @@
         i, glob: ЦЕЛОЕ;
     НАЧАЛО
         glob := 0;
-        gsize := Align(gsize, 4) + 4;
+        gsize := Выровнять(gsize, 4) + 4;
         COPY(FName, OutFile);
         Labels[мКонст._RTABLE] := -dcount;
         dataint(recarray[0]);
