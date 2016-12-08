@@ -442,19 +442,20 @@
         мФайл.Закрыть(F)
     КОНЕЦ WritePE;
 
-ПРОЦЕДУРА New;
-    ПЕРЕМ nov: тАсмУзел;
+ПРОЦЕДУРА Узел_Новый;
+    ПЕРЕМ
+        узел_новый: тАсмУзел;
     НАЧАЛО
-      NEW(nov);
-      MemErr(nov = ПУСТО);
-      nov.cmd := ccount;
-      мСпис.Вставить(asmlist, nov, current);
-      current := current.следующ(тАсмУзел)
-    КОНЕЦ New;
+        НОВ(узел_новый);
+        MemErr(узел_новый = ПУСТО);
+        узел_новый.cmd := ccount;
+        мСпис.Вставить(asmlist, узел_новый, current);
+        current := current.следующ(тАсмУзел)
+    КОНЕЦ Узел_Новый;
 
 ПРОЦЕДУРА Empty(varadr: ЦЕЛОЕ);
     НАЧАЛО
-      New;
+      Узел_Новый;
       current.clen := 0;
       current.tcmd := мКонст._ECMD;
       current.varadr := varadr
@@ -462,7 +463,7 @@
 
 ПРОЦЕДУРА OutByte(byte: ЦЕЛОЕ);
     НАЧАЛО
-      New;
+      Узел_Новый;
       current.clen := 1;
       Code[ccount] := CHR(byte);
       ДОБ(ccount)
@@ -470,7 +471,7 @@
 
 ПРОЦЕДУРА OutInt(int: ЦЕЛОЕ);
     НАЧАЛО
-      New;
+      Узел_Новый;
       current.clen := 4;
       sys.PUT(sys.ADR(Code[ccount]), int);
       ДОБ(ccount, 4)
@@ -515,7 +516,7 @@
 ПРОЦЕДУРА OutCode(cmd: мСтр.тСтрока);
     ПЕРЕМ a, b: ЦЕЛОЕ;
     НАЧАЛО
-      New;
+      Узел_Новый;
       a := sys.ADR(Code[ccount]);
       b := a;
       Массив_Настроить(a, cmd);
@@ -540,7 +541,7 @@
 
 ПРОЦЕДУРА PushCall*(asmline: тАсмУзел);
     НАЧАЛО
-      New;
+      Узел_Новый;
       callstk[topstk][0] := asmline;
       callstk[topstk][1] := current;
       ДОБ(topstk)
@@ -600,7 +601,7 @@
 ПРОЦЕДУРА jmp*(jamp: СИМВ; label: ЦЕЛОЕ);
     ПЕРЕМ n: ЦЕЛОЕ;
     НАЧАЛО
-      New;
+      Узел_Новый;
       ВЫБРАТЬ jamp ИЗ
       |мКонст._JMP, мКонст._CALL:
         n := 5
@@ -628,14 +629,14 @@
 
 ПРОЦЕДУРА Label*(label: ЦЕЛОЕ);
     НАЧАЛО
-      New;
+      Узел_Новый;
       current.varadr := sys.ADR(Labels[label]);
       current.tcmd := мКонст._LCMD
     КОНЕЦ Label;
 
 ПРОЦЕДУРА CmdN(Number: ЦЕЛОЕ);
     НАЧАЛО
-      New;
+      Узел_Новый;
       current.clen := 4;
       current.codeadr := sys.ADR(Code[ccount]);
       current.varadr := sys.ADR(Labels[Number]);
@@ -731,7 +732,7 @@
 
 ПРОЦЕДУРА CallRTL(Proc: ЦЕЛОЕ);
     НАЧАЛО
-      New;
+      Узел_Новый;
       current.clen := 5;
       Code[ccount] := мКонст._CALL;
       ДОБ(ccount);
@@ -1914,7 +1915,7 @@
 ПРОЦЕДУРА OutStringZ(str: МАССИВ ИЗ СИМВ);
     ПЕРЕМ i: ЦЕЛОЕ;
     НАЧАЛО
-      New;
+      Узел_Новый;
       current.clen := LENGTH(str);
       ДЛЯ i := 0 ДО current.clen - 1 ДЕЛАТЬ
         Code[ccount] := str[i];
