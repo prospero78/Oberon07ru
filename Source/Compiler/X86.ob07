@@ -46,7 +46,7 @@
 
   тСекция = ЗАПИСЬ
     секц_имя: тСекцияИмя;
-    размер, adr, sizealign, OAPfile, reserved6, reserved7, reserved8, attrflags: ЦЕЛОЕ
+    размер, адрес, sizealign, OAPfile, резерв6, reserved7, reserved8, attrflags: ЦЕЛОЕ
   КОНЕЦ;
 
   тЗаголовок = ЗАПИСЬ
@@ -301,7 +301,7 @@
     НАЧАЛО
       Section.секц_имя := name;
       Section.размер := size;
-      Section.adr := adr;
+      Section.адрес := adr;
       Section.sizealign := sizealign;
       Section.OAPfile := OAPfile;
       Section.attrflags := attrflags;
@@ -392,10 +392,10 @@
                 Выровнять(rdatasize, 200H) + 400H, dataattr);
 
         ЕСЛИ dll ТОГДА
-            SetSection(RelocSection, ".reloc", rcount, Header.sections[2].adr + Выровнять(datasize +
+            SetSection(RelocSection, ".reloc", rcount, Header.sections[2].адрес + Выровнять(datasize +
                     gsize, 1000H), Выровнять(rcount, 200H), Header.sections[2].OAPfile +
                     Выровнять(datasize, 200H), relocattr);
-            Header.structs[5].adr := RelocSection.adr;
+            Header.structs[5].adr := RelocSection.адрес;
             Header.structs[5].size := rcount
         КОНЕЦ;
 
@@ -1594,29 +1594,29 @@
 
             Coff.text.секц_имя := ".flat";
             Coff.text.размер := 0;
-            Coff.text.adr := 0;
+            Coff.text.адрес := 0;
             Coff.text.sizealign := size;
             Coff.text.OAPfile := 8CH;
-            Coff.text.reserved6 := size + datasize + 8CH;
+            Coff.text.резерв6 := size + datasize + 8CH;
             Coff.text.reserved7 := 0;
             Coff.text.attrflags := 40300020H;
 
             Coff.data.секц_имя := ".data";
             Coff.data.размер := 0;
-            Coff.data.adr := 0;
+            Coff.data.адрес := 0;
             Coff.data.sizealign := datasize;
             Coff.data.OAPfile := size + 8CH;
-            Coff.data.reserved6 := 0;
+            Coff.data.резерв6 := 0;
             Coff.data.reserved7 := 0;
             Coff.data.reserved8 := 0;
             Coff.data.attrflags := 0C0300040H;
 
             Coff.bss.секц_имя := ".bss";
             Coff.bss.размер := 0;
-            Coff.bss.adr := 0;
+            Coff.bss.адрес := 0;
             Coff.bss.sizealign := gsize;
             Coff.bss.OAPfile := 0;
-            Coff.bss.reserved6 := 0;
+            Coff.bss.резерв6 := 0;
             Coff.bss.reserved7 := 0;
             Coff.bss.reserved8 := 0;
             Coff.bss.attrflags := 0C03000C0H;
@@ -1652,7 +1652,7 @@
             Заполнить(Выровнять(size, 4) - size2, 0X);
             Записать(sys.ADR(Data), datasize);
             Coff.text.reserved8 := rcount DIV 10;
-            Coff.PointerToSymbolTable := Coff.text.reserved6 + rcount;
+            Coff.PointerToSymbolTable := Coff.text.резерв6 + rcount;
             Coff.NumberOfSymbols := 4;
 
             Файл_Записать(F, sys.ADR(Coff), sys.SIZE(тЗаголовокВин));
