@@ -46,7 +46,7 @@
 
   тСекция = ЗАПИСЬ
     секц_имя: тСекцияИмя;
-    size, adr, sizealign, OAPfile, reserved6, reserved7, reserved8, attrflags: ЦЕЛОЕ
+    размер, adr, sizealign, OAPfile, reserved6, reserved7, reserved8, attrflags: ЦЕЛОЕ
   КОНЕЦ;
 
   тЗаголовок = ЗАПИСЬ
@@ -300,7 +300,7 @@
 ПРОЦЕДУРА SetSection(ПЕРЕМ Section: тСекция; name: тСекцияИмя; size, adr, sizealign, OAPfile, attrflags: ЦЕЛОЕ);
     НАЧАЛО
       Section.секц_имя := name;
-      Section.size := size;
+      Section.размер := size;
       Section.adr := adr;
       Section.sizealign := sizealign;
       Section.OAPfile := OAPfile;
@@ -1593,7 +1593,7 @@
             Coff.Characteristics := IntToCard16(0184H);
 
             Coff.text.секц_имя := ".flat";
-            Coff.text.size := 0;
+            Coff.text.размер := 0;
             Coff.text.adr := 0;
             Coff.text.sizealign := size;
             Coff.text.OAPfile := 8CH;
@@ -1602,7 +1602,7 @@
             Coff.text.attrflags := 40300020H;
 
             Coff.data.секц_имя := ".data";
-            Coff.data.size := 0;
+            Coff.data.размер := 0;
             Coff.data.adr := 0;
             Coff.data.sizealign := datasize;
             Coff.data.OAPfile := size + 8CH;
@@ -1612,7 +1612,7 @@
             Coff.data.attrflags := 0C0300040H;
 
             Coff.bss.секц_имя := ".bss";
-            Coff.bss.size := 0;
+            Coff.bss.размер := 0;
             Coff.bss.adr := 0;
             Coff.bss.sizealign := gsize;
             Coff.bss.OAPfile := 0;
