@@ -1523,29 +1523,31 @@
     …– strcmp;
 
 –…„“€ Optimization;
-    …… cur: β€α¬“§¥«; flag: “‹…‚;
+    ……
+         α¬_γ§¥«: β€α¬“§¥«;
+        flag: “‹…‚;
     €—€‹
-      cur := asmlist.―¥ΰΆλ©(β€α¬“§¥«);
-      € cur # “‘’ „…‹€’
-        flag := ‹†;
-        ‚›€’ cur.tcmd ‡
-        |¬®­αβ._PUSHEAX:
-          flag := cur.α«¥¤γξι(β€α¬“§¥«).tcmd = ¬®­αβ._POPEAX
-        |¬®­αβ._PUSHECX:
-          flag := cur.α«¥¤γξι(β€α¬“§¥«).tcmd = ¬®­αβ._POPECX
-        |¬®­αβ._PUSHEDX:
-          flag := cur.α«¥¤γξι(β€α¬“§¥«).tcmd = ¬®­αβ._POPEDX
-        €—…
-        …–;
-        …‘‹ flag ’ƒ„€
-          cur.clen := 0;
-          cur.tcmd := 0;
-          cur := cur.α«¥¤γξι(β€α¬“§¥«);
-          cur.clen := 0;
-          cur.tcmd := 0
-        …–;
-        cur := cur.α«¥¤γξι(β€α¬“§¥«)
-      …–
+         α¬_γ§¥« := asmlist.―¥ΰΆλ©(β€α¬“§¥«);
+        €  α¬_γ§¥« # “‘’ „…‹€’
+            flag := ‹†;
+            ‚›€’  α¬_γ§¥«.tcmd ‡
+                |¬®­αβ._PUSHEAX:
+                  flag :=  α¬_γ§¥«.α«¥¤γξι(β€α¬“§¥«).tcmd = ¬®­αβ._POPEAX
+                |¬®­αβ._PUSHECX:
+                  flag :=  α¬_γ§¥«.α«¥¤γξι(β€α¬“§¥«).tcmd = ¬®­αβ._POPECX
+                |¬®­αβ._PUSHEDX:
+                  flag :=  α¬_γ§¥«.α«¥¤γξι(β€α¬“§¥«).tcmd = ¬®­αβ._POPEDX
+            €—…
+            …–;
+            …‘‹ flag ’ƒ„€
+                 α¬_γ§¥«.clen := 0;
+                 α¬_γ§¥«.tcmd := 0;
+                 α¬_γ§¥« :=  α¬_γ§¥«.α«¥¤γξι(β€α¬“§¥«);
+                 α¬_γ§¥«.clen := 0;
+                 α¬_γ§¥«.tcmd := 0
+            …–;
+             α¬_γ§¥« :=  α¬_γ§¥«.α«¥¤γξι(β€α¬“§¥«)
+        …–
     …– Optimization;
 
 –…„“€ WriteKOS(FName: €‘‘‚ ‡ ‘‚; stk, size, datasize, gsize: –…‹…; obj: “‹…‚);
