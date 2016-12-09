@@ -32,67 +32,67 @@
 
 ТИПЫ
 
-  PROC = ПРОЦЕДУРА (err: БУЛЕВО);
+    PROC = ПРОЦЕДУРА (err: БУЛЕВО);
 
-  тАсмУзел* = УКАЗАТЕЛЬ НА ЗАПИСЬ (мСпис.тУзел)
-    cmd, clen, varadr, адр, tcmd, codeadr: ЦЕЛОЕ; short: БУЛЕВО
-  КОНЕЦ;
+    тАсмУзел* = УКАЗАТЕЛЬ НА ЗАПИСЬ (мСпис.тУзел)
+        cmd, clen, varadr, адр, tcmd, codeadr: ЦЕЛОЕ; short: БУЛЕВО
+    КОНЕЦ;
 
-  тВещДлин = МАССИВ 2 ИЗ ЦЕЛОЕ;
+    тВещДлин = МАССИВ 2 ИЗ ЦЕЛОЕ;
 
-  tIdx* = МАССИВ мКонст._ADIM ИЗ ЦЕЛОЕ;
+    tIdx* = МАССИВ мКонст._ADIM ИЗ ЦЕЛОЕ;
 
-  тСекцияИмя = МАССИВ 8 ИЗ СИМВ;
+    тСекцияИмя = МАССИВ 8 ИЗ СИМВ;
 
-  тСекция = ЗАПИСЬ
-    секц_имя: тСекцияИмя;
-    размер, адрес, sizealign, OAPfile, резерв6, reserved7, reserved8, attrflags: ЦЕЛОЕ
-  КОНЕЦ;
+    тСекция = ЗАПИСЬ
+        секц_имя: тСекцияИмя;
+        размер, адрес, sizealign, OAPfile, резерв6, резерв7, резерв8, attrflags: ЦЕЛОЕ
+    КОНЕЦ;
 
-  тЗаголовок = ЗАПИСЬ
-    msdos: МАССИВ 180 ИЗ СИМВ;
-    typecomp, seccount: sys.CARD16;
-    time, reserved1, reserved2: ЦЕЛОЕ;
-    PEoptsize, infflags, PEfile, compver: sys.CARD16;
-    код_размер, данные_размер, initdatasize, startadr,
-    codeadr, rdataadr, loadadr, secalign, filealign,
-    oldestver, version, oldestverNT, reserved3,
-    filesize, headersize, dllcrc: ЦЕЛОЕ;
-    UI, reserved4: sys.CARD16;
-    стэк_разм, stkalloc, heapsize, heapalloc, reserved5, structcount: ЦЕЛОЕ;
-    structs: МАССИВ 16 ИЗ ЗАПИСЬ adr, size: ЦЕЛОЕ КОНЕЦ;
-    sections: МАССИВ 3 ИЗ тСекция
-  КОНЕЦ;
+    тЗаголовок = ЗАПИСЬ
+        msdos: МАССИВ 180 ИЗ СИМВ;
+        typecomp, seccount: sys.CARD16;
+        time, reserved1, reserved2: ЦЕЛОЕ;
+        PEoptsize, infflags, PEfile, compver: sys.CARD16;
+        код_размер, данные_размер, initdatasize, startadr,
+        codeadr, rdataadr, loadadr, secalign, filealign,
+        oldestver, version, oldestverNT, reserved3,
+        filesize, headersize, dllcrc: ЦЕЛОЕ;
+        UI, reserved4: sys.CARD16;
+        стэк_разм, stkalloc, heapsize, heapalloc, reserved5, structcount: ЦЕЛОЕ;
+        structs: МАССИВ 16 ИЗ ЗАПИСЬ adr, size: ЦЕЛОЕ КОНЕЦ;
+        sections: МАССИВ 3 ИЗ тСекция
+    КОНЕЦ;
 
-  тЗаголовокВин = ЗАПИСЬ
-    Machine: sys.CARD16;
-    секции_число: sys.CARD16;
-    датаВремя_штамп,
-    PointerToSymbolTable,
-    NumberOfSymbols: ЦЕЛОЕ;
-    SizeOfOptionalHeader,
-    Characteristics: sys.CARD16;
-    text, data, bss: тСекция
-  КОНЕЦ;
+    тЗаголовокВин = ЗАПИСЬ
+        Machine: sys.CARD16;
+        секции_число: sys.CARD16;
+        датаВремя_штамп,
+        PointerToSymbolTable,
+        NumberOfSymbols: ЦЕЛОЕ;
+        SizeOfOptionalHeader,
+        Characteristics: sys.CARD16;
+        text, data, bss: тСекция
+    КОНЕЦ;
 
-  тЗаголовокКолибри = ЗАПИСЬ
-    menuet01: МАССИВ 8 ИЗ СИМВ;
-    ver, start, size, mem, sp, param, path: ЦЕЛОЕ
-  КОНЕЦ;
+    тЗаголовокКолибри = ЗАПИСЬ
+        menuet01: МАССИВ 8 ИЗ СИМВ;
+        ver, start, size, mem, sp, param, path: ЦЕЛОЕ
+    КОНЕЦ;
 
-  ETABLE = ЗАПИСЬ
-    reserved1, time, reserved2, dllnameoffset, firstnum, adrcount,
-    namecount, arradroffset, arrnameptroffset, arrnumoffset: ЦЕЛОЕ;
-    arradr, arrnameptr: МАССИВ 10000H ИЗ ЦЕЛОЕ;
-    arrnum: МАССИВ 10000H ИЗ sys.CARD16;
-    text: МАССИВ 1000000 ИЗ СИМВ;
-    textlen, size: ЦЕЛОЕ
-  КОНЕЦ;
+    ETABLE = ЗАПИСЬ
+        reserved1, time, reserved2, dllnameoffset, firstnum, adrcount,
+        namecount, arradroffset, arrnameptroffset, arrnumoffset: ЦЕЛОЕ;
+        arradr, arrnameptr: МАССИВ 10000H ИЗ ЦЕЛОЕ;
+        arrnum: МАССИВ 10000H ИЗ sys.CARD16;
+        text: МАССИВ 1000000 ИЗ СИМВ;
+        textlen, size: ЦЕЛОЕ
+    КОНЕЦ;
 
-  тСмещение = ЗАПИСЬ
-    Page, Size: ЦЕЛОЕ;
-    reloc: МАССИВ 1024 ИЗ sys.CARD16
-  КОНЕЦ;
+    тСмещение = ЗАПИСЬ
+        Page, Size: ЦЕЛОЕ;
+        reloc: МАССИВ 1024 ИЗ sys.CARD16
+    КОНЕЦ;
 
 ПЕРЕМ
     asmlist: мСпис.туСписок;
@@ -1598,7 +1598,7 @@
             Coff.text.sizealign := size;
             Coff.text.OAPfile := 8CH;
             Coff.text.резерв6 := size + datasize + 8CH;
-            Coff.text.reserved7 := 0;
+            Coff.text.резерв7 := 0;
             Coff.text.attrflags := 40300020H;
 
             Coff.data.секц_имя := ".data";
@@ -1607,8 +1607,8 @@
             Coff.data.sizealign := datasize;
             Coff.data.OAPfile := size + 8CH;
             Coff.data.резерв6 := 0;
-            Coff.data.reserved7 := 0;
-            Coff.data.reserved8 := 0;
+            Coff.data.резерв7 := 0;
+            Coff.data.резерв8 := 0;
             Coff.data.attrflags := 0C0300040H;
 
             Coff.bss.секц_имя := ".bss";
@@ -1617,8 +1617,8 @@
             Coff.bss.sizealign := gsize;
             Coff.bss.OAPfile := 0;
             Coff.bss.резерв6 := 0;
-            Coff.bss.reserved7 := 0;
-            Coff.bss.reserved8 := 0;
+            Coff.bss.резерв7 := 0;
+            Coff.bss.резерв8 := 0;
             Coff.bss.attrflags := 0C03000C0H;
 
             size := Выровнять(size2, 4);
@@ -1651,7 +1651,7 @@
             size := size2;
             Заполнить(Выровнять(size, 4) - size2, 0X);
             Записать(sys.ADR(Data), datasize);
-            Coff.text.reserved8 := rcount DIV 10;
+            Coff.text.резерв8 := rcount DIV 10;
             Coff.PointerToSymbolTable := Coff.text.резерв6 + rcount;
             Coff.NumberOfSymbols := 4;
 
