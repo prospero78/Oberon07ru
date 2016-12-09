@@ -101,7 +101,7 @@
     dll, con, gui, kos, elf, obj: “‹…‚;
     Lcount, reccount, topstk: –…‹…;
     recarray: €‘‘‚ 2048 ‡ –…‹…;
-    current*: β€α¬“§¥«;
+     α¬_β¥ªγι*: β€α¬“§¥«;
     callstk: €‘‘‚ 1024, 2 ‡ β€α¬“§¥«;
     OutFile: ¬‘βΰ.β‘βΰ®ª ;
     Code: €‘‘‚ 4000000 ‡ ‘‚;
@@ -449,22 +449,22 @@
         ‚(γ§¥«_­®Άλ©);
         MemErr(γ§¥«_­®Άλ© = “‘’);
         γ§¥«_­®Άλ©.cmd := ccount;
-        ¬‘―¨α.‚αβ Ά¨βμ(asmlist, γ§¥«_­®Άλ©, current);
-        current := current.α«¥¤γξι(β€α¬“§¥«)
+        ¬‘―¨α.‚αβ Ά¨βμ(asmlist, γ§¥«_­®Άλ©,  α¬_β¥ªγι);
+         α¬_β¥ªγι :=  α¬_β¥ªγι.α«¥¤γξι(β€α¬“§¥«)
     …– “§¥«_®Άλ©;
 
 –…„“€ Empty(varadr: –…‹…);
     €—€‹
-      “§¥«_®Άλ©;
-      current.clen := 0;
-      current.tcmd := ¬®­αβ._ECMD;
-      current.varadr := varadr
+        “§¥«_®Άλ©;
+         α¬_β¥ªγι.clen := 0;
+         α¬_β¥ªγι.tcmd := ¬®­αβ._ECMD;
+         α¬_β¥ªγι.varadr := varadr
     …– Empty;
 
 –…„“€ OutByte(byte: –…‹…);
     €—€‹
       “§¥«_®Άλ©;
-      current.clen := 1;
+       α¬_β¥ªγι.clen := 1;
       Code[ccount] := CHR(byte);
       „(ccount)
     …– OutByte;
@@ -472,7 +472,7 @@
 –…„“€ OutInt(int: –…‹…);
     €—€‹
       “§¥«_®Άλ©;
-      current.clen := 4;
+       α¬_β¥ªγι.clen := 4;
       sys.PUT(sys.ADR(Code[ccount]), int);
       „(ccount, 4)
     …– OutInt;
@@ -480,37 +480,37 @@
 –…„“€ PushEAX;
     €—€‹
       OutByte(50H);
-      current.tcmd := ¬®­αβ._PUSHEAX
+       α¬_β¥ªγι.tcmd := ¬®­αβ._PUSHEAX
     …– PushEAX;
 
 –…„“€ PushECX;
     €—€‹
       OutByte(51H);
-      current.tcmd := ¬®­αβ._PUSHECX
+       α¬_β¥ªγι.tcmd := ¬®­αβ._PUSHECX
     …– PushECX;
 
 –…„“€ PushEDX;
     €—€‹
       OutByte(52H);
-      current.tcmd := ¬®­αβ._PUSHEDX
+       α¬_β¥ªγι.tcmd := ¬®­αβ._PUSHEDX
     …– PushEDX;
 
 –…„“€ PopEAX;
     €—€‹
       OutByte(58H);
-      current.tcmd := ¬®­αβ._POPEAX
+       α¬_β¥ªγι.tcmd := ¬®­αβ._POPEAX
     …– PopEAX;
 
 –…„“€ PopECX;
     €—€‹
       OutByte(59H);
-      current.tcmd := ¬®­αβ._POPECX
+       α¬_β¥ªγι.tcmd := ¬®­αβ._POPECX
     …– PopECX;
 
 –…„“€ PopEDX;
     €—€‹
       OutByte(5AH);
-      current.tcmd := ¬®­αβ._POPEDX
+       α¬_β¥ªγι.tcmd := ¬®­αβ._POPEDX
     …– PopEDX;
 
 –…„“€ OutCode(cmd: ¬‘βΰ.β‘βΰ®ª );
@@ -521,16 +521,16 @@
       b := a;
        αα¨Ά_ αβΰ®¨βμ(a, cmd);
       ccount := a - b + ccount;
-      current.clen := a - b
+       α¬_β¥ªγι.clen := a - b
     …– OutCode;
 
 –…„“€ Del*(last: β€α¬“§¥«);
     €—€‹
-      last.α«¥¤γξι := current.α«¥¤γξι;
-      …‘‹ current = asmlist.―®α«¥¤­¨© ’ƒ„€
+      last.α«¥¤γξι :=  α¬_β¥ªγι.α«¥¤γξι;
+      …‘‹  α¬_β¥ªγι = asmlist.―®α«¥¤­¨© ’ƒ„€
         asmlist.―®α«¥¤­¨© := last
       …–;
-      current := last
+       α¬_β¥ªγι := last
     …– Del;
 
 –…„“€ ¥βª ο®Ά ο_®«γη*(): –…‹…;
@@ -543,18 +543,18 @@
     €—€‹
       “§¥«_®Άλ©;
       callstk[topstk][0] := asmline;
-      callstk[topstk][1] := current;
+      callstk[topstk][1] :=  α¬_β¥ªγι;
       „(topstk)
     …– PushCall;
 
 –…„“€ Param*;
     €—€‹
-      current := callstk[topstk - 1][0]
+       α¬_β¥ªγι := callstk[topstk - 1][0]
     …– Param;
 
 –…„“€ EndCall*;
     €—€‹
-      current := callstk[topstk - 1][1];
+       α¬_β¥ªγι := callstk[topstk - 1][1];
       ‚›—(topstk)
     …– EndCall;
 
@@ -575,7 +575,7 @@
       NEW(nov);
       MemErr(nov = “‘’);
       ¬‘―¨α.„®΅ Ά¨βμ(asmlist, nov);
-      current := nov;
+       α¬_β¥ªγι := nov;
     …– Init;
 
 –…„“€ datastr(str: ¬‘βΰ.β‘βΰ®ª );
@@ -611,36 +611,36 @@
         n := 6
       €—…
       …–;
-      current.clen := n;
+       α¬_β¥ªγι.clen := n;
       Code[ccount] := jamp;
       „(ccount);
-      current.codeadr := sys.ADR(Code[ccount]);
-      current.varadr := sys.ADR(Labels[label]);
-      current.tcmd := ¬®­αβ._JCMD;
-      current.short := ‘’€;
+       α¬_β¥ªγι.codeadr := sys.ADR(Code[ccount]);
+       α¬_β¥ªγι.varadr := sys.ADR(Labels[label]);
+       α¬_β¥ªγι.tcmd := ¬®­αβ._JCMD;
+       α¬_β¥ªγι.short := ‘’€;
       „(ccount, 4)
     …– jmp;
 
 –…„“€ jmplong(jamp: ‘‚; label: –…‹…);
     €—€‹
       jmp(jamp, label);
-      current.short := ‹†
+       α¬_β¥ªγι.short := ‹†
     …– jmplong;
 
 –…„“€ Label*(label: –…‹…);
     €—€‹
       “§¥«_®Άλ©;
-      current.varadr := sys.ADR(Labels[label]);
-      current.tcmd := ¬®­αβ._LCMD
+       α¬_β¥ªγι.varadr := sys.ADR(Labels[label]);
+       α¬_β¥ªγι.tcmd := ¬®­αβ._LCMD
     …– Label;
 
 –…„“€ CmdN(Number: –…‹…);
     €—€‹
       “§¥«_®Άλ©;
-      current.clen := 4;
-      current.codeadr := sys.ADR(Code[ccount]);
-      current.varadr := sys.ADR(Labels[Number]);
-      current.tcmd := ¬®­αβ._OCMD;
+       α¬_β¥ªγι.clen := 4;
+       α¬_β¥ªγι.codeadr := sys.ADR(Code[ccount]);
+       α¬_β¥ªγι.varadr := sys.ADR(Labels[Number]);
+       α¬_β¥ªγι.tcmd := ¬®­αβ._OCMD;
       „(ccount, 4)
     …– CmdN;
 
@@ -733,12 +733,12 @@
 –…„“€ CallRTL(Proc: –…‹…);
     €—€‹
       “§¥«_®Άλ©;
-      current.clen := 5;
+       α¬_β¥ªγι.clen := 5;
       Code[ccount] := ¬®­αβ._CALL;
       „(ccount);
-      current.codeadr := sys.ADR(Code[ccount]);
-      current.varadr := sys.ADR(RtlProc[Proc]);
-      current.tcmd := ¬®­αβ._JCMD;
+       α¬_β¥ªγι.codeadr := sys.ADR(Code[ccount]);
+       α¬_β¥ªγι.varadr := sys.ADR(RtlProc[Proc]);
+       α¬_β¥ªγι.tcmd := ¬®­αβ._JCMD;
       „(ccount, 4)
     …– CallRTL;
 
@@ -775,7 +775,7 @@
 –…„“€ CmpOpt(inv: “‹…‚): –…‹…;
     …… cur: β€α¬“§¥«; c: –…‹…;
     €—€‹
-      c := ORD(Code[current.―ΰ¥¤λ¤γι.―ΰ¥¤λ¤γι(β€α¬“§¥«).cmd]);
+      c := ORD(Code[ α¬_β¥ªγι.―ΰ¥¤λ¤γι.―ΰ¥¤λ¤γι(β€α¬“§¥«).cmd]);
       …‘‹ inv ’ƒ„€
         …‘‹ ODD(c) ’ƒ„€
           ‚›—(c)
@@ -783,7 +783,7 @@
           „(c)
         …–
       …–;
-      cur := current;
+      cur :=  α¬_β¥ªγι;
       ‚’’
         cur.tcmd := 0;
         cur.clen := 0;
@@ -797,7 +797,7 @@
 –…„“€ ifwh*(L: –…‹…);
     …… c: –…‹…;
     €—€‹
-      …‘‹ current.―ΰ¥¤λ¤γι(β€α¬“§¥«).tcmd = ¬®­αβ._ICMP2 ’ƒ„€
+      …‘‹  α¬_β¥ªγι.―ΰ¥¤λ¤γι(β€α¬“§¥«).tcmd = ¬®­αβ._ICMP2 ’ƒ„€
         c := CmpOpt(‘’€);
         OutCode("5A583BC2");
         jmp(CHR(c), L)
@@ -811,14 +811,14 @@
 –…„“€ PushConst*(Number: –…‹…);
     €—€‹
       IntByte("6A", "68", Number);
-      current.―ΰ¥¤λ¤γι(β€α¬“§¥«).varadr := Number
+       α¬_β¥ªγι.―ΰ¥¤λ¤γι(β€α¬“§¥«).varadr := Number
     …– PushConst;
 
 –…„“€ IfWhile*(L: –…‹…; orop: “‹…‚);
     …… c, L1: –…‹…;
     €—€‹
       L1 := ¥βª ο®Ά ο_®«γη();
-      …‘‹ current.―ΰ¥¤λ¤γι(β€α¬“§¥«).tcmd = ¬®­αβ._ICMP2 ’ƒ„€
+      …‘‹  α¬_β¥ªγι.―ΰ¥¤λ¤γι(β€α¬“§¥«).tcmd = ¬®­αβ._ICMP2 ’ƒ„€
         c := CmpOpt(orop);
         OutCode("5A583BC2");
         jmp(CHR(c), L1);
@@ -863,14 +863,14 @@
     …… t: β€α¬“§¥«;
     €—€‹
       …‘‹ isfpu ’ƒ„€
-        t := current;
-        current := fpucmd;
+        t :=  α¬_β¥ªγι;
+         α¬_β¥ªγι := fpucmd;
         …‘‹ maxfpu > 0 ’ƒ„€
           OutCode("83EC");
           OutByte(maxfpu * 8)
         …–;
         OutCode("DBE3");
-        current := t
+         α¬_β¥ªγι := t
       …–
     …– InsertFpuInit;
 
@@ -897,7 +897,7 @@
           OutCode("6A00")
         …–
       …–;
-      fpucmd := current;
+      fpucmd :=  α¬_β¥ªγι;
       fpu := 0;
       maxfpu := 0;
       isfpu := ‹†
@@ -940,8 +940,8 @@
     €—€‹
       OutByte(0BAH);
       OutInt(offset);
-      current.codeadr := sys.ADR(Code[ccount - 4]);
-      current.tcmd := ¬®­αβ._GCMD;
+       α¬_β¥ªγι.codeadr := sys.ADR(Code[ccount - 4]);
+       α¬_β¥ªγι.tcmd := ¬®­αβ._GCMD;
       PushEDX
     …– GlobalAdr;
 
@@ -1117,7 +1117,7 @@
 –…„“€ CmpInt*(Op: –…‹…);
     …… n: –…‹…;
     €—€‹
-      OutCode("33C95A583BC20F"); current.tcmd := ¬®­αβ._ICMP1;
+      OutCode("33C95A583BC20F");  α¬_β¥ªγι.tcmd := ¬®­αβ._ICMP1;
       ‚›€’ Op ‡
       |¬®­αβ._®― Ά­®: n := 94H
       |¬®­αβ._®―¥ Ά­®: n := 95H
@@ -1128,7 +1128,7 @@
       €—…
       …–;
       OutByte(n);
-      OutCode("C1"); current.tcmd := ¬®­αβ._ICMP2;
+      OutCode("C1");  α¬_β¥ªγι.tcmd := ¬®­αβ._ICMP2;
       PushECX;
     …– CmpInt;
 
@@ -1265,7 +1265,7 @@
       …– del;
 
     €—€‹
-  lastcmd := current;
+  lastcmd :=  α¬_β¥ªγι;
   ‚›€’ T ‡
   |¬®­αβ._β–¥«®¥, ¬®­αβ._TSET, ¬®­αβ._β“ª § β¥«μ, ¬®­αβ._TPROC:
     …‘‹ lastcmd.tcmd = ¬®­αβ._ECMD ’ƒ„€
@@ -1916,14 +1916,14 @@
     …… i: –…‹…;
     €—€‹
       “§¥«_®Άλ©;
-      current.clen := LENGTH(str);
-      „‹ i := 0 „ current.clen - 1 „…‹€’
+       α¬_β¥ªγι.clen := LENGTH(str);
+      „‹ i := 0 „  α¬_β¥ªγι.clen - 1 „…‹€’
         Code[ccount] := str[i];
         „(ccount)
       …–;
       Code[ccount] := 0X;
       „(ccount);
-      „(current.clen)
+      „( α¬_β¥ªγι.clen)
     …– OutStringZ;
 
 –…„“€ Epilog*(gsize: –…‹…; FName: €‘‘‚ ‡ ‘‚; stk: –…‹…);
@@ -1938,14 +1938,14 @@
         „‹ i := 1 „ reccount „…‹€’
             dataint(recarray[i])
         …–;
-        current := start;
+         α¬_β¥ªγι := start;
         …‘‹ con ‹ gui ‹ dll ’ƒ„€
             PushInt(¬®­αβ._LoadLibrary);
             PushInt(¬®­αβ._GetProcAddress);
             OutCode("5859FF31FF3054")
         €…‘‹ elf ’ƒ„€
             OutCode("6800000000");
-            glob := current.cmd;
+            glob :=  α¬_β¥ªγι.cmd;
         €…‘‹ kos ‹ obj ’ƒ„€
             OutByte(54H)
         …–;
@@ -1954,7 +1954,7 @@
         PushInt(¬®­αβ._RTABLE);
         PushInt(¬®­αβ._SELFNAME);
         CallRTL(¬®­αβ._init);
-        current := asmlist.―®α«¥¤­¨©(β€α¬“§¥«);
+         α¬_β¥ªγι := asmlist.―®α«¥¤­¨©(β€α¬“§¥«);
         …‘‹ dll ’ƒ„€
             OutCode("B801000000C9C20C00")
         …–;
