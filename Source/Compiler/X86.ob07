@@ -96,7 +96,7 @@
 
 ……
      α¬_α―¨α: ¬‘―¨α.βγ‘―¨α®ª;
-    start: β€α¬“§¥«;
+    αβ ΰβ_γ§¥«: β€α¬“§¥«;
     MemErr: PROC;
     dll, con, gui, kos, elf, obj: “‹…‚;
     Lcount, reccount, topstk: –…‹…;
@@ -763,7 +763,7 @@
       €…‘‹ obj ’ƒ„€
         OutCode("558BEC")
       …–;
-      start :=  α¬_α―¨α.―®α«¥¤­¨©(β€α¬“§¥«)
+      αβ ΰβ_γ§¥« :=  α¬_α―¨α.―®α«¥¤­¨©(β€α¬“§¥«)
     …– Prolog;
 
 –…„“€ AddRec*(base: –…‹…);
@@ -1940,7 +1940,7 @@
         „‹ i := 1 „ reccount „…‹€’
             dataint(recarray[i])
         …–;
-         α¬_β¥ªγι := start;
+         α¬_β¥ªγι := αβ ΰβ_γ§¥«;
         …‘‹ con ‹ gui ‹ dll ’ƒ„€
             PushInt(¬®­αβ._LoadLibrary);
             PushInt(¬®­αβ._GetProcAddress);
