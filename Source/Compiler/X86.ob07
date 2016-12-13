@@ -81,7 +81,7 @@
     Š…–;
 
     ETABLE = ‡€ˆ‘œ
-        reserved1, time, reserved2, dllnameoffset, firstnum, adrcount,
+        à¥§¥à¢1, time, reserved2, dllnameoffset, firstnum, adrcount,
         namecount, arradroffset, arrnameptroffset, arrnumoffset: –…‹…;
         arradr, arrnameptr: Œ€‘‘ˆ‚ 10000H ˆ‡ –…‹…;
         arrnum: Œ€‘‘ˆ‚ 10000H ˆ‡ sys.CARD16;
