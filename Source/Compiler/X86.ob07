@@ -59,9 +59,9 @@
         oldestver, version, oldestverNT, reserved3,
         filesize, headersize, dllcrc: ЦЕЛОЕ;
         UI, reserved4: sys.CARD16;
-        стэк_разм, stkalloc, heapsize, heapalloc, reserved5, structcount: ЦЕЛОЕ;
+        стэк_разм, stkalloc, heapsize, heapalloc, резерв5, structcount: ЦЕЛОЕ;
         structs: МАССИВ 16 ИЗ ЗАПИСЬ adr, size: ЦЕЛОЕ КОНЕЦ;
-        sections: МАССИВ 3 ИЗ тСекция
+        секции: МАССИВ 3 ИЗ тСекция
     КОНЕЦ;
 
     тЗаголовокВин = ЗАПИСЬ
@@ -81,7 +81,7 @@
     КОНЕЦ;
 
     ETABLE = ЗАПИСЬ
-        резерв1, time, reserved2, dllnameoffset, firstnum, adrcount,
+        резерв1, время, reserved2, dllnameoffset, firstnum, adrcount,
         namecount, arradroffset, arrnameptroffset, arrnumoffset: ЦЕЛОЕ;
         arradr, arrnameptr: МАССИВ 10000H ИЗ ЦЕЛОЕ;
         arrnum: МАССИВ 10000H ИЗ sys.CARD16;
@@ -383,17 +383,17 @@
         Header.structs[12].adr := Header.rdataadr;
         Header.structs[12].size := 0CH;
 
-        SetSection(Header.sections[0], ".text", codesize, 1000H, Выровнять(codesize, 200H), 400H,
+        SetSection(Header.секции[0], ".text", codesize, 1000H, Выровнять(codesize, 200H), 400H,
                 textattr);
-        SetSection(Header.sections[1], ".rdata", rdatasize, Выровнять(codesize, 1000H) + 1000H,
+        SetSection(Header.секции[1], ".rdata", rdatasize, Выровнять(codesize, 1000H) + 1000H,
                 Выровнять(rdatasize, 200H), Выровнять(codesize, 200H) + 400H, rdataattr);
-        SetSection(Header.sections[2], ".data", datasize + gsize, Выровнять(codesize, 1000H) +
+        SetSection(Header.секции[2], ".data", datasize + gsize, Выровнять(codesize, 1000H) +
                 Выровнять(rdatasize, 1000H) + 1000H, Выровнять(datasize, 200H), Выровнять(codesize, 200H) +
                 Выровнять(rdatasize, 200H) + 400H, dataattr);
 
         ЕСЛИ dll ТОГДА
-            SetSection(RelocSection, ".reloc", rcount, Header.sections[2].адрес + Выровнять(datasize +
-                    gsize, 1000H), Выровнять(rcount, 200H), Header.sections[2].OAPfile +
+            SetSection(RelocSection, ".reloc", rcount, Header.секции[2].адрес + Выровнять(datasize +
+                    gsize, 1000H), Выровнять(rcount, 200H), Header.секции[2].OAPfile +
                     Выровнять(datasize, 200H), relocattr);
             Header.structs[5].adr := RelocSection.адрес;
             Header.structs[5].size := rcount
@@ -424,7 +424,7 @@
         Заполнить(Выровнять(codesize, 200H) - codesize, 0X);
         Записать(sys.ADR(rdata), 0DAH);
         ЕСЛИ dll ТОГДА
-            etable.time := Header.time;
+            etable.время := Header.time;
             Записать(sys.ADR(etable), 40);
             Записать(sys.ADR(etable.arradr), etable.adrcount * 4);
             Записать(sys.ADR(etable.arrnameptr), etable.namecount * 4);
