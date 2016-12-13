@@ -58,8 +58,8 @@
         адр_код, rdataadr, адр_загр, secalign, filealign,
         oldestver, version, oldestverNT, резерв3,
         файл_размер, headersize, dllcrc: ЦЕЛОЕ;
-        UI, reserved4: sys.CARD16;
-        стэк_разм, stkalloc, heapsize, heapalloc, резерв5, structcount: ЦЕЛОЕ;
+        UI, резерв4: sys.CARD16;
+        стэк_разм, stkalloc, куча_размер, heapalloc, резерв5, structcount: ЦЕЛОЕ;
         structs: МАССИВ 16 ИЗ ЗАПИСЬ adr, size: ЦЕЛОЕ КОНЕЦ;
         секции: МАССИВ 3 ИЗ тСекция
     КОНЕЦ;
@@ -103,16 +103,16 @@
     recarray: МАССИВ 2048 ИЗ ЦЕЛОЕ;
     асм_текущ*: тАсмУзел;
     callstk: МАССИВ 1024, 2 ИЗ тАсмУзел;
-    OutFile: мСтр.тСтрока;
+    файл_выход: мСтр.тСтрока;
     Code: МАССИВ 4000000 ИЗ СИМВ;
     ccount: ЦЕЛОЕ;
-    Data: МАССИВ 1000000 ИЗ СИМВ;
+    данные_стр: МАССИВ 1000000 ИЗ СИМВ;
     dcount: ЦЕЛОЕ;
-    Labels: МАССИВ 200000 ИЗ ЦЕЛОЕ;
+    метки: МАССИВ 200000 ИЗ ЦЕЛОЕ;
     rdata: МАССИВ 400H ИЗ ЦЕЛОЕ;
     Header: тЗаголовок;
     etable: ETABLE;
-    ExecName: мСтр.тСтрока;
+    файл_назв: мСтр.тСтрока;
     LoadAdr: ЦЕЛОЕ;
     Reloc: МАССИВ 200000 ИЗ СИМВ;
     rcount: ЦЕЛОЕ;
@@ -278,7 +278,7 @@
 ПРОЦЕДУРА Файл_Записать(файл_, адр_, число_байт_: ЦЕЛОЕ);
     НАЧАЛО
         ЕСЛИ мФайл.Записать(файл_, адр_, число_байт_) # число_байт_ ТОГДА
-            мОш.Сообщ(мКонстОш._ош60); мКонс.Стр_Печать(OutFile)
+            мОш.Сообщ(мКонстОш._ош60); мКонс.Стр_Печать(файл_выход)
         КОНЕЦ
     КОНЕЦ Файл_Записать;
 
@@ -370,7 +370,7 @@
         Header.UI := IntToCard16(ORD(con) + 2);
         Header.стэк_разм := stksize;
         Header.stkalloc := stkalloc;
-        Header.heapsize := heapsize;
+        Header.куча_размер := heapsize;
         Header.heapalloc := heapalloc;
         Header.structcount := 10H;
         ЕСЛИ dll ТОГДА
@@ -401,7 +401,7 @@
 
         F := мФайл.Создать(FName);
         ЕСЛИ F = 0 ТОГДА
-            мОш.Сообщ(мКонстОш._ош58); мКонс.Стр_Печать(OutFile)
+            мОш.Сообщ(мКонстОш._ош58); мКонс.Стр_Печать(файл_выход)
         КОНЕЦ;
         OutFilePos := мУтиль.ПамятьНов_Получ(filesize);
         filebuf := OutFilePos;
@@ -432,7 +432,7 @@
             Записать(sys.ADR(etable.text), etable.textlen)
         КОНЕЦ;
         Заполнить(Выровнять(rdatasize, 200H) - rdatasize, 0X);
-        Записать(sys.ADR(Data), datasize);
+        Записать(sys.ADR(данные_стр), datasize);
         Заполнить(Выровнять(datasize, 200H) - datasize, 0X);
         ЕСЛИ dll ТОГДА
             Записать(sys.ADR(Reloc), rcount);
@@ -584,17 +584,17 @@
       i := 0;
       n := LEN(str);
       ПОКА (i < n) & (str[i] # 0X) ДЕЛАТЬ
-        Data[dcount] := str[i];
+        данные_стр[dcount] := str[i];
         ДОБ(dcount);
         ДОБ(i)
       КОНЕЦ;
-      Data[dcount] := 0X;
+      данные_стр[dcount] := 0X;
       ДОБ(dcount)
     КОНЕЦ datastr;
 
 ПРОЦЕДУРА dataint(n: ЦЕЛОЕ);
     НАЧАЛО
-      sys.PUT(sys.ADR(Data[dcount]), n);
+      sys.PUT(sys.ADR(данные_стр[dcount]), n);
       ДОБ(dcount, 4)
     КОНЕЦ dataint;
 
@@ -615,7 +615,7 @@
       Code[ccount] := jamp;
       ДОБ(ccount);
       асм_текущ.codeadr := sys.ADR(Code[ccount]);
-      асм_текущ.varadr := sys.ADR(Labels[label]);
+      асм_текущ.varadr := sys.ADR(метки[label]);
       асм_текущ.tcmd := мКонст._JCMD;
       асм_текущ.short := ИСТИНА;
       ДОБ(ccount, 4)
@@ -630,7 +630,7 @@
 ПРОЦЕДУРА Label*(label: ЦЕЛОЕ);
     НАЧАЛО
       Узел_Новый;
-      асм_текущ.varadr := sys.ADR(Labels[label]);
+      асм_текущ.varadr := sys.ADR(метки[label]);
       асм_текущ.tcmd := мКонст._LCMD
     КОНЕЦ Label;
 
@@ -639,7 +639,7 @@
       Узел_Новый;
       асм_текущ.clen := 4;
       асм_текущ.codeadr := sys.ADR(Code[ccount]);
-      асм_текущ.varadr := sys.ADR(Labels[Number]);
+      асм_текущ.varadr := sys.ADR(метки[Number]);
       асм_текущ.tcmd := мКонст._OCMD;
       ДОБ(ccount, 4)
     КОНЕЦ CmdN;
@@ -750,10 +750,10 @@
 
 ПРОЦЕДУРА Prolog*(exename: мСтр.тСтрока);
     НАЧАЛО
-      ExecName := exename;
-      Labels[мКонст._hInstance] := -dcount;
+      файл_назв := exename;
+      метки[мКонст._hInstance] := -dcount;
       dataint(0);
-      Labels[мКонст._SELFNAME] := -dcount;
+      метки[мКонст._SELFNAME] := -dcount;
       datastr(exename);
       Label(мКонст._START);
       ЕСЛИ dll ТОГДА
@@ -849,7 +849,7 @@
 
 ПРОЦЕДУРА String*(Number, Len: ЦЕЛОЕ; str: мСтр.тСтрока);
     НАЧАЛО
-      Labels[Number] := -dcount;
+      метки[Number] := -dcount;
       ЕСЛИ Len > 1 ТОГДА
         datastr(str)
       АЕСЛИ Len = 1 ТОГДА
@@ -1012,7 +1012,7 @@
         OutCode("D9E8")
       ИНАЧЕ
         L := МеткаяНовая_Получ();
-        Labels[L] := -dcount;
+        метки[L] := -dcount;
         dataint(f[0]);
         dataint(f[1]);
         OutByte(0BAH);
@@ -1557,7 +1557,7 @@
     НАЧАЛО
         F := мФайл.Создать(FName);
         ЕСЛИ F <= 0 ТОГДА
-            мОш.Сообщ(мКонстОш._ош58); мКонс.Стр_Печать(OutFile)
+            мОш.Сообщ(мКонстОш._ош58); мКонс.Стр_Печать(файл_выход)
         КОНЕЦ;
         OutFilePos := мУтиль.ПамятьНов_Получ(Выровнять(size, 4) + datasize + 1000H);
         filebuf := OutFilePos;
@@ -1581,7 +1581,7 @@
                 cur := cur.следующ(тАсмУзел)
             КОНЕЦ;
             Заполнить(Выровнять(size, 4) - size, 0X);
-            Записать(sys.ADR(Data), datasize);
+            Записать(sys.ADR(данные_стр), datasize);
             Файл_Записать(F, filebuf, OutFilePos - filebuf)
         ИНАЧЕ
             size2 := size;
@@ -1650,7 +1650,7 @@
             КОНЕЦ;
             size := size2;
             Заполнить(Выровнять(size, 4) - size2, 0X);
-            Записать(sys.ADR(Data), datasize);
+            Записать(sys.ADR(данные_стр), datasize);
             Coff.text.резерв8 := rcount DIV 10;
             Coff.PointerToSymbolTable := Coff.text.резерв6 + rcount;
             Coff.NumberOfSymbols := 4;
@@ -1662,7 +1662,7 @@
             adr := sys.ADR(sym);
             Массив_Настроить(adr, "4558504F52545300000000000100000002002E666C617400000000000000010000000300");
             Массив_Настроить(adr, "2E64617461000000000000000200000003002E6273730000000000000000030000000300");
-            sys.PUT(sys.ADR(sym) + 8, Labels[мКонст._Exports] - sys.SIZE(тЗаголовокКолибри));
+            sys.PUT(sys.ADR(sym) + 8, метки[мКонст._Exports] - sys.SIZE(тЗаголовокКолибри));
 
             Файл_Записать(F, sys.ADR(sym), LEN(sym));
             i := 4;
@@ -1748,13 +1748,13 @@
         КОНЕЦ;
         Заполнить(Выровнять(code, 1000H) - code, 90X);
         Записать(sys.ADR(bytes[817H]), 55FH);
-        Записать(sys.ADR(Data), data);
+        Записать(sys.ADR(данные_стр), data);
         Заполнить(Выровнять(data, 1000H) - data, 0X);
         Записать(sys.ADR(bytes[817H + 55FH + 55FH]), 0DC5H);
 
         F := мФайл.Создать(FName);
         ЕСЛИ F <= 0 ТОГДА
-            мОш.Сообщ(мКонстОш._ош58); мКонс.Стр_Печать(OutFile)
+            мОш.Сообщ(мКонстОш._ош58); мКонс.Стр_Печать(файл_выход)
         КОНЕЦ;
         Файл_Записать(F, filebuf, OutFilePos - filebuf);
         мФайл.Закрыть(F)
@@ -1770,7 +1770,7 @@
         dcount := Выровнять(dcount, 4);
         ЕСЛИ dll ТОГДА
             LoadAdr := 10000000H;
-            PackExport(ExecName)
+            PackExport(файл_назв)
         АЕСЛИ con ИЛИ gui ТОГДА
             LoadAdr := 400000H
         АЕСЛИ kos ИЛИ obj ТОГДА
@@ -1834,8 +1834,8 @@
         КОНЕЦ;
 
         ДЛЯ i := 0 ДО Lcount ДЕЛАТЬ
-            ЕСЛИ Labels[i] < 0 ТОГДА
-                Labels[i] := -Labels[i] + asize + Выровнять(rdatasize, 1000H)
+            ЕСЛИ метки[i] < 0 ТОГДА
+                метки[i] := -метки[i] + asize + Выровнять(rdatasize, 1000H)
             КОНЕЦ
         КОНЕЦ;
 
@@ -1849,7 +1849,7 @@
         ЕСЛИ dll ТОГДА
             asize := asize - LoadAdr + 0DAH;
             ДЛЯ i := 0 ДО etable.namecount - 1 ДЕЛАТЬ
-                etable.arradr[i] := Labels[etable.arradr[i]] - LoadAdr;
+                etable.arradr[i] := метки[etable.arradr[i]] - LoadAdr;
                 etable.arrnameptr[i] := etable.arrnameptr[i] + asize
             КОНЕЦ;
             etable.arradroffset := etable.arradroffset + asize;
@@ -1859,8 +1859,8 @@
             asize := asize + LoadAdr - 0DAH
         КОНЕЦ;
         ЕСЛИ dll ИЛИ con ИЛИ gui ТОГДА
-            Labels[мКонст._LoadLibrary] := asize + 4;
-            Labels[мКонст._GetProcAddress] := asize;
+            метки[мКонст._LoadLibrary] := asize + 4;
+            метки[мКонст._GetProcAddress] := asize;
             R.Page := 0;
             R.Size := 0;
             RCount := 0;
@@ -1868,7 +1868,7 @@
         cur := asmlist.первый(тАсмУзел);
 
         ДЛЯ i := 0 ДО LEN(RtlProc) - 1 ДЕЛАТЬ
-            RtlProc[i] := Labels[RtlProc[i]]
+            RtlProc[i] := метки[RtlProc[i]]
         КОНЕЦ;
 
         temp3 := asize + Выровнять(rdatasize, 1000H) + dcount;
@@ -1934,8 +1934,8 @@
     НАЧАЛО
         glob := 0;
         gsize := Выровнять(gsize, 4) + 4;
-        COPY(FName, OutFile);
-        Labels[мКонст._RTABLE] := -dcount;
+        COPY(FName, файл_выход);
+        метки[мКонст._RTABLE] := -dcount;
         dataint(recarray[0]);
         ДЛЯ i := 1 ДО reccount ДЕЛАТЬ
             dataint(recarray[i])
