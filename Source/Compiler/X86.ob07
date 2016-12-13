@@ -55,7 +55,7 @@
         время, резерв1, резерв2: ЦЕЛОЕ;
         PEoptsize, infflags, PEfile, compver: sys.CARD16;
         код_размер, данные_размер, initdatasize, адр_старт,
-        адр_код, rdataadr, loadadr, secalign, filealign,
+        адр_код, rdataadr, адр_загр, secalign, filealign,
         oldestver, version, oldestverNT, резерв3,
         файл_размер, headersize, dllcrc: ЦЕЛОЕ;
         UI, reserved4: sys.CARD16;
@@ -359,7 +359,7 @@
         Header.адр_старт := 1000H;
         Header.адр_код := 1000H;
         Header.rdataadr := Header.адр_код + Выровнять(codesize, 1000H);
-        Header.loadadr := LoadAdr;
+        Header.адр_загр := LoadAdr;
         Header.secalign := 1000H;
         Header.filealign := 0200H;
         Header.oldestver := 0004H;
