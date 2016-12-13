@@ -54,10 +54,10 @@
         typecomp, seccount: sys.CARD16;
         время, резерв1, резерв2: ЦЕЛОЕ;
         PEoptsize, infflags, PEfile, compver: sys.CARD16;
-        код_размер, данные_размер, initdatasize, startadr,
-        codeadr, rdataadr, loadadr, secalign, filealign,
+        код_размер, данные_размер, initdatasize, адр_старт,
+        адр_код, rdataadr, loadadr, secalign, filealign,
         oldestver, version, oldestverNT, резерв3,
-        filesize, headersize, dllcrc: ЦЕЛОЕ;
+        файл_размер, headersize, dllcrc: ЦЕЛОЕ;
         UI, reserved4: sys.CARD16;
         стэк_разм, stkalloc, heapsize, heapalloc, резерв5, structcount: ЦЕЛОЕ;
         structs: МАССИВ 16 ИЗ ЗАПИСЬ adr, size: ЦЕЛОЕ КОНЕЦ;
@@ -356,16 +356,16 @@
         Header.compver := IntToCard16(compver);
         Header.код_размер := Выровнять(codesize, 200H);
         Header.данные_размер := Выровнять(datasize + gsize, 200H) + Выровнять(rdatasize, 200H) + Выровнять(rcount, 200H);
-        Header.startadr := 1000H;
-        Header.codeadr := 1000H;
-        Header.rdataadr := Header.codeadr + Выровнять(codesize, 1000H);
+        Header.адр_старт := 1000H;
+        Header.адр_код := 1000H;
+        Header.rdataadr := Header.адр_код + Выровнять(codesize, 1000H);
         Header.loadadr := LoadAdr;
         Header.secalign := 1000H;
         Header.filealign := 0200H;
         Header.oldestver := 0004H;
         Header.version := version;
         Header.oldestverNT := 0004H;
-        Header.filesize := Выровнять(codesize, 1000H) + Выровнять(datasize + gsize, 1000H) + Выровнять(rdatasize, 1000H) + Выровнять(rcount, 1000H) + 1000H;
+        Header.файл_размер := Выровнять(codesize, 1000H) + Выровнять(datasize + gsize, 1000H) + Выровнять(rdatasize, 1000H) + Выровнять(rcount, 1000H) + 1000H;
         Header.headersize := 0400H;
         Header.UI := IntToCard16(ORD(con) + 2);
         Header.стэк_разм := stksize;
