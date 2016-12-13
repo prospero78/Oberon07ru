@@ -52,11 +52,11 @@
     тЗаголовок = ЗАПИСЬ
         msdos: МАССИВ 180 ИЗ СИМВ;
         typecomp, seccount: sys.CARD16;
-        time, reserved1, reserved2: ЦЕЛОЕ;
+        время, резерв1, резерв2: ЦЕЛОЕ;
         PEoptsize, infflags, PEfile, compver: sys.CARD16;
         код_размер, данные_размер, initdatasize, startadr,
         codeadr, rdataadr, loadadr, secalign, filealign,
-        oldestver, version, oldestverNT, reserved3,
+        oldestver, version, oldestverNT, резерв3,
         filesize, headersize, dllcrc: ЦЕЛОЕ;
         UI, reserved4: sys.CARD16;
         стэк_разм, stkalloc, heapsize, heapalloc, резерв5, structcount: ЦЕЛОЕ;
@@ -350,7 +350,7 @@
             Header.seccount := IntToCard16(0003H);
             Header.infflags := IntToCard16(010FH)
         КОНЕЦ;
-        Header.time := мКонст._дата;
+        Header.время := мКонст._дата;
         Header.PEoptsize := IntToCard16(00E0H);
         Header.PEfile := IntToCard16(010BH);
         Header.compver := IntToCard16(compver);
@@ -424,7 +424,7 @@
         Заполнить(Выровнять(codesize, 200H) - codesize, 0X);
         Записать(sys.ADR(rdata), 0DAH);
         ЕСЛИ dll ТОГДА
-            etable.время := Header.time;
+            etable.время := Header.время;
             Записать(sys.ADR(etable), 40);
             Записать(sys.ADR(etable.arradr), etable.adrcount * 4);
             Записать(sys.ADR(etable.arrnameptr), etable.namecount * 4);
