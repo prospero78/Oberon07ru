@@ -1,0 +1,2006 @@
+(*
+    Copyright 2013 Krotov Anton
+
+    This file is part of Compiler.
+
+    Compiler is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Compiler is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Compiler. If not, see <http://www.gnu.org/licenses/>.
+  *)
+
+лндскэ ЛНДюЯЛ86_32;
+
+хлонпр UTILS := ЛНДсРХКЭ,
+    sys := SYSTEM,
+    SCAN := ЛНДяЙЮМЕП,
+    mConst := ЛНДйНМЯРЮМРШ;
+
+йнмяр
+
+  ADIM* = 5;
+
+  lxPlus = 51; lxMinus = 52; lxMult = 53; lxSlash = 54;
+  lxEQ = 71; lxNE = 72; lxLT = 73; lxGT = 74; lxLE = 75; lxGE = 76;
+
+  TINTEGER = 1; TREAL = 2; TLONGREAL = 3; TCHAR = 4; TSET = 5; TBOOLEAN = 6; TVOID = 7;
+  TNIL = 8; TCARD16 = 9; TSTRING = 10; TARRAY = 11; TRECORD = 12; TPOINTER = 13; TPROC = 14;
+
+  stABS* = 1; stODD* = 2; stLEN* = 3; stLSL* = 4; stASR* = 5; stROR* = 6; stFLOOR* = 7;
+  stFLT* = 8; stORD* = 9; stCHR* = 10; stLONG* = 11; stSHORT* = 12; stINC* = 13;
+  stDEC* = 14; stINCL* = 15; stEXCL* = 16; stCOPY* = 17; stNEW* = 18; stASSERT* = 19;
+  stPACK* = 20; stUNPK* = 21; stDISPOSE* = 22; stFABS* = 23; stINC1* = 24;
+  stDEC1* = 25; stASSERT1* = 26; stUNPK1* = 27; stPACK1* = 28; stLSR* = 29;
+  stLENGTH* = 30;
+
+  sysBIT* = 103; sysMOVE* = 108;
+
+  JMP* = 0E9X; CALL = 0E8X;
+  JE = 84X; JNE = 85X; JLE = 8EX; JGE = 8DX; JG = 8FX; JL = 8CX;
+
+  JCMD = 1; LCMD = 2; GCMD = 3; OCMD = 4; ECMD = 5;
+  PUSHEAX = 6; PUSHECX = 7; PUSHEDX = 8; POPEAX = 9; POPECX = 10; POPEDX = 11;
+  ICMP1 = 13; ICMP2 = 14;
+
+  defcall = 0; stdcall = 1; cdecl = 2; winapi = 3;
+
+  _rset* = 0; _inset* = 1; _saverec* = 2; _length* = 3; _checktype* = 4; _strcmp* = 5;
+  _lstrcmp* = 6; _rstrcmp* = 7; _savearr* = 8; _newrec* = 9; _disprec* = 10; _arrayidx* = 11;
+  _arrayrot* = 12; _assrt* = 13; _strcopy* = 14; _arrayidx1* = 15; _init* = 16; _close* = 17; _halt* = 18;
+  ASSRT = 19; hInstance = 20; SELFNAME = 21; RTABLE = 22;LoadLibrary = 23; GetProcAddress = 24;
+  Exports = 25; szSTART = 26; START = 27; szversion = 28; HALT = 29;
+
+  FREGS = 8;
+
+рхош
+
+  PROC = опнжедспю (err: BOOLEAN);
+
+  ASMLINE* = сйюгюрекэ мю гюохяэ (UTILS.tItem)
+      cmd, clen, varadr, adr, tcmd, codeadr: INTEGER; short: BOOLEAN
+    йнмеж;
+
+  TFLT = люяяхб 2 хг INTEGER;
+
+  TIDX* = люяяхб ADIM хг INTEGER;
+
+  SECTIONNAME = люяяхб 8 хг CHAR;
+
+  SECTION = гюохяэ
+      name: SECTIONNAME;
+      size, adr, sizealign, OAPfile, reserved6, reserved7, reserved8, attrflags: INTEGER
+    йнмеж;
+
+  HEADER = гюохяэ
+      msdos: люяяхб 180 хг CHAR;
+      typecomp, seccount: sys.CARD16;
+      time, reserved1, reserved2: INTEGER;
+      PEoptsize, infflags, PEfile, compver: sys.CARD16;
+      codesize, datasize, initdatasize, startadr,
+      codeadr, rdataadr, loadadr, secalign, filealign,
+      oldestver, version, oldestverNT, reserved3,
+      filesize, headersize, dllcrc: INTEGER;
+      UI, reserved4: sys.CARD16;
+      stksize, stkalloc, heapsize, heapalloc, reserved5, structcount: INTEGER;
+      structs: люяяхб 16 хг гюохяэ adr, size: INTEGER йнмеж;
+      sections: люяяхб 3 хг SECTION
+    йнмеж;
+
+  COFFHEADER = гюохяэ
+      Machine: sys.CARD16;
+      NumberOfSections: sys.CARD16;
+      TimeDateStamp,
+      PointerToSymbolTable,
+      NumberOfSymbols: INTEGER;
+      SizeOfOptionalHeader,
+      Characteristics: sys.CARD16;
+      text, data, bss: SECTION
+    йнмеж;
+
+  KOSHEADER = гюохяэ
+      menuet01: люяяхб 8 хг CHAR;
+      ver, start, size, mem, sp, param, path: INTEGER
+    йнмеж;
+
+  ETABLE = гюохяэ
+      reserved1, time, reserved2, dllnameoffset, firstnum, adrcount,
+      namecount, arradroffset, arrnameptroffset, arrnumoffset: INTEGER;
+      arradr, arrnameptr: люяяхб 10000H хг INTEGER;
+      arrnum: люяяхб 10000H хг sys.CARD16;
+      text: люяяхб 1000000 хг CHAR;
+      textlen, size: INTEGER
+    йнмеж;
+
+  RELOC = гюохяэ
+      Page, Size: INTEGER;
+      reloc: люяяхб 1024 хг sys.CARD16
+    йнмеж;
+
+оепел
+  asmlist: UTILS.tpList;
+  start: ASMLINE; MemErr: PROC; dll, con, gui, kos, elf, obj: BOOLEAN;
+    Lcount, reccount, topstk: INTEGER; recarray: люяяхб 2048 хг INTEGER; current*: ASMLINE;
+    callstk: люяяхб 1024, 2 хг ASMLINE; OutFile: UTILS.tString;
+    Code: люяяхб 4000000 хг CHAR; ccount: INTEGER; Data: люяяхб 1000000 хг CHAR; dcount: INTEGER;
+    Labels: люяяхб 200000 хг INTEGER; rdata: люяяхб 400H хг INTEGER; Header: HEADER; etable: ETABLE;
+    ExecName: UTILS.tString;
+    LoadAdr: INTEGER; Reloc: люяяхб 200000 хг CHAR; rcount: INTEGER;
+    RtlProc: люяяхб 20 хг INTEGER; OutFilePos: INTEGER;
+    RelocSection: SECTION;
+    felf: UTILS.tString;
+    fpu*: INTEGER; isfpu: BOOLEAN; maxfpu: INTEGER; fpucmd: ASMLINE;
+    kosexp: люяяхб 65536 хг гюохяэ
+      Name: SCAN.NODE;
+      Adr, NameLabel: INTEGER
+      йнмеж;
+    kosexpcount: INTEGER;
+
+опнжедспю setfelf*(name: UTILS.tString);
+  мювюкн
+    felf := name
+  йнмеж setfelf;
+
+опнжедспю AddRtlProc*(idx, proc: INTEGER);
+  мювюкн
+    RtlProc[idx] := proc
+  йнмеж AddRtlProc;
+
+опнжедспю IntToCard16(i: INTEGER): sys.CARD16;
+  оепел w: sys.CARD16;
+  мювюкн
+    sys.GET(sys.ADR(i), w)
+    бепмсрэ w
+  йнмеж IntToCard16;
+
+опнжедспю CopyStr(оеп Dest: люяяхб хг CHAR; Source: люяяхб хг CHAR; оеп di: INTEGER; si: INTEGER);
+  мювюкн
+    DEC(di);
+    REPEAT
+      INC(di);
+      Dest[di] := Source[si];
+      INC(si)
+    UNTIL Dest[di] = 0X
+  йнмеж CopyStr;
+
+опнжедспю exch(оеп a, b: INTEGER);
+  оепел c: INTEGER;
+  мювюкн
+    c := a;
+    a := b;
+    b := c
+  йнмеж exch;
+
+опнжедспю Sort(оеп NamePtr, Adr: люяяхб хг INTEGER; Text: люяяхб хг CHAR; LB, RB: INTEGER);
+  оепел L, R: INTEGER;
+
+      опнжедспю strle(s1, s2: INTEGER): BOOLEAN;
+      оепел S1, S2: люяяхб 256 хг CHAR; i: INTEGER;
+      мювюкн
+        i := 0;
+        CopyStr(S1, Text, i, s1);
+        i := 0;
+        CopyStr(S2, Text, i, s2)
+        бепмсрэ S1 <= S2
+      йнмеж strle;
+
+  мювюкн
+    еякх LB < RB рнцдю
+      L := LB;
+      R := RB;
+      REPEAT
+        онйю (L < RB) & strle(NamePtr[L], NamePtr[LB]) декюрэ
+          INC(L)
+        йнмеж;
+        онйю (R > LB) & strle(NamePtr[LB], NamePtr[R]) декюрэ
+          DEC(R)
+        йнмеж;
+        еякх L < R рнцдю
+          exch(NamePtr[L], NamePtr[R]);
+          exch(Adr[L], Adr[R])
+        йнмеж
+      UNTIL L >= R;
+      еякх R > LB рнцдю
+        exch(NamePtr[LB], NamePtr[R]);
+        exch(Adr[LB], Adr[R]);
+        Sort(NamePtr, Adr, Text, LB, R - 1)
+      йнмеж;
+      Sort(NamePtr, Adr, Text, R + 1, RB)
+    йнмеж
+  йнмеж Sort;
+
+опнжедспю PackExport(Name: люяяхб хг CHAR);
+  оепел i: INTEGER;
+  мювюкн
+    Sort(etable.arrnameptr, etable.arradr, etable.text, 0, etable.namecount - 1);
+    дкъ i := 0 дн etable.namecount - 1 декюрэ
+      etable.arrnum[i] := IntToCard16(i)
+    йнмеж;
+    etable.size := 40 + etable.adrcount * 4 + etable.namecount * 6;
+    etable.arradroffset := 40;
+    etable.arrnameptroffset := 40 + etable.adrcount * 4;
+    etable.arrnumoffset := etable.arrnameptroffset + etable.namecount * 4;
+    etable.dllnameoffset := etable.size + etable.textlen;
+    CopyStr(etable.text, Name, etable.textlen, 0);
+    INC(etable.textlen);
+    дкъ i := 0 дн etable.namecount - 1 декюрэ
+      etable.arrnameptr[i] := etable.arrnameptr[i] + etable.size
+    йнмеж;
+    etable.size := etable.size + etable.textlen
+  йнмеж PackExport;
+
+опнжедспю ProcExport*(Number: INTEGER; Name: SCAN.NODE; NameLabel: INTEGER);
+  мювюкн
+    еякх dll рнцдю
+      etable.arradr[etable.adrcount] := Number;
+      INC(etable.adrcount);
+      etable.arrnameptr[etable.namecount] := etable.textlen;
+      INC(etable.namecount);
+      CopyStr(etable.text, Name.Name, etable.textlen, 0);
+      INC(etable.textlen)
+    юеякх obj рнцдю
+      kosexp[kosexpcount].Name := Name;
+      kosexp[kosexpcount].Adr := Number;
+      kosexp[kosexpcount].NameLabel := NameLabel;
+      INC(kosexpcount)
+    йнмеж
+  йнмеж ProcExport;
+
+опнжедспю Err(code: INTEGER);
+  мювюкн
+    CASE code хг
+    |1: UTILS.ErrMsg(67); UTILS.OutString(OutFile)
+    |2: UTILS.ErrMsg(69); UTILS.OutString(OutFile)
+    |3: UTILS.ErrMsg(58)
+    |4: UTILS.ErrMsg(88)
+    хмюве
+    йнмеж;
+    UTILS.Ln;
+    UTILS.HALT(1)
+  йнмеж Err;
+
+опнжедспю Align*(n, m: INTEGER): INTEGER;
+    бепмсрэ n + (m - n MOD m) MOD m
+  йнмеж Align;
+
+опнжедспю PutReloc(R: RELOC);
+  оепел i: INTEGER;
+  мювюкн
+    sys.PUT(sys.ADR(Reloc[rcount]), R.Page);
+    INC(rcount, 4);
+    sys.PUT(sys.ADR(Reloc[rcount]), R.Size);
+    INC(rcount, 4);
+    дкъ i := 0 дн ASR(R.Size - 8, 1) - 1 декюрэ
+      sys.PUT(sys.ADR(Reloc[rcount]), R.reloc[i]);
+      INC(rcount, 2)
+    йнмеж
+  йнмеж PutReloc;
+
+опнжедспю InitArray(оеп adr: INTEGER; chars: UTILS.tString);
+  оепел i, x, n: INTEGER;
+  мювюкн
+    n := LEN(chars) - 1;
+    i := 0;
+    онйю (i < n) & (chars[i] # 0X) декюрэ
+      x := SCAN.hex(chars[i]) * 16 + SCAN.hex(chars[i + 1]);
+      sys.PUT(adr, CHR(x));
+      INC(adr);
+      INC(i, 2)
+    йнмеж
+  йнмеж InitArray;
+
+опнжедспю WriteF(F, A, N: INTEGER);
+  мювюкн
+    еякх UTILS.Write(F, A, N) # N рнцдю
+      Err(2)
+    йнмеж
+  йнмеж WriteF;
+
+опнжедспю Write(A, N: INTEGER);
+  мювюкн
+    sys.MOVE(A, OutFilePos, N);
+    OutFilePos := OutFilePos + N
+  йнмеж Write;
+
+опнжедспю Fill(n: INTEGER; c: CHAR);
+  оепел i: INTEGER;
+  мювюкн
+    дкъ i := 1 дн n декюрэ
+      Write(sys.ADR(c), 1)
+    йнмеж
+  йнмеж Fill;
+
+опнжедспю SetSection(оеп Section: SECTION; name: SECTIONNAME; size, adr, sizealign, OAPfile, attrflags: INTEGER);
+  мювюкн
+    Section.name := name;
+    Section.size := size;
+    Section.adr := adr;
+    Section.sizealign := sizealign;
+    Section.OAPfile := OAPfile;
+    Section.attrflags := attrflags;
+  йнмеж SetSection;
+
+опнжедспю WritePE(FName: люяяхб хг CHAR; stksize, codesize, datasize, rdatasize, gsize: INTEGER);
+  CONST textattr = 60000020H; rdataattr = 40000040H; dataattr = 0C0000040H; relocattr = 42000040H;
+  оепел i, F, adr, acodesize, compver, version, stkalloc, heapsize, heapalloc, filesize, filebuf: INTEGER;
+      cur: ASMLINE;
+  мювюкн
+
+    compver := 0;
+    version := 0;
+    stkalloc := stksize;
+    heapsize := 100000H;
+    heapalloc := 100000H;
+    acodesize := Align(codesize, 1000H) + 1000H;
+    adr := sys.ADR(rdata);
+    filesize := acodesize + Align(rdatasize, 1000H) + Align(datasize, 1000H) + Align(rcount, 1000H);
+
+    InitArray(adr, "5000000040000000000000003400000000000000000000006200000000000000");
+    InitArray(adr, "0000000000000000000000000000000000000000500000004000000000000000");
+    InitArray(adr, "A4014C6F61644C6962726172794100001F0147657450726F6341646472657373");
+    InitArray(adr, "00006B65726E656C33322E646C6C0000");
+
+    rdata[ 0] := acodesize + 50H;
+    rdata[ 1] := acodesize + 40H;
+    rdata[ 3] := acodesize + 34H;
+    rdata[ 6] := acodesize + 62H;
+    rdata[ 7] := acodesize;
+    rdata[13] := acodesize + 50H;
+    rdata[14] := acodesize + 40H;
+
+    adr := sys.ADR(Header.msdos);
+    InitArray(adr, "4D5A90000300000004000000FFFF0000B8000000000000004000000000000000");
+    InitArray(adr, "00000000000000000000000000000000000000000000000000000000B0000000");
+    InitArray(adr, "0E1FBA0E00B409CD21B8014CCD21546869732070726F6772616D2063616E6E6F");
+    InitArray(adr, "742062652072756E20696E20444F53206D6F64652E0D0D0A2400000000000000");
+    InitArray(adr, "5DCF9F8719AEF1D419AEF1D419AEF1D497B1E2D413AEF1D4E58EE3D418AEF1D4");
+    InitArray(adr, "5269636819AEF1D4000000000000000050450000");
+    Header.typecomp := IntToCard16(014CH);
+    еякх dll рнцдю
+      Header.seccount := IntToCard16(0004H);
+      Header.infflags := IntToCard16(210EH)
+    хмюве
+      Header.seccount := IntToCard16(0003H);
+      Header.infflags := IntToCard16(010FH)
+    йнмеж;
+    Header.time := mConst.Date;
+    Header.PEoptsize := IntToCard16(00E0H);
+    Header.PEfile := IntToCard16(010BH);
+    Header.compver := IntToCard16(compver);
+    Header.codesize := Align(codesize, 200H);
+    Header.datasize := Align(datasize + gsize, 200H) + Align(rdatasize, 200H) + Align(rcount, 200H);
+    Header.startadr := 1000H;
+    Header.codeadr := 1000H;
+    Header.rdataadr := Header.codeadr + Align(codesize, 1000H);
+    Header.loadadr := LoadAdr;
+    Header.secalign := 1000H;
+    Header.filealign := 0200H;
+    Header.oldestver := 0004H;
+    Header.version := version;
+    Header.oldestverNT := 0004H;
+    Header.filesize := Align(codesize, 1000H) + Align(datasize + gsize, 1000H) + Align(rdatasize, 1000H) + Align(rcount, 1000H) + 1000H;
+    Header.headersize := 0400H;
+    Header.UI := IntToCard16(ORD(con) + 2);
+    Header.stksize := stksize;
+    Header.stkalloc := stkalloc;
+    Header.heapsize := heapsize;
+    Header.heapalloc := heapalloc;
+    Header.structcount := 10H;
+    еякх dll рнцдю
+      Header.structs[0].adr := Header.rdataadr + 0DAH;
+      Header.structs[0].size := etable.size
+    йнмеж;
+
+    Header.structs[1].adr := Header.rdataadr + 0CH;
+    Header.structs[1].size := 28H;
+    Header.structs[12].adr := Header.rdataadr;
+    Header.structs[12].size := 0CH;
+
+    SetSection(Header.sections[0], ".text", codesize, 1000H, Align(codesize, 200H), 400H, textattr);
+    SetSection(Header.sections[1], ".rdata", rdatasize, Align(codesize, 1000H) + 1000H, Align(rdatasize, 200H),
+      Align(codesize, 200H) + 400H, rdataattr);
+    SetSection(Header.sections[2], ".data", datasize + gsize, Align(codesize, 1000H) + Align(rdatasize, 1000H) + 1000H,
+      Align(datasize, 200H), Align(codesize, 200H) + Align(rdatasize, 200H) + 400H, dataattr);
+
+    еякх dll рнцдю
+      SetSection(RelocSection, ".reloc", rcount, Header.sections[2].adr + Align(datasize + gsize, 1000H), Align(rcount, 200H),
+        Header.sections[2].OAPfile + Align(datasize, 200H), relocattr);
+      Header.structs[5].adr := RelocSection.adr;
+      Header.structs[5].size := rcount
+    йнмеж;
+
+    F := UTILS.CreateF(FName);
+    еякх F = 0 рнцдю
+      Err(1)
+    йнмеж;
+    OutFilePos := UTILS.GetMem(filesize);
+    filebuf := OutFilePos;
+    UTILS.MemErr(OutFilePos = 0);
+
+    Write(sys.ADR(Header), sys.SIZE(HEADER));
+    еякх dll рнцдю
+      Write(sys.ADR(RelocSection), sys.SIZE(SECTION));
+      Fill(Align(sys.SIZE(HEADER) + sys.SIZE(SECTION), 200H) - (sys.SIZE(HEADER) + sys.SIZE(SECTION)), 0X)
+    хмюве
+      Fill(Align(sys.SIZE(HEADER), 200H) - sys.SIZE(HEADER), 0X)
+    йнмеж;
+
+    cur := asmlist.First(ASMLINE);
+    онйю cur # осярн декюрэ
+      Write(sys.ADR(Code[cur.cmd]), cur.clen);
+      cur := cur.Next(ASMLINE)
+    йнмеж;
+    Fill(Align(codesize, 200H) - codesize, 0X);
+    Write(sys.ADR(rdata), 0DAH);
+    еякх dll рнцдю
+      etable.time := Header.time;
+      Write(sys.ADR(etable), 40);
+      Write(sys.ADR(etable.arradr), etable.adrcount * 4);
+      Write(sys.ADR(etable.arrnameptr), etable.namecount * 4);
+      Write(sys.ADR(etable.arrnum), etable.namecount * 2);
+      Write(sys.ADR(etable.text), etable.textlen)
+    йнмеж;
+    Fill(Align(rdatasize, 200H) - rdatasize, 0X);
+    Write(sys.ADR(Data), datasize);
+    Fill(Align(datasize, 200H) - datasize, 0X);
+    еякх dll рнцдю
+      Write(sys.ADR(Reloc), rcount);
+      Fill(Align(rcount, 200H) - rcount, 0X)
+    йнмеж;
+    WriteF(F, filebuf, OutFilePos - filebuf);
+    UTILS.CloseF(F)
+  йнмеж WritePE;
+
+опнжедспю New;
+  оепел nov: ASMLINE;
+  мювюкн
+    NEW(nov);
+    MemErr(nov = осярн);
+    nov.cmd := ccount;
+    UTILS.Insert(asmlist, nov, current);
+    current := current.Next(ASMLINE)
+  йнмеж New;
+
+опнжедспю Empty(varadr: INTEGER);
+  мювюкн
+    New;
+    current.clen := 0;
+    current.tcmd := ECMD;
+    current.varadr := varadr
+  йнмеж Empty;
+
+опнжедспю OutByte(byte: INTEGER);
+  мювюкн
+    New;
+    current.clen := 1;
+    Code[ccount] := CHR(byte);
+    INC(ccount)
+  йнмеж OutByte;
+
+опнжедспю OutInt(int: INTEGER);
+  мювюкн
+    New;
+    current.clen := 4;
+    sys.PUT(sys.ADR(Code[ccount]), int);
+    INC(ccount, 4)
+  йнмеж OutInt;
+
+опнжедспю PushEAX;
+  мювюкн
+    OutByte(50H);
+    current.tcmd := PUSHEAX
+  йнмеж PushEAX;
+
+опнжедспю PushECX;
+  мювюкн
+    OutByte(51H);
+    current.tcmd := PUSHECX
+  йнмеж PushECX;
+
+опнжедспю PushEDX;
+  мювюкн
+    OutByte(52H);
+    current.tcmd := PUSHEDX
+  йнмеж PushEDX;
+
+опнжедспю PopEAX;
+  мювюкн
+    OutByte(58H);
+    current.tcmd := POPEAX
+  йнмеж PopEAX;
+
+опнжедспю PopECX;
+  мювюкн
+    OutByte(59H);
+    current.tcmd := POPECX
+  йнмеж PopECX;
+
+опнжедспю PopEDX;
+  мювюкн
+    OutByte(5AH);
+    current.tcmd := POPEDX
+  йнмеж PopEDX;
+
+опнжедспю OutCode(cmd: UTILS.tString);
+  оепел a, b: INTEGER;
+  мювюкн
+    New;
+    a := sys.ADR(Code[ccount]);
+    b := a;
+    InitArray(a, cmd);
+    ccount := a - b + ccount;
+    current.clen := a - b
+  йнмеж OutCode;
+
+опнжедспю Del*(last: ASMLINE);
+  мювюкн
+    last.Next := current.Next;
+    еякх current = asmlist.Last рнцдю
+      asmlist.Last := last
+    йнмеж;
+    current := last
+  йнмеж Del;
+
+опнжедспю NewLabel*(): INTEGER;
+  мювюкн
+    INC(Lcount)
+    бепмсрэ Lcount
+  йнмеж NewLabel;
+
+опнжедспю PushCall*(asmline: ASMLINE);
+  мювюкн
+    New;
+    callstk[topstk][0] := asmline;
+    callstk[topstk][1] := current;
+    INC(topstk)
+  йнмеж PushCall;
+
+опнжедспю Param*;
+  мювюкн
+    current := callstk[topstk - 1][0]
+  йнмеж Param;
+
+опнжедспю EndCall*;
+  мювюкн
+    current := callstk[topstk - 1][1];
+    DEC(topstk)
+  йнмеж EndCall;
+
+опнжедспю Init*(mem: PROC; UI: INTEGER);
+  оепел nov: ASMLINE;
+  мювюкн
+    dcount := 4;
+    dll := UI = 1;
+    gui := UI = 2;
+    con := UI = 3;
+    kos := UI = 4;
+    elf := UI = 5;
+    obj := UI = 6;
+    MemErr := mem;
+    Lcount := HALT;
+    asmlist := UTILS.CreateList();
+    MemErr(asmlist = осярн);
+    NEW(nov);
+    MemErr(nov = осярн);
+    UTILS.Push(asmlist, nov);
+    current := nov;
+  йнмеж Init;
+
+опнжедспю datastr(str: UTILS.tString);
+  оепел i, n: INTEGER;
+  мювюкн
+    i := 0;
+    n := LEN(str);
+    онйю (i < n) & (str[i] # 0X) декюрэ
+      Data[dcount] := str[i];
+      INC(dcount);
+      INC(i)
+    йнмеж;
+    Data[dcount] := 0X;
+    INC(dcount)
+  йнмеж datastr;
+
+опнжедспю dataint(n: INTEGER);
+  мювюкн
+    sys.PUT(sys.ADR(Data[dcount]), n);
+    INC(dcount, 4)
+  йнмеж dataint;
+
+опнжедспю jmp*(jamp: CHAR; label: INTEGER);
+  оепел n: INTEGER;
+  мювюкн
+    New;
+    CASE jamp хг
+    |JMP, CALL:
+      n := 5
+    |JE, JLE, JGE, JG, JL, JNE:
+      Code[ccount] := 0FX;
+      INC(ccount);
+      n := 6
+    хмюве
+    йнмеж;
+    current.clen := n;
+    Code[ccount] := jamp;
+    INC(ccount);
+    current.codeadr := sys.ADR(Code[ccount]);
+    current.varadr := sys.ADR(Labels[label]);
+    current.tcmd := JCMD;
+    current.short := хярхмю;
+    INC(ccount, 4)
+  йнмеж jmp;
+
+опнжедспю jmplong(jamp: CHAR; label: INTEGER);
+  мювюкн
+    jmp(jamp, label);
+    current.short := кнфэ
+  йнмеж jmplong;
+
+опнжедспю Label*(label: INTEGER);
+  мювюкн
+    New;
+    current.varadr := sys.ADR(Labels[label]);
+    current.tcmd := LCMD
+  йнмеж Label;
+
+опнжедспю CmdN(Number: INTEGER);
+  мювюкн
+    New;
+    current.clen := 4;
+    current.codeadr := sys.ADR(Code[ccount]);
+    current.varadr := sys.ADR(Labels[Number]);
+    current.tcmd := OCMD;
+    INC(ccount, 4)
+  йнмеж CmdN;
+
+опнжедспю IntByte(bytecode, intcode: UTILS.tString; n: INTEGER);
+  мювюкн
+    еякх (n <= 127) & (n >= -128) рнцдю
+      OutCode(bytecode);
+      OutByte(n)
+    хмюве
+      OutCode(intcode);
+      OutInt(n)
+    йнмеж
+  йнмеж IntByte;
+
+опнжедспю DropFpu*(long: BOOLEAN);
+  мювюкн
+    еякх long рнцдю
+      OutCode("83EC08DD1C24")
+    хмюве
+      OutCode("83EC04D91C24")
+    йнмеж;
+    DEC(fpu)
+  йнмеж DropFpu;
+
+опнжедспю AfterRet(func, float: BOOLEAN; callconv, parsize: INTEGER);
+  мювюкн
+    еякх callconv = cdecl рнцдю
+      OutCode("81C4");
+      OutInt(parsize)
+    йнмеж;
+    еякх func рнцдю
+      еякх float рнцдю
+        OutCode("83EC08DD1C24")
+      хмюве
+        PushEAX
+      йнмеж
+    йнмеж
+  йнмеж AfterRet;
+
+опнжедспю FpuSave(local: INTEGER);
+  оепел i: INTEGER;
+  мювюкн
+    еякх fpu > maxfpu рнцдю
+      maxfpu := fpu
+    йнмеж;
+    дкъ i := 1 дн fpu декюрэ
+      IntByte("DD5D", "DD9D", -local - i * 8)
+    йнмеж
+  йнмеж FpuSave;
+
+опнжедспю Incfpu;
+  мювюкн
+    еякх fpu >= FREGS рнцдю
+      UTILS.ErrMsgPos(SCAN.line, SCAN.col, 97);
+      UTILS.HALT(1)
+    йнмеж;
+    INC(fpu);
+    isfpu := хярхмю
+  йнмеж Incfpu;
+
+опнжедспю FpuLoad(local: INTEGER; float: BOOLEAN);
+  оепел i: INTEGER;
+  мювюкн
+    дкъ i := fpu дн 1 BY -1 декюрэ
+      IntByte("DD45", "DD85", -local - i * 8)
+    йнмеж;
+    еякх float рнцдю
+      Incfpu;
+      OutCode("DD042483C408")
+    йнмеж
+  йнмеж FpuLoad;
+
+опнжедспю Call*(proc: INTEGER; func, float: BOOLEAN; callconv, ccall, bases, level, parsize, local: INTEGER);
+  оепел i: INTEGER;
+  мювюкн
+    еякх ccall # 0 рнцдю
+      дкъ i := level дн level - bases + ORD(ccall = 1) + 1 BY -1 декюрэ
+        IntByte("FF75", "FFB5", 4 * i + 4)
+      йнмеж;
+      еякх ccall = 1 рнцдю
+        OutByte(55H)
+      йнмеж
+    йнмеж;
+    FpuSave(local);
+    jmplong(CALL, proc);
+    AfterRet(func, float, callconv, parsize);
+    FpuLoad(local, func & float)
+  йнмеж Call;
+
+опнжедспю CallRTL(Proc: INTEGER);
+  мювюкн
+    New;
+    current.clen := 5;
+    Code[ccount] := CALL;
+    INC(ccount);
+    current.codeadr := sys.ADR(Code[ccount]);
+    current.varadr := sys.ADR(RtlProc[Proc]);
+    current.tcmd := JCMD;
+    INC(ccount, 4)
+  йнмеж CallRTL;
+
+опнжедспю PushInt*(n: INTEGER);
+  мювюкн
+    OutByte(68H);
+    CmdN(n)
+  йнмеж PushInt;
+
+опнжедспю Prolog*(exename: UTILS.tString);
+  мювюкн
+    ExecName := exename;
+    Labels[hInstance] := -dcount;
+    dataint(0);
+    Labels[SELFNAME] := -dcount;
+    datastr(exename);
+    Label(START);
+    еякх dll рнцдю
+      OutCode("558BEC837D0C007507");
+      CallRTL(_close);
+      OutCode("EB06837D0C017409B801000000C9C20C00")
+    юеякх obj рнцдю
+      OutCode("558BEC")
+    йнмеж;
+    start := asmlist.Last(ASMLINE)
+  йнмеж Prolog;
+
+опнжедспю AddRec*(base: INTEGER);
+  мювюкн
+    INC(reccount);
+    recarray[reccount] := base
+  йнмеж AddRec;
+
+опнжедспю CmpOpt(inv: BOOLEAN): INTEGER;
+  оепел cur: ASMLINE; c: INTEGER;
+  мювюкн
+    c := ORD(Code[current.Prev.Prev(ASMLINE).cmd]);
+    еякх inv рнцдю
+      еякх ODD(c) рнцдю
+        DEC(c)
+      хмюве
+        INC(c)
+      йнмеж
+    йнмеж;
+    cur := current;
+    REPEAT
+      cur.tcmd := 0;
+      cur.clen := 0;
+      cur := cur.Prev(ASMLINE)
+    UNTIL cur.tcmd = ICMP1;
+    cur.tcmd := 0;
+    cur.clen := 0
+    бепмсрэ c - 16
+  йнмеж CmpOpt;
+
+опнжедспю ifwh*(L: INTEGER);
+  оепел c: INTEGER;
+  мювюкн
+    еякх current.Prev(ASMLINE).tcmd = ICMP2 рнцдю
+      c := CmpOpt(хярхмю);
+      OutCode("5A583BC2");
+      jmp(CHR(c), L)
+    хмюве
+      PopECX;
+      OutCode("85C9");
+      jmp(JE, L)
+    йнмеж
+  йнмеж ifwh;
+
+опнжедспю PushConst*(Number: INTEGER);
+  мювюкн
+    IntByte("6A", "68", Number);
+    current.Prev(ASMLINE).varadr := Number
+  йнмеж PushConst;
+
+опнжедспю IfWhile*(L: INTEGER; orop: BOOLEAN);
+  оепел c, L1: INTEGER;
+  мювюкн
+    L1 := NewLabel();
+    еякх current.Prev(ASMLINE).tcmd = ICMP2 рнцдю
+      c := CmpOpt(orop);
+      OutCode("5A583BC2");
+      jmp(CHR(c), L1);
+      PushConst(ORD(orop))
+    хмюве
+      PopECX;
+      OutCode("85C9");
+      еякх orop рнцдю
+        jmp(JE, L1)
+      хмюве
+        jmp(JNE, L1)
+      йнмеж;
+      PushECX
+    йнмеж;
+    jmp(JMP, L);
+    Label(L1)
+  йнмеж IfWhile;
+
+опнжедспю newrec*;
+  мювюкн
+    CallRTL(_newrec)
+  йнмеж newrec;
+
+  опнжедспю disprec*;
+  мювюкн
+    CallRTL(_disprec)
+  йнмеж disprec;
+
+опнжедспю String*(Number, Len: INTEGER; str: UTILS.tString);
+  мювюкн
+    Labels[Number] := -dcount;
+    еякх Len > 1 рнцдю
+      datastr(str)
+    юеякх Len = 1 рнцдю
+      dataint(ORD(str[0]))
+    хмюве
+      dataint(0)
+    йнмеж
+  йнмеж String;
+
+опнжедспю InsertFpuInit;
+  оепел t: ASMLINE;
+  мювюкн
+    еякх isfpu рнцдю
+      t := current;
+      current := fpucmd;
+      еякх maxfpu > 0 рнцдю
+        OutCode("83EC");
+        OutByte(maxfpu * 8)
+      йнмеж;
+      OutCode("DBE3");
+      current := t
+    йнмеж
+  йнмеж InsertFpuInit;
+
+опнжедспю ProcBeg*(Number, Local: INTEGER; Module: BOOLEAN);
+  оепел i: INTEGER;
+  мювюкн
+    еякх Module рнцдю
+      OutCode("EB0C");
+      Label(Number + 3);
+      PushInt(Number + 2);
+      jmplong(JMP, HALT);
+      Label(Number + 1)
+    хмюве
+      Label(Number)
+    йнмеж;
+    OutCode("558BEC");
+    еякх Local > 12 рнцдю
+      IntByte("83EC", "81EC", Local);
+      OutCode("8BD733C08BFCB9");
+      OutInt(ASR(Local, 2));
+      OutCode("9CFCF3AB8BFA9D")
+    хмюве
+      дкъ i := 4 дн Local BY 4 декюрэ
+        OutCode("6A00")
+      йнмеж
+    йнмеж;
+    fpucmd := current;
+    fpu := 0;
+    maxfpu := 0;
+    isfpu := кнфэ
+  йнмеж ProcBeg;
+
+опнжедспю Leave*;
+  мювюкн
+    OutByte(0C9H);
+    InsertFpuInit
+  йнмеж Leave;
+
+опнжедспю ProcEnd*(Number, Param: INTEGER; func, float: BOOLEAN);
+  мювюкн
+    еякх func & ~float рнцдю
+      PopEAX
+    йнмеж;
+    OutByte(0C9H);
+    еякх Param = 0 рнцдю
+      OutByte(0C3H)
+    хмюве
+      OutByte(0C2H);
+      OutByte(Param MOD 256);
+      OutByte(ASR(Param, 8))
+    йнмеж;
+    InsertFpuInit
+  йнмеж ProcEnd;
+
+опнжедспю Module*(Name: UTILS.tString; Number: INTEGER);
+  мювюкн
+    String(Number + 2, LENGTH(Name), Name);
+    jmplong(JMP, Number + 1)
+  йнмеж Module;
+
+опнжедспю Asm*(s: UTILS.tString);
+  мювюкн
+    OutCode(s)
+  йнмеж Asm;
+
+опнжедспю GlobalAdr*(offset: INTEGER);
+  мювюкн
+    OutByte(0BAH);
+    OutInt(offset);
+    current.codeadr := sys.ADR(Code[ccount - 4]);
+    current.tcmd := GCMD;
+    PushEDX
+  йнмеж GlobalAdr;
+
+опнжедспю Mono*(Number: INTEGER);
+  мювюкн
+    PopEDX;
+    PushInt(Number)
+  йнмеж Mono;
+
+опнжедспю StrMono*;
+  мювюкн
+    PopEDX;
+    OutCode("6A02");
+    PushEDX
+  йнмеж StrMono;
+
+опнжедспю Not*;
+  мювюкн
+    PopECX;
+    OutCode("85C90F94C1");
+    PushECX
+  йнмеж Not;
+
+опнжедспю NegSet*;
+  мювюкн
+    OutCode("F71424")
+  йнмеж NegSet;
+
+опнжедспю Int*(Op: INTEGER);
+  мювюкн
+    PopEDX;
+    CASE Op хг
+    |lxPlus:  OutCode("011424")
+    |lxMinus: OutCode("291424")
+    |lxMult:  OutCode("58F7EA"); PushEAX
+    хмюве
+    йнмеж
+  йнмеж Int;
+
+опнжедспю Set*(Op: INTEGER);
+  мювюкн
+    PopEDX;
+    OutCode("58");
+    CASE Op хг
+    |lxPlus:  OutCode("0B")
+    |lxMinus: OutCode("F7D223")
+    |lxMult:  OutCode("23")
+    |lxSlash: OutCode("33")
+    хмюве
+    йнмеж;
+    OutCode("C2");
+    PushEAX
+  йнмеж Set;
+
+опнжедспю Setfpu*(newfpu: INTEGER);
+  мювюкн
+    fpu := newfpu
+  йнмеж Setfpu;
+
+опнжедспю PushFlt*(x: LONGREAL);
+  оепел f: TFLT; L: INTEGER;
+  мювюкн
+    sys.PUT(sys.ADR(f), x);
+    Incfpu;
+    еякх x = 0.0D0 рнцдю
+      OutCode("D9EE")
+    юеякх x = 1.0D0 рнцдю
+      OutCode("D9E8")
+    хмюве
+      L := NewLabel();
+      Labels[L] := -dcount;
+      dataint(f[0]);
+      dataint(f[1]);
+      OutByte(0BAH);
+      CmdN(L);
+      OutCode("DD02")
+    йнмеж
+  йнмеж PushFlt;
+
+опнжедспю farith*(op: INTEGER);
+  оепел n: INTEGER;
+  мювюкн
+    OutCode("DE");
+    CASE op хг
+    |lxPlus:  n := 0C1H
+    |lxMinus: n := 0E9H
+    |lxMult:  n := 0C9H
+    |lxSlash: n := 0F9H
+    хмюве
+    йнмеж;
+    OutByte(n);
+    DEC(fpu)
+  йнмеж farith;
+
+опнжедспю fcmp*(Op: INTEGER);
+  оепел n: INTEGER;
+  мювюкн
+    OutCode("33C9DED9DFE09E0F");
+    CASE Op хг
+    |lxEQ: n := 94H
+    |lxNE: n := 95H
+    |lxLT: n := 97H
+    |lxGT: n := 92H
+    |lxLE: n := 93H
+    |lxGE: n := 96H
+    хмюве
+    йнмеж;
+    DEC(fpu, 2);
+    OutByte(n);
+    OutByte(0C1H);
+    PushECX
+  йнмеж fcmp;
+
+опнжедспю fneg*;
+  мювюкн
+    OutCode("D9E0")
+  йнмеж fneg;
+
+опнжедспю OnError*(n: INTEGER);
+  мювюкн
+    OutByte(68H);
+    OutInt(UTILS.Line * 16 + n);
+    jmplong(JMP, UTILS.Unit + 3)
+  йнмеж OnError;
+
+опнжедспю idivmod*(opmod: BOOLEAN);
+  мювюкн
+    PopECX;
+    еякх opmod рнцдю
+      OutCode("58E32E538BD833D9C1FB1F8BD0C1FA1F83F9FF750C3D0000008075055B6A00EB1AF7F985DB740685D2740203D15B52EB0A")
+    хмюве
+      OutCode("58E32C538BD833D9C1FB1F8BD0C1FA1F83F9FF750B3D0000008075045B50EB19F7F985DB740585D27401485B50EB0A")
+    йнмеж;
+    OnError(8)
+  йнмеж idivmod;
+
+опнжедспю rset*;
+  мювюкн
+    CallRTL(_rset);
+    PushEAX
+  йнмеж rset;
+
+опнжедспю inset*;
+  мювюкн
+    CallRTL(_inset);
+    PushEAX
+  йнмеж inset;
+
+опнжедспю Dup*;
+  мювюкн
+    PopEDX;
+    PushEDX;
+    PushEDX
+  йнмеж Dup;
+
+опнжедспю Inclusion*(Op: INTEGER);
+  мювюкн
+    PopEDX;
+    PopEAX;
+    еякх Op = lxLE рнцдю
+      PushEDX
+    хмюве
+      PushEAX
+    йнмеж;
+    OutCode("0BC25933C8E3046A00EB026A01")
+  йнмеж Inclusion;
+
+опнжедспю NegInt*;
+  мювюкн
+    OutCode("F71C24")
+  йнмеж NegInt;
+
+опнжедспю CmpInt*(Op: INTEGER);
+  оепел n: INTEGER;
+  мювюкн
+    OutCode("33C95A583BC20F"); current.tcmd := ICMP1;
+    CASE Op хг
+    |lxEQ: n := 94H
+    |lxNE: n := 95H
+    |lxLT: n := 9CH
+    |lxGT: n := 9FH
+    |lxLE: n := 9EH
+    |lxGE: n := 9DH
+    хмюве
+    йнмеж;
+    OutByte(n);
+    OutCode("C1"); current.tcmd := ICMP2;
+    PushECX;
+  йнмеж CmpInt;
+
+опнжедспю CallVar*(func, float: BOOLEAN; callconv, parsize, local: INTEGER);
+  мювюкн
+    PopEDX;
+    OutCode("8B1285D2750A");
+    OnError(2);
+    FpuSave(local);
+    OutCode("FFD2");
+    AfterRet(func, float, callconv, parsize);
+    FpuLoad(local, func & float)
+  йнмеж CallVar;
+
+опнжедспю LocalAdr*(offset, bases: INTEGER);
+  мювюкн
+    еякх bases = 0 рнцдю
+      Empty(offset);
+      OutCode("8BD5")
+    хмюве
+      IntByte("8B55", "8B95", 4 * bases + 4)
+    йнмеж;
+    IntByte("83C2", "81C2", offset);
+    PushEDX;
+    еякх bases = 0 рнцдю
+      Empty(offset)
+    йнмеж
+  йнмеж LocalAdr;
+
+опнжедспю Field*(offset: INTEGER);
+  мювюкн
+    еякх offset # 0 рнцдю
+      IntByte("830424", "810424", offset)
+    йнмеж
+  йнмеж Field;
+
+опнжедспю DerefType*(n: INTEGER);
+  мювюкн
+    IntByte("8B5424", "8B9424", n);
+    OutCode("FF72FC")
+  йнмеж DerefType;
+
+опнжедспю Guard*(T: INTEGER; Check: BOOLEAN);
+  мювюкн
+    еякх Check рнцдю
+      PopEAX;
+      OutCode("85C074");
+      еякх T <= 127 рнцдю
+        OutByte(9)
+      хмюве
+        OutByte(12)
+      йнмеж;
+      PushEAX
+    йнмеж;
+    PushConst(T);
+    PushEAX;
+    CallRTL(_checktype);
+    еякх Check рнцдю
+      PushEAX
+    хмюве
+      OutCode("85C0750A");
+      OnError(3)
+    йнмеж
+  йнмеж Guard;
+
+опнжедспю StProc*(proc: INTEGER);
+  мювюкн
+    CASE proc хг
+    |stINC:   PopEDX; OutCode("590111")
+    |stDEC:   PopEDX; OutCode("592911")
+    |stINC1:  PopEDX; OutCode("FF02")
+    |stDEC1:  PopEDX; OutCode("FF0A")
+    |stINCL:  PopEDX; OutCode("580910")
+    |stEXCL:  PopEDX; OutCode("582110")
+    |sysBIT:  PopECX; OutCode("5A585333DB8A18E3050FABD3EB030FB3D388185B")
+    |stPACK:  OutCode("DB04245A5ADD02D9FDDD1A"); isfpu := хярхмю
+    |stPACK1: OutCode("DB04245A5AD902D9FDD91A"); isfpu := хярхмю
+    |stUNPK:  PopEDX; OutCode("59DD01D9F4DD19DB1A"); isfpu := хярхмю
+    |stUNPK1: PopEDX; OutCode("59D901D9F4D919DB1A"); isfpu := хярхмю
+    |stCOPY:  CallRTL(_strcopy)
+    |sysMOVE: CallRTL(_savearr)
+    хмюве
+    йнмеж
+  йнмеж StProc;
+
+опнжедспю Assert*(proc, assrt: INTEGER);
+  мювюкн
+    PopEDX;
+    OutCode("85D2751368");
+    OutInt(UTILS.Line * 16 + 1);
+    PushInt(UTILS.Unit + 2);
+    еякх proc = stASSERT рнцдю
+      OutCode("6A026A")
+    хмюве
+      OutCode("6A016A")
+    йнмеж;
+    OutByte(assrt);
+    jmplong(JMP, ASSRT)
+  йнмеж Assert;
+
+опнжедспю StFunc*(func: INTEGER);
+  мювюкн
+    CASE func хг
+    |stABS:    PopEDX; OutCode("85D27D02F7DA"); PushEDX
+    |stFABS:   OutCode("D9E1")
+    |stFLT:    OutCode("DB0424"); PopEAX; Incfpu;
+    |stFLOOR:  OutCode("83EC06D93C2466812424FFF366810C24FFF7D92C2483C402D9FCDB1C24"); DEC(fpu)
+    |stODD:    OutCode("83242401")
+    |stROR:    PopECX; OutCode("58D3C8"); PushEAX
+    |stASR:    PopECX; OutCode("58D3F8"); PushEAX
+    |stLSL:    PopECX; OutCode("58D3E0"); PushEAX
+    |stLSR:    PopECX; OutCode("58D3E8"); PushEAX
+    |stORD:    PopEDX; OutCode("85D274036A015A"); PushEDX
+    |stLENGTH: CallRTL(_length); PushEAX
+    |sysBIT:   PopEDX; OutCode("5933C08A010FA3D072046A00EB026A01")
+    хмюве
+    йнмеж
+  йнмеж StFunc;
+
+опнжедспю Load*(T: INTEGER);
+  оепел lastcmd: ASMLINE; offset: INTEGER;
+
+    опнжедспю del;
+    мювюкн
+      lastcmd.tcmd := 0;
+      offset := lastcmd.varadr;
+      lastcmd := lastcmd.Prev(ASMLINE);
+      онйю lastcmd.tcmd # ECMD декюрэ
+        lastcmd.clen := 0;
+        lastcmd.tcmd := 0;
+        lastcmd := lastcmd.Prev(ASMLINE)
+      йнмеж;
+      lastcmd.tcmd := 0
+    йнмеж del;
+
+  мювюкн
+    lastcmd := current;
+    CASE T хг
+    |TINTEGER, TSET, TPOINTER, TPROC:
+      еякх lastcmd.tcmd = ECMD рнцдю
+        del;
+        IntByte("8B55", "8B95", offset);
+        PushEDX
+      хмюве
+        PopEDX;
+        OutCode("FF32")
+      йнмеж
+    |TCHAR, TBOOLEAN:
+      еякх lastcmd.tcmd = ECMD рнцдю
+        del;
+        OutCode("33D28A");
+        IntByte("55", "95", offset);
+        PushEDX
+      хмюве
+        PopEDX;
+        OutCode("33C98A0A");
+        PushECX
+      йнмеж
+    |TLONGREAL:
+      еякх lastcmd.tcmd = ECMD рнцдю
+        del;
+        IntByte("DD45", "DD85", offset)
+      хмюве
+        PopEDX;
+        OutCode("DD02")
+      йнмеж;
+      Incfpu
+    |TREAL:
+      еякх lastcmd.tcmd = ECMD рнцдю
+        del;
+        IntByte("D945", "D985", offset)
+      хмюве
+        PopEDX;
+        OutCode("D902")
+      йнмеж;
+      Incfpu
+    |TCARD16:
+      еякх lastcmd.tcmd = ECMD рнцдю
+        del;
+        OutCode("33D2668B");
+        IntByte("55", "95", offset);
+        PushEDX
+      хмюве
+        PopEDX;
+        OutCode("33C9668B0A");
+        PushECX
+      йнмеж
+    хмюве
+    йнмеж
+  йнмеж Load;
+
+опнжедспю Save*(T: INTEGER);
+  мювюкн
+    CASE T хг
+    |TINTEGER, TSET, TPOINTER, TPROC:
+      PopEDX;
+      OutCode("588910")
+    |TCHAR, TSTRING, TBOOLEAN:
+      PopEDX;
+      OutCode("588810")
+    |TCARD16:
+      PopEDX;
+      OutCode("58668910")
+    |TLONGREAL:
+      PopEDX;
+      OutCode("DD1A");
+      DEC(fpu)
+    |TREAL:
+      PopEDX;
+      OutCode("D91A");
+      DEC(fpu)
+    |TRECORD:
+      CallRTL(_saverec);
+      OutCode("83F800750A");
+      OnError(4)
+    |TARRAY:
+      CallRTL(_savearr)
+    хмюве
+    йнмеж
+  йнмеж Save;
+
+опнжедспю OpenArray*(A: TIDX; n: INTEGER);
+  оепел i: INTEGER;
+  мювюкн
+    PopEDX;
+    дкъ i := n - 1 дн 0 BY -1 декюрэ
+      PushConst(A[i])
+    йнмеж;
+    PushEDX
+  йнмеж OpenArray;
+
+опнжедспю OpenIdx*(n: INTEGER);
+  мювюкн
+    OutByte(54H);
+    еякх n > 1 рнцдю
+      PushConst(n);
+      CallRTL(_arrayidx)
+    хмюве
+      CallRTL(_arrayidx1)
+    йнмеж;
+    PopEDX;
+    OutCode("85D2750A");
+    OnError(5);
+    PushEDX;
+  йнмеж OpenIdx;
+
+опнжедспю FixIdx*(len, size: INTEGER);
+  мювюкн
+    PopEDX;
+    IntByte("5983FA", "5981FA", len);
+    OutCode("720A");
+    OnError(5);
+    еякх size > 1 рнцдю
+      IntByte("6BD2", "69D2", size)
+    йнмеж;
+    OutCode("03D1");
+    PushEDX
+  йнмеж FixIdx;
+
+опнжедспю Idx*;
+  мювюкн
+    PopEDX;
+    PopECX;
+    OutCode("03D1");
+    PushEDX
+  йнмеж Idx;
+
+опнжедспю DupLoadCheck*;
+  мювюкн
+    PopEDX;
+    OutCode("528B125285D2750A");
+    OnError(6)
+  йнмеж DupLoadCheck;
+
+опнжедспю DupLoad*;
+  мювюкн
+    PopEDX;
+    OutCode("528B12");
+    PushEDX;
+  йнмеж DupLoad;
+
+опнжедспю CheckNIL*;
+  мювюкн
+    PopEDX;
+    OutCode("85D2750A");
+    OnError(6);
+    PushEDX;
+  йнмеж CheckNIL;
+
+опнжедспю ExtArray*(A: TIDX; n, m: INTEGER);
+  оепел i: INTEGER;
+  мювюкн
+    дкъ i := n - 1 дн 0 BY -1 декюрэ
+      PushConst(A[i])
+    йнмеж;
+    OutByte(54H);
+    PushConst(n);
+    PushConst(m);
+    CallRTL(_arrayrot)
+  йнмеж ExtArray;
+
+опнжедспю ADR*(dim: INTEGER);
+  мювюкн
+    еякх dim > 0 рнцдю
+      PopEDX;
+      OutCode("83C4");
+      OutByte(dim * 4);
+      PushEDX
+    йнмеж
+  йнмеж ADR;
+
+опнжедспю Len*(dim: INTEGER);
+  мювюкн
+    PopEDX;
+    еякх dim < 0 рнцдю
+      PushConst(-dim)
+    юеякх dim > 1 рнцдю
+      PopEDX;
+      OutCode("83C4");
+      OutByte((dim - 1) * 4);
+      PushEDX
+    йнмеж
+  йнмеж Len;
+
+опнжедспю For*(inc: BOOLEAN; оеп LBeg, LEnd: INTEGER);
+  мювюкн
+    LEnd := NewLabel();
+    LBeg := NewLabel();
+    Label(LBeg);
+    OutCode("8B14248B4424043910");
+    еякх inc рнцдю
+      jmp(JG, LEnd)
+    хмюве
+      jmp(JL, LEnd)
+    йнмеж
+  йнмеж For;
+
+опнжедспю NextFor*(step, LBeg, LEnd: INTEGER);
+  мювюкн
+    OutCode("8B542404");
+    еякх step = 1 рнцдю
+      OutCode("FF02")
+    юеякх step = -1 рнцдю
+      OutCode("FF0A")
+    хмюве
+      IntByte("8302", "8102", step)
+    йнмеж;
+    jmp(JMP, LBeg);
+    Label(LEnd);
+    OutCode("83C408")
+  йнмеж NextFor;
+
+опнжедспю CaseLabel*(a, b, LBeg: INTEGER);
+  оепел L: INTEGER;
+  мювюкн
+    L := NewLabel();
+    IntByte("83FA", "81FA", a);
+    еякх a = b рнцдю
+      jmp(JNE, L)
+    хмюве
+      jmp(JL, L);
+      IntByte("83FA", "81FA", b);
+      jmp(JG, L)
+    йнмеж;
+    jmp(JMP, LBeg);
+    Label(L)
+  йнмеж CaseLabel;
+
+опнжедспю Drop*;
+  мювюкн
+    PopEDX
+  йнмеж Drop;
+
+опнжедспю strcmp*(Op, LR: INTEGER);
+  мювюкн
+    CASE Op хг
+    |lxEQ: PushConst(0)
+    |lxNE: PushConst(1)
+    |lxLT: PushConst(2)
+    |lxGT: PushConst(3)
+    |lxLE: PushConst(4)
+    |lxGE: PushConst(5)
+    хмюве
+    йнмеж;
+    CASE LR хг
+    |-1: CallRTL(_lstrcmp)
+    | 0: CallRTL(_strcmp)
+    | 1: CallRTL(_rstrcmp)
+    хмюве
+    йнмеж;
+    PushEAX
+  йнмеж strcmp;
+
+опнжедспю Optimization;
+  оепел cur: ASMLINE; flag: BOOLEAN;
+  мювюкн
+    cur := asmlist.First(ASMLINE);
+    онйю cur # осярн декюрэ
+      flag := кнфэ;
+      CASE cur.tcmd хг
+      |PUSHEAX:
+        flag := cur.Next(ASMLINE).tcmd = POPEAX
+      |PUSHECX:
+        flag := cur.Next(ASMLINE).tcmd = POPECX
+      |PUSHEDX:
+        flag := cur.Next(ASMLINE).tcmd = POPEDX
+      хмюве
+      йнмеж;
+      еякх flag рнцдю
+        cur.clen := 0;
+        cur.tcmd := 0;
+        cur := cur.Next(ASMLINE);
+        cur.clen := 0;
+        cur.tcmd := 0
+      йнмеж;
+      cur := cur.Next(ASMLINE)
+    йнмеж
+  йнмеж Optimization;
+
+опнжедспю WriteKOS(FName: люяяхб хг CHAR; stk, size, datasize, gsize: INTEGER; obj: BOOLEAN);
+  CONST strsize = 2048;
+  оепел
+    Header: KOSHEADER;
+    F, i, filesize, filebuf, a, sec, adr, size2: INTEGER;
+    cur: ASMLINE;
+    Coff: COFFHEADER;
+    sym: люяяхб 18 * 4 хг CHAR;
+    FileName: UTILS.tString;
+  мювюкн
+    F := UTILS.CreateF(FName);
+    еякх F <= 0 рнцдю
+      Err(1)
+    йнмеж;
+    OutFilePos := UTILS.GetMem(Align(size, 4) + datasize + 1000H);
+    filebuf := OutFilePos;
+    UTILS.MemErr(OutFilePos = 0);
+
+    еякх ~obj рнцдю
+      Header.menuet01 := "MENUET01";
+      Header.ver := 1;
+      Header.start := sys.SIZE(KOSHEADER);
+      Header.size := Align(size, 4) + datasize;
+      Header.mem := Header.size + stk + gsize + strsize * 2 + 1000H;
+      Header.sp := Header.size + gsize + stk;
+      Header.param := Header.sp;
+      Header.path := Header.param + strsize;
+
+      Write(sys.ADR(Header), sys.SIZE(KOSHEADER));
+
+      cur := asmlist.First(ASMLINE);
+      онйю cur # осярн декюрэ
+        Write(sys.ADR(Code[cur.cmd]), cur.clen);
+        cur := cur.Next(ASMLINE)
+      йнмеж;
+      Fill(Align(size, 4) - size, 0X);
+      Write(sys.ADR(Data), datasize);
+      WriteF(F, filebuf, OutFilePos - filebuf)
+
+    хмюве
+
+      size2 := size;
+      size := Align(size, 4) - sys.SIZE(KOSHEADER);
+      Coff.Machine := IntToCard16(014CH);
+      Coff.NumberOfSections := IntToCard16(3);
+      Coff.TimeDateStamp := mConst.Date;
+      Coff.SizeOfOptionalHeader := IntToCard16(0);
+      Coff.Characteristics := IntToCard16(0184H);
+
+      Coff.text.name := ".flat";
+      Coff.text.size := 0;
+      Coff.text.adr := 0;
+      Coff.text.sizealign := size;
+      Coff.text.OAPfile := 8CH;
+      Coff.text.reserved6 := size + datasize + 8CH;
+      Coff.text.reserved7 := 0;
+      Coff.text.attrflags := 40300020H;
+
+      Coff.data.name := ".data";
+      Coff.data.size := 0;
+      Coff.data.adr := 0;
+      Coff.data.sizealign := datasize;
+      Coff.data.OAPfile := size + 8CH;
+      Coff.data.reserved6 := 0;
+      Coff.data.reserved7 := 0;
+      Coff.data.reserved8 := 0;
+      Coff.data.attrflags := 0C0300040H;
+
+      Coff.bss.name := ".bss";
+      Coff.bss.size := 0;
+      Coff.bss.adr := 0;
+      Coff.bss.sizealign := gsize;
+      Coff.bss.OAPfile := 0;
+      Coff.bss.reserved6 := 0;
+      Coff.bss.reserved7 := 0;
+      Coff.bss.reserved8 := 0;
+      Coff.bss.attrflags := 0C03000C0H;
+
+      size := Align(size2, 4);
+      rcount := 0;
+      cur := asmlist.First(ASMLINE);
+      онйю cur # осярн декюрэ
+        еякх cur.tcmd IN {OCMD, GCMD} рнцдю
+          sys.GET(sys.ADR(Code[cur.cmd]), a);
+          еякх a < size рнцдю
+            a := a - sys.SIZE(KOSHEADER);
+            sec := 1
+          юеякх a < size + datasize рнцдю
+            a := a - size;
+            sec := 2
+          хмюве
+            a := a - size - datasize;
+            sec := 3
+          йнмеж;
+          sys.PUT(sys.ADR(Code[cur.cmd]), a);
+          sys.PUT(sys.ADR(Reloc[rcount]), cur.adr - sys.SIZE(KOSHEADER));
+          INC(rcount, 4);
+          sys.PUT(sys.ADR(Reloc[rcount]), sec);
+          INC(rcount, 4);
+          sys.PUT(sys.ADR(Reloc[rcount]), 06X); INC(rcount);
+          sys.PUT(sys.ADR(Reloc[rcount]), 00X); INC(rcount);
+        йнмеж;
+        Write(sys.ADR(Code[cur.cmd]), cur.clen);
+        cur := cur.Next(ASMLINE)
+      йнмеж;
+      size := size2;
+      Fill(Align(size, 4) - size2, 0X);
+      Write(sys.ADR(Data), datasize);
+      Coff.text.reserved8 := rcount DIV 10;
+      Coff.PointerToSymbolTable := Coff.text.reserved6 + rcount;
+      Coff.NumberOfSymbols := 4;
+
+      WriteF(F, sys.ADR(Coff), sys.SIZE(COFFHEADER));
+      WriteF(F, filebuf, OutFilePos - filebuf);
+      WriteF(F, sys.ADR(Reloc), rcount);
+
+      adr := sys.ADR(sym);
+      InitArray(adr, "4558504F52545300000000000100000002002E666C617400000000000000010000000300");
+      InitArray(adr, "2E64617461000000000000000200000003002E6273730000000000000000030000000300");
+      sys.PUT(sys.ADR(sym) + 8, Labels[Exports] - sys.SIZE(KOSHEADER));
+
+      WriteF(F, sys.ADR(sym), LEN(sym));
+      i := 4;
+      WriteF(F, sys.ADR(i), 4)
+    йнмеж;
+    UTILS.CloseF(F)
+  йнмеж WriteKOS;
+
+опнжедспю WriteELF(FName: люяяхб хг CHAR; code, data, glob: INTEGER);
+  оепел F, res, delta, filebuf: INTEGER; cur: ASMLINE; bytes: люяяхб 817H + 55FH + 4900 хг CHAR;
+
+    опнжедспю Add(offset: INTEGER);
+    оепел m: INTEGER;
+    мювюкн
+      sys.GET(sys.ADR(bytes[offset]), m);
+      sys.PUT(sys.ADR(bytes[offset]), m + delta)
+    йнмеж Add;
+
+    опнжедспю Sub(offset: INTEGER);
+    оепел m: INTEGER;
+    мювюкн
+      sys.GET(sys.ADR(bytes[offset]), m);
+      sys.PUT(sys.ADR(bytes[offset]), m - delta)
+    йнмеж Sub;
+
+  мювюкн
+    F := UTILS.OpenF(felf, 0);
+    еякх F = 0 рнцдю
+      Err(3)
+    йнмеж;
+    еякх UTILS.Read(F, sys.ADR(bytes), 817H + 55FH + 4900) # 817H + 55FH + 4900 рнцдю
+      Err(4)
+    йнмеж;
+    UTILS.CloseF(F);
+    bytes[0] := 7FX;
+
+    DEC(code, 13);
+
+    delta := Align(data, 1000H) - 100000H;
+    Add(0020H); Add(00A4H); Add(00A8H); Add(0258H); Add(02B8H); Add(0308H); Add(0494H); Add(049CH);
+    Add(04A4H); Add(0679H); Add(0681H); Add(06A4H); Add(06B0H); Add(06BAH); Add(0703H); Add(0762H);
+    Add(0774H); Add(0786H); Add(0819H); Add(0823H); Add(17C5H); Add(17E5H); Add(17E9H); Add(1811H);
+    Add(1839H); Add(1861H); Add(1889H); Add(1A25H); Add(1A95H); Add(1AA5H); Add(1C05H); Add(1C55H);
+    Add(1CE5H); Add(1D09H); Add(1D15H); Add(1D25H); Add(1D35H); Add(1D55H);
+
+    delta := Align(glob, 1000H) - 3200000H;
+    Add(00A8H); Add(17EDH); Add(1C09H); Add(1D25H);
+
+    delta := Align(code, 1000H) - 100000H;
+    Add(0020H); Add(0084H); Add(0088H); Add(0098H); Add(009CH); Add(00A0H); Add(00B8H); Add(00BCH);
+    Add(00C0H); Add(0118H); Add(011CH); Add(0120H); Add(0258H); Add(0278H); Add(02B8H); Add(0308H);
+    Add(048CH); Add(0494H); Add(049CH); Add(04A4H); Add(04ACH); Add(04B4H); Add(04BCH); Add(04C4H);
+    Add(04CCH); Add(04D4H); Add(04DCH); Add(04E4H); Add(04ECH); Add(04F4H); Add(04FCH); Add(0504H);
+    Add(050CH); Add(0514H); Add(052BH); Add(0544H); Add(054EH); Add(0554H); Add(055EH); Add(056EH);
+    Add(057EH); Add(058EH); Add(059EH); Add(05AEH); Add(05BEH); Add(05CEH); Add(05DEH); Add(05EEH);
+    Add(05FEH); Add(060EH); Add(061EH); Add(062EH); Add(064CH); Add(0651H); Add(0679H); Add(0681H);
+    Add(0686H); Add(068CH); Add(06A4H); Add(06ABH); Add(06B0H); Add(06BAH); Add(06D7H); Add(06EBH);
+    Add(0703H); Add(0762H); Add(0774H); Add(0786H); Add(0819H); Add(0823H); Add(0828H); Add(082DH);
+    Sub(0845H); Sub(087BH); Add(08DEH); Add(08E8H); Sub(0916H); Add(0C52H); Add(0C8AH); Add(0D0AH);
+    Add(1635H); Add(1655H); Add(1659H); Add(167DH); Add(1681H); Add(16A5H); Add(16A9H); Add(16CDH);
+    Add(16D1H); Add(16F5H); Add(16F9H); Add(171DH); Add(1721H); Add(1745H); Add(1749H); Add(176DH);
+    Add(1771H); Add(1795H); Add(1799H); Add(17BDH); Add(17C1H); Add(17E5H); Add(17E9H); Add(1811H);
+    Add(1839H); Add(1861H); Add(1889H); Add(1985H); Add(1995H); Add(19A5H); Add(19B5H); Add(19C5H);
+    Add(19D5H); Add(19E5H); Add(19F5H); Add(1A05H); Add(1A15H); Add(1A25H); Add(1A55H); Add(1A65H);
+    Add(1A75H); Add(1A95H); Add(1AA5H); Add(1AD5H); Add(1AE5H); Add(1AF5H); Add(1B05H); Add(1B25H);
+    Add(1B35H); Add(1B45H); Add(1B55H); Add(1B65H); Add(1B75H); Add(1BB5H); Add(1BC5H); Add(1BE5H);
+    Add(1C05H); Add(1C15H); Add(1C55H); Add(1C75H); Add(1CA5H); Add(1CB5H); Add(1CE5H); Add(1D05H);
+    Add(1D15H); Add(1D25H); Add(1D35H); Add(1D55H); Add(1D75H); Add(1D89H);
+
+    OutFilePos := UTILS.GetMem(code + data + 8000H);
+    filebuf := OutFilePos;
+    UTILS.MemErr(OutFilePos = 0);
+
+    Write(sys.ADR(bytes), 817H);
+    Fill(2DDH, 90X);
+    cur := asmlist.First(ASMLINE);
+    онйю cur # осярн декюрэ
+      Write(sys.ADR(Code[cur.cmd]), cur.clen);
+      cur := cur.Next(ASMLINE)
+    йнмеж;
+    Fill(Align(code, 1000H) - code, 90X);
+    Write(sys.ADR(bytes[817H]), 55FH);
+    Write(sys.ADR(Data), data);
+    Fill(Align(data, 1000H) - data, 0X);
+    Write(sys.ADR(bytes[817H + 55FH + 55FH]), 0DC5H);
+
+    F := UTILS.CreateF(FName);
+    еякх F <= 0 рнцдю
+      Err(1)
+    йнмеж;
+    WriteF(F, filebuf, OutFilePos - filebuf);
+    UTILS.CloseF(F)
+  йнмеж WriteELF;
+
+опнжедспю FixLabels(FName: люяяхб хг CHAR; stk, gsize, glob: INTEGER);
+  оепел size, asize, i, rdatasize, RCount, n, temp, temp2, temp3: INTEGER; cur: ASMLINE; R: RELOC; c: CHAR;
+  мювюкн
+    dcount := Align(dcount, 4);
+    еякх dll рнцдю
+      LoadAdr := 10000000H;
+      PackExport(ExecName)
+    юеякх con OR gui рнцдю
+      LoadAdr := 400000H
+    юеякх kos OR obj рнцдю
+      LoadAdr := sys.SIZE(KOSHEADER)
+    юеякх elf рнцдю
+      LoadAdr := 134514420 + 1024;
+      INC(gsize, 1024)
+    йнмеж;
+
+    еякх dll OR con OR gui рнцдю
+      rdatasize := 0DAH + etable.size;
+      size := 1000H + LoadAdr;
+    юеякх kos OR elf OR obj рнцдю
+      rdatasize := 0;
+      size := LoadAdr
+    йнмеж;
+
+    Optimization;
+    temp2 := size;
+    cur := asmlist.First(ASMLINE);
+    онйю cur # осярн декюрэ
+      cur.adr := size;
+      еякх cur.tcmd = LCMD рнцдю
+        sys.PUT(cur.varadr, size)
+      йнмеж;
+      size := size + cur.clen;
+      cur := cur.Next(ASMLINE)
+    йнмеж;
+
+    size := temp2;
+    cur := asmlist.First(ASMLINE);
+    онйю cur # осярн декюрэ
+      cur.adr := size;
+      еякх cur.tcmd = LCMD рнцдю
+        sys.PUT(cur.varadr, size)
+      юеякх (cur.tcmd = JCMD) & cur.short рнцдю
+        sys.GET(cur.varadr, i);
+        temp3 := i - cur.Next(ASMLINE).adr;
+        еякх (-131 <= temp3) & (temp3 <= 123) рнцдю
+          sys.GET(cur(ASMLINE).codeadr - 1, c);
+          еякх c = JMP рнцдю
+            sys.PUT(cur(ASMLINE).codeadr - 1, 0EBX)
+          хмюве (*JE, JNE, JLE, JGE, JG, JL*)
+            sys.PUT(cur(ASMLINE).codeadr - 2, ORD(c) - 16);
+            sys.PUT(cur(ASMLINE).codeadr - 1, temp3);
+            DEC(cur(ASMLINE).codeadr)
+          йнмеж;
+          cur.clen := 2
+        йнмеж
+      йнмеж;
+      size := size + cur.clen;
+      cur := cur.Next(ASMLINE)
+    йнмеж;
+
+    еякх dll OR con OR gui рнцдю
+      asize := Align(size, 1000H)
+    юеякх kos OR obj рнцдю
+      asize := Align(size, 4)
+    юеякх elf рнцдю
+      asize := 134514420 + 6508 + Align(size - 13 - LoadAdr, 1000H)
+    йнмеж;
+
+    дкъ i := 0 дн Lcount декюрэ
+      еякх Labels[i] < 0 рнцдю
+        Labels[i] := -Labels[i] + asize + Align(rdatasize, 1000H)
+      йнмеж
+    йнмеж;
+
+    temp := dcount;
+    еякх elf рнцдю
+      asize := asize + Align(dcount, 1000H) + 64 + 1024;
+      sys.PUT(sys.ADR(Code[glob + 1]), asize - 1024);
+      dcount := 0
+    йнмеж;
+
+    еякх dll рнцдю
+      asize := asize - LoadAdr + 0DAH;
+      дкъ i := 0 дн etable.namecount - 1 декюрэ
+        etable.arradr[i] := Labels[etable.arradr[i]] - LoadAdr;
+        etable.arrnameptr[i] := etable.arrnameptr[i] + asize
+      йнмеж;
+      etable.arradroffset := etable.arradroffset + asize;
+      etable.arrnameptroffset := etable.arrnameptroffset + asize;
+      etable.arrnumoffset := etable.arrnumoffset + asize;
+      etable.dllnameoffset := etable.dllnameoffset + asize;
+      asize := asize + LoadAdr - 0DAH
+    йнмеж;
+    еякх dll OR con OR gui рнцдю
+      Labels[LoadLibrary] := asize + 4;
+      Labels[GetProcAddress] := asize;
+      R.Page := 0;
+      R.Size := 0;
+      RCount := 0;
+    йнмеж;
+    cur := asmlist.First(ASMLINE);
+
+    дкъ i := 0 дн LEN(RtlProc) - 1 декюрэ
+      RtlProc[i] := Labels[RtlProc[i]]
+    йнмеж;
+
+    temp3 := asize + Align(rdatasize, 1000H) + dcount;
+    онйю cur # осярн декюрэ
+      CASE cur.tcmd хг
+      |JCMD:
+        sys.GET(cur.varadr, i);
+        sys.PUT(cur.codeadr, i - cur.Next(ASMLINE).adr)
+      |GCMD:
+        sys.GET(cur.codeadr, i);
+        sys.PUT(cur.codeadr, i + temp3)
+      |OCMD:
+        sys.MOVE(cur.varadr, cur.codeadr, 4)
+      хмюве
+      йнмеж;
+      еякх dll & (cur.tcmd IN {GCMD, OCMD}) рнцдю
+        n := cur.adr - LoadAdr;
+        еякх ASR(n, 12) = ASR(R.Page, 12) рнцдю
+          R.reloc[RCount] := IntToCard16(n MOD 1000H + 3000H);
+          INC(RCount);
+          INC(R.Size, 2)
+        хмюве
+          еякх R.Size # 0 рнцдю
+            PutReloc(R)
+          йнмеж;
+          R.Page := ASR(n, 12) * 1000H;
+          R.Size := 10;
+          R.reloc[0] := IntToCard16(n MOD 1000H + 3000H);
+          RCount := 1
+        йнмеж
+      йнмеж;
+      cur := cur.Next(ASMLINE)
+    йнмеж;
+    еякх R.Size # 0 рнцдю
+      PutReloc(R)
+    йнмеж;
+    еякх dll OR con OR gui рнцдю
+      WritePE(FName, stk, size - 1000H - LoadAdr, dcount, rdatasize, gsize)
+    юеякх kos OR obj рнцдю
+      WriteKOS(FName, Align(stk, 4), size, dcount, gsize, obj)
+    юеякх elf рнцдю
+      WriteELF(FName, size - LoadAdr, temp, gsize)
+    йнмеж
+  йнмеж FixLabels;
+
+опнжедспю OutStringZ(str: люяяхб хг CHAR);
+	оепел i: INTEGER;
+	мювюкн
+	  New;
+	  current.clen := LENGTH(str);
+	  дкъ i := 0 дн current.clen - 1 декюрэ
+		Code[ccount] := str[i];
+		INC(ccount)
+	  йнмеж;
+	  Code[ccount] := 0X;
+	  INC(ccount);
+	  INC(current.clen)
+	йнмеж OutStringZ;
+
+опнжедспю Epilog*(gsize: INTEGER; FName: люяяхб хг CHAR; stk: INTEGER);
+	оепел i, glob: INTEGER;
+	мювюкн
+	  glob := 0;
+	  gsize := Align(gsize, 4) + 4;
+	  COPY(FName, OutFile);
+	  Labels[RTABLE] := -dcount;
+	  dataint(recarray[0]);
+	  дкъ i := 1 дн reccount декюрэ
+		dataint(recarray[i])
+	  йнмеж;
+	  current := start;
+	  еякх con OR gui OR dll рнцдю
+		PushInt(LoadLibrary);
+		PushInt(GetProcAddress);
+		OutCode("5859FF31FF3054")
+	  юеякх elf рнцдю
+		OutCode("6800000000");
+		glob := current.cmd;
+	  юеякх kos OR obj рнцдю
+		OutByte(54H)
+	  йнмеж;
+	  GlobalAdr(0);
+	  PushConst(ASR(gsize, 2));
+	  PushInt(RTABLE);
+	  PushInt(SELFNAME);
+	  CallRTL(_init);
+	  current := asmlist.Last(ASMLINE);
+	  еякх dll рнцдю
+		OutCode("B801000000C9C20C00")
+	  йнмеж;
+	  еякх obj рнцдю
+		OutCode("B801000000C9C20400")
+	  йнмеж;
+	  OutCode("EB05");
+	  Label(ASSRT);
+	  CallRTL(_assrt);
+	  OutCode("EB09");
+	  Label(HALT);
+	  OutCode("6A006A00");
+	  CallRTL(_assrt);
+	  OutCode("6A00");
+	  CallRTL(_halt);
+	  OutByte(90H);
+	  еякх obj рнцдю
+		Label(Exports);
+		CmdN(szSTART); CmdN(START);
+		CmdN(szversion); OutInt(stk);
+		дкъ i := 0 дн kosexpcount - 1 декюрэ
+		  CmdN(kosexp[i].NameLabel); CmdN(kosexp[i].Adr)
+		йнмеж;
+		OutInt(0);
+		Label(szSTART); OutStringZ("START");
+		Label(szversion); OutStringZ("version");
+		дкъ i := 0 дн kosexpcount - 1 декюрэ
+		  Label(kosexp[i].NameLabel);
+		  OutStringZ(kosexp[i].Name.Name)
+		йнмеж
+	  йнмеж;
+	  FixLabels(FName, stk, gsize, glob)
+	йнмеж Epilog;
+
+йнмеж ЛНДюЯЛ86_32.
