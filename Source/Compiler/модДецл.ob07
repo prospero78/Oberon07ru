@@ -1331,8 +1331,8 @@
         self := unit;
         мСкан.Backup(unit.scanner);
         COPY(name.Name, FName);
-        ЕСЛИ ~((~self.Std & pReadModule(Path, FName, мКонст.Ext)) ИЛИ
-                                pReadModule(Std, FName, мКонст.Ext)) ТОГДА
+        ЕСЛИ ~((~self.Std & pReadModule(Path, FName, мКонст.расшир)) ИЛИ
+                                pReadModule(Std, FName, мКонст.расшир)) ТОГДА
           ЕСЛИ FName = "SYSTEM" ТОГДА
             unit := sys;
             self.sys := ИСТИНА
@@ -1524,7 +1524,7 @@
   НАЧАЛО
     Platform := platform;
     main := ЛОЖЬ;
-    ЕСЛИ ReadModule(Std, "RTL", мКонст.Ext) ТОГДА
+    ЕСЛИ ReadModule(Std, "RTL", мКонст.расшир) ТОГДА
       Rtl(unit)
     ИНАЧЕ
       мУтиль.ErrMsg(65);

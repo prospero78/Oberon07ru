@@ -1859,7 +1859,7 @@
     pFactor := Factor;
     pOpSeq := OpSeq;
     м”тиль.Split(FName, Path, Name, Ext);
-    ≈—Ћ» Ext # м онст.Ext “ќ√ƒј
+    ≈—Ћ» Ext # м онст.расшир “ќ√ƒј
       м”тиль.ErrMsg(121);
       м”тиль.HALT(1)
      ќЌ≈÷;
