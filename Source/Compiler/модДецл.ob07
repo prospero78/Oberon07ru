@@ -254,7 +254,7 @@
       |lxRCurly:  code := 51
       |lxLRound:  code := 56
       |lxComma:   code := 61
-      |мКонст.lxTHEN:    code := 98
+      |мКонст.ксТОГДА:    code := 98
       |lxRSquare: code := 109
       |мКонст.lxDO:      code := 118
       |мКонст.lxUNTIL:   code := 119
@@ -1182,7 +1182,7 @@
         Next
       КОНЕЦ
     КОНЕЦ;
-    ЕСЛИ мСкан.tLex = мКонст.lxTYPE ТОГДА
+    ЕСЛИ мСкан.tLex = мКонст.ксТИПЫ ТОГДА
       мУтиль.Clear(PtrBases);
       unit.typedecl := ИСТИНА;
       Next;

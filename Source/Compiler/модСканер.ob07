@@ -693,8 +693,8 @@
         AddNodeKey("IF", мКонст.lxIF);
         AddNodeKey("ЕСЛИ", мКонст.lxIF);
         
-        AddNodeKey("TYPE", мКонст.lxTYPE);
-        AddNodeKey("ТИПЫ", мКонст.lxTYPE);
+        AddNodeKey("TYPE", мКонст.ксТИПЫ);
+        AddNodeKey("ТИПЫ", мКонст.ксТИПЫ);
         
         AddNodeKey("BEGIN", мКонст.lxBEGIN);
         AddNodeKey("НАЧАЛО", мКонст.lxBEGIN);
@@ -722,8 +722,8 @@
         AddNodeKey("OF", мКонст.lxOF);
         AddNodeKey("ИЗ", мКонст.lxOF);
         
-        AddNodeKey("THEN", мКонст.lxTHEN);
-        AddNodeKey("ТОГДА", мКонст.lxTHEN);
+        AddNodeKey("THEN", мКонст.ксТОГДА);
+        AddNodeKey("ТОГДА", мКонст.ксТОГДА);
         
         AddNodeKey("WHILE", мКонст.lxWHILE);
         AddNodeKey("ПОКА", мКонст.lxWHILE);

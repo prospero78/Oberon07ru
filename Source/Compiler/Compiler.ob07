@@ -1243,7 +1243,7 @@
       ЕСЛИ wh ТОГДА
         Check(мКонст.lxDO)
       ИНАЧЕ
-        Check(мКонст.lxTHEN)
+        Check(мКонст.ксТОГДА)
       КОНЕЦ;
       L3 := X86.NewLabel();
       X86.ifwh(L3);
