@@ -719,8 +719,8 @@
         AddNodeKey("DO", м онст.ксƒ≈Ћј“№);
         AddNodeKey("ƒ≈Ћј“№", м онст.ксƒ≈Ћј“№);
         
-        AddNodeKey("IS", м онст.lxIS);
-        AddNodeKey("≈—“№", м онст.lxIS);
+        AddNodeKey("IS", м онст.кс≈—“№);
+        AddNodeKey("≈—“№", м онст.кс≈—“№);
         
         AddNodeKey("OF", м онст.lxOF);
         AddNodeKey("»«", м онст.lxOF);

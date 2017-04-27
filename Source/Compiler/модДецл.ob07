@@ -30,7 +30,6 @@
   lxEOF = 0; lxINT = -1; lxREAL = -2; lxSTRING = -3; lxIDENT = -4; lxHEX = -5; lxCHX = -6; lxLONGREAL = -7;
   lxBY = 3;
   lxDIV = 6;
-  lxIS = 16;
   lxMOD = 17;
 
   lxPlus = 51; lxMinus = 52; lxMult = 53; lxSlash = 54; lxNot = 55; lxAnd = 56; lxComma = 57; lxSemi = 58;
@@ -437,7 +436,7 @@
   НАЧАЛО
     ВЫБОР Op ИЗ
     |lxEQ, lxNE, lxLT, lxGT,
-     lxLE, lxGE, мКонст.ксВ, lxIS:
+     lxLE, lxGE, мКонст.ксВ, мКонст.ксЕСТЬ:
       Res := ИСТИНА
     ИНАЧЕ
       Res := ЛОЖЬ

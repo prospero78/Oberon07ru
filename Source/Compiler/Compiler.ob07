@@ -29,7 +29,6 @@
 
   lxEOF = 0; lxINT = -1; lxREAL = -2; lxSTRING = -3; lxIDENT = -4; lxHEX = -5; lxCHX = -6; lxLONGREAL = -7;
   lxBY = 3; lxDIV = 6;
-  lxIS = 16;
   lxMOD = 17; 
 
   lxPlus = 51; lxMinus = 52; lxMult = 53; lxSlash = 54; lxNot = 55; lxAnd = 56; lxComma = 57; lxSemi = 58;
@@ -1169,7 +1168,7 @@
       Coord(line, col);
       Op := Ï—Í‡Ì.tLex;
       Next;
-      ≈—À» Op = lxIS “Œ√ƒ¿
+      ≈—À» Op = Ï ÓÌÒÚ.ÍÒ≈—“‹ “Œ√ƒ¿
         Assert(e.T.tType IN {TRECORD, TPOINTER}, line, col, 37);
         ≈—À» e.T.tType = TRECORD “Œ√ƒ¿
           Assert(e.vparam, line, col, 37)
