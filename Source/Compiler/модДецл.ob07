@@ -1544,7 +1544,7 @@
       UTILS.concat(path, mConst.Slash, path);
       UTILS.concat(path, Path, full);
       Path := full;
-      еякх (mConst.OS = "WIN") & (Path[0] = mConst.Slash) рнцдю
+      еякх (mConst.ня = "WIN") & (Path[0] = mConst.Slash) рнцдю
         delfirstchar(Path)
       йнмеж;
       еякх ~ReadModule(Path, Main, ExtMain) рнцдю

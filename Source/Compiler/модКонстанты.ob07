@@ -9,7 +9,7 @@
 КОНСТ
 
  (* модУтиль *)
-   OS* = API.OS;
+   ОС* = API.OS;
    Slash* = API.Slash;
    Ext* = ".ob07";
    MAX_PATH* = 1024;
