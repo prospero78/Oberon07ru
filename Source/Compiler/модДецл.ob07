@@ -249,7 +249,7 @@
       |lxEQ:      code := 35
       |lxRRound:  code := 38
       |мКонст.ксДО:      code := 40
-      |мКонст.lxOF:      code := 41
+      |мКонст.ксИЗ:      code := 41
       |lxRCurly:  code := 51
       |lxLRound:  code := 56
       |lxComma:   code := 61
@@ -456,7 +456,7 @@
       Assert(b # 0.0D0, line, col, 46);
       res := a / b
     |lxDIV:
-      Assert(~((a = LONG(FLT(мСкан.minINT))) & (b = -1.0D0)), line, col, IOVER);
+      Assert(~((a = LONG(FLT(мКонст.целое_мин))) & (b = -1.0D0)), line, col, IOVER);
       res := LONG(FLT(FLOOR(a) DIV FLOOR(b)))
     |lxMOD:
       res := LONG(FLT(FLOOR(a) MOD FLOOR(b)))
@@ -464,12 +464,12 @@
     КОНЕЦ;
     Assert(~мУтиль.IsInf(res), line, col, FOVER);
     ВЫБОР T.tType ИЗ
-    |TINTEGER:  Assert((res <= LONG(FLT(мКонст.целое_макс))) & (res >= LONG(FLT(мСкан.minINT))), line, col, IOVER)
-    |TREAL:     Assert((res <= LONG(мСкан.maxREAL)) & (res >= -LONG(мСкан.maxREAL)), line, col, FOVER)
+    |TINTEGER:  Assert((res <= LONG(FLT(мКонст.целое_макс))) & (res >= LONG(FLT(мКонст.целое_мин))), line, col, IOVER)
+    |TREAL:     Assert((res <= LONG(мКонст.maxREAL)) & (res >= -LONG(мКонст.maxREAL)), line, col, FOVER)
     |TLONGREAL: Assert((res <= max) & (res >= -max), line, col, FOVER)
     ИНАЧЕ
     КОНЕЦ;
-    ЕСЛИ (res = 0.0D0) & (T.tType IN {TREAL, TLONGREAL}) ИЛИ (ABS(res) < LONG(мСкан.minREAL)) & (T.tType = TREAL) ТОГДА
+    ЕСЛИ (res = 0.0D0) & (T.tType IN {TREAL, TLONGREAL}) ИЛИ (ABS(res) < LONG(мКонст.minREAL)) & (T.tType = TREAL) ТОГДА
       ВЫБОР Op ИЗ
       |lxPlus:  Assert(a = -b, line, col, UNDER)
       |lxMinus: Assert(a = b, line, col, UNDER)
@@ -850,7 +850,7 @@
   НАЧАЛО
     ЕСЛИ мСкан.tLex = мКонст.ксМАССИВ ТОГДА
       Next;
-      Check(мКонст.lxOF);
+      Check(мКонст.ксИЗ);
       Next;
       TA := CreateType(TARRAY, 0, 0, 0, FormalType(line, col), ЛОЖЬ, ПУСТО)
     ИНАЧЕ
@@ -1030,7 +1030,7 @@
       nov := CreateType(TARRAY, FLOOR(v), 0, 0, ПУСТО, ЛОЖЬ, NewType);
       ЕСЛИ мСкан.tLex = lxComma ТОГДА
         nov.Base := StructType(ИСТИНА, ПУСТО)
-      АЕСЛИ мСкан.tLex = мКонст.lxOF ТОГДА
+      АЕСЛИ мСкан.tLex = мКонст.ксИЗ ТОГДА
         Next;
         Coord(line, col);
         id_T := мСкан.tLex = lxIDENT;

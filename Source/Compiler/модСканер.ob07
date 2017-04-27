@@ -24,10 +24,10 @@
     мКонст := модКонстанты;
 
 КОНСТ
-    minINT* = 80000000H;
-    maxREAL* = 3.39E38;
+    
+    
     maxDBL* = 1.69D308;
-    minREAL* = 1.41E-45;
+    
     IDLENGTH = 255;
     STRLENGTH* = 256;
 
@@ -396,9 +396,9 @@
           НАЧАЛО
             cont := ИСТИНА;
             ЕСЛИ str[i] = 0X ТОГДА
-              ЕСЛИ res > LONG(maxREAL) ТОГДА
+              ЕСЛИ res > LONG(мКонст.maxREAL) ТОГДА
                 Error(lxERR7, cont)
-              АЕСЛИ nez & ((res = 0.0D0) ИЛИ (res < LONG(minREAL)) & (tLex = lxREAL)) ТОГДА
+              АЕСЛИ nez & ((res = 0.0D0) ИЛИ (res < LONG(мКонст.minREAL)) & (tLex = lxREAL)) ТОГДА
                 Error(lxERR9, cont)
               КОНЕЦ
             КОНЕЦ
@@ -451,9 +451,9 @@
             res := res * m;
             Inf(cont, i)
             КОНЕЦ;
-            ЕСЛИ cont & (nez & (res = 0.0D0) ИЛИ (res > 0.0D0) & (res < LONG(minREAL)) & (tLex = lxREAL)) ТОГДА
+            ЕСЛИ cont & (nez & (res = 0.0D0) ИЛИ (res > 0.0D0) & (res < LONG(мКонст.minREAL)) & (tLex = lxREAL)) ТОГДА
             Error(lxERR9, cont)
-            АЕСЛИ cont & (tLex = lxREAL) & (res > LONG(maxREAL)) ТОГДА
+            АЕСЛИ cont & (tLex = lxREAL) & (res > LONG(мКонст.maxREAL)) ТОГДА
             Error(lxERR7, cont)
             КОНЕЦ
             ВЕРНУТЬ cont
@@ -722,8 +722,8 @@
         AddNodeKey("IS", мКонст.ксЕСТЬ);
         AddNodeKey("ЕСТЬ", мКонст.ксЕСТЬ);
         
-        AddNodeKey("OF", мКонст.lxOF);
-        AddNodeKey("ИЗ", мКонст.lxOF);
+        AddNodeKey("OF", мКонст.ксИЗ);
+        AddNodeKey("ИЗ", мКонст.ксИЗ);
         
         AddNodeKey("THEN", мКонст.ксТОГДА);
         AddNodeKey("ТОГДА", мКонст.ксТОГДА);

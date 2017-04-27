@@ -433,7 +433,7 @@
       ЕСЛИ e1.eType = eCONST ТОГДА
         e.Value := ABS(e1.Value);
         e.eType := eCONST;
-        Assert(~((e1.T.tType = TINTEGER) & (e1.Value = LONG(FLT(мСкан.minINT)))), line, col, DECL.IOVER)
+        Assert(~((e1.T.tType = TINTEGER) & (e1.Value = LONG(FLT(мКонст.целое_мин)))), line, col, DECL.IOVER)
       КОНЕЦ;
       ЕСЛИ e1.T.tType = TINTEGER ТОГДА
         X86.StFunc(X86.stABS)
@@ -496,7 +496,7 @@
       Assert(e1.T.tType IN {TREAL, TLONGREAL}, line, col, 66);
       Load(e1);
       ЕСЛИ e1.eType = eCONST ТОГДА
-        Assert((e1.Value - 1.0D0 < LONG(FLT(мКонст.целое_макс))) & (e1.Value >= LONG(FLT(мСкан.minINT))), line, col, 74);
+        Assert((e1.Value - 1.0D0 < LONG(FLT(мКонст.целое_макс))) & (e1.Value >= LONG(FLT(мКонст.целое_мин))), line, col, 74);
         e.Value := LONG(FLT(FLOOR(e1.Value)));
         e.eType := eCONST
       КОНЕЦ;
@@ -567,8 +567,8 @@
       pExpr(e1);
       Assert(e1.T.tType = TLONGREAL, line, col, 70);
       ЕСЛИ e1.eType = eCONST ТОГДА
-        Assert(ABS(e1.Value) <= LONG(мСкан.maxREAL), line, col, DECL.FOVER);
-        Assert(ABS(e1.Value) >= LONG(мСкан.minREAL), line, col, DECL.UNDER);
+        Assert(ABS(e1.Value) <= LONG(мКонст.maxREAL), line, col, DECL.FOVER);
+        Assert(ABS(e1.Value) >= LONG(мКонст.minREAL), line, col, DECL.UNDER);
         e.Value := e1.Value;
         e.eType := eCONST
       КОНЕЦ;
@@ -1128,7 +1128,7 @@
       ЕСЛИ (uOp = lxMinus) & (e.eType = eCONST) ТОГДА
         ВЫБОР e.T.tType ИЗ
         |TINTEGER:
-          Assert(e.Value # LONG(FLT(мСкан.minINT)), uline, ucol, DECL.IOVER)
+          Assert(e.Value # LONG(FLT(мКонст.целое_мин)), uline, ucol, DECL.IOVER)
         |TSET:
           e.Value := -LONG(FLT(ORD(-BITS(FLOOR(e.Value)))))
         ИНАЧЕ
@@ -1409,7 +1409,7 @@
     Assert(e.T.tType IN {TCHAR, TSTRING, TINTEGER}, line, col, 156);
     Assert(~((e.T.tType = TSTRING) & (LenString(e.Value) # 1)), line, col, 94);
     int := e.T.tType = TINTEGER;
-    Check(мКонст.lxOF);
+    Check(мКонст.ксИЗ);
     Load(e);
     X86.Drop;
     Labels := мУтиль.CreateList();
