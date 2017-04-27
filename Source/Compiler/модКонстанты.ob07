@@ -30,9 +30,11 @@
    lxFOR* = 12;
    lxIF* = 13;
    lxIMPORT* = 14;
+   
    lxMODULE* = 18;
    lxNIL* = 19;
    lxOF* = 20;
+   lxOR* = 21;
    lxPOINTER* = 22;
    lxPROCEDURE* = 23;
    lxRECORD* = 24;
