@@ -24,11 +24,11 @@
     UTILS := модУтиль,
     X86 := модАсм86_32,
     SYSTEM,
-    mConst := модКонстанты;
+    мКонст := модКонстанты;
 
 КОНСТ
 
-  Slash = mConst.Slash;
+  Slash = мКонст.Slash;
 
   lxEOF = 0; lxINT = -1; lxREAL = -2; lxSTRING = -3; lxIDENT = -4; lxHEX = -5; lxCHX = -6; lxLONGREAL = -7;
   lxBY = 3; lxDIV = 6;
@@ -500,7 +500,7 @@
       Assert(e1.T.tType IN {TREAL, TLONGREAL}, line, col, 66);
       Load(e1);
       ЕСЛИ e1.eType = eCONST ТОГДА
-        Assert((e1.Value - 1.0D0 < LONG(FLT(mConst.maxINT))) & (e1.Value >= LONG(FLT(SCAN.minINT))), line, col, 74);
+        Assert((e1.Value - 1.0D0 < LONG(FLT(мКонст.maxINT))) & (e1.Value >= LONG(FLT(SCAN.minINT))), line, col, 74);
         e.Value := LONG(FLT(FLOOR(e1.Value)));
         e.eType := eCONST
       КОНЕЦ;
@@ -896,17 +896,17 @@
       АЕСЛИ e.eType IN {eSTPROC, eSYSPROC} ТОГДА
         StFunc(e, e.id.StProc)
       КОНЕЦ
-    |mConst.lxNIL:
+    |мКонст.lxNIL:
       e.T := sttypes[TNIL];
       e.Value := 0.0D0;
       X86.PushConst(0);
       Next
-    |mConst.lxTRUE:
+    |мКонст.lxTRUE:
       e.T := sttypes[TBOOLEAN];
       e.Value := 1.0D0;
       X86.PushConst(1);
       Next
-    |mConst.lxFALSE:
+    |мКонст.lxFALSE:
       e.T := sttypes[TBOOLEAN];
       e.Value := 0.0D0;
       X86.PushConst(0);
@@ -1038,7 +1038,7 @@
       ИНАЧЕ
         X86.idivmod(Op = lxMOD)
       КОНЕЦ
-    |lxAnd, mConst.lxOR:
+    |lxAnd, мКонст.lxOR:
       Assert((a.T.tType = TBOOLEAN) & (b.T.tType = TBOOLEAN), line, col, 37)
     |lxIN:
       Assert((a.T.tType = TINTEGER) & (b.T.tType = TSET), line, col, 37);
@@ -1144,18 +1144,18 @@
       КОНЕЦ;
       e.vparam := ЛОЖЬ
     КОНЕЦ;
-    ПОКА (SCAN.tLex = lxPlus) ИЛИ (SCAN.tLex = lxMinus) ИЛИ (SCAN.tLex = mConst.lxOR) ДЕЛАТЬ
+    ПОКА (SCAN.tLex = lxPlus) ИЛИ (SCAN.tLex = lxMinus) ИЛИ (SCAN.tLex = мКонст.lxOR) ДЕЛАТЬ
       Load(e);
       Coord(line, col);
       Op := SCAN.tLex;
       Next;
-      ЕСЛИ Op = mConst.lxOR ТОГДА
+      ЕСЛИ Op = мКонст.lxOR ТОГДА
         L := X86.NewLabel();
         X86.IfWhile(L, ИСТИНА)
       КОНЕЦ;
       Term(a);
       Load(a);
-      ЕСЛИ Op = mConst.lxOR ТОГДА
+      ЕСЛИ Op = мКонст.lxOR ТОГДА
         X86.Label(L)
       КОНЕЦ;
       Operation(e, a, Op, line, col)
@@ -1244,9 +1244,9 @@
       Assert(e.T.tType = TBOOLEAN, line, col, 117);
       Load(e);
       ЕСЛИ wh ТОГДА
-        Check(mConst.lxDO)
+        Check(мКонст.lxDO)
       ИНАЧЕ
-        Check(mConst.lxTHEN)
+        Check(мКонст.lxTHEN)
       КОНЕЦ;
       L3 := X86.NewLabel();
       X86.ifwh(L3);
@@ -1254,12 +1254,12 @@
       pOpSeq;
       X86.jmp(X86.JMP, L);
       X86.Label(L3)
-    ПОКАНЕ SCAN.tLex # mConst.lxELSIF;
-    ЕСЛИ ~wh & (SCAN.tLex = mConst.lxELSE) ТОГДА
+    ПОКАНЕ SCAN.tLex # мКонст.lxELSIF;
+    ЕСЛИ ~wh & (SCAN.tLex = мКонст.lxELSE) ТОГДА
       Next;
       pOpSeq
     КОНЕЦ;
-    Check(mConst.lxEND);
+    Check(мКонст.lxEND);
     ЕСЛИ ~wh ТОГДА
       X86.Label(L)
     КОНЕЦ;
@@ -1273,7 +1273,7 @@
     L := X86.NewLabel();
     X86.Label(L);
     pOpSeq;
-    Check(mConst.lxUNTIL);
+    Check(мКонст.lxUNTIL);
     Next;
     Coord(line, col);
     Expr(e);
@@ -1309,7 +1309,7 @@
     Assert(e.T.tType = TINTEGER, line, col, 52);
     Load(e);
     X86.Save(TINTEGER);
-    Check(mConst.lxTO);
+    Check(мКонст.lxTO);
     Next;
     Coord(line, col);
     Expr(e);
@@ -1324,12 +1324,12 @@
       iValue := FLOOR(Value);
       Assert(iValue # 0, line, col, 122)
     КОНЕЦ;
-    Check(mConst.lxDO);
+    Check(мКонст.lxDO);
     Next;
     X86.For(iValue > 0, LBeg, LEnd);
     pOpSeq;
     X86.NextFor(iValue, LBeg, LEnd);
-    Check(mConst.lxEND);
+    Check(мКонст.lxEND);
     Next
   КОНЕЦ ForOper;
 
@@ -1384,7 +1384,7 @@
   НАЧАЛО
     LBeg := X86.NewLabel();
     LEnd := X86.NewLabel();
-    ЕСЛИ ~((SCAN.tLex = lxStick) ИЛИ (SCAN.tLex = mConst.lxEND)) ТОГДА
+    ЕСЛИ ~((SCAN.tLex = lxStick) ИЛИ (SCAN.tLex = мКонст.lxEND)) ТОГДА
       Label(int, Labels, LBeg);
       ПОКА SCAN.tLex = lxComma ДЕЛАТЬ
         Next;
@@ -1413,7 +1413,7 @@
     Assert(e.T.tType IN {TCHAR, TSTRING, TINTEGER}, line, col, 156);
     Assert(~((e.T.tType = TSTRING) & (LenString(e.Value) # 1)), line, col, 94);
     int := e.T.tType = TINTEGER;
-    Check(mConst.lxOF);
+    Check(мКонст.lxOF);
     Load(e);
     X86.Drop;
     Labels := UTILS.CreateList();
@@ -1425,14 +1425,14 @@
       Next;
       Variant(int, Labels, EndCase)
     КОНЕЦ;
-    ЕСЛИ SCAN.tLex = mConst.lxELSE ТОГДА
+    ЕСЛИ SCAN.tLex = мКонст.lxELSE ТОГДА
       Next;
       pOpSeq
     ИНАЧЕ
       UTILS.UnitLine(DECL.UnitNumber, SCAN.line);
       X86.OnError(7)
     КОНЕЦ;
-    Check(mConst.lxEND);
+    Check(мКонст.lxEND);
     X86.Label(EndCase);
     Next;
     UTILS.Clear(Labels)
@@ -1762,10 +1762,10 @@
     UTILS.UnitLine(DECL.UnitNumber, SCAN.line);
     ВЫБОР SCAN.tLex ИЗ
     |lxIDENT: IdentOper
-    |mConst.lxIF, mConst.lxWHILE: IfWhileOper(SCAN.tLex = mConst.lxWHILE)
-    |mConst.lxREPEAT: RepeatOper
-    |mConst.lxFOR: ForOper
-    |mConst.lxCASE: CaseOper
+    |мКонст.lxIF, мКонст.lxWHILE: IfWhileOper(SCAN.tLex = мКонст.lxWHILE)
+    |мКонст.lxREPEAT: RepeatOper
+    |мКонст.lxFOR: ForOper
+    |мКонст.lxCASE: CaseOper
     ИНАЧЕ
     КОНЕЦ
   КОНЕЦ Operator;
@@ -1862,7 +1862,7 @@
     pFactor := Factor;
     pOpSeq := OpSeq;
     UTILS.Split(FName, Path, Name, Ext);
-    ЕСЛИ Ext # mConst.Ext ТОГДА
+    ЕСЛИ Ext # мКонст.Ext ТОГДА
       UTILS.ErrMsg(121);
       UTILS.HALT(1)
     КОНЕЦ;
@@ -1901,7 +1901,7 @@ UTILS.concat(temp, ".obj", temp)
       stksize := getver()
     КОНЕЦ;
     UTILS.concat(SelfPath, "Lib", SelfPath);
-    UTILS.concat(SelfPath, mConst.Slash, SelfPath);
+    UTILS.concat(SelfPath, мКонст.Slash, SelfPath);
     ЕСЛИ platform = 5 ТОГДА
       UTILS.concat(SelfPath, "Linux32", SelfPath)
     АЕСЛИ platform IN {4, 6} ТОГДА
@@ -1909,7 +1909,7 @@ UTILS.concat(temp, ".obj", temp)
     АЕСЛИ platform IN {1, 2, 3} ТОГДА
       UTILS.concat(SelfPath, "Windows32", SelfPath)
     КОНЕЦ;
-    UTILS.concat(SelfPath, mConst.Slash, SelfPath);
+    UTILS.concat(SelfPath, мКонст.Slash, SelfPath);
     X86.Init(DECL.MemErr, platform);
     X86.Prolog(temp);
     DECL.Program(SelfPath, Path, Name, Ext, platform IN {1, 2, 3}, OpSeq, Expr, AssComp, sttypes);

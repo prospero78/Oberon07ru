@@ -23,7 +23,7 @@
     UTILS := ЛНДсРХКЭ,
     X86 := ЛНДюЯЛ86_32,
     SYSTEM,
-    mConst := ЛНДйНМЯРЮМРШ;
+    ЛйНМЯР := ЛНДйНМЯРЮМРШ;
 
 йнмяр
 
@@ -242,24 +242,24 @@
   мювюкн
     еякх SCAN.tLex # key рнцдю
       бшанп key хг
-      |mConst.lxMODULE:  code := 21
+      |ЛйНМЯР.lxMODULE:  code := 21
       |lxIDENT:   code := 22
       |lxSemi:    code := 23
-      |mConst.lxEND:     code := 24
+      |ЛйНМЯР.lxEND:     code := 24
       |lxDot:     code := 25
       |lxEQ:      code := 35
       |lxRRound:  code := 38
-      |mConst.lxTO:      code := 40
-      |mConst.lxOF:      code := 41
+      |ЛйНМЯР.lxTO:      code := 40
+      |ЛйНМЯР.lxOF:      code := 41
       |lxRCurly:  code := 51
       |lxLRound:  code := 56
       |lxComma:   code := 61
-      |mConst.lxTHEN:    code := 98
+      |ЛйНМЯР.lxTHEN:    code := 98
       |lxRSquare: code := 109
-      |mConst.lxDO:      code := 118
-      |mConst.lxUNTIL:   code := 119
+      |ЛйНМЯР.lxDO:      code := 118
+      |ЛйНМЯР.lxUNTIL:   code := 119
       |lxAssign:  code := 120
-      |mConst.lxRETURN:  code := 124
+      |ЛйНМЯР.lxRETURN:  code := 124
       |lxColon:   code := 157
       хмюве
       йнмеж;
@@ -465,7 +465,7 @@
     йнмеж;
     Assert(~UTILS.IsInf(res), line, col, FOVER);
     бшанп T.tType хг
-    |TINTEGER:  Assert((res <= LONG(FLT(mConst.maxINT))) & (res >= LONG(FLT(SCAN.minINT))), line, col, IOVER)
+    |TINTEGER:  Assert((res <= LONG(FLT(ЛйНМЯР.maxINT))) & (res >= LONG(FLT(SCAN.minINT))), line, col, IOVER)
     |TREAL:     Assert((res <= LONG(SCAN.maxREAL)) & (res >= -LONG(SCAN.maxREAL)), line, col, FOVER)
     |TLONGREAL: Assert((res <= max) & (res >= -max), line, col, FOVER)
     хмюве
@@ -529,7 +529,7 @@
     |lxAnd:
       Assert(Ta.tType = TBOOLEAN, line, col, 37);
       Res := LONG(FLT(ORD((ai # 0) & (bi # 0))))
-    |mConst.lxOR:
+    |ЛйНМЯР.lxOR:
       Assert(Ta.tType = TBOOLEAN, line, col, 37);
       Res := LONG(FLT(ORD((ai # 0) хкх (bi # 0))))
     |lxEQ, lxNE:
@@ -573,7 +573,7 @@
       Res := LONG(FLT(ORD(ai IN BITS(bi))))
     хмюве
     йнмеж;
-    еякх Relation(Op) хкх (Op = lxAnd) хкх (Op = mConst.lxOR) рнцдю
+    еякх Relation(Op) хкх (Op = lxAnd) хкх (Op = ЛйНМЯР.lxOR) рнцдю
       TRes := sttypes[TBOOLEAN]
     йнмеж
   йнмеж Calc;
@@ -643,7 +643,7 @@
 
 опнжедспю FieldOffset(Align, RecSize: INTEGER): INTEGER;
   мювюкн
-    Assert2(RecSize <= mConst.maxINT - (Align - RecSize MOD Align) MOD Align, 83)
+    Assert2(RecSize <= ЛйНМЯР.maxINT - (Align - RecSize MOD Align) MOD Align, 83)
     бепмсрэ RecSize + (Align - RecSize MOD Align) MOD Align
   йнмеж FieldOffset;
 
@@ -673,11 +673,11 @@
         йнмеж;
         еякх Tr.Rec = record рнцдю
           cur.Offset := FieldOffset(Tf.Align, Tr.Size);
-          Assert2(cur.Offset <= mConst.maxINT - Tf.Size, 83);
+          Assert2(cur.Offset <= ЛйНМЯР.maxINT - Tf.Size, 83);
           Tr.Size := cur.Offset + Tf.Size
         юеякх Tr.Rec = noalign рнцдю
           cur.Offset := FieldOffset(1, Tr.Size);
-          Assert2(cur.Offset <= mConst.maxINT - Tf.Size, 83);
+          Assert2(cur.Offset <= ЛйНМЯР.maxINT - Tf.Size, 83);
           Tr.Size := cur.Offset + Tf.Size
         юеякх Tr.Rec = union рнцдю
           еякх Tf.Size > Tr.Size рнцдю
@@ -763,7 +763,7 @@
           Next;
           Check(lxIDENT)
         хмюве
-          Assert2(SCAN.tLex = mConst.lxEND, 86)
+          Assert2(SCAN.tLex = ЛйНМЯР.lxEND, 86)
         йнмеж
       хмюве
         Assert2(кнфэ, 85)
@@ -796,14 +796,14 @@
         n := 4 * (1 + Dim(T) + ORD((cur.VarKind = paramvar) & (T.tType = TRECORD)))
       хмюве
         n := T.Size;
-        Assert2(n <= mConst.maxINT - UTILS.Align(n), 93);
+        Assert2(n <= ЛйНМЯР.maxINT - UTILS.Align(n), 93);
         n := n + UTILS.Align(n)
       йнмеж;
       еякх cur.Level = 3 рнцдю
         cur.Offset := ProgSize;
-        Assert2(ProgSize <= mConst.maxINT - n, 93);
+        Assert2(ProgSize <= ЛйНМЯР.maxINT - n, 93);
         ProgSize := ProgSize + n;
-        Assert2(ProgSize <= mConst.maxINT - UTILS.Align(ProgSize), 93);
+        Assert2(ProgSize <= ЛйНМЯР.maxINT - UTILS.Align(ProgSize), 93);
         ProgSize := ProgSize + UTILS.Align(ProgSize)
       хмюве
         еякх cur.VarKind = 0 рнцдю
@@ -812,9 +812,9 @@
           cur.Offset := curBlock.VarSize - 8 + 4 * (cur.Level + ORD((cur.VarKind = paramvar) & (T.tType = TRECORD)))
         йнмеж
       йнмеж;
-      Assert2(curBlock.VarSize <= mConst.maxINT - n, 93);
+      Assert2(curBlock.VarSize <= ЛйНМЯР.maxINT - n, 93);
       curBlock.VarSize := curBlock.VarSize + n;
-      Assert2(curBlock.VarSize <= mConst.maxINT - UTILS.Align(curBlock.VarSize), 93);
+      Assert2(curBlock.VarSize <= ЛйНМЯР.maxINT - UTILS.Align(curBlock.VarSize), 93);
       curBlock.VarSize := curBlock.VarSize + UTILS.Align(curBlock.VarSize);
       еякх cur.VarKind # 0 рнцдю
         curBlock.ParamSize := curBlock.VarSize
@@ -849,9 +849,9 @@
 опнжедспю FormalType(оеп line, col: INTEGER): pTYPE;
   оепел TA: pTYPE;
   мювюкн
-    еякх SCAN.tLex = mConst.lxARRAY рнцдю
+    еякх SCAN.tLex = ЛйНМЯР.lxARRAY рнцдю
       Next;
-      Check(mConst.lxOF);
+      Check(ЛйНМЯР.lxOF);
       Next;
       TA := CreateType(TARRAY, 0, 0, 0, FormalType(line, col), кнфэ, осярн)
     хмюве
@@ -870,9 +870,9 @@
     еякх proc рнцдю
       T := curBlock.T
     йнмеж;
-    Assert2((SCAN.tLex = lxIDENT) хкх (SCAN.tLex = mConst.lxVAR), 84);
+    Assert2((SCAN.tLex = lxIDENT) хкх (SCAN.tLex = ЛйНМЯР.lxVAR), 84);
     ByRef := кнфэ;
-    еякх SCAN.tLex = mConst.lxVAR рнцдю
+    еякх SCAN.tLex = ЛйНМЯР.lxVAR рнцдю
       ByRef := хярхмю;
       Next;
       Check(lxIDENT)
@@ -919,7 +919,7 @@
 опнжедспю ParamType(T: pTYPE);
   оепел break: BOOLEAN;
   мювюкн
-    еякх (SCAN.tLex = lxIDENT) хкх (SCAN.tLex = mConst.lxVAR) рнцдю
+    еякх (SCAN.tLex = lxIDENT) хкх (SCAN.tLex = ЛйНМЯР.lxVAR) рнцдю
       break := кнфэ;
       онбрнпърэ
         Section(T);
@@ -1019,7 +1019,7 @@
   оепел v: LONGREAL; T, nov: pTYPE; line, col, line2, col2: INTEGER; id_T: BOOLEAN;
   мювюкн
     бшанп SCAN.tLex хг
-    |mConst.lxARRAY, lxComma:
+    |ЛйНМЯР.lxARRAY, lxComma:
       еякх SCAN.tLex = lxComma рнцдю
         Assert2(Comma, 39)
       йнмеж;
@@ -1031,7 +1031,7 @@
       nov := CreateType(TARRAY, FLOOR(v), 0, 0, осярн, кнфэ, NewType);
       еякх SCAN.tLex = lxComma рнцдю
         nov.Base := StructType(хярхмю, осярн)
-      юеякх SCAN.tLex = mConst.lxOF рнцдю
+      юеякх SCAN.tLex = ЛйНМЯР.lxOF рнцдю
         Next;
         Coord(line, col);
         id_T := SCAN.tLex = lxIDENT;
@@ -1041,10 +1041,10 @@
       хмюве
         Assert2(кнфэ, 79)
       йнмеж;
-      Assert2(nov.Base.Size <= mConst.maxINT DIV nov.Len, 83);
+      Assert2(nov.Base.Size <= ЛйНМЯР.maxINT DIV nov.Len, 83);
       nov.Size := nov.Base.Size * nov.Len;
       nov.Align := nov.Base.Align
-    |mConst.lxRECORD:
+    |ЛйНМЯР.lxRECORD:
       Next;
       INC(RecCount);
       nov := CreateType(TRECORD, 0, 0, RecCount, осярн, хярхмю, NewType);
@@ -1070,7 +1070,7 @@
         Assert(nov.Base.Rec = record, line2, col2, 113)
       йнмеж;
       ReadFields(nov);
-      Check(mConst.lxEND);
+      Check(ЛйНМЯР.lxEND);
       nov.Size := X86.Align(nov.Size, nov.Align);
       еякх nov.Base # осярн рнцдю
         X86.AddRec(nov.Base.Number)
@@ -1078,9 +1078,9 @@
         X86.AddRec(0)
       йнмеж;
       Next
-    |mConst.lxPOINTER:
+    |ЛйНМЯР.lxPOINTER:
       Next;
-      Check(mConst.lxTO);
+      Check(ЛйНМЯР.lxTO);
       Next;
       nov := CreateType(TPOINTER, 0, 4, 0, осярн, кнфэ, NewType);
       nov.Align := 4;
@@ -1092,7 +1092,7 @@
       хмюве
         Assert(nov.Base.tType = TRECORD, line, col, 81)
       йнмеж
-    |mConst.lxPROCEDURE:
+    |ЛйНМЯР.lxPROCEDURE:
       Next;
       nov := CreateType(TPROC, 0, 4, 0, sttypes[TVOID], хярхмю, NewType);
       Coord(line, col);
@@ -1167,7 +1167,7 @@
     йнмеж IdentDef;
 
   мювюкн
-    еякх SCAN.tLex = mConst.lxCONST рнцдю
+    еякх SCAN.tLex = ЛйНМЯР.lxCONST рнцдю
       Next;
       онйю SCAN.tLex = lxIDENT декюрэ
         IdentDef;
@@ -1182,7 +1182,7 @@
         Next
       йнмеж
     йнмеж;
-    еякх SCAN.tLex = mConst.lxTYPE рнцдю
+    еякх SCAN.tLex = ЛйНМЯР.lxTYPE рнцдю
       UTILS.Clear(PtrBases);
       unit.typedecl := хярхмю;
       Next;
@@ -1204,7 +1204,7 @@
     LinkPtr;
     unit.typedecl := кнфэ;
     unit.ExportType := кнфэ;
-    еякх SCAN.tLex = mConst.lxVAR рнцдю
+    еякх SCAN.tLex = ЛйНМЯР.lxVAR рнцдю
       Next;
       онйю SCAN.tLex = lxIDENT декюрэ
         IdentDef;
@@ -1225,7 +1225,7 @@
         йнмеж
       йнмеж
     йнмеж;
-    онйю SCAN.tLex = mConst.lxPROCEDURE декюрэ
+    онйю SCAN.tLex = ЛйНМЯР.lxPROCEDURE декюрэ
       Next;
       Coord(line, col);
       еякх CallFlag(Call) рнцдю
@@ -1252,13 +1252,13 @@
       DeclSeq;
       id.LocalSize := id.VarSize - id.ParamSize;
       X86.ProcBeg(id.Number, id.LocalSize, кнфэ);
-      еякх SCAN.tLex = mConst.lxBEGIN рнцдю
+      еякх SCAN.tLex = ЛйНМЯР.lxBEGIN рнцдю
         Next;
         OpSeq
       йнмеж;
       func := curBlock.T.Base.tType # TVOID;
       еякх func рнцдю
-        Check(mConst.lxRETURN);
+        Check(ЛйНМЯР.lxRETURN);
         UTILS.UnitLine(UnitNumber, SCAN.line);
         Next;
         Coord(line, col);
@@ -1268,9 +1268,9 @@
           X86.Load(e.T.tType)
         йнмеж
       хмюве
-        Assert2(SCAN.tLex # mConst.lxRETURN, 123)
+        Assert2(SCAN.tLex # ЛйНМЯР.lxRETURN, 123)
       йнмеж;
-      Check(mConst.lxEND);
+      Check(ЛйНМЯР.lxEND);
       Next;
       Check(lxIDENT);
       Assert2(SCAN.id = Name, 87);
@@ -1331,8 +1331,8 @@
         self := unit;
         SCAN.Backup(unit.scanner);
         COPY(name.Name, FName);
-        еякх ~((~self.Std & pReadModule(Path, FName, mConst.Ext)) хкх
-                                pReadModule(Std, FName, mConst.Ext)) рнцдю
+        еякх ~((~self.Std & pReadModule(Path, FName, ЛйНМЯР.Ext)) хкх
+                                pReadModule(Std, FName, ЛйНМЯР.Ext)) рнцдю
           еякх FName = "SYSTEM" рнцдю
             unit := sys;
             self.sys := хярхмю
@@ -1448,7 +1448,7 @@
       COPY(Name, unit.File);
       UTILS.SetFile(unit.File);
       StIdent;
-      Next; Check(mConst.lxMODULE);
+      Next; Check(ЛйНМЯР.lxMODULE);
       
       Next; Check(lxIDENT);
       Assert2(UTILS.streq(SCAN.id.Name, name), 33);
@@ -1458,7 +1458,7 @@
       Guard;
       Next; Check(lxSemi);
       Next;
-      еякх SCAN.tLex = mConst.lxIMPORT рнцдю
+      еякх SCAN.tLex = ЛйНМЯР.lxIMPORT рнцдю
         temp := main;
         main := кнфэ;
         ImportList;
@@ -1471,11 +1471,11 @@
       curBlock := idmod;
       DeclSeq;
       X86.ProcBeg(idmod.Number, 0, хярхмю);
-      еякх SCAN.tLex = mConst.lxBEGIN рнцдю
+      еякх SCAN.tLex = ЛйНМЯР.lxBEGIN рнцдю
         Next;
         OpSeq
       йнмеж;
-      Check(mConst.lxEND);
+      Check(ЛйНМЯР.lxEND);
       Next; Check(lxIDENT);
       Assert2(SCAN.id = unit.Name, 26);
       Next; Check(lxDot);
@@ -1524,7 +1524,7 @@
   мювюкн
     Platform := platform;
     main := кнфэ;
-    еякх ReadModule(Std, "RTL", mConst.Ext) рнцдю
+    еякх ReadModule(Std, "RTL", ЛйНМЯР.Ext) рнцдю
       Rtl(unit)
     хмюве
       UTILS.ErrMsg(65);
@@ -1538,13 +1538,13 @@
       еякх path[0] # 0X рнцдю
         path[LENGTH(path) - 1] := 0X
       йнмеж;
-      еякх Path[0] = mConst.Slash рнцдю
+      еякх Path[0] = ЛйНМЯР.Slash рнцдю
         delfirstchar(Path)
       йнмеж;
-      UTILS.concat(path, mConst.Slash, path);
+      UTILS.concat(path, ЛйНМЯР.Slash, path);
       UTILS.concat(path, Path, full);
       Path := full;
-      еякх (mConst.ня = "WIN") & (Path[0] = mConst.Slash) рнцдю
+      еякх (ЛйНМЯР.ня = "WIN") & (Path[0] = ЛйНМЯР.Slash) рнцдю
         delfirstchar(Path)
       йнмеж;
       еякх ~ReadModule(Path, Main, ExtMain) рнцдю

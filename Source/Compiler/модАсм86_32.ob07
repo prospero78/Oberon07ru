@@ -22,7 +22,7 @@
 »ћѕќ–“ UTILS := мод”тиль,
     mSys := SYSTEM,
     SCAN := мод—канер,
-    mConst := мод онстанты;
+    м онст := мод онстанты;
 
  ќЌ—“
 
@@ -370,7 +370,7 @@
       Header.seccount := IntToCard16(0003H);
       Header.infflags := IntToCard16(010FH)
      ќЌ≈÷;
-    Header.time := mConst.Date;
+    Header.time := м онст.Date;
     Header.PEoptsize := IntToCard16(00E0H);
     Header.PEfile := IntToCard16(010BH);
     Header.compver := IntToCard16(compver);
@@ -1608,7 +1608,7 @@
       size := Align(size, 4) - mSys.SIZE(KOSHEADER);
       Coff.Machine := IntToCard16(014CH);
       Coff.NumberOfSections := IntToCard16(3);
-      Coff.TimeDateStamp := mConst.Date;
+      Coff.TimeDateStamp := м онст.Date;
       Coff.SizeOfOptionalHeader := IntToCard16(0);
       Coff.Characteristics := IntToCard16(0184H);
 
