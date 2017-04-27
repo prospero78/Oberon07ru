@@ -36,6 +36,7 @@
    lxPOINTER* = 22;
    lxPROCEDURE* = 23;
    lxRECORD* = 24;
+   lxREPEAT* = 25;
    lxRETURN* = 26;
    lxTHEN* = 27;
    lxTO* = 28;
