@@ -17,7 +17,7 @@
    дата* = 1385856000; (*2013-12-01*)
  (* мод—кан *)
    таб* = 8;
-   maxINT* = 7FFFFFFFH;
+   целое_макс* = 7FFFFFFFH;
   
    lxARRAY* = 1;
    lxBEGIN* = 2;
@@ -32,7 +32,7 @@
    lxIF* = 13;
    lxIMPORT* = 14;
    
-   lxMODULE* = 18;
+   ксћќƒ”Ћ№* = 18;
    lxNIL* = 19;
    lxOF* = 20;
    lxOR* = 21;

@@ -497,7 +497,7 @@
       Assert(e1.T.tType IN {TREAL, TLONGREAL}, line, col, 66);
       Load(e1);
       ЕСЛИ e1.eType = eCONST ТОГДА
-        Assert((e1.Value - 1.0D0 < LONG(FLT(мКонст.maxINT))) & (e1.Value >= LONG(FLT(мСкан.minINT))), line, col, 74);
+        Assert((e1.Value - 1.0D0 < LONG(FLT(мКонст.целое_макс))) & (e1.Value >= LONG(FLT(мСкан.minINT))), line, col, 74);
         e.Value := LONG(FLT(FLOOR(e1.Value)));
         e.eType := eCONST
       КОНЕЦ;

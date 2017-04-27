@@ -242,7 +242,7 @@
   Ќј„јЋќ
     ≈—Ћ» м—кан.tLex # key “ќ√ƒј
       ¬џЅќ– key »«
-      |м онст.lxMODULE:  code := 21
+      |м онст.ксћќƒ”Ћ№:  code := 21
       |lxIDENT:   code := 22
       |lxSemi:    code := 23
       |м онст.lxEND:     code := 24
@@ -465,7 +465,7 @@
      ќЌ≈÷;
     Assert(~м”тиль.IsInf(res), line, col, FOVER);
     ¬џЅќ– T.tType »«
-    |TINTEGER:  Assert((res <= LONG(FLT(м онст.maxINT))) & (res >= LONG(FLT(м—кан.minINT))), line, col, IOVER)
+    |TINTEGER:  Assert((res <= LONG(FLT(м онст.целое_макс))) & (res >= LONG(FLT(м—кан.minINT))), line, col, IOVER)
     |TREAL:     Assert((res <= LONG(м—кан.maxREAL)) & (res >= -LONG(м—кан.maxREAL)), line, col, FOVER)
     |TLONGREAL: Assert((res <= max) & (res >= -max), line, col, FOVER)
     »Ќј„≈
@@ -643,7 +643,7 @@
 
 ѕ–ќ÷≈ƒ”–ј FieldOffset(Align, RecSize: INTEGER): INTEGER;
   Ќј„јЋќ
-    Assert2(RecSize <= м онст.maxINT - (Align - RecSize MOD Align) MOD Align, 83)
+    Assert2(RecSize <= м онст.целое_макс - (Align - RecSize MOD Align) MOD Align, 83)
     ¬≈–Ќ”“№ RecSize + (Align - RecSize MOD Align) MOD Align
    ќЌ≈÷ FieldOffset;
 
@@ -673,11 +673,11 @@
          ќЌ≈÷;
         ≈—Ћ» Tr.Rec = record “ќ√ƒј
           cur.Offset := FieldOffset(Tf.Align, Tr.Size);
-          Assert2(cur.Offset <= м онст.maxINT - Tf.Size, 83);
+          Assert2(cur.Offset <= м онст.целое_макс - Tf.Size, 83);
           Tr.Size := cur.Offset + Tf.Size
         ј≈—Ћ» Tr.Rec = noalign “ќ√ƒј
           cur.Offset := FieldOffset(1, Tr.Size);
-          Assert2(cur.Offset <= м онст.maxINT - Tf.Size, 83);
+          Assert2(cur.Offset <= м онст.целое_макс - Tf.Size, 83);
           Tr.Size := cur.Offset + Tf.Size
         ј≈—Ћ» Tr.Rec = union “ќ√ƒј
           ≈—Ћ» Tf.Size > Tr.Size “ќ√ƒј
@@ -796,14 +796,14 @@
         n := 4 * (1 + Dim(T) + ORD((cur.VarKind = paramvar) & (T.tType = TRECORD)))
       »Ќј„≈
         n := T.Size;
-        Assert2(n <= м онст.maxINT - м”тиль.Align(n), 93);
+        Assert2(n <= м онст.целое_макс - м”тиль.Align(n), 93);
         n := n + м”тиль.Align(n)
        ќЌ≈÷;
       ≈—Ћ» cur.Level = 3 “ќ√ƒј
         cur.Offset := ProgSize;
-        Assert2(ProgSize <= м онст.maxINT - n, 93);
+        Assert2(ProgSize <= м онст.целое_макс - n, 93);
         ProgSize := ProgSize + n;
-        Assert2(ProgSize <= м онст.maxINT - м”тиль.Align(ProgSize), 93);
+        Assert2(ProgSize <= м онст.целое_макс - м”тиль.Align(ProgSize), 93);
         ProgSize := ProgSize + м”тиль.Align(ProgSize)
       »Ќј„≈
         ≈—Ћ» cur.VarKind = 0 “ќ√ƒј
@@ -812,9 +812,9 @@
           cur.Offset := curBlock.VarSize - 8 + 4 * (cur.Level + ORD((cur.VarKind = paramvar) & (T.tType = TRECORD)))
          ќЌ≈÷
        ќЌ≈÷;
-      Assert2(curBlock.VarSize <= м онст.maxINT - n, 93);
+      Assert2(curBlock.VarSize <= м онст.целое_макс - n, 93);
       curBlock.VarSize := curBlock.VarSize + n;
-      Assert2(curBlock.VarSize <= м онст.maxINT - м”тиль.Align(curBlock.VarSize), 93);
+      Assert2(curBlock.VarSize <= м онст.целое_макс - м”тиль.Align(curBlock.VarSize), 93);
       curBlock.VarSize := curBlock.VarSize + м”тиль.Align(curBlock.VarSize);
       ≈—Ћ» cur.VarKind # 0 “ќ√ƒј
         curBlock.ParamSize := curBlock.VarSize
@@ -1041,7 +1041,7 @@
       »Ќј„≈
         Assert2(Ћќ∆№, 79)
        ќЌ≈÷;
-      Assert2(nov.Base.Size <= м онст.maxINT DIV nov.Len, 83);
+      Assert2(nov.Base.Size <= м онст.целое_макс DIV nov.Len, 83);
       nov.Size := nov.Base.Size * nov.Len;
       nov.Align := nov.Base.Align
     |м онст.lxRECORD:
@@ -1448,7 +1448,7 @@
       COPY(Name, unit.File);
       м”тиль.SetFile(unit.File);
       StIdent;
-      Next; Check(м онст.lxMODULE);
+      Next; Check(м онст.ксћќƒ”Ћ№);
       
       Next; Check(lxIDENT);
       Assert2(м”тиль.streq(м—кан.id.Name, name), 33);

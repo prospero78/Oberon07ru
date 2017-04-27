@@ -324,27 +324,28 @@
         i := 0;
         flag := ИСТИНА;
         ПОКА flag & (str[i] # 0X) ДЕЛАТЬ
-            ЕСЛИ res > мКонст.maxINT DIV 10 ТОГДА
-            tLex := lxERR5;
-            flag := ЛОЖЬ;
-            res := 0
+            ЕСЛИ res > мКонст.целое_макс DIV 10 ТОГДА
+                tLex := lxERR5;
+                flag := ЛОЖЬ;
+                res := 0
             ИНАЧЕ
-            res := res * 10;
-            ЕСЛИ res > мКонст.maxINT - (ORD(str[i]) - ORD("0")) ТОГДА
-        tLex := lxERR5;
-        flag := ЛОЖЬ;
-        res := 0
-            ИНАЧЕ
-        res := res + (ORD(str[i]) - ORD("0"));
-        INC(i)
-            КОНЕЦ
+                res := res * 10;
+                ЕСЛИ res > мКонст.целое_макс - (ORD(str[i]) - ORD("0")) ТОГДА
+                    tLex := lxERR5;
+                    flag := ЛОЖЬ;
+                    res := 0
+                ИНАЧЕ
+                    res := res + (ORD(str[i]) - ORD("0"));
+                    INC(i)
+                КОНЕЦ
             КОНЕЦ
         КОНЕЦ
         ВЕРНУТЬ res
     КОНЕЦ StrToInt;
 
 ПРОЦЕДУРА StrToFloat(str: мУтиль.tString): LONGREAL;
-    ПЕРЕМ i, scale: INTEGER; res, m, d: LONGREAL; minus, nez: BOOLEAN;
+    ПЕРЕМ
+        i, scale: INTEGER; res, m, d: LONGREAL; minus, nez: BOOLEAN;
 
         ПРОЦЕДУРА Error(e: INTEGER; ПЕР cont: BOOLEAN);
           НАЧАЛО
@@ -424,11 +425,11 @@
             scale := 0;
             cont := ИСТИНА;
             ПОКА cont & Digit(str[i]) ДЕЛАТЬ
-              ЕСЛИ scale > мКонст.maxINT DIV 10 ТОГДА
+              ЕСЛИ scale > мКонст.целое_макс DIV 10 ТОГДА
                 Error(lxERR8, cont)
               ИНАЧЕ
                 scale := scale * 10;
-                ЕСЛИ scale > мКонст.maxINT - (ORD(str[i]) - ORD("0")) ТОГДА
+                ЕСЛИ scale > мКонст.целое_макс - (ORD(str[i]) - ORD("0")) ТОГДА
                     Error(lxERR8, cont)
                 ИНАЧЕ
                     scale := scale + (ORD(str[i]) - ORD("0"));
@@ -443,7 +444,7 @@
           ПЕРЕМ cont: BOOLEAN; i: INTEGER;
           НАЧАЛО
             cont := ИСТИНА;
-            ЕСЛИ scale = мКонст.maxINT ТОГДА
+            ЕСЛИ scale = мКонст.целое_макс ТОГДА
             Error(lxERR8, cont)
             КОНЕЦ;
             i := 1;
@@ -729,8 +730,8 @@
         
         AddNodeKey("BY", lxBY);
         
-        AddNodeKey("MODULE", мКонст.lxMODULE);
-        AddNodeKey("МОДУЛЬ", мКонст.lxMODULE);
+        AddNodeKey("MODULE", мКонст.ксМОДУЛЬ);
+        AddNodeKey("МОДУЛЬ", мКонст.ксМОДУЛЬ);
         
         AddNodeKey("IMPORT", мКонст.lxIMPORT);
         AddNodeKey("ИМПОРТ", мКонст.lxIMPORT);
