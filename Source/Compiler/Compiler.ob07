@@ -1306,7 +1306,7 @@
     Assert(e.T.tType = TINTEGER, line, col, 52);
     Load(e);
     X86.Save(TINTEGER);
-    Check(м онст.lxTO);
+    Check(м онст.ксƒќ);
     Next;
     Coord(line, col);
     Expr(e);

@@ -249,7 +249,7 @@
       |lxDot:     code := 25
       |lxEQ:      code := 35
       |lxRRound:  code := 38
-      |м онст.lxTO:      code := 40
+      |м онст.ксƒќ:      code := 40
       |м онст.lxOF:      code := 41
       |lxRCurly:  code := 51
       |lxLRound:  code := 56
@@ -1080,7 +1080,7 @@
       Next
     |м онст.кс” ј«ј“≈Ћ№:
       Next;
-      Check(м онст.lxTO);
+      Check(м онст.ксƒќ);
       Next;
       nov := CreateType(TPOINTER, 0, 4, 0, ѕ”—“ќ, Ћќ∆№, NewType);
       nov.Align := 4;

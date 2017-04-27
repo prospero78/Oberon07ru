@@ -34,7 +34,6 @@
     lxEOF = 0; lxINT = -1; lxREAL = -2; lxSTRING = -3; lxIDENT = -4; lxHEX = -5; lxCHX = -6; lxLONGREAL = -7;
     lxBY = 3; lxDIV = 6; 
      
-    lxIS = 16;
     lxMOD = 17;
 
     lxPlus = 51; lxMinus = 52; lxMult = 53; lxSlash = 54; lxNot = 55; lxAnd = 56; lxComma = 57; lxSemi = 58;
@@ -672,7 +671,9 @@
     КОНЕЦ AddNodeKey;
 
 ПРОЦЕДУРА Init;
-    ПЕРЕМ i: INTEGER; node: NODE;
+    ПЕРЕМ
+      i: INTEGER;
+      node: NODE;
     НАЧАЛО
         ДЛЯ i := 0 ДО LEN(Nodes) - 1 ДЕЛАТЬ
             NEW(node);
@@ -718,7 +719,8 @@
         AddNodeKey("DO", мКонст.ксДЕЛАТЬ);
         AddNodeKey("ДЕЛАТЬ", мКонст.ксДЕЛАТЬ);
         
-        AddNodeKey("IS", lxIS);
+        AddNodeKey("IS", мКонст.lxIS);
+        AddNodeKey("ЕСТЬ", мКонст.lxIS);
         
         AddNodeKey("OF", мКонст.lxOF);
         AddNodeKey("ИЗ", мКонст.lxOF);
@@ -739,7 +741,7 @@
         
         AddNodeKey("CONST", мКонст.ксКОНСТ);
         AddNodeKey("КОНСТ", мКонст.ксКОНСТ);
-        
+
         AddNodeKey("END", мКонст.ксКОНЕЦ);
         AddNodeKey("КОНЕЦ", мКонст.ксКОНЕЦ);
         
@@ -752,9 +754,9 @@
         AddNodeKey("POINTER", мКонст.ксУКАЗАТЕЛЬ);
         AddNodeKey("УКАЗАТЕЛЬ", мКонст.ксУКАЗАТЕЛЬ);
         
-        AddNodeKey("TO", мКонст.lxTO);
-        AddNodeKey("НА", мКонст.lxTO);
-        AddNodeKey("ДО", мКонст.lxTO);
+        AddNodeKey("TO", мКонст.ксДО);
+        AddNodeKey("НА", мКонст.ксДО);
+        AddNodeKey("ДО", мКонст.ксДО);
         
         AddNodeKey("RECORD", мКонст.ксЗАПИСЬ);
         AddNodeKey("ЗАПИСЬ", мКонст.ксЗАПИСЬ);
