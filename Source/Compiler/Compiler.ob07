@@ -62,7 +62,7 @@
 
   pExpr, pFactor: опнжедспю (оеп e: DECL.EXPRESSION);
   pOpSeq: опнжедспю;
-  Lex: ЛрХОШ.tString;
+  Lex: ЛрХОШ.РяРПНЙЮ;
   sttypes: DECL.stTYPES;
 
 опнжедспю Load(e: DECL.EXPRESSION);
@@ -124,7 +124,7 @@
   йнмеж BaseOf;
 
 опнжедспю Designator(оеп e: DECL.EXPRESSION);
-  оепел id: DECL.IDENT; name: ЛяЙЮМ.NODE; e1: DECL.EXPRESSION;
+  оепел id: DECL.IDENT; name: ЛрХОШ.NODE; e1: DECL.EXPRESSION;
       line, col, i, n, bases, glob, loc, idx: INTEGER;
       imp, break, guard: BOOLEAN; f: DECL.FIELD;
       T, BaseT: DECL.pTYPE; s: DECL.STRCONST;
@@ -1281,7 +1281,7 @@
 
 опнжедспю ForOper;
   оепел e: DECL.EXPRESSION; line, col, LBeg, LEnd, iValue: INTEGER; Value: LONGREAL;
-      T: DECL.pTYPE; name: ЛяЙЮМ.NODE; id: DECL.IDENT;
+      T: DECL.pTYPE; name: ЛрХОШ.NODE; id: DECL.IDENT;
   мювюкн
     Next;
     Check(lxIDENT);
@@ -1435,7 +1435,7 @@
     ЛсРХКЭ.Clear(Labels)
   йнмеж CaseOper;
 
-опнжедспю CheckCode(Code: ЛрХОШ.tString; Len, line, col: INTEGER);
+опнжедспю CheckCode(Code: ЛрХОШ.РяРПНЙЮ; Len, line, col: INTEGER);
   оепел i: INTEGER;
   мювюкн
     Assert(~ODD(Len), line, col, 34);
@@ -1778,7 +1778,7 @@
 
 опнжедспю Start;
   оепел SelfName, SelfPath, CName, CExt, FName, Path, StdPath,
-      Name, Ext, temp, system, stk, felf: ЛрХОШ.tString;
+      Name, Ext, temp, system, stk, felf: ЛрХОШ.РяРПНЙЮ;
       platform, stksize: INTEGER;
 
     опнжедспю getstksize(): INTEGER;

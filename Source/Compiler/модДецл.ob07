@@ -77,8 +77,8 @@
   IDENT* = сйюгюрекэ мю rIDENT;
 
   UNIT* = сйюгюрекэ мю гюохяэ (ЛсРХКЭ.tItem)
-      Name: ЛяЙЮМ.NODE;
-      File: ЛрХОШ.tString;
+      Name: ЛрХОШ.NODE;
+      File: ЛрХОШ.РяРПНЙЮ;
       Idents: ЛсРХКЭ.tpList;
       Import: ЛсРХКЭ.tpList;
       IdentBegin: IDENT;
@@ -88,7 +88,7 @@
     йнмеж;
 
   rIDENT* = гюохяэ (ЛсРХКЭ.tItem)
-      Name: ЛяЙЮМ.NODE;
+      Name: ЛрХОШ.NODE;
       T*: pTYPE;
       Unit*: UNIT;
       Parent*: IDENT;
@@ -99,17 +99,17 @@
     йнмеж;
 
   PTRBASE = сйюгюрекэ мю гюохяэ (ЛсРХКЭ.tItem)
-      Name: ЛяЙЮМ.NODE;
+      Name: ЛрХОШ.NODE;
       line, col: INTEGER;
       Ptr: pTYPE
     йнмеж;
 
   STRITEM = сйюгюрекэ мю гюохяэ (ЛсРХКЭ.tItem)
-      Str: ЛрХОШ.tString
+      Str: ЛрХОШ.РяРПНЙЮ
     йнмеж;
 
   FIELD* = сйюгюрекэ мю гюохяэ (ЛсРХКЭ.tItem)
-      Name: ЛяЙЮМ.NODE;
+      Name: ЛрХОШ.NODE;
       T*: pTYPE;
       Offset*: INTEGER;
       ByRef*, Export*: BOOLEAN;
@@ -117,7 +117,7 @@
     йнмеж;
 
   STRCONST* = сйюгюрекэ мю гюохяэ (ЛсРХКЭ.tItem)
-      Str*: ЛрХОШ.tString;
+      Str*: ЛрХОШ.РяРПНЙЮ;
       Len*, Number*: INTEGER
     йнмеж;
 
@@ -138,13 +138,13 @@
 оепел
 
   sttypes: stTYPES; unit*, sys: UNIT; curBlock*: IDENT;
-  Path, Main, Std, ExtMain: ЛрХОШ.tString;
-  NamePtrBase: ЛяЙЮМ.NODE; ProgSize*, RecCount, UnitNumber*: INTEGER;
+  Path, Main, Std, ExtMain: ЛрХОШ.РяРПНЙЮ;
+  NamePtrBase: ЛрХОШ.NODE; ProgSize*, RecCount, UnitNumber*: INTEGER;
   PtrBases, Strings, types, prog: ЛсРХКЭ.tpList;
   OpSeq: opPROC; Expr: expPROC;
   AssComp: assPROC; main, sizefunc, winplatf, Const*: BOOLEAN;
   pParseType: опнжедспю (оеп line, col: INTEGER): pTYPE;
-  pReadModule: опнжедспю (Path, Name, Ext: ЛрХОШ.tString): BOOLEAN;
+  pReadModule: опнжедспю (Path, Name, Ext: ЛрХОШ.РяРПНЙЮ): BOOLEAN;
   Platform: INTEGER;
 
 опнжедспю SetSizeFunc*;
@@ -166,7 +166,7 @@
     бепмсрэ str
   йнмеж GetString;
 
-опнжедспю AddString*(str: ЛрХОШ.tString): STRCONST;
+опнжедспю AddString*(str: ЛрХОШ.РяРПНЙЮ): STRCONST;
   оепел nov: STRCONST;
   мювюкн
     NEW(nov);
@@ -199,7 +199,7 @@
     col := ЛяЙЮМ.col
   йнмеж Coord;
 
-опнжедспю GetModule(Name: ЛяЙЮМ.NODE): UNIT;
+опнжедспю GetModule(Name: ЛрХОШ.NODE): UNIT;
   оепел cur, res: UNIT;
   мювюкн
     res := осярн;
@@ -267,7 +267,7 @@
     йнмеж
   йнмеж Check;
 
-опнжедспю CheckIdent(Name: ЛяЙЮМ.NODE): BOOLEAN;
+опнжедспю CheckIdent(Name: ЛрХОШ.NODE): BOOLEAN;
   оепел cur: IDENT;
   мювюкн
     cur := unit.Idents.Last(IDENT);
@@ -289,7 +289,7 @@
     INC(unit.Level)
   йнмеж Guard;
 
-опнжедспю PushIdent(Name: ЛяЙЮМ.NODE; line, col, iType: INTEGER; T: pTYPE; u: UNIT; Export: BOOLEAN; StProc: INTEGER);
+опнжедспю PushIdent(Name: ЛрХОШ.NODE; line, col, iType: INTEGER; T: pTYPE; u: UNIT; Export: BOOLEAN; StProc: INTEGER);
   оепел ident: IDENT; i: INTEGER;
   мювюкн
     Assert(CheckIdent(Name), line, col, 30);
@@ -339,22 +339,22 @@
     йнмеж
   йнмеж StTypes;
 
-опнжедспю PushStProc(Name: ЛрХОШ.tString; StProc: INTEGER);
+опнжедспю PushStProc(Name: ЛрХОШ.РяРПНЙЮ; StProc: INTEGER);
   мювюкн
     PushIdent(ЛяЙЮМ.AddNode(Name), 0, 0, IDSTPROC, sttypes[TVOID], осярн, кнфэ, StProc)
   йнмеж PushStProc;
 
-опнжедспю PushStType(Name: ЛрХОШ.tString; T: INTEGER);
+опнжедспю PushStType(Name: ЛрХОШ.РяРПНЙЮ; T: INTEGER);
   мювюкн
     PushIdent(ЛяЙЮМ.AddNode(Name), 0, 0, IDTYPE, sttypes[T], осярн, кнфэ, 0)
   йнмеж PushStType;
 
-опнжедспю PushSysProc(Name: ЛрХОШ.tString; StProc: INTEGER);
+опнжедспю PushSysProc(Name: ЛрХОШ.РяРПНЙЮ; StProc: INTEGER);
   мювюкн
     PushIdent(ЛяЙЮМ.AddNode(Name), 0, 0, IDSYSPROC, sttypes[TVOID], осярн, хярхмю, StProc)
   йнмеж PushSysProc;
 
-опнжедспю PushSysType(Name: ЛрХОШ.tString; T: INTEGER);
+опнжедспю PushSysType(Name: ЛрХОШ.РяРПНЙЮ; T: INTEGER);
   мювюкн
     PushIdent(ЛяЙЮМ.AddNode(Name), 0, 0, IDTYPE, sttypes[T], осярн, хярхмю, 0)
   йнмеж PushSysType;
@@ -396,7 +396,7 @@
     Guard
   йнмеж StIdent;
 
-опнжедспю GetQIdent*(Unit: UNIT; Name: ЛяЙЮМ.NODE): IDENT;
+опнжедспю GetQIdent*(Unit: UNIT; Name: ЛрХОШ.NODE): IDENT;
   оепел cur, res: IDENT; line, col: INTEGER;
   мювюкн
     res := осярн;
@@ -417,7 +417,7 @@
     бепмсрэ res
   йнмеж GetQIdent;
 
-опнжедспю GetIdent*(Name: ЛяЙЮМ.NODE): IDENT;
+опнжедспю GetIdent*(Name: ЛрХОШ.NODE): IDENT;
   оепел cur, res: IDENT; line, col: INTEGER;
   мювюкн
     res := осярн;
@@ -592,7 +592,7 @@
   йнмеж ConstExpr;
 
 опнжедспю IdType*(оеп line, col: INTEGER): pTYPE;
-  оепел id: IDENT; Name: ЛяЙЮМ.NODE; Unit: UNIT; Res: pTYPE;
+  оепел id: IDENT; Name: ЛрХОШ.NODE; Unit: UNIT; Res: pTYPE;
   мювюкн
     Res := осярн;
     Name := ЛяЙЮМ.id;
@@ -692,7 +692,7 @@
     йнмеж
   йнмеж SetFields;
 
-опнжедспю GetField*(T: pTYPE; Name: ЛяЙЮМ.NODE): FIELD;
+опнжедспю GetField*(T: pTYPE; Name: ЛрХОШ.NODE): FIELD;
   оепел cur, Res: FIELD;
   мювюкн
     Res := осярн;
@@ -706,7 +706,7 @@
     бепмсрэ Res
   йнмеж GetField;
 
-опнжедспю Unique(T: pTYPE; Name: ЛяЙЮМ.NODE): BOOLEAN;
+опнжедспю Unique(T: pTYPE; Name: ЛрХОШ.NODE): BOOLEAN;
   оепел field: FIELD; res: BOOLEAN;
   мювюкн
     res := хярхмю;
@@ -728,7 +728,7 @@
   йнмеж notrecurs;
 
 опнжедспю ReadFields(T: pTYPE);
-  оепел Name: ЛяЙЮМ.NODE; field: FIELD; Tf: pTYPE; line, col: INTEGER; id_T: BOOLEAN;
+  оепел Name: ЛрХОШ.NODE; field: FIELD; Tf: pTYPE; line, col: INTEGER; id_T: BOOLEAN;
   мювюкн
     онйю ЛяЙЮМ.tLex = lxIDENT декюрэ
       Name := ЛяЙЮМ.id;
@@ -863,7 +863,7 @@
   йнмеж FormalType;
 
 опнжедспю Section(T: pTYPE);
-  оепел Name: ЛяЙЮМ.NODE; ByRef, cont: BOOLEAN; field: FIELD;
+  оепел Name: ЛрХОШ.NODE; ByRef, cont: BOOLEAN; field: FIELD;
       Tf: pTYPE; fp: IDENT; line, col: INTEGER; proc: BOOLEAN;
   мювюкн
     proc := T = осярн;
@@ -932,7 +932,7 @@
     йнмеж
   йнмеж ParamType;
 
-опнжедспю AddPtrBase(Name: ЛяЙЮМ.NODE; line, col: INTEGER; T: pTYPE);
+опнжедспю AddPtrBase(Name: ЛрХОШ.NODE; line, col: INTEGER; T: pTYPE);
   оепел nov: PTRBASE;
   мювюкн
     NEW(nov);
@@ -964,7 +964,7 @@
 
 опнжедспю CallFlag(оеп Call: INTEGER): BOOLEAN;
   оепел
-    flag: ЛрХОШ.tString;
+    flag: ЛрХОШ.РяРПНЙЮ;
     res: BOOLEAN;
   мювюкн
     res := ЛяЙЮМ.tLex = lxLSquare;
@@ -992,7 +992,7 @@
 
 опнжедспю RecFlag(оеп rec: INTEGER): BOOLEAN;
   оепел
-    flag: ЛрХОШ.tString;
+    flag: ЛрХОШ.РяРПНЙЮ;
     res: BOOLEAN;
   мювюкн
     res := ЛяЙЮМ.tLex = lxLSquare;
@@ -1150,7 +1150,7 @@
   йнмеж LinkPtr;
 
 опнжедспю DeclSeq;
-  оепел Value: LONGREAL; T, NewType: pTYPE; Name: ЛяЙЮМ.NODE; line, col, Call: INTEGER;
+  оепел Value: LONGREAL; T, NewType: pTYPE; Name: ЛрХОШ.NODE; line, col, Call: INTEGER;
       Export, func: BOOLEAN; last, id: IDENT; e: EXPRESSION;
 
     опнжедспю IdentDef;
@@ -1285,7 +1285,7 @@
 
 опнжедспю Rtl(u: UNIT);
 
-    опнжедспю AddProc(name: ЛрХОШ.tString; num: INTEGER);
+    опнжедспю AddProc(name: ЛрХОШ.РяРПНЙЮ; num: INTEGER);
     оепел id: IDENT;
     мювюкн
       id := GetQIdent(u, ЛяЙЮМ.AddNode(name));
@@ -1320,8 +1320,8 @@
 
 опнжедспю ImportList;
   оепел cond, col, line, namecol, nameline: INTEGER;
-      name, alias: ЛяЙЮМ.NODE; u, self: UNIT;
-      FName: ЛрХОШ.tString;
+      name, alias: ЛрХОШ.NODE; u, self: UNIT;
+      FName: ЛрХОШ.РяРПНЙЮ;
 
     опнжедспю AddUnit(newcond: INTEGER);
     оепел str: STRITEM;
@@ -1388,7 +1388,7 @@
     йнмеж
   йнмеж ImportList;
 
-опнжедспю Header(Name: ЛяЙЮМ.NODE);
+опнжедспю Header(Name: ЛрХОШ.NODE);
   мювюкн
     NEW(unit);
     MemErr(unit = осярн);
@@ -1421,8 +1421,8 @@
     unit := temp
   йнмеж Pseudo;
 
-опнжедспю ReadModule(Path, Name1, Ext: ЛрХОШ.tString): BOOLEAN;
-  оепел FHandle: INTEGER; name, Name, b: ЛрХОШ.tString; idmod: IDENT; Res, temp: BOOLEAN;
+опнжедспю ReadModule(Path, Name1, Ext: ЛрХОШ.РяРПНЙЮ): BOOLEAN;
+  оепел FHandle: INTEGER; name, Name, b: ЛрХОШ.РяРПНЙЮ; idmod: IDENT; Res, temp: BOOLEAN;
   мювюкн
     Res := кнфэ;
     name := Name1;
@@ -1487,7 +1487,7 @@
     бепмсрэ Res
   йнмеж ReadModule;
 
-опнжедспю Program*(StdPath, FilePath, NameFile, ExtFile: ЛрХОШ.tString; windows: BOOLEAN;
+опнжедспю Program*(StdPath, FilePath, NameFile, ExtFile: ЛрХОШ.РяРПНЙЮ; windows: BOOLEAN;
     OpSeqProc: opPROC; ExprProc: expPROC; AssCompProc: assPROC; оеп stypes: stTYPES);
   мювюкн
     winplatf := windows;
@@ -1511,7 +1511,7 @@
     stypes := sttypes
   йнмеж Program;
 
-опнжедспю delfirstchar(оеп s: ЛрХОШ.tString);
+опнжедспю delfirstchar(оеп s: ЛрХОШ.РяРПНЙЮ);
   оепел i: INTEGER;
   мювюкн
     дкъ i := 0 дн LENGTH(s) - 1 декюрэ
@@ -1520,7 +1520,7 @@
   йнмеж delfirstchar;
 
 опнжедспю Compile*(platform, stksize: INTEGER);
-  оепел full, path, name, ext, temp, path2: ЛрХОШ.tString;
+  оепел full, path, name, ext, temp, path2: ЛрХОШ.РяРПНЙЮ;
   мювюкн
     Platform := platform;
     main := кнфэ;

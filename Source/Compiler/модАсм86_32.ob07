@@ -129,22 +129,22 @@
   asmlist: ЛсРХКЭ.tpList;
   start: ASMLINE; MemErr: PROC; dll, con, gui, kos, elf, obj: BOOLEAN;
     Lcount, reccount, topstk: INTEGER; recarray: люяяхб 2048 хг INTEGER; current*: ASMLINE;
-    callstk: люяяхб 1024, 2 хг ASMLINE; OutFile: ЛрХОШ.tString;
+    callstk: люяяхб 1024, 2 хг ASMLINE; OutFile: ЛрХОШ.РяРПНЙЮ;
     Code: люяяхб 4000000 хг CHAR; ccount: INTEGER; Data: люяяхб 1000000 хг CHAR; dcount: INTEGER;
     Labels: люяяхб 200000 хг INTEGER; rdata: люяяхб 400H хг INTEGER; Header: HEADER; etable: ETABLE;
-    ExecName: ЛрХОШ.tString;
+    ExecName: ЛрХОШ.РяРПНЙЮ;
     LoadAdr: INTEGER; Reloc: люяяхб 200000 хг CHAR; rcount: INTEGER;
     RtlProc: люяяхб 20 хг INTEGER; OutFilePos: INTEGER;
     RelocSection: SECTION;
-    felf: ЛрХОШ.tString;
+    felf: ЛрХОШ.РяРПНЙЮ;
     fpu*: INTEGER; isfpu: BOOLEAN; maxfpu: INTEGER; fpucmd: ASMLINE;
     kosexp: люяяхб 65536 хг гюохяэ
-      Name: ЛяЙЮМ.NODE;
+      Name: ЛрХОШ.NODE;
       Adr, NameLabel: INTEGER
       йнмеж;
     kosexpcount: INTEGER;
 
-опнжедспю setfelf*(name: ЛрХОШ.tString);
+опнжедспю setfelf*(name: ЛрХОШ.РяРПНЙЮ);
   мювюкн
     felf := name
   йнмеж setfelf;
@@ -237,7 +237,7 @@
     etable.size := etable.size + etable.textlen
   йнмеж PackExport;
 
-опнжедспю ProcExport*(Number: INTEGER; Name: ЛяЙЮМ.NODE; NameLabel: INTEGER);
+опнжедспю ProcExport*(Number: INTEGER; Name: ЛрХОШ.NODE; NameLabel: INTEGER);
   мювюкн
     еякх dll рнцдю
       etable.arradr[etable.adrcount] := Number;
@@ -284,7 +284,7 @@
     йнмеж
   йнмеж PutReloc;
 
-опнжедспю InitArray(оеп adr: INTEGER; chars: ЛрХОШ.tString);
+опнжедспю InitArray(оеп adr: INTEGER; chars: ЛрХОШ.РяРПНЙЮ);
   оепел i, x, n: INTEGER;
   мювюкн
     n := LEN(chars) - 1;
@@ -529,7 +529,7 @@
     current.tcmd := POPEDX
   йнмеж PopEDX;
 
-опнжедспю OutCode(cmd: ЛрХОШ.tString);
+опнжедспю OutCode(cmd: ЛрХОШ.РяРПНЙЮ);
   оепел a, b: INTEGER;
   мювюкн
     New;
@@ -594,7 +594,7 @@
     current := nov;
   йнмеж Init;
 
-опнжедспю datastr(str: ЛрХОШ.tString);
+опнжедспю datastr(str: ЛрХОШ.РяРПНЙЮ);
   оепел i, n: INTEGER;
   мювюкн
     i := 0;
@@ -660,7 +660,7 @@
     INC(ccount, 4)
   йнмеж CmdN;
 
-опнжедспю IntByte(bytecode, intcode: ЛрХОШ.tString; n: INTEGER);
+опнжедспю IntByte(bytecode, intcode: ЛрХОШ.РяРПНЙЮ; n: INTEGER);
   мювюкн
     еякх (n <= 127) & (n >= -128) рнцдю
       OutCode(bytecode);
@@ -764,7 +764,7 @@
     CmdN(n)
   йнмеж PushInt;
 
-опнжедспю Prolog*(exename: ЛрХОШ.tString);
+опнжедспю Prolog*(exename: ЛрХОШ.РяРПНЙЮ);
   мювюкн
     ExecName := exename;
     Labels[hInstance] := -dcount;
@@ -863,7 +863,7 @@
     CallRTL(_disprec)
   йнмеж disprec;
 
-опнжедспю String*(Number, Len: INTEGER; str: ЛрХОШ.tString);
+опнжедспю String*(Number, Len: INTEGER; str: ЛрХОШ.РяРПНЙЮ);
   мювюкн
     Labels[Number] := -dcount;
     еякх Len > 1 рнцдю
@@ -941,13 +941,13 @@
     InsertFpuInit
   йнмеж ProcEnd;
 
-опнжедспю Module*(Name: ЛрХОШ.tString; Number: INTEGER);
+опнжедспю Module*(Name: ЛрХОШ.РяРПНЙЮ; Number: INTEGER);
   мювюкн
     String(Number + 2, LENGTH(Name), Name);
     jmplong(JMP, Number + 1)
   йнмеж Module;
 
-опнжедспю Asm*(s: ЛрХОШ.tString);
+опнжедспю Asm*(s: ЛрХОШ.РяРПНЙЮ);
   мювюкн
     OutCode(s)
   йнмеж Asm;
@@ -1572,7 +1572,7 @@
     cur: ASMLINE;
     Coff: COFFHEADER;
     sym: люяяхб 18 * 4 хг CHAR;
-    FileName: ЛрХОШ.tString;
+    FileName: ЛрХОШ.РяРПНЙЮ;
   мювюкн
     F := ЛсРХКЭ.CreateF(FName);
     еякх F <= 0 рнцдю

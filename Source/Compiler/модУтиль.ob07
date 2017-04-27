@@ -42,9 +42,9 @@
   Params: люяяхб ЛйНМЯР.ЛЮЙЯ_ОЮПЮЛ, 2 хг INTEGER;
   hConsoleOutput, hConsoleInput, ParamCount*, Line*, Unit*: INTEGER;
   win, kos, lnx: BOOLEAN;
-  FileName: ЛрХОШ.tString;
+  FileName: ЛрХОШ.РяРПНЙЮ;
 
-опнжедспю SetFile*(F_: ЛрХОШ.tString);
+опнжедспю SetFile*(F_: ЛрХОШ.РяРПНЙЮ);
   мювюкн
     FileName := F_
   йнмеж SetFile;
@@ -175,7 +175,7 @@
 
 опнжедспю OutString*(str: люяяхб хг CHAR);
   оепел
-    s: ЛрХОШ.tString; n: INTEGER;
+    s: ЛрХОШ.РяРПНЙЮ; n: INTEGER;
   мювюкн
     еякх win хкх lnx рнцдю
       n := Write(hConsoleOutput, mSys.ADR(str), LENGTH(str))
@@ -191,7 +191,7 @@
 
 опнжедспю ErrMsgPos*(line, col, code: INTEGER);
   оепел
-    s: ЛрХОШ.tString;
+    s: ЛрХОШ.РяРПНЙЮ;
   мювюкн
     OutString("НЬХАЙЮ: "); Int(code); Ln;
     OutString("ТЮИК:   "); OutString(FileName); Ln;
@@ -296,7 +296,7 @@
     бепмсрэ nov
   йнмеж CreateList;
 
-опнжедспю Revers(оеп str: ЛрХОШ.tString);
+опнжедспю Revers(оеп str: ЛрХОШ.РяРПНЙЮ);
   оепел a, b: INTEGER; c: CHAR;
   мювюкн
     a := 0;
@@ -310,7 +310,7 @@
     йнмеж
   йнмеж Revers;
 
-опнжедспю Split*(FName: ЛрХОШ.tString; оеп Path, Name, Ext: ЛрХОШ.tString);
+опнжедспю Split*(FName: ЛрХОШ.РяРПНЙЮ; оеп Path, Name, Ext: ЛрХОШ.РяРПНЙЮ);
    оепел
    i, j, k: INTEGER;
    мювюкн
