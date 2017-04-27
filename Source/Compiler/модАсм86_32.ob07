@@ -21,7 +21,7 @@
 
 ИМПОРТ UTILS := модУтиль,
     mSys := SYSTEM,
-    SCAN := модСканер,
+    мСкан := модСканер,
     мКонст := модКонстанты;
 
 КОНСТ
@@ -138,7 +138,7 @@
     felf: UTILS.tString;
     fpu*: INTEGER; isfpu: BOOLEAN; maxfpu: INTEGER; fpucmd: ASMLINE;
     kosexp: МАССИВ 65536 ИЗ ЗАПИСЬ
-      Name: SCAN.NODE;
+      Name: мСкан.NODE;
       Adr, NameLabel: INTEGER
       КОНЕЦ;
     kosexpcount: INTEGER;
@@ -236,7 +236,7 @@
     etable.size := etable.size + etable.textlen
   КОНЕЦ PackExport;
 
-ПРОЦЕДУРА ProcExport*(Number: INTEGER; Name: SCAN.NODE; NameLabel: INTEGER);
+ПРОЦЕДУРА ProcExport*(Number: INTEGER; Name: мСкан.NODE; NameLabel: INTEGER);
   НАЧАЛО
     ЕСЛИ dll ТОГДА
       etable.arradr[etable.adrcount] := Number;
@@ -289,7 +289,7 @@
     n := LEN(chars) - 1;
     i := 0;
     ПОКА (i < n) & (chars[i] # 0X) ДЕЛАТЬ
-      x := SCAN.hex(chars[i]) * 16 + SCAN.hex(chars[i + 1]);
+      x := мСкан.hex(chars[i]) * 16 + мСкан.hex(chars[i + 1]);
       mSys.PUT(adr, CHR(x));
       INC(adr);
       INC(i, 2)
@@ -709,7 +709,7 @@
 ПРОЦЕДУРА Incfpu;
   НАЧАЛО
     ЕСЛИ fpu >= FREGS ТОГДА
-      UTILS.ErrMsgPos(SCAN.line, SCAN.col, 97);
+      UTILS.ErrMsgPos(мСкан.line, мСкан.col, 97);
       UTILS.HALT(1)
     КОНЕЦ;
     INC(fpu);

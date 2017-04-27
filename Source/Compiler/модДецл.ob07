@@ -19,7 +19,7 @@
 
 лндскэ ЛНДдЕЖК;
 
-хлонпр SCAN := ЛНДяЙЮМЕП,
+хлонпр ЛяЙЮМ := ЛНДяЙЮМЕП,
     UTILS := ЛНДсРХКЭ,
     X86 := ЛНДюЯЛ86_32,
     SYSTEM,
@@ -77,18 +77,18 @@
   IDENT* = сйюгюрекэ мю rIDENT;
 
   UNIT* = сйюгюрекэ мю гюохяэ (UTILS.tItem)
-      Name: SCAN.NODE;
+      Name: ЛяЙЮМ.NODE;
       File: UTILS.tString;
       Idents: UTILS.tpList;
       Import: UTILS.tpList;
       IdentBegin: IDENT;
-      scanner: SCAN.SCANNER;
+      scanner: ЛяЙЮМ.SCANNER;
       Level*: INTEGER;
       Closed, typedecl, ExportType, Std, sys: BOOLEAN
     йнмеж;
 
   rIDENT* = гюохяэ (UTILS.tItem)
-      Name: SCAN.NODE;
+      Name: ЛяЙЮМ.NODE;
       T*: pTYPE;
       Unit*: UNIT;
       Parent*: IDENT;
@@ -99,7 +99,7 @@
     йнмеж;
 
   PTRBASE = сйюгюрекэ мю гюохяэ (UTILS.tItem)
-      Name: SCAN.NODE;
+      Name: ЛяЙЮМ.NODE;
       line, col: INTEGER;
       Ptr: pTYPE
     йнмеж;
@@ -109,7 +109,7 @@
     йнмеж;
 
   FIELD* = сйюгюрекэ мю гюохяэ (UTILS.tItem)
-      Name: SCAN.NODE;
+      Name: ЛяЙЮМ.NODE;
       T*: pTYPE;
       Offset*: INTEGER;
       ByRef*, Export*: BOOLEAN;
@@ -139,7 +139,7 @@
 
   sttypes: stTYPES; unit*, sys: UNIT; curBlock*: IDENT;
   Path, Main, Std, ExtMain: UTILS.tString;
-  NamePtrBase: SCAN.NODE; ProgSize*, RecCount, UnitNumber*: INTEGER;
+  NamePtrBase: ЛяЙЮМ.NODE; ProgSize*, RecCount, UnitNumber*: INTEGER;
   PtrBases, Strings, types, prog: UTILS.tpList;
   OpSeq: opPROC; Expr: expPROC;
   AssComp: assPROC; main, sizefunc, winplatf, Const*: BOOLEAN;
@@ -172,7 +172,7 @@
     NEW(nov);
     MemErr(nov = осярн);
     COPY(str, nov.Str);
-    nov.Len := SCAN.count - 1;
+    nov.Len := ЛяЙЮМ.count - 1;
     nov.Number := X86.NewLabel();
     UTILS.Push(Strings, nov);
     X86.String(nov.Number, nov.Len, nov.Str)
@@ -195,11 +195,11 @@
 
 опнжедспю Coord(оеп line, col: INTEGER);
   мювюкн
-    line := SCAN.line;
-    col := SCAN.col
+    line := ЛяЙЮМ.line;
+    col := ЛяЙЮМ.col
   йнмеж Coord;
 
-опнжедспю GetModule(Name: SCAN.NODE): UNIT;
+опнжедспю GetModule(Name: ЛяЙЮМ.NODE): UNIT;
   оепел cur, res: UNIT;
   мювюкн
     res := осярн;
@@ -224,23 +224,23 @@
 опнжедспю Assert2(cond: BOOLEAN; code: INTEGER);
   мювюкн
     еякх ~cond рнцдю
-      Assert(кнфэ, SCAN.line, SCAN.col, code)
+      Assert(кнфэ, ЛяЙЮМ.line, ЛяЙЮМ.col, code)
     йнмеж
   йнмеж Assert2;
 
 опнжедспю Next*;
   мювюкн
-    SCAN.GetLex;
-    еякх (SCAN.tLex > lxERR0) & (SCAN.tLex < lxERR20) рнцдю
-      Assert(кнфэ, SCAN.line, SCAN.col + SCAN.count, SCAN.tLex - lxERR0)
+    ЛяЙЮМ.GetLex;
+    еякх (ЛяЙЮМ.tLex > lxERR0) & (ЛяЙЮМ.tLex < lxERR20) рнцдю
+      Assert(кнфэ, ЛяЙЮМ.line, ЛяЙЮМ.col + ЛяЙЮМ.count, ЛяЙЮМ.tLex - lxERR0)
     йнмеж;
-    Assert2(SCAN.tLex # lxEOF, 27)
+    Assert2(ЛяЙЮМ.tLex # lxEOF, 27)
   йнмеж Next;
 
 опнжедспю Check*(key: INTEGER);
   оепел code: INTEGER;
   мювюкн
-    еякх SCAN.tLex # key рнцдю
+    еякх ЛяЙЮМ.tLex # key рнцдю
       бшанп key хг
       |ЛйНМЯР.lxMODULE:  code := 21
       |lxIDENT:   code := 22
@@ -267,7 +267,7 @@
     йнмеж
   йнмеж Check;
 
-опнжедспю CheckIdent(Name: SCAN.NODE): BOOLEAN;
+опнжедспю CheckIdent(Name: ЛяЙЮМ.NODE): BOOLEAN;
   оепел cur: IDENT;
   мювюкн
     cur := unit.Idents.Last(IDENT);
@@ -289,7 +289,7 @@
     INC(unit.Level)
   йнмеж Guard;
 
-опнжедспю PushIdent(Name: SCAN.NODE; line, col, iType: INTEGER; T: pTYPE; u: UNIT; Export: BOOLEAN; StProc: INTEGER);
+опнжедспю PushIdent(Name: ЛяЙЮМ.NODE; line, col, iType: INTEGER; T: pTYPE; u: UNIT; Export: BOOLEAN; StProc: INTEGER);
   оепел ident: IDENT; i: INTEGER;
   мювюкн
     Assert(CheckIdent(Name), line, col, 30);
@@ -341,22 +341,22 @@
 
 опнжедспю PushStProc(Name: UTILS.tString; StProc: INTEGER);
   мювюкн
-    PushIdent(SCAN.AddNode(Name), 0, 0, IDSTPROC, sttypes[TVOID], осярн, кнфэ, StProc)
+    PushIdent(ЛяЙЮМ.AddNode(Name), 0, 0, IDSTPROC, sttypes[TVOID], осярн, кнфэ, StProc)
   йнмеж PushStProc;
 
 опнжедспю PushStType(Name: UTILS.tString; T: INTEGER);
   мювюкн
-    PushIdent(SCAN.AddNode(Name), 0, 0, IDTYPE, sttypes[T], осярн, кнфэ, 0)
+    PushIdent(ЛяЙЮМ.AddNode(Name), 0, 0, IDTYPE, sttypes[T], осярн, кнфэ, 0)
   йнмеж PushStType;
 
 опнжедспю PushSysProc(Name: UTILS.tString; StProc: INTEGER);
   мювюкн
-    PushIdent(SCAN.AddNode(Name), 0, 0, IDSYSPROC, sttypes[TVOID], осярн, хярхмю, StProc)
+    PushIdent(ЛяЙЮМ.AddNode(Name), 0, 0, IDSYSPROC, sttypes[TVOID], осярн, хярхмю, StProc)
   йнмеж PushSysProc;
 
 опнжедспю PushSysType(Name: UTILS.tString; T: INTEGER);
   мювюкн
-    PushIdent(SCAN.AddNode(Name), 0, 0, IDTYPE, sttypes[T], осярн, хярхмю, 0)
+    PushIdent(ЛяЙЮМ.AddNode(Name), 0, 0, IDTYPE, sttypes[T], осярн, хярхмю, 0)
   йнмеж PushSysType;
 
 опнжедспю StIdent;
@@ -396,7 +396,7 @@
     Guard
   йнмеж StIdent;
 
-опнжедспю GetQIdent*(Unit: UNIT; Name: SCAN.NODE): IDENT;
+опнжедспю GetQIdent*(Unit: UNIT; Name: ЛяЙЮМ.NODE): IDENT;
   оепел cur, res: IDENT; line, col: INTEGER;
   мювюкн
     res := осярн;
@@ -417,7 +417,7 @@
     бепмсрэ res
   йнмеж GetQIdent;
 
-опнжедспю GetIdent*(Name: SCAN.NODE): IDENT;
+опнжедспю GetIdent*(Name: ЛяЙЮМ.NODE): IDENT;
   оепел cur, res: IDENT; line, col: INTEGER;
   мювюкн
     res := осярн;
@@ -446,7 +446,7 @@
   йнмеж Relation;
 
 опнжедспю Arith(a, b: LONGREAL; T: pTYPE; Op, line, col: INTEGER): LONGREAL;
-  CONST max = SCAN.maxDBL;
+  CONST max = ЛяЙЮМ.maxDBL;
   оепел res: LONGREAL;
   мювюкн
     бшанп Op хг
@@ -457,7 +457,7 @@
       Assert(b # 0.0D0, line, col, 46);
       res := a / b
     |lxDIV:
-      Assert(~((a = LONG(FLT(SCAN.minINT))) & (b = -1.0D0)), line, col, IOVER);
+      Assert(~((a = LONG(FLT(ЛяЙЮМ.minINT))) & (b = -1.0D0)), line, col, IOVER);
       res := LONG(FLT(FLOOR(a) DIV FLOOR(b)))
     |lxMOD:
       res := LONG(FLT(FLOOR(a) MOD FLOOR(b)))
@@ -465,12 +465,12 @@
     йнмеж;
     Assert(~UTILS.IsInf(res), line, col, FOVER);
     бшанп T.tType хг
-    |TINTEGER:  Assert((res <= LONG(FLT(ЛйНМЯР.maxINT))) & (res >= LONG(FLT(SCAN.minINT))), line, col, IOVER)
-    |TREAL:     Assert((res <= LONG(SCAN.maxREAL)) & (res >= -LONG(SCAN.maxREAL)), line, col, FOVER)
+    |TINTEGER:  Assert((res <= LONG(FLT(ЛйНМЯР.maxINT))) & (res >= LONG(FLT(ЛяЙЮМ.minINT))), line, col, IOVER)
+    |TREAL:     Assert((res <= LONG(ЛяЙЮМ.maxREAL)) & (res >= -LONG(ЛяЙЮМ.maxREAL)), line, col, FOVER)
     |TLONGREAL: Assert((res <= max) & (res >= -max), line, col, FOVER)
     хмюве
     йнмеж;
-    еякх (res = 0.0D0) & (T.tType IN {TREAL, TLONGREAL}) хкх (ABS(res) < LONG(SCAN.minREAL)) & (T.tType = TREAL) рнцдю
+    еякх (res = 0.0D0) & (T.tType IN {TREAL, TLONGREAL}) хкх (ABS(res) < LONG(ЛяЙЮМ.minREAL)) & (T.tType = TREAL) рнцдю
       бшанп Op хг
       |lxPlus:  Assert(a = -b, line, col, UNDER)
       |lxMinus: Assert(a = b, line, col, UNDER)
@@ -592,10 +592,10 @@
   йнмеж ConstExpr;
 
 опнжедспю IdType*(оеп line, col: INTEGER): pTYPE;
-  оепел id: IDENT; Name: SCAN.NODE; Unit: UNIT; Res: pTYPE;
+  оепел id: IDENT; Name: ЛяЙЮМ.NODE; Unit: UNIT; Res: pTYPE;
   мювюкн
     Res := осярн;
-    Name := SCAN.id;
+    Name := ЛяЙЮМ.id;
     id := GetIdent(Name);
     еякх id = осярн рнцдю
       Coord(line, col);
@@ -612,7 +612,7 @@
         Check(lxDot);
         Next;
         Check(lxIDENT);
-        Name := SCAN.id;
+        Name := ЛяЙЮМ.id;
         NamePtrBase := Name;
         id := GetQIdent(Unit, Name);
         еякх Unit # unit рнцдю
@@ -692,7 +692,7 @@
     йнмеж
   йнмеж SetFields;
 
-опнжедспю GetField*(T: pTYPE; Name: SCAN.NODE): FIELD;
+опнжедспю GetField*(T: pTYPE; Name: ЛяЙЮМ.NODE): FIELD;
   оепел cur, Res: FIELD;
   мювюкн
     Res := осярн;
@@ -706,7 +706,7 @@
     бепмсрэ Res
   йнмеж GetField;
 
-опнжедспю Unique(T: pTYPE; Name: SCAN.NODE): BOOLEAN;
+опнжедспю Unique(T: pTYPE; Name: ЛяЙЮМ.NODE): BOOLEAN;
   оепел field: FIELD; res: BOOLEAN;
   мювюкн
     res := хярхмю;
@@ -728,10 +728,10 @@
   йнмеж notrecurs;
 
 опнжедспю ReadFields(T: pTYPE);
-  оепел Name: SCAN.NODE; field: FIELD; Tf: pTYPE; line, col: INTEGER; id_T: BOOLEAN;
+  оепел Name: ЛяЙЮМ.NODE; field: FIELD; Tf: pTYPE; line, col: INTEGER; id_T: BOOLEAN;
   мювюкн
-    онйю SCAN.tLex = lxIDENT декюрэ
-      Name := SCAN.id;
+    онйю ЛяЙЮМ.tLex = lxIDENT декюрэ
+      Name := ЛяЙЮМ.id;
       Assert2(Unique(T, Name), 30);
       NEW(field);
       MemErr(field = осярн);
@@ -741,29 +741,29 @@
       field.Export := кнфэ;
       field.Unit := unit;
       Next;
-      еякх SCAN.tLex = lxMult рнцдю
+      еякх ЛяЙЮМ.tLex = lxMult рнцдю
         Assert2(unit.Level = 3, 89);
         Assert2(unit.typedecl, 91);
         Assert2(unit.ExportType, 92);
         field.Export := хярхмю;
         Next
       йнмеж;
-      еякх SCAN.tLex = lxComma рнцдю
+      еякх ЛяЙЮМ.tLex = lxComma рнцдю
         Next;
         Check(lxIDENT)
-      юеякх SCAN.tLex = lxColon рнцдю
+      юеякх ЛяЙЮМ.tLex = lxColon рнцдю
         Next;
         Coord(line, col);
-        id_T := SCAN.tLex = lxIDENT;
+        id_T := ЛяЙЮМ.tLex = lxIDENT;
         Tf:= pParseType(line, col);
         Assert(Tf # осярн, line, col, 42);
         Assert(notrecurs(id_T, Tf), line, col, 96);
         SetFields(T, Tf, хярхмю);
-        еякх SCAN.tLex = lxSemi рнцдю
+        еякх ЛяЙЮМ.tLex = lxSemi рнцдю
           Next;
           Check(lxIDENT)
         хмюве
-          Assert2(SCAN.tLex = ЛйНМЯР.lxEND, 86)
+          Assert2(ЛяЙЮМ.tLex = ЛйНМЯР.lxEND, 86)
         йнмеж
       хмюве
         Assert2(кнфэ, 85)
@@ -849,7 +849,7 @@
 опнжедспю FormalType(оеп line, col: INTEGER): pTYPE;
   оепел TA: pTYPE;
   мювюкн
-    еякх SCAN.tLex = ЛйНМЯР.lxARRAY рнцдю
+    еякх ЛяЙЮМ.tLex = ЛйНМЯР.lxARRAY рнцдю
       Next;
       Check(ЛйНМЯР.lxOF);
       Next;
@@ -863,23 +863,23 @@
   йнмеж FormalType;
 
 опнжедспю Section(T: pTYPE);
-  оепел Name: SCAN.NODE; ByRef, cont: BOOLEAN; field: FIELD;
+  оепел Name: ЛяЙЮМ.NODE; ByRef, cont: BOOLEAN; field: FIELD;
       Tf: pTYPE; fp: IDENT; line, col: INTEGER; proc: BOOLEAN;
   мювюкн
     proc := T = осярн;
     еякх proc рнцдю
       T := curBlock.T
     йнмеж;
-    Assert2((SCAN.tLex = lxIDENT) хкх (SCAN.tLex = ЛйНМЯР.lxVAR), 84);
+    Assert2((ЛяЙЮМ.tLex = lxIDENT) хкх (ЛяЙЮМ.tLex = ЛйНМЯР.lxVAR), 84);
     ByRef := кнфэ;
-    еякх SCAN.tLex = ЛйНМЯР.lxVAR рнцдю
+    еякх ЛяЙЮМ.tLex = ЛйНМЯР.lxVAR рнцдю
       ByRef := хярхмю;
       Next;
       Check(lxIDENT)
     йнмеж;
     cont := хярхмю;
     онйю cont декюрэ
-      Name := SCAN.id;
+      Name := ЛяЙЮМ.id;
       Assert2(GetField(T, Name) = осярн, 30);
       NEW(field);
       MemErr(field = осярн);
@@ -898,10 +898,10 @@
         йнмеж
       йнмеж;
       Next;
-      еякх SCAN.tLex = lxComma рнцдю
+      еякх ЛяЙЮМ.tLex = lxComma рнцдю
         Next;
         Check(lxIDENT)
-      юеякх SCAN.tLex = lxColon рнцдю
+      юеякх ЛяЙЮМ.tLex = lxColon рнцдю
         Next;
         Tf := FormalType(line, col);
         Assert(Dim(Tf) <= X86.ADIM, line, col, 110);
@@ -919,11 +919,11 @@
 опнжедспю ParamType(T: pTYPE);
   оепел break: BOOLEAN;
   мювюкн
-    еякх (SCAN.tLex = lxIDENT) хкх (SCAN.tLex = ЛйНМЯР.lxVAR) рнцдю
+    еякх (ЛяЙЮМ.tLex = lxIDENT) хкх (ЛяЙЮМ.tLex = ЛйНМЯР.lxVAR) рнцдю
       break := кнфэ;
       онбрнпърэ
         Section(T);
-        еякх SCAN.tLex = lxSemi рнцдю
+        еякх ЛяЙЮМ.tLex = lxSemi рнцдю
           Next
         хмюве
           break := хярхмю
@@ -932,7 +932,7 @@
     йнмеж
   йнмеж ParamType;
 
-опнжедспю AddPtrBase(Name: SCAN.NODE; line, col: INTEGER; T: pTYPE);
+опнжедспю AddPtrBase(Name: ЛяЙЮМ.NODE; line, col: INTEGER; T: pTYPE);
   оепел nov: PTRBASE;
   мювюкн
     NEW(nov);
@@ -947,12 +947,12 @@
 опнжедспю FormalList(T: pTYPE; оеп Res: pTYPE);
   оепел line, col: INTEGER;
   мювюкн
-    еякх SCAN.tLex = lxLRound рнцдю
+    еякх ЛяЙЮМ.tLex = lxLRound рнцдю
       Next;
       ParamType(T);
       Check(lxRRound);
       Next;
-      еякх SCAN.tLex = lxColon рнцдю
+      еякх ЛяЙЮМ.tLex = lxColon рнцдю
         Next;
         Check(lxIDENT);
         Res := IdType(line, col);
@@ -967,10 +967,10 @@
     flag: UTILS.tString;
     res: BOOLEAN;
   мювюкн
-    res := SCAN.tLex = lxLSquare;
+    res := ЛяЙЮМ.tLex = lxLSquare;
     еякх res рнцдю
       Next;
-      SCAN.GetLexStr(flag);
+      ЛяЙЮМ.GetLexStr(flag);
       еякх flag = "cdecl" рнцдю
         Call := cdecl
       юеякх flag = "stdcall" рнцдю
@@ -995,10 +995,10 @@
     flag: UTILS.tString;
     res: BOOLEAN;
   мювюкн
-    res := SCAN.tLex = lxLSquare;
+    res := ЛяЙЮМ.tLex = lxLSquare;
     еякх res рнцдю
       Next;
-      SCAN.GetLexStr(flag);
+      ЛяЙЮМ.GetLexStr(flag);
       еякх flag = "union" рнцдю
         rec := union
       юеякх flag = "noalign" рнцдю
@@ -1018,9 +1018,9 @@
 опнжедспю StructType(Comma: BOOLEAN; NewType: pTYPE): pTYPE;
   оепел v: LONGREAL; T, nov: pTYPE; line, col, line2, col2: INTEGER; id_T: BOOLEAN;
   мювюкн
-    бшанп SCAN.tLex хг
+    бшанп ЛяЙЮМ.tLex хг
     |ЛйНМЯР.lxARRAY, lxComma:
-      еякх SCAN.tLex = lxComma рнцдю
+      еякх ЛяЙЮМ.tLex = lxComma рнцдю
         Assert2(Comma, 39)
       йнмеж;
       Next;
@@ -1029,12 +1029,12 @@
       Assert(T.tType = TINTEGER, line, col, 52);
       Assert(v > 0.0D0, line, col, 78);
       nov := CreateType(TARRAY, FLOOR(v), 0, 0, осярн, кнфэ, NewType);
-      еякх SCAN.tLex = lxComma рнцдю
+      еякх ЛяЙЮМ.tLex = lxComma рнцдю
         nov.Base := StructType(хярхмю, осярн)
-      юеякх SCAN.tLex = ЛйНМЯР.lxOF рнцдю
+      юеякх ЛяЙЮМ.tLex = ЛйНМЯР.lxOF рнцдю
         Next;
         Coord(line, col);
-        id_T := SCAN.tLex = lxIDENT;
+        id_T := ЛяЙЮМ.tLex = lxIDENT;
         nov.Base := pParseType(line, col);
         Assert(nov.Base # осярн, line, col, 42);
         Assert(notrecurs(id_T, nov.Base), line, col, 96)
@@ -1054,7 +1054,7 @@
         Assert(unit.sys, line, col, 111)
       йнмеж;
       Coord(line, col);
-      еякх SCAN.tLex = lxLRound рнцдю
+      еякх ЛяЙЮМ.tLex = lxLRound рнцдю
         Next;
         Coord(line2, col2);
         Check(lxIDENT);
@@ -1110,7 +1110,7 @@
 опнжедспю ParseType(оеп line, col: INTEGER): pTYPE;
   оепел Res: pTYPE;
   мювюкн
-    еякх SCAN.tLex = lxIDENT рнцдю
+    еякх ЛяЙЮМ.tLex = lxIDENT рнцдю
       Res := IdType(line, col)
     хмюве
       Res := StructType(кнфэ, осярн)
@@ -1150,16 +1150,16 @@
   йнмеж LinkPtr;
 
 опнжедспю DeclSeq;
-  оепел Value: LONGREAL; T, NewType: pTYPE; Name: SCAN.NODE; line, col, Call: INTEGER;
+  оепел Value: LONGREAL; T, NewType: pTYPE; Name: ЛяЙЮМ.NODE; line, col, Call: INTEGER;
       Export, func: BOOLEAN; last, id: IDENT; e: EXPRESSION;
 
     опнжедспю IdentDef;
     мювюкн
-      Name := SCAN.id;
+      Name := ЛяЙЮМ.id;
       Coord(line, col);
       Next;
       Export := кнфэ;
-      еякх SCAN.tLex = lxMult рнцдю
+      еякх ЛяЙЮМ.tLex = lxMult рнцдю
         Assert2(unit.Level = 3, 89);
         Export := хярхмю;
         Next
@@ -1167,9 +1167,9 @@
     йнмеж IdentDef;
 
   мювюкн
-    еякх SCAN.tLex = ЛйНМЯР.lxCONST рнцдю
+    еякх ЛяЙЮМ.tLex = ЛйНМЯР.lxCONST рнцдю
       Next;
-      онйю SCAN.tLex = lxIDENT декюрэ
+      онйю ЛяЙЮМ.tLex = lxIDENT декюрэ
         IdentDef;
         PushIdent(Name, line, col, IDCONST, осярн, осярн, Export, 0);
         last := unit.Idents.Last(IDENT);
@@ -1182,11 +1182,11 @@
         Next
       йнмеж
     йнмеж;
-    еякх SCAN.tLex = ЛйНМЯР.lxTYPE рнцдю
+    еякх ЛяЙЮМ.tLex = ЛйНМЯР.lxTYPE рнцдю
       UTILS.Clear(PtrBases);
       unit.typedecl := хярхмю;
       Next;
-      онйю SCAN.tLex = lxIDENT декюрэ
+      онйю ЛяЙЮМ.tLex = lxIDENT декюрэ
         IdentDef;
         PushIdent(Name, line, col, IDTYPE, осярн, осярн, Export, 0);
         last := unit.Idents.Last(IDENT);
@@ -1204,15 +1204,15 @@
     LinkPtr;
     unit.typedecl := кнфэ;
     unit.ExportType := кнфэ;
-    еякх SCAN.tLex = ЛйНМЯР.lxVAR рнцдю
+    еякх ЛяЙЮМ.tLex = ЛйНМЯР.lxVAR рнцдю
       Next;
-      онйю SCAN.tLex = lxIDENT декюрэ
+      онйю ЛяЙЮМ.tLex = lxIDENT декюрэ
         IdentDef;
         PushIdent(Name, line, col, IDVAR, осярн, осярн, Export, 0);
-        еякх SCAN.tLex = lxComma рнцдю
+        еякх ЛяЙЮМ.tLex = lxComma рнцдю
           Next;
           Check(lxIDENT)
-        юеякх SCAN.tLex = lxColon рнцдю
+        юеякх ЛяЙЮМ.tLex = lxColon рнцдю
           Next;
           Coord(line, col);
           T := ParseType(line, col);
@@ -1225,7 +1225,7 @@
         йнмеж
       йнмеж
     йнмеж;
-    онйю SCAN.tLex = ЛйНМЯР.lxPROCEDURE декюрэ
+    онйю ЛяЙЮМ.tLex = ЛйНМЯР.lxPROCEDURE декюрэ
       Next;
       Coord(line, col);
       еякх CallFlag(Call) рнцдю
@@ -1238,7 +1238,7 @@
       id := unit.Idents.Last(IDENT);
       еякх id.Export & main рнцдю
         еякх Platform = 6 рнцдю
-          Assert((Name # SCAN._START) & (Name # SCAN._version), line, col, 133)
+          Assert((Name # ЛяЙЮМ._START) & (Name # ЛяЙЮМ._version), line, col, 133)
         йнмеж;
         X86.ProcExport(id.Number, Name, X86.NewLabel())
       йнмеж;
@@ -1252,14 +1252,14 @@
       DeclSeq;
       id.LocalSize := id.VarSize - id.ParamSize;
       X86.ProcBeg(id.Number, id.LocalSize, кнфэ);
-      еякх SCAN.tLex = ЛйНМЯР.lxBEGIN рнцдю
+      еякх ЛяЙЮМ.tLex = ЛйНМЯР.lxBEGIN рнцдю
         Next;
         OpSeq
       йнмеж;
       func := curBlock.T.Base.tType # TVOID;
       еякх func рнцдю
         Check(ЛйНМЯР.lxRETURN);
-        UTILS.UnitLine(UnitNumber, SCAN.line);
+        UTILS.UnitLine(UnitNumber, ЛяЙЮМ.line);
         Next;
         Coord(line, col);
         Expr(e);
@@ -1268,12 +1268,12 @@
           X86.Load(e.T.tType)
         йнмеж
       хмюве
-        Assert2(SCAN.tLex # ЛйНМЯР.lxRETURN, 123)
+        Assert2(ЛяЙЮМ.tLex # ЛйНМЯР.lxRETURN, 123)
       йнмеж;
       Check(ЛйНМЯР.lxEND);
       Next;
       Check(lxIDENT);
-      Assert2(SCAN.id = Name, 87);
+      Assert2(ЛяЙЮМ.id = Name, 87);
       Next;
       Check(lxSemi);
       Next;
@@ -1288,7 +1288,7 @@
     опнжедспю AddProc(name: UTILS.tString; num: INTEGER);
     оепел id: IDENT;
     мювюкн
-      id := GetQIdent(u, SCAN.AddNode(name));
+      id := GetQIdent(u, ЛяЙЮМ.AddNode(name));
       еякх id = осярн рнцдю
         UTILS.ErrMsg(158);
         UTILS.HALT(1)
@@ -1320,7 +1320,7 @@
 
 опнжедспю ImportList;
   оепел cond, col, line, namecol, nameline: INTEGER;
-      name, alias: SCAN.NODE; u, self: UNIT;
+      name, alias: ЛяЙЮМ.NODE; u, self: UNIT;
       FName: UTILS.tString;
 
     опнжедспю AddUnit(newcond: INTEGER);
@@ -1329,7 +1329,7 @@
       u := GetModule(name);
       еякх u = осярн рнцдю
         self := unit;
-        SCAN.Backup(unit.scanner);
+        ЛяЙЮМ.Backup(unit.scanner);
         COPY(name.Name, FName);
         еякх ~((~self.Std & pReadModule(Path, FName, ЛйНМЯР.Ext)) хкх
                                 pReadModule(Std, FName, ЛйНМЯР.Ext)) рнцдю
@@ -1340,7 +1340,7 @@
             Assert(кнфэ, nameline, namecol, 32)
           йнмеж
         йнмеж;
-        SCAN.Recover(self.scanner);
+        ЛяЙЮМ.Recover(self.scanner);
         u := unit;
         unit := self;
         UTILS.SetFile(unit.File)
@@ -1361,12 +1361,12 @@
       Next;
       бшанп cond хг
       |0: Check(lxIDENT);
-          name := SCAN.id;
+          name := ЛяЙЮМ.id;
           Coord(line, col);
           Coord(nameline, namecol);
           alias := name;
           cond := 1
-      |1: бшанп SCAN.tLex хг
+      |1: бшанп ЛяЙЮМ.tLex хг
           |lxComma:  AddUnit(0)
           |lxSemi:   AddUnit(4); Next
           |lxAssign: cond := 2
@@ -1374,10 +1374,10 @@
             Assert2(кнфэ, 28)
           йнмеж
       |2: Check(lxIDENT);
-          name := SCAN.id;
+          name := ЛяЙЮМ.id;
           Coord(nameline, namecol);
           cond := 3
-      |3: бшанп SCAN.tLex хг
+      |3: бшанп ЛяЙЮМ.tLex хг
           |lxComma: AddUnit(0)
           |lxSemi:  AddUnit(4); Next
           хмюве
@@ -1388,7 +1388,7 @@
     йнмеж
   йнмеж ImportList;
 
-опнжедспю Header(Name: SCAN.NODE);
+опнжедспю Header(Name: ЛяЙЮМ.NODE);
   мювюкн
     NEW(unit);
     MemErr(unit = осярн);
@@ -1407,7 +1407,7 @@
   оепел temp: UNIT;
   мювюкн
     temp := unit;
-    Header(SCAN.AddNode("SYSTEM"));
+    Header(ЛяЙЮМ.AddNode("SYSTEM"));
     PushSysProc("ADR",     sysADR);
     PushSysProc("SIZE",    sysSIZE);
     PushSysProc("TYPEID",  sysTYPEID);
@@ -1429,7 +1429,7 @@
     Name := Name1;
     UTILS.concat(Path, Name, b);
     UTILS.concat(b, Ext, Name);
-    еякх SCAN.Open(Name, FHandle) рнцдю
+    еякх ЛяЙЮМ.Open(Name, FHandle) рнцдю
       NEW(unit);
       MemErr(unit = осярн);
       unit.sys := кнфэ;
@@ -1451,14 +1451,14 @@
       Next; Check(ЛйНМЯР.lxMODULE);
       
       Next; Check(lxIDENT);
-      Assert2(UTILS.streq(SCAN.id.Name, name), 33);
-      unit.Name := SCAN.id;
-      PushIdent(unit.Name, SCAN.line, SCAN.col, IDMOD, sttypes[TVOID], unit, кнфэ, 0);
+      Assert2(UTILS.streq(ЛяЙЮМ.id.Name, name), 33);
+      unit.Name := ЛяЙЮМ.id;
+      PushIdent(unit.Name, ЛяЙЮМ.line, ЛяЙЮМ.col, IDMOD, sttypes[TVOID], unit, кнфэ, 0);
       idmod := unit.Idents.Last(IDENT);
       Guard;
       Next; Check(lxSemi);
       Next;
-      еякх SCAN.tLex = ЛйНМЯР.lxIMPORT рнцдю
+      еякх ЛяЙЮМ.tLex = ЛйНМЯР.lxIMPORT рнцдю
         temp := main;
         main := кнфэ;
         ImportList;
@@ -1471,13 +1471,13 @@
       curBlock := idmod;
       DeclSeq;
       X86.ProcBeg(idmod.Number, 0, хярхмю);
-      еякх SCAN.tLex = ЛйНМЯР.lxBEGIN рнцдю
+      еякх ЛяЙЮМ.tLex = ЛйНМЯР.lxBEGIN рнцдю
         Next;
         OpSeq
       йнмеж;
       Check(ЛйНМЯР.lxEND);
       Next; Check(lxIDENT);
-      Assert2(SCAN.id = unit.Name, 26);
+      Assert2(ЛяЙЮМ.id = unit.Name, 26);
       Next; Check(lxDot);
       X86.Leave;
       unit.Closed := хярхмю;

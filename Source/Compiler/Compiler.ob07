@@ -16,11 +16,10 @@
     You should have received a copy of the GNU General Public License
     along with Compiler. If not, see <http://www.gnu.org/licenses/>.
    *)
-
 лндскэ Compiler;
 
 хлонпр DECL := ЛНДдЕЖК,
-    SCAN := ЛНДяЙЮМЕП,
+    ЛяЙЮМ := ЛНДяЙЮМЕП,
     UTILS := ЛНДсРХКЭ,
     X86 := ЛНДюЯЛ86_32,
     SYSTEM,
@@ -84,8 +83,8 @@
 
 опнжедспю Coord(оеп line, col: INTEGER);
   мювюкн
-    line := SCAN.line;
-    col := SCAN.col
+    line := ЛяЙЮМ.line;
+    col := ЛяЙЮМ.col
   йнмеж Coord;
 
 опнжедспю Assert(cond: BOOLEAN; line, col, code: INTEGER);
@@ -98,7 +97,7 @@
 опнжедспю Assert2(cond: BOOLEAN; code: INTEGER);
   мювюкн
     еякх ~cond рнцдю
-      DECL.Assert(кнфэ, SCAN.line, SCAN.col, code)
+      DECL.Assert(кнфэ, ЛяЙЮМ.line, ЛяЙЮМ.col, code)
     йнмеж
   йнмеж Assert2;
 
@@ -127,7 +126,7 @@
   йнмеж BaseOf;
 
 опнжедспю Designator(оеп e: DECL.EXPRESSION);
-  оепел id: DECL.IDENT; name: SCAN.NODE; e1: DECL.EXPRESSION;
+  оепел id: DECL.IDENT; name: ЛяЙЮМ.NODE; e1: DECL.EXPRESSION;
       line, col, i, n, bases, glob, loc, idx: INTEGER;
       imp, break, guard: BOOLEAN; f: DECL.FIELD;
       T, BaseT: DECL.pTYPE; s: DECL.STRCONST;
@@ -148,7 +147,7 @@
     loc := -1;
     Coord(line, col);
     Check(lxIDENT);
-    name := SCAN.id;
+    name := ЛяЙЮМ.id;
     id := DECL.GetIdent(name);
     еякх (id # осярн) & (id.iType = IDMOD) рнцдю
       Next;
@@ -156,7 +155,7 @@
       Next;
       Check(lxIDENT);
       Coord(line, col);
-      name := SCAN.id;
+      name := ЛяЙЮМ.id;
       imp := id.Unit # DECL.unit;
       id := DECL.GetQIdent(id.Unit, name)
     йнмеж;
@@ -224,7 +223,7 @@
     break := кнфэ;
     guard := кнфэ;
     онбрнпърэ
-      бшанп SCAN.tLex хг
+      бшанп ЛяЙЮМ.tLex хг
       |lxDot:
         e.deref := кнфэ;
         Assert2(e.T.tType IN {TPOINTER, TRECORD}, 105);
@@ -240,7 +239,7 @@
         Next;
         Check(lxIDENT);
         Coord(line, col);
-        name := SCAN.id;
+        name := ЛяЙЮМ.id;
         T := e.T;
         онбрнпърэ
           f := DECL.GetField(T, name);
@@ -288,7 +287,7 @@
             йнмеж
           йнмеж;
           e.T := e.T.Base
-        онйюме SCAN.tLex # lxComma;
+        онйюме ЛяЙЮМ.tLex # lxComma;
         Check(lxRSquare);
         e.vparam := кнфэ;
         guard := кнфэ;
@@ -327,7 +326,7 @@
           Check(lxRRound);
           Next;
           еякх e.T.tType = TPOINTER рнцдю
-            еякх (SCAN.tLex = lxDot) хкх (SCAN.tLex = lxCaret) рнцдю
+            еякх (ЛяЙЮМ.tLex = lxDot) хкх (ЛяЙЮМ.tLex = lxCaret) рнцдю
               X86.DupLoadCheck
             хмюве
               X86.DupLoad
@@ -359,7 +358,7 @@
     s := {};
     flag := хярхмю;
     X86.PushConst(0);
-    онйю SCAN.tLex # lxRCurly декюрэ
+    онйю ЛяЙЮМ.tLex # lxRCurly декюрэ
       Coord(line, col);
       pExpr(a);
       Assert(a.T.tType = TINTEGER, line, col, 52);
@@ -368,7 +367,7 @@
       йнмеж;
       Load(a);
       b := a;
-      еякх SCAN.tLex = lxDbl рнцдю
+      еякх ЛяЙЮМ.tLex = lxDbl рнцдю
         Next;
         Coord(line, col);
         pExpr(b);
@@ -387,9 +386,9 @@
       еякх flag рнцдю
         s := s + {FLOOR(a.Value) .. FLOOR(b.Value)}
       йнмеж;
-      еякх SCAN.tLex = lxComma рнцдю
+      еякх ЛяЙЮМ.tLex = lxComma рнцдю
         Next;
-        Assert2(SCAN.tLex # lxRCurly, 36)
+        Assert2(ЛяЙЮМ.tLex # lxRCurly, 36)
       хмюве
         Check(lxRCurly)
       йнмеж
@@ -437,7 +436,7 @@
       еякх e1.eType = eCONST рнцдю
         e.Value := ABS(e1.Value);
         e.eType := eCONST;
-        Assert(~((e1.T.tType = TINTEGER) & (e1.Value = LONG(FLT(SCAN.minINT)))), line, col, DECL.IOVER)
+        Assert(~((e1.T.tType = TINTEGER) & (e1.Value = LONG(FLT(ЛяЙЮМ.minINT)))), line, col, DECL.IOVER)
       йнмеж;
       еякх e1.T.tType = TINTEGER рнцдю
         X86.StFunc(X86.stABS)
@@ -500,7 +499,7 @@
       Assert(e1.T.tType IN {TREAL, TLONGREAL}, line, col, 66);
       Load(e1);
       еякх e1.eType = eCONST рнцдю
-        Assert((e1.Value - 1.0D0 < LONG(FLT(ЛйНМЯР.maxINT))) & (e1.Value >= LONG(FLT(SCAN.minINT))), line, col, 74);
+        Assert((e1.Value - 1.0D0 < LONG(FLT(ЛйНМЯР.maxINT))) & (e1.Value >= LONG(FLT(ЛяЙЮМ.minINT))), line, col, 74);
         e.Value := LONG(FLT(FLOOR(e1.Value)));
         e.eType := eCONST
       йнмеж;
@@ -571,8 +570,8 @@
       pExpr(e1);
       Assert(e1.T.tType = TLONGREAL, line, col, 70);
       еякх e1.eType = eCONST рнцдю
-        Assert(ABS(e1.Value) <= LONG(SCAN.maxREAL), line, col, DECL.FOVER);
-        Assert(ABS(e1.Value) >= LONG(SCAN.minREAL), line, col, DECL.UNDER);
+        Assert(ABS(e1.Value) <= LONG(ЛяЙЮМ.maxREAL), line, col, DECL.FOVER);
+        Assert(ABS(e1.Value) >= LONG(ЛяЙЮМ.minREAL), line, col, DECL.UNDER);
         e.Value := e1.Value;
         e.eType := eCONST
       йнмеж;
@@ -594,8 +593,8 @@
       e.T := sttypes[TINTEGER];
       X86.StFunc(X86.stLENGTH)
     |sysADR:
-      Assert((SCAN.tLex = lxIDENT) хкх (SCAN.tLex = lxSTRING) хкх (SCAN.tLex = lxCHX), line, col, 43);
-      еякх SCAN.tLex = lxIDENT рнцдю
+      Assert((ЛяЙЮМ.tLex = lxIDENT) хкх (ЛяЙЮМ.tLex = lxSTRING) хкх (ЛяЙЮМ.tLex = lxCHX), line, col, 43);
+      еякх ЛяЙЮМ.tLex = lxIDENT рнцдю
         Designator(e1);
         Assert((e1.eType = eVAR) хкх (e1.eType = ePROC) хкх (e1.T = sttypes[TSTRING]), line, col, 43);
         еякх e1.eType = ePROC рнцдю
@@ -859,12 +858,12 @@
   мювюкн
     e.eType := eCONST;
     e.vparam := кнфэ;
-    бшанп SCAN.tLex хг
+    бшанп ЛяЙЮМ.tLex хг
     |lxIDENT:
       begcall := X86.current;
       Designator(e);
       еякх e.eType = ePROC рнцдю
-        еякх SCAN.tLex = lxLRound рнцдю
+        еякх ЛяЙЮМ.tLex = lxLRound рнцдю
           Assert2(e.id.T.Base.tType # TVOID, 73);
           Next;
           X86.PushCall(begcall);
@@ -884,7 +883,7 @@
         хмюве
           X86.PushInt(e.id.Number)
         йнмеж
-      юеякх (e.eType = eVAR) & (e.T.tType = TPROC) & (SCAN.tLex = lxLRound) рнцдю
+      юеякх (e.eType = eVAR) & (e.T.tType = TPROC) & (ЛяЙЮМ.tLex = lxLRound) рнцдю
         Assert2(e.T.Base.tType # TVOID, 73);
         Next;
         X86.PushCall(begcall);
@@ -912,8 +911,8 @@
       X86.PushConst(0);
       Next
     |lxCHX, lxSTRING:
-      еякх SCAN.tLex = lxSTRING рнцдю
-        SCAN.GetLexStr(Lex);
+      еякх ЛяЙЮМ.tLex = lxSTRING рнцдю
+        ЛяЙЮМ.GetLexStr(Lex);
         str2 := DECL.AddString(Lex);
         SYSTEM.GET(SYSTEM.ADR(str2), p);
         e.Value := LONG(FLT(p));
@@ -924,27 +923,27 @@
           X86.PushInt(s.Number)
         йнмеж
       хмюве
-        str2 := DECL.AddMono(SCAN.vCHX);
+        str2 := DECL.AddMono(ЛяЙЮМ.vCHX);
         SYSTEM.GET(SYSTEM.ADR(str2), p);
         e.Value := LONG(FLT(p));
-        X86.PushConst(ORD(SCAN.vCHX))
+        X86.PushConst(ORD(ЛяЙЮМ.vCHX))
       йнмеж;
       e.T := sttypes[TSTRING];
       Next
     |lxREAL:
       e.T := sttypes[TREAL];
-      e.Value := SCAN.vFLT;
-      X86.PushFlt(SCAN.vFLT);
+      e.Value := ЛяЙЮМ.vFLT;
+      X86.PushFlt(ЛяЙЮМ.vFLT);
       Next
     |lxLONGREAL:
       e.T := sttypes[TLONGREAL];
-      e.Value := SCAN.vFLT;
-      X86.PushFlt(SCAN.vFLT);
+      e.Value := ЛяЙЮМ.vFLT;
+      X86.PushFlt(ЛяЙЮМ.vFLT);
       Next
     |lxINT, lxHEX:
       e.T := sttypes[TINTEGER];
-      e.Value := LONG(FLT(SCAN.vINT));
-      X86.PushConst(SCAN.vINT);
+      e.Value := LONG(FLT(ЛяЙЮМ.vINT));
+      X86.PushConst(ЛяЙЮМ.vINT);
       Next
     |lxLRound:
       Next;
@@ -1088,12 +1087,12 @@
   оепел a: DECL.EXPRESSION; Op, line, col, L: INTEGER;
   мювюкн
     Factor(e);
-    онйю (SCAN.tLex = lxMult) хкх (SCAN.tLex = lxSlash) хкх
-      (SCAN.tLex = lxDIV) хкх (SCAN.tLex = lxMOD) хкх
-       (SCAN.tLex = lxAnd) декюрэ
+    онйю (ЛяЙЮМ.tLex = lxMult) хкх (ЛяЙЮМ.tLex = lxSlash) хкх
+      (ЛяЙЮМ.tLex = lxDIV) хкх (ЛяЙЮМ.tLex = lxMOD) хкх
+       (ЛяЙЮМ.tLex = lxAnd) декюрэ
       Load(e);
       Coord(line, col);
-      Op := SCAN.tLex;
+      Op := ЛяЙЮМ.tLex;
       Next;
       еякх Op = lxAnd рнцдю
         L := X86.NewLabel();
@@ -1112,9 +1111,9 @@
   оепел a: DECL.EXPRESSION; Op, line, col, uOp, uline, ucol, L: INTEGER;
   мювюкн
     uOp := 0;
-    еякх (SCAN.tLex = lxPlus) хкх (SCAN.tLex = lxMinus) рнцдю
+    еякх (ЛяЙЮМ.tLex = lxPlus) хкх (ЛяЙЮМ.tLex = lxMinus) рнцдю
       Coord(uline, ucol);
-      uOp := SCAN.tLex;
+      uOp := ЛяЙЮМ.tLex;
       Next
     йнмеж;
     Term(e);
@@ -1132,7 +1131,7 @@
       еякх (uOp = lxMinus) & (e.eType = eCONST) рнцдю
         бшанп e.T.tType хг
         |TINTEGER:
-          Assert(e.Value # LONG(FLT(SCAN.minINT)), uline, ucol, DECL.IOVER)
+          Assert(e.Value # LONG(FLT(ЛяЙЮМ.minINT)), uline, ucol, DECL.IOVER)
         |TSET:
           e.Value := -LONG(FLT(ORD(-BITS(FLOOR(e.Value)))))
         хмюве
@@ -1144,10 +1143,10 @@
       йнмеж;
       e.vparam := кнфэ
     йнмеж;
-    онйю (SCAN.tLex = lxPlus) хкх (SCAN.tLex = lxMinus) хкх (SCAN.tLex = ЛйНМЯР.lxOR) декюрэ
+    онйю (ЛяЙЮМ.tLex = lxPlus) хкх (ЛяЙЮМ.tLex = lxMinus) хкх (ЛяЙЮМ.tLex = ЛйНМЯР.lxOR) декюрэ
       Load(e);
       Coord(line, col);
-      Op := SCAN.tLex;
+      Op := ЛяЙЮМ.tLex;
       Next;
       еякх Op = ЛйНМЯР.lxOR рнцдю
         L := X86.NewLabel();
@@ -1168,9 +1167,9 @@
     fpu := X86.fpu;
     beg := X86.current;
     Simple(e);
-    еякх DECL.Relation(SCAN.tLex) рнцдю
+    еякх DECL.Relation(ЛяЙЮМ.tLex) рнцдю
       Coord(line, col);
-      Op := SCAN.tLex;
+      Op := ЛяЙЮМ.tLex;
       Next;
       еякх Op = lxIS рнцдю
         Assert(e.T.tType IN {TRECORD, TPOINTER}, line, col, 37);
@@ -1254,8 +1253,8 @@
       pOpSeq;
       X86.jmp(X86.JMP, L);
       X86.Label(L3)
-    онйюме SCAN.tLex # ЛйНМЯР.lxELSIF;
-    еякх ~wh & (SCAN.tLex = ЛйНМЯР.lxELSE) рнцдю
+    онйюме ЛяЙЮМ.tLex # ЛйНМЯР.lxELSIF;
+    еякх ~wh & (ЛяЙЮМ.tLex = ЛйНМЯР.lxELSE) рнцдю
       Next;
       pOpSeq
     йнмеж;
@@ -1284,11 +1283,11 @@
 
 опнжедспю ForOper;
   оепел e: DECL.EXPRESSION; line, col, LBeg, LEnd, iValue: INTEGER; Value: LONGREAL;
-      T: DECL.pTYPE; name: SCAN.NODE; id: DECL.IDENT;
+      T: DECL.pTYPE; name: ЛяЙЮМ.NODE; id: DECL.IDENT;
   мювюкн
     Next;
     Check(lxIDENT);
-    name := SCAN.id;
+    name := ЛяЙЮМ.id;
     id := DECL.GetIdent(name);
     Assert2(id # осярн, 42);
     Assert2(id.iType = IDVAR, 126);
@@ -1316,7 +1315,7 @@
     Assert(e.T.tType = TINTEGER, line, col, 52);
     Load(e);
     iValue := 1;
-    еякх SCAN.tLex = lxBY рнцдю
+    еякх ЛяЙЮМ.tLex = lxBY рнцдю
       Next;
       Coord(line, col);
       DECL.ConstExpr(Value, T);
@@ -1365,7 +1364,7 @@
     Coord(line, col);
     LabelVal(a, int);
     b := a;
-    еякх SCAN.tLex = lxDbl рнцдю
+    еякх ЛяЙЮМ.tLex = lxDbl рнцдю
       Next;
       LabelVal(b, int)
     йнмеж;
@@ -1384,9 +1383,9 @@
   мювюкн
     LBeg := X86.NewLabel();
     LEnd := X86.NewLabel();
-    еякх ~((SCAN.tLex = lxStick) хкх (SCAN.tLex = ЛйНМЯР.lxEND)) рнцдю
+    еякх ~((ЛяЙЮМ.tLex = lxStick) хкх (ЛяЙЮМ.tLex = ЛйНМЯР.lxEND)) рнцдю
       Label(int, Labels, LBeg);
-      онйю SCAN.tLex = lxComma декюрэ
+      онйю ЛяЙЮМ.tLex = lxComma декюрэ
         Next;
         Label(int, Labels, LBeg)
       йнмеж;
@@ -1421,15 +1420,15 @@
     Next;
     EndCase := X86.NewLabel();
     Variant(int, Labels, EndCase);
-    онйю SCAN.tLex = lxStick декюрэ
+    онйю ЛяЙЮМ.tLex = lxStick декюрэ
       Next;
       Variant(int, Labels, EndCase)
     йнмеж;
-    еякх SCAN.tLex = ЛйНМЯР.lxELSE рнцдю
+    еякх ЛяЙЮМ.tLex = ЛйНМЯР.lxELSE рнцдю
       Next;
       pOpSeq
     хмюве
-      UTILS.UnitLine(DECL.UnitNumber, SCAN.line);
+      UTILS.UnitLine(DECL.UnitNumber, ЛяЙЮМ.line);
       X86.OnError(7)
     йнмеж;
     Check(ЛйНМЯР.lxEND);
@@ -1443,7 +1442,7 @@
   мювюкн
     Assert(~ODD(Len), line, col, 34);
     дкъ i := 0 дн Len - 1 декюрэ
-      Assert(SCAN.HexDigit(Code[i]), line, col, 34)
+      Assert(ЛяЙЮМ.HexDigit(Code[i]), line, col, 34)
     йнмеж
   йнмеж CheckCode;
 
@@ -1461,7 +1460,7 @@
       Assert(e1.eType = eVAR, line, col, 63);
       Assert(~e1.Read, line, col, 115);
       Assert(e1.T.tType = TINTEGER, line, col, 128);
-      еякх SCAN.tLex = lxComma рнцдю
+      еякх ЛяЙЮМ.tLex = lxComma рнцдю
         Next;
         Coord(line, col);
         DECL.ConstExpr(Value, T);
@@ -1552,7 +1551,7 @@
       Expr(e1);
       Assert(e1.T.tType = TBOOLEAN, line, col, 117);
       Load(e1);
-      еякх SCAN.tLex = lxComma рнцдю
+      еякх ЛяЙЮМ.tLex = lxComma рнцдю
         Next;
         Coord(line, col);
         DECL.ConstExpr(Value, T);
@@ -1628,9 +1627,9 @@
         X86.Save(e2.T.tType)
       йнмеж
     |sysCODE:
-      Assert(SCAN.tLex = lxSTRING, line, col, 150);
-      SCAN.GetLexStr(Lex);
-      CheckCode(Lex, SCAN.count - 1, line, col);
+      Assert(ЛяЙЮМ.tLex = lxSTRING, line, col, 150);
+      ЛяЙЮМ.GetLexStr(Lex);
+      CheckCode(Lex, ЛяЙЮМ.count - 1, line, col);
       X86.Asm(Lex);
       Next
     |sysMOVE:
@@ -1715,7 +1714,7 @@
         X86.PushCall(begcall);
         Call(e1.id.T.Fields.First(DECL.FIELD));
         X86.EndCall
-      юеякх SCAN.tLex = lxLRound рнцдю
+      юеякх ЛяЙЮМ.tLex = lxLRound рнцдю
         Next;
         Check(lxRRound);
         Next
@@ -1731,14 +1730,14 @@
     юеякх e1.eType IN {eSTPROC, eSYSPROC} рнцдю
       StProc(e1.id.StProc)
     юеякх (e1.eType = eVAR) & (e1.T.tType = TPROC) рнцдю
-      еякх SCAN.tLex = lxLRound рнцдю
+      еякх ЛяЙЮМ.tLex = lxLRound рнцдю
         Next;
         Assert((e1.T.Base.tType = TVOID) хкх (e1.T.Call = DECL.winapi), line, col, 132);
         X86.PushCall(begcall);
         Call(e1.T.Fields.First(DECL.FIELD));
         X86.EndCall;
         X86.CallVar(кнфэ, кнфэ, e1.T.Call, e1.T.Len, DECL.curBlock.LocalSize)
-      юеякх SCAN.tLex = lxAssign рнцдю
+      юеякх ЛяЙЮМ.tLex = lxAssign рнцдю
         Assert(~e1.Read, line, col, 115);
         Next;
         Coord(line, col);
@@ -1759,10 +1758,10 @@
 
 опнжедспю Operator;
   мювюкн
-    UTILS.UnitLine(DECL.UnitNumber, SCAN.line);
-    бшанп SCAN.tLex хг
+    UTILS.UnitLine(DECL.UnitNumber, ЛяЙЮМ.line);
+    бшанп ЛяЙЮМ.tLex хг
     |lxIDENT: IdentOper
-    |ЛйНМЯР.lxIF, ЛйНМЯР.lxWHILE: IfWhileOper(SCAN.tLex = ЛйНМЯР.lxWHILE)
+    |ЛйНМЯР.lxIF, ЛйНМЯР.lxWHILE: IfWhileOper(ЛяЙЮМ.tLex = ЛйНМЯР.lxWHILE)
     |ЛйНМЯР.lxREPEAT: RepeatOper
     |ЛйНМЯР.lxFOR: ForOper
     |ЛйНМЯР.lxCASE: CaseOper
@@ -1773,7 +1772,7 @@
 опнжедспю OpSeq;
   мювюкн
     Operator;
-    онйю SCAN.tLex = lxSemi декюрэ
+    онйю ЛяЙЮМ.tLex = lxSemi декюрэ
       Next;
       Operator
     йнмеж
@@ -1789,12 +1788,12 @@
     мювюкн
       res := 0;
       i := 0;
-      онйю SCAN.Digit(stk[i]) декюрэ
+      онйю ЛяЙЮМ.Digit(stk[i]) декюрэ
         INC(i)
       йнмеж;
       еякх stk[i] <= 20X рнцдю
         stk[i] := 0X;
-        res := SCAN.StrToInt(stk)
+        res := ЛяЙЮМ.StrToInt(stk)
       йнмеж;
       еякх res = 0 рнцдю
         res := 1
