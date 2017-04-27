@@ -31,8 +31,8 @@
   Slash = mConst.Slash;
 
   lxEOF = 0; lxINT = -1; lxREAL = -2; lxSTRING = -3; lxIDENT = -4; lxHEX = -5; lxCHX = -6; lxLONGREAL = -7;
-  lxBY = 3; lxCASE = 4; lxDIV = 6;
-    lxIN = 15; lxIS = 16;
+  lxBY = 3; lxDIV = 6;
+  lxIN = 15; lxIS = 16;
   lxMOD = 17; 
 
   lxPlus = 51; lxMinus = 52; lxMult = 53; lxSlash = 54; lxNot = 55; lxAnd = 56; lxComma = 57; lxSemi = 58;
@@ -165,7 +165,7 @@
     e.deref := кнфэ;
     e.id := id;
     Next;
-    CASE id.iType хг
+    бшанп id.iType хг
     |IDVAR:
       e.eType := eVAR;
       e.T := id.T;
@@ -224,7 +224,7 @@
     break := кнфэ;
     guard := кнфэ;
     онбрнпърэ
-      CASE SCAN.tLex хг
+      бшанп SCAN.tLex хг
       |lxDot:
         e.deref := кнфэ;
         Assert2(e.T.tType IN {TPOINTER, TRECORD}, 105);
@@ -429,7 +429,7 @@
     Check(lxLRound);
     Next;
     Coord(line, col);
-    CASE func хг
+    бшанп func хг
     |stABS:
       pExpr(e1);
       Assert(e1.T.tType IN {TINTEGER, TREAL, TLONGREAL}, line, col, 57);
@@ -477,7 +477,7 @@
       еякх (e1.eType = eCONST) & (e2.eType = eCONST) рнцдю
         a := FLOOR(e1.Value);
         b := FLOOR(e2.Value);
-        CASE func хг
+        бшанп func хг
         |stLSL: a := LSL(a, b)
         |stASR: a := ASR(a, b)
         |stROR: a := ROR(a, b)
@@ -487,7 +487,7 @@
         e.Value := LONG(FLT(a));
         e.eType := eCONST
       йнмеж;
-      CASE func хг
+      бшанп func хг
       |stLSL: X86.StFunc(X86.stLSL)
       |stASR: X86.StFunc(X86.stASR)
       |stROR: X86.StFunc(X86.stROR)
@@ -722,7 +722,7 @@
 опнжедспю AssComp(e: DECL.EXPRESSION; T: DECL.pTYPE; param: BOOLEAN): BOOLEAN;
   оепел Res: BOOLEAN;
   мювюкн
-    CASE T.tType хг
+    бшанп T.tType хг
     |TINTEGER, TREAL, TLONGREAL, TSET, TBOOLEAN, TCARD16:
       Res := e.T = T
     |TCHAR:
@@ -770,7 +770,7 @@
   мювюкн
     еякх ByRef рнцдю
       еякх e.eType = eVAR рнцдю
-        CASE T.tType хг
+        бшанп T.tType хг
         |TINTEGER, TREAL, TLONGREAL, TCHAR,
          TSET, TBOOLEAN, TPOINTER, TCARD16:
           Res := e.T = T
@@ -859,7 +859,7 @@
   мювюкн
     e.eType := eCONST;
     e.vparam := кнфэ;
-    CASE SCAN.tLex хг
+    бшанп SCAN.tLex хг
     |lxIDENT:
       begcall := X86.current;
       Designator(e);
@@ -1006,11 +1006,11 @@
 опнжедспю Operation(оеп a, b: DECL.EXPRESSION; Op, line, col: INTEGER);
   оепел n, m: INTEGER;
   мювюкн
-    CASE Op хг
+    бшанп Op хг
     |lxPlus, lxMinus, lxMult, lxSlash:
       Assert((a.T.tType IN {TINTEGER, TREAL, TLONGREAL, TSET}) & (a.T.tType = b.T.tType), line, col, 37);
       Assert(~((Op = lxSlash) & (a.T.tType = TINTEGER)), line, col, 37);
-      CASE a.T.tType хг
+      бшанп a.T.tType хг
       |TINTEGER: X86.Int(Op)
       |TSET: X86.Set(Op)
       |TREAL, TLONGREAL: X86.farith(Op)
@@ -1122,7 +1122,7 @@
       Assert(e.T.tType IN {TINTEGER, TREAL, TLONGREAL, TSET}, uline, ucol, 37);
       Load(e);
       еякх uOp = lxMinus рнцдю
-        CASE e.T.tType хг
+        бшанп e.T.tType хг
         |TINTEGER: X86.NegInt
         |TSET: X86.NegSet
         |TREAL, TLONGREAL: X86.fneg
@@ -1130,7 +1130,7 @@
         йнмеж
       йнмеж;
       еякх (uOp = lxMinus) & (e.eType = eCONST) рнцдю
-        CASE e.T.tType хг
+        бшанп e.T.tType хг
         |TINTEGER:
           Assert(e.Value # LONG(FLT(SCAN.minINT)), uline, ucol, DECL.IOVER)
         |TSET:
@@ -1212,7 +1212,7 @@
       X86.Del(beg);
       X86.Setfpu(fpu);
       еякх ~DECL.Const рнцдю
-        CASE e.T.tType хг
+        бшанп e.T.tType хг
         |TREAL, TLONGREAL:
           X86.PushFlt(e.Value)
         |TINTEGER, TSET, TBOOLEAN, TNIL:
@@ -1455,7 +1455,7 @@
     Check(lxLRound);
     Next;
     Coord(line, col);
-    CASE proc хг
+    бшанп proc хг
     |stINC, stDEC:
       Designator(e1);
       Assert(e1.eType = eVAR, line, col, 63);
@@ -1760,12 +1760,12 @@
 опнжедспю Operator;
   мювюкн
     UTILS.UnitLine(DECL.UnitNumber, SCAN.line);
-    CASE SCAN.tLex хг
+    бшанп SCAN.tLex хг
     |lxIDENT: IdentOper
     |mConst.lxIF, mConst.lxWHILE: IfWhileOper(SCAN.tLex = mConst.lxWHILE)
     |mConst.lxREPEAT: RepeatOper
     |mConst.lxFOR: ForOper
-    |lxCASE: CaseOper
+    |mConst.lxCASE: CaseOper
     хмюве
     йнмеж
   йнмеж Operator;

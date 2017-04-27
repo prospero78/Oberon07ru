@@ -21,6 +21,7 @@
   
    lxARRAY* = 1;
    lxBEGIN* = 2;
+   lxCASE* = 4;
    lxCONST* = 5;
    lxDO* = 7;
    lxELSE* = 8;

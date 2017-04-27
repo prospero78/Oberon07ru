@@ -72,7 +72,7 @@
     опнжедспю ChangeCond(A, B, C: INTEGER);
     мювюкн
       cond := C;
-      CASE c хг
+      бшанп c хг
       |0X: cond := 6
       |1X..20X: cond := A
       |22X: cond := B
@@ -85,7 +85,7 @@
     cond := 0;
     онйю (count < mConst.MAX_PARAM) & (cond # 6) декюрэ
       c := GetChar(p);
-      CASE cond хг
+      бшанп cond хг
       |0: ChangeCond(0, 4, 1); еякх cond = 1 рнцдю Params[count, 0] := p йнмеж
       |4: ChangeCond(5, 0, 5); еякх cond = 5 рнцдю Params[count, 0] := p йнмеж
       |1: ChangeCond(0, 3, 1); еякх cond IN {0, 6} рнцдю Params[count, 1] := p - 1; INC(count) йнмеж

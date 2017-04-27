@@ -28,7 +28,7 @@
 йнмяр
 
   lxEOF = 0; lxINT = -1; lxREAL = -2; lxSTRING = -3; lxIDENT = -4; lxHEX = -5; lxCHX = -6; lxLONGREAL = -7;
-  lxBY = 3; lxCASE = 4;
+  lxBY = 3;
   lxDIV = 6;
   lxIN = 15; lxIS = 16;
   lxMOD = 17;
@@ -241,7 +241,7 @@
   оепел code: INTEGER;
   мювюкн
     еякх SCAN.tLex # key рнцдю
-      CASE key хг
+      бшанп key хг
       |mConst.lxMODULE:  code := 21
       |lxIDENT:   code := 22
       |lxSemi:    code := 23
@@ -435,7 +435,7 @@
 опнжедспю Relation*(Op: INTEGER): BOOLEAN;
   оепел Res: BOOLEAN;
   мювюкн
-    CASE Op хг
+    бшанп Op хг
     |lxEQ, lxNE, lxLT, lxGT,
      lxLE, lxGE, lxIN, lxIS:
       Res := хярхмю
@@ -449,7 +449,7 @@
   CONST max = SCAN.maxDBL;
   оепел res: LONGREAL;
   мювюкн
-    CASE Op хг
+    бшанп Op хг
     |lxPlus: res := a + b
     |lxMinus: res := a - b
     |lxMult: res := a * b
@@ -464,14 +464,14 @@
     хмюве
     йнмеж;
     Assert(~UTILS.IsInf(res), line, col, FOVER);
-    CASE T.tType хг
+    бшанп T.tType хг
     |TINTEGER:  Assert((res <= LONG(FLT(mConst.maxINT))) & (res >= LONG(FLT(SCAN.minINT))), line, col, IOVER)
     |TREAL:     Assert((res <= LONG(SCAN.maxREAL)) & (res >= -LONG(SCAN.maxREAL)), line, col, FOVER)
     |TLONGREAL: Assert((res <= max) & (res >= -max), line, col, FOVER)
     хмюве
     йнмеж;
     еякх (res = 0.0D0) & (T.tType IN {TREAL, TLONGREAL}) хкх (ABS(res) < LONG(SCAN.minREAL)) & (T.tType = TREAL) рнцдю
-      CASE Op хг
+      бшанп Op хг
       |lxPlus:  Assert(a = -b, line, col, UNDER)
       |lxMinus: Assert(a = b, line, col, UNDER)
       |lxMult:  Assert((a = 0.0D0) хкх (b = 0.0D0), line, col, UNDER)
@@ -487,7 +487,7 @@
   мювюкн
     sa := GetString(a);
     sb := GetString(b);
-    CASE Op хг
+    бшанп Op хг
     |lxEQ, lxNE: Res := LONG(FLT(ORD(sa.Str = sb.Str)))
     |lxLT, lxGT: Res := LONG(FLT(ORD(sa.Str < sb.Str)))
     |lxLE, lxGE: Res := LONG(FLT(ORD(sa.Str <= sb.Str)))
@@ -504,13 +504,13 @@
     еякх Op # lxIN рнцдю
       Assert(Ta = Tb, line, col, 37)
     йнмеж;
-    CASE Op хг
+    бшанп Op хг
     |lxPlus, lxMinus, lxMult, lxSlash:
       Assert(~((Op = lxSlash) & (Ta.tType = TINTEGER)), line, col, 37);
       еякх Ta.tType IN {TINTEGER, TREAL, TLONGREAL} рнцдю
         Res := Arith(a, b, Ta, Op, line, col)
       юеякх Ta.tType = TSET рнцдю
-        CASE Op хг
+        бшанп Op хг
         |lxPlus:  Res := LONG(FLT(ORD(BITS(ai) + BITS(bi))))
         |lxMinus: Res := LONG(FLT(ORD(BITS(ai) - BITS(bi))))
         |lxMult:  Res := LONG(FLT(ORD(BITS(ai) * BITS(bi))))
@@ -1018,7 +1018,7 @@
 опнжедспю StructType(Comma: BOOLEAN; NewType: pTYPE): pTYPE;
   оепел v: LONGREAL; T, nov: pTYPE; line, col, line2, col2: INTEGER; id_T: BOOLEAN;
   мювюкн
-    CASE SCAN.tLex хг
+    бшанп SCAN.tLex хг
     |mConst.lxARRAY, lxComma:
       еякх SCAN.tLex = lxComma рнцдю
         Assert2(Comma, 39)
@@ -1359,14 +1359,14 @@
     cond := 0;
     онйю cond # 4 декюрэ
       Next;
-      CASE cond хг
+      бшанп cond хг
       |0: Check(lxIDENT);
           name := SCAN.id;
           Coord(line, col);
           Coord(nameline, namecol);
           alias := name;
           cond := 1
-      |1: CASE SCAN.tLex хг
+      |1: бшанп SCAN.tLex хг
           |lxComma:  AddUnit(0)
           |lxSemi:   AddUnit(4); Next
           |lxAssign: cond := 2
@@ -1377,7 +1377,7 @@
           name := SCAN.id;
           Coord(nameline, namecol);
           cond := 3
-      |3: CASE SCAN.tLex хг
+      |3: бшанп SCAN.tLex хг
           |lxComma: AddUnit(0)
           |lxSemi:  AddUnit(4); Next
           хмюве

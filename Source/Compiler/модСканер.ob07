@@ -32,7 +32,7 @@
     STRLENGTH* = 256;
 
     lxEOF = 0; lxINT = -1; lxREAL = -2; lxSTRING = -3; lxIDENT = -4; lxHEX = -5; lxCHX = -6; lxLONGREAL = -7;
-    lxBY = 3; lxCASE = 4; lxDIV = 6; 
+    lxBY = 3; lxDIV = 6; 
      
     lxIN = 15; lxIS = 16;
     lxMOD = 17;
@@ -164,7 +164,7 @@
         cr := кнфэ;
         sys.GET(bufpos, ch);
         INC(ccol);
-        CASE ch хг
+        бшанп ch хг
         |0AX: еякх ~CR рнцдю INC(cline) йнмеж; ccol := 0
         |0DX: INC(cline); ccol := 0; cr := хярхмю
         |09X: DEC(ccol); ccol := ccol + ЛйНМЯР.Tab - (ccol - 1) MOD ЛйНМЯР.Tab - 1
@@ -264,7 +264,7 @@
     оепел Res: INTEGER;
     мювюкн
         Res := ORD(ch);
-        CASE ch хг
+        бшанп ch хг
         |"0".."9": DEC(Res, ORD("0"))
         |"A".."F": DEC(Res, ORD("A") - 10)
         хмюве
@@ -513,7 +513,7 @@
 опнжедспю Delim(ch: CHAR): INTEGER;
     оепел Res: INTEGER;
     мювюкн
-        CASE ch хг
+        бшанп ch хг
         |"+": Res := lxPlus
         |"-": Res := lxMinus
         |"*": Res := lxMult
@@ -547,7 +547,7 @@
         cont := хярхмю;
         онйю cont & (level > 0) декюрэ
             Next;
-            CASE ch хг
+            бшанп ch хг
             |"(": c := 2
             |")": еякх c = 3 рнцдю DEC(level) йнмеж; c := 1
             |"*": еякх c = 2 рнцдю INC(level); c := 1 хмюве c := 3 йнмеж
@@ -569,7 +569,7 @@
         col := ccol;
         line := cline;
         count := 0;
-        CASE ch хг
+        бшанп ch хг
         |"A".."Z", "a".."z", "_": (* eng *)
             Ident;
             id := AddNode(Lex);
@@ -580,7 +580,7 @@
             tLex := id.tLex;
         |"0".."9":
             Number;
-            CASE tLex хг
+            бшанп tLex хг
             |lxINT:  vINT := StrToInt(Lex)
             |lxHEX:  vINT := StrToInt16(Lex)
             |lxCHX:  vCHX := StrToChx(Lex)
@@ -617,7 +617,7 @@
             tLex := Delim(ch);
             PutNext(ch);
             еякх ch = "=" рнцдю
-            CASE tLex хг
+            бшанп tLex хг
             |lxLT:  tLex := lxLE
             |lxGT:  tLex := lxGE
             |lxColon: tLex := lxAssign
@@ -677,7 +677,8 @@
         _version := AddNode("version");
         AddNodeKey("MOD", lxMOD);
         
-        AddNodeKey("CASE", lxCASE);
+        AddNodeKey("CASE", ЛйНМЯР.lxCASE);
+        AddNodeKey("бшанп", ЛйНМЯР.lxCASE);
         
         AddNodeKey("IF", ЛйНМЯР.lxIF);
         AddNodeKey("еякх", ЛйНМЯР.lxIF);

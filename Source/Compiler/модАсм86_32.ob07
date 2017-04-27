@@ -255,7 +255,7 @@
 
 опнжедспю Err(code: INTEGER);
   мювюкн
-    CASE code хг
+    бшанп code хг
     |1: UTILS.ErrMsg(67); UTILS.OutString(OutFile)
     |2: UTILS.ErrMsg(69); UTILS.OutString(OutFile)
     |3: UTILS.ErrMsg(58)
@@ -617,7 +617,7 @@
   оепел n: INTEGER;
   мювюкн
     New;
-    CASE jamp хг
+    бшанп jamp хг
     |JMP, CALL:
       n := 5
     |JE, JLE, JGE, JG, JL, JNE:
@@ -988,7 +988,7 @@
 опнжедспю Int*(Op: INTEGER);
   мювюкн
     PopEDX;
-    CASE Op хг
+    бшанп Op хг
     |lxPlus:  OutCode("011424")
     |lxMinus: OutCode("291424")
     |lxMult:  OutCode("58F7EA"); PushEAX
@@ -1000,7 +1000,7 @@
   мювюкн
     PopEDX;
     OutCode("58");
-    CASE Op хг
+    бшанп Op хг
     |lxPlus:  OutCode("0B")
     |lxMinus: OutCode("F7D223")
     |lxMult:  OutCode("23")
@@ -1040,7 +1040,7 @@
   оепел n: INTEGER;
   мювюкн
     OutCode("DE");
-    CASE op хг
+    бшанп op хг
     |lxPlus:  n := 0C1H
     |lxMinus: n := 0E9H
     |lxMult:  n := 0C9H
@@ -1055,7 +1055,7 @@
   оепел n: INTEGER;
   мювюкн
     OutCode("33C9DED9DFE09E0F");
-    CASE Op хг
+    бшанп Op хг
     |lxEQ: n := 94H
     |lxNE: n := 95H
     |lxLT: n := 97H
@@ -1133,7 +1133,7 @@
   оепел n: INTEGER;
   мювюкн
     OutCode("33C95A583BC20F"); current.tcmd := ICMP1;
-    CASE Op хг
+    бшанп Op хг
     |lxEQ: n := 94H
     |lxNE: n := 95H
     |lxLT: n := 9CH
@@ -1211,7 +1211,7 @@
 
 опнжедспю StProc*(proc: INTEGER);
   мювюкн
-    CASE proc хг
+    бшанп proc хг
     |stINC:   PopEDX; OutCode("590111")
     |stDEC:   PopEDX; OutCode("592911")
     |stINC1:  PopEDX; OutCode("FF02")
@@ -1246,7 +1246,7 @@
 
 опнжедспю StFunc*(func: INTEGER);
   мювюкн
-    CASE func хг
+    бшанп func хг
     |stABS:    PopEDX; OutCode("85D27D02F7DA"); PushEDX
     |stFABS:   OutCode("D9E1")
     |stFLT:    OutCode("DB0424"); PopEAX; Incfpu;
@@ -1281,7 +1281,7 @@
 
   мювюкн
     lastcmd := current;
-    CASE T хг
+    бшанп T хг
     |TINTEGER, TSET, TPOINTER, TPROC:
       еякх lastcmd.tcmd = ECMD рнцдю
         del;
@@ -1337,7 +1337,7 @@
 
 опнжедспю Save*(T: INTEGER);
   мювюкн
-    CASE T хг
+    бшанп T хг
     |TINTEGER, TSET, TPOINTER, TPROC:
       PopEDX;
       OutCode("588910")
@@ -1519,7 +1519,7 @@
 
 опнжедспю strcmp*(Op, LR: INTEGER);
   мювюкн
-    CASE Op хг
+    бшанп Op хг
     |lxEQ: PushConst(0)
     |lxNE: PushConst(1)
     |lxLT: PushConst(2)
@@ -1528,7 +1528,7 @@
     |lxGE: PushConst(5)
     хмюве
     йнмеж;
-    CASE LR хг
+    бшанп LR хг
     |-1: CallRTL(_lstrcmp)
     | 0: CallRTL(_strcmp)
     | 1: CallRTL(_rstrcmp)
@@ -1543,7 +1543,7 @@
     cur := asmlist.First(ASMLINE);
     онйю cur # осярн декюрэ
       flag := кнфэ;
-      CASE cur.tcmd хг
+      бшанп cur.tcmd хг
       |PUSHEAX:
         flag := cur.Next(ASMLINE).tcmd = POPEAX
       |PUSHECX:
@@ -1886,7 +1886,7 @@
 
     temp3 := asize + Align(rdatasize, 1000H) + dcount;
     онйю cur # осярн декюрэ
-      CASE cur.tcmd хг
+      бшанп cur.tcmd хг
       |JCMD:
         sys.GET(cur.varadr, i);
         sys.PUT(cur.codeadr, i - cur.Next(ASMLINE).adr)
