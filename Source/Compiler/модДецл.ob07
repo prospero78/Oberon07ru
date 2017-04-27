@@ -77,18 +77,18 @@
   IDENT* = сйюгюрекэ мю rIDENT;
 
   UNIT* = сйюгюрекэ мю гюохяэ (ЛсРХКЭ.tItem)
-      Name: ЛрХОШ.NODE;
+      Name: ЛрХОШ.РСсГЕК;
       File: ЛрХОШ.РяРПНЙЮ;
       Idents: ЛсРХКЭ.tpList;
       Import: ЛсРХКЭ.tpList;
       IdentBegin: IDENT;
-      scanner: ЛяЙЮМ.SCANNER;
+      scanner: ЛрХОШ.SCANNER;
       Level*: INTEGER;
       Closed, typedecl, ExportType, Std, sys: BOOLEAN
     йнмеж;
 
   rIDENT* = гюохяэ (ЛсРХКЭ.tItem)
-      Name: ЛрХОШ.NODE;
+      Name: ЛрХОШ.РСсГЕК;
       T*: pTYPE;
       Unit*: UNIT;
       Parent*: IDENT;
@@ -99,7 +99,7 @@
     йнмеж;
 
   PTRBASE = сйюгюрекэ мю гюохяэ (ЛсРХКЭ.tItem)
-      Name: ЛрХОШ.NODE;
+      Name: ЛрХОШ.РСсГЕК;
       line, col: INTEGER;
       Ptr: pTYPE
     йнмеж;
@@ -109,7 +109,7 @@
     йнмеж;
 
   FIELD* = сйюгюрекэ мю гюохяэ (ЛсРХКЭ.tItem)
-      Name: ЛрХОШ.NODE;
+      Name: ЛрХОШ.РСсГЕК;
       T*: pTYPE;
       Offset*: INTEGER;
       ByRef*, Export*: BOOLEAN;
@@ -139,7 +139,7 @@
 
   sttypes: stTYPES; unit*, sys: UNIT; curBlock*: IDENT;
   Path, Main, Std, ExtMain: ЛрХОШ.РяРПНЙЮ;
-  NamePtrBase: ЛрХОШ.NODE; ProgSize*, RecCount, UnitNumber*: INTEGER;
+  NamePtrBase: ЛрХОШ.РСсГЕК; ProgSize*, RecCount, UnitNumber*: INTEGER;
   PtrBases, Strings, types, prog: ЛсРХКЭ.tpList;
   OpSeq: opPROC; Expr: expPROC;
   AssComp: assPROC; main, sizefunc, winplatf, Const*: BOOLEAN;
@@ -199,7 +199,7 @@
     col := ЛяЙЮМ.col
   йнмеж Coord;
 
-опнжедспю GetModule(Name: ЛрХОШ.NODE): UNIT;
+опнжедспю GetModule(Name: ЛрХОШ.РСсГЕК): UNIT;
   оепел cur, res: UNIT;
   мювюкн
     res := осярн;
@@ -267,7 +267,7 @@
     йнмеж
   йнмеж Check;
 
-опнжедспю CheckIdent(Name: ЛрХОШ.NODE): BOOLEAN;
+опнжедспю CheckIdent(Name: ЛрХОШ.РСсГЕК): BOOLEAN;
   оепел cur: IDENT;
   мювюкн
     cur := unit.Idents.Last(IDENT);
@@ -289,7 +289,7 @@
     INC(unit.Level)
   йнмеж Guard;
 
-опнжедспю PushIdent(Name: ЛрХОШ.NODE; line, col, iType: INTEGER; T: pTYPE; u: UNIT; Export: BOOLEAN; StProc: INTEGER);
+опнжедспю PushIdent(Name: ЛрХОШ.РСсГЕК; line, col, iType: INTEGER; T: pTYPE; u: UNIT; Export: BOOLEAN; StProc: INTEGER);
   оепел ident: IDENT; i: INTEGER;
   мювюкн
     Assert(CheckIdent(Name), line, col, 30);
@@ -396,7 +396,7 @@
     Guard
   йнмеж StIdent;
 
-опнжедспю GetQIdent*(Unit: UNIT; Name: ЛрХОШ.NODE): IDENT;
+опнжедспю GetQIdent*(Unit: UNIT; Name: ЛрХОШ.РСсГЕК): IDENT;
   оепел cur, res: IDENT; line, col: INTEGER;
   мювюкн
     res := осярн;
@@ -417,7 +417,7 @@
     бепмсрэ res
   йнмеж GetQIdent;
 
-опнжедспю GetIdent*(Name: ЛрХОШ.NODE): IDENT;
+опнжедспю GetIdent*(Name: ЛрХОШ.РСсГЕК): IDENT;
   оепел cur, res: IDENT; line, col: INTEGER;
   мювюкн
     res := осярн;
@@ -592,7 +592,7 @@
   йнмеж ConstExpr;
 
 опнжедспю IdType*(оеп line, col: INTEGER): pTYPE;
-  оепел id: IDENT; Name: ЛрХОШ.NODE; Unit: UNIT; Res: pTYPE;
+  оепел id: IDENT; Name: ЛрХОШ.РСсГЕК; Unit: UNIT; Res: pTYPE;
   мювюкн
     Res := осярн;
     Name := ЛяЙЮМ.id;
@@ -692,7 +692,7 @@
     йнмеж
   йнмеж SetFields;
 
-опнжедспю GetField*(T: pTYPE; Name: ЛрХОШ.NODE): FIELD;
+опнжедспю GetField*(T: pTYPE; Name: ЛрХОШ.РСсГЕК): FIELD;
   оепел cur, Res: FIELD;
   мювюкн
     Res := осярн;
@@ -706,7 +706,7 @@
     бепмсрэ Res
   йнмеж GetField;
 
-опнжедспю Unique(T: pTYPE; Name: ЛрХОШ.NODE): BOOLEAN;
+опнжедспю Unique(T: pTYPE; Name: ЛрХОШ.РСсГЕК): BOOLEAN;
   оепел field: FIELD; res: BOOLEAN;
   мювюкн
     res := хярхмю;
@@ -728,7 +728,7 @@
   йнмеж notrecurs;
 
 опнжедспю ReadFields(T: pTYPE);
-  оепел Name: ЛрХОШ.NODE; field: FIELD; Tf: pTYPE; line, col: INTEGER; id_T: BOOLEAN;
+  оепел Name: ЛрХОШ.РСсГЕК; field: FIELD; Tf: pTYPE; line, col: INTEGER; id_T: BOOLEAN;
   мювюкн
     онйю ЛяЙЮМ.tLex = lxIDENT декюрэ
       Name := ЛяЙЮМ.id;
@@ -863,7 +863,7 @@
   йнмеж FormalType;
 
 опнжедспю Section(T: pTYPE);
-  оепел Name: ЛрХОШ.NODE; ByRef, cont: BOOLEAN; field: FIELD;
+  оепел Name: ЛрХОШ.РСсГЕК; ByRef, cont: BOOLEAN; field: FIELD;
       Tf: pTYPE; fp: IDENT; line, col: INTEGER; proc: BOOLEAN;
   мювюкн
     proc := T = осярн;
@@ -932,7 +932,7 @@
     йнмеж
   йнмеж ParamType;
 
-опнжедспю AddPtrBase(Name: ЛрХОШ.NODE; line, col: INTEGER; T: pTYPE);
+опнжедспю AddPtrBase(Name: ЛрХОШ.РСсГЕК; line, col: INTEGER; T: pTYPE);
   оепел nov: PTRBASE;
   мювюкн
     NEW(nov);
@@ -1150,7 +1150,7 @@
   йнмеж LinkPtr;
 
 опнжедспю DeclSeq;
-  оепел Value: LONGREAL; T, NewType: pTYPE; Name: ЛрХОШ.NODE; line, col, Call: INTEGER;
+  оепел Value: LONGREAL; T, NewType: pTYPE; Name: ЛрХОШ.РСсГЕК; line, col, Call: INTEGER;
       Export, func: BOOLEAN; last, id: IDENT; e: EXPRESSION;
 
     опнжедспю IdentDef;
@@ -1320,7 +1320,7 @@
 
 опнжедспю ImportList;
   оепел cond, col, line, namecol, nameline: INTEGER;
-      name, alias: ЛрХОШ.NODE; u, self: UNIT;
+      name, alias: ЛрХОШ.РСсГЕК; u, self: UNIT;
       FName: ЛрХОШ.РяРПНЙЮ;
 
     опнжедспю AddUnit(newcond: INTEGER);
@@ -1388,7 +1388,7 @@
     йнмеж
   йнмеж ImportList;
 
-опнжедспю Header(Name: ЛрХОШ.NODE);
+опнжедспю Header(Name: ЛрХОШ.РСсГЕК);
   мювюкн
     NEW(unit);
     MemErr(unit = осярн);

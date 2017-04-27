@@ -139,7 +139,7 @@
     felf: м“ипы.т—трока;
     fpu*: INTEGER; isfpu: BOOLEAN; maxfpu: INTEGER; fpucmd: ASMLINE;
     kosexp: ћј——»¬ 65536 »« «јѕ»—№
-      Name: м“ипы.NODE;
+      Name: м“ипы.ту”зел;
       Adr, NameLabel: INTEGER
        ќЌ≈÷;
     kosexpcount: INTEGER;
@@ -237,7 +237,7 @@
     etable.size := etable.size + etable.textlen
    ќЌ≈÷ PackExport;
 
-ѕ–ќ÷≈ƒ”–ј ProcExport*(Number: INTEGER; Name: м“ипы.NODE; NameLabel: INTEGER);
+ѕ–ќ÷≈ƒ”–ј ProcExport*(Number: INTEGER; Name: м“ипы.ту”зел; NameLabel: INTEGER);
   Ќј„јЋќ
     ≈—Ћ» dll “ќ√ƒј
       etable.arradr[etable.adrcount] := Number;

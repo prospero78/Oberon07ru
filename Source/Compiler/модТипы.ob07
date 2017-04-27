@@ -9,10 +9,20 @@ BSD-2    *)
     
    тСтрока* = МАССИВ мКонст.макс_дл_пути ИЗ CHAR;
    
-   NODE* = УКАЗАТЕЛЬ НА ЗАПИСЬ
-         Left*, Right*: NODE;
+   туУзел* = УКАЗАТЕЛЬ НА ЗАПИСЬ
+         Left*, Right*: туУзел;
          tLex*: INTEGER;
          Name*: тСтрока
       КОНЕЦ;
+   
+   SCANNER* = УКАЗАТЕЛЬ НА ЗАПИСЬ
+            File*, ccol*, cline*, count*, col*, line*, tLex*, vINT*: INTEGER;
+            ch*, vCHX*: CHAR;
+            Lex*: тСтрока;
+            vFLT*: LONGREAL;
+            id*: туУзел;
+            buf*, bufpos*: INTEGER;
+            CR*, UTF8*: BOOLEAN
+        КОНЕЦ;
     
 КОНЕЦ модТипы.

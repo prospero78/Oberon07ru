@@ -46,27 +46,19 @@
 
 “»ѕџ
 
-    SCANNER* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№
-            File, ccol, cline, count, col, line, tLex, vINT: INTEGER;
-            ch, vCHX: CHAR;
-            Lex: м“ипы.т—трока;
-            vFLT: LONGREAL;
-            id: м“ипы.NODE;
-            buf, bufpos: INTEGER;
-            CR, UTF8: BOOLEAN
-         ќЌ≈÷;
+    
 
 ѕ≈–≈ћ
 
     Lex: м“ипы.т—трока;
     File, ccol, cline, count*, col*, line*, tLex*, vINT*: INTEGER;
-    vFLT*: LONGREAL; id*: м“ипы.NODE; ch, vCHX*: CHAR;
+    vFLT*: LONGREAL; id*: м“ипы.ту”зел; ch, vCHX*: CHAR;
     buf, bufpos: INTEGER; CR, UTF8: BOOLEAN;
-    Nodes: ћј——»¬ 256 »« м“ипы.NODE;
-    _START*, _version*: м“ипы.NODE;
+    Nodes: ћј——»¬ 256 »« м“ипы.ту”зел;
+    _START*, _version*: м“ипы.ту”зел;
 
-ѕ–ќ÷≈ƒ”–ј AddNode*(Name: м“ипы.т—трока): м“ипы.NODE;
-    ѕ≈–≈ћ cur, res: м“ипы.NODE;
+ѕ–ќ÷≈ƒ”–ј AddNode*(Name: м“ипы.т—трока): м“ипы.ту”зел;
+    ѕ≈–≈ћ cur, res: м“ипы.ту”зел;
 
         ѕ–ќ÷≈ƒ”–ј NewNode(Right: BOOLEAN);
             Ќј„јЋќ
@@ -111,7 +103,7 @@
         L := Lex
      ќЌ≈÷ GetLexStr;
 
-ѕ–ќ÷≈ƒ”–ј Backup*(scanner: SCANNER);
+ѕ–ќ÷≈ƒ”–ј Backup*(scanner: м“ипы.SCANNER);
     Ќј„јЋќ
         scanner.File := File;
         scanner.ccol := ccol;
@@ -131,7 +123,7 @@
         scanner.UTF8 := UTF8
      ќЌ≈÷ Backup;
 
-ѕ–ќ÷≈ƒ”–ј Recover*(scanner: SCANNER);
+ѕ–ќ÷≈ƒ”–ј Recover*(scanner: м“ипы.SCANNER);
     Ќј„јЋќ
         File := scanner.File;
         ccol := scanner.ccol;
@@ -658,7 +650,7 @@
      ќЌ≈÷ GetLex;
 
 ѕ–ќ÷≈ƒ”–ј AddNodeKey(Name: м“ипы.т—трока; key: INTEGER);
-    ѕ≈–≈ћ node: м“ипы.NODE;
+    ѕ≈–≈ћ node: м“ипы.ту”зел;
     Ќј„јЋќ
         node := AddNode(Name);
         node.tLex := key
@@ -667,7 +659,7 @@
 ѕ–ќ÷≈ƒ”–ј Init;
     ѕ≈–≈ћ
       i: INTEGER;
-      node: м“ипы.NODE;
+      node: м“ипы.ту”зел;
     Ќј„јЋќ
         ƒЋя i := 0 ƒќ LEN(Nodes) - 1 ƒ≈Ћј“№
             NEW(node);

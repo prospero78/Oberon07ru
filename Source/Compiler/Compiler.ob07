@@ -124,7 +124,7 @@
   йнмеж BaseOf;
 
 опнжедспю Designator(оеп e: DECL.EXPRESSION);
-  оепел id: DECL.IDENT; name: ЛрХОШ.NODE; e1: DECL.EXPRESSION;
+  оепел id: DECL.IDENT; name: ЛрХОШ.РСсГЕК; e1: DECL.EXPRESSION;
       line, col, i, n, bases, glob, loc, idx: INTEGER;
       imp, break, guard: BOOLEAN; f: DECL.FIELD;
       T, BaseT: DECL.pTYPE; s: DECL.STRCONST;
@@ -1281,7 +1281,7 @@
 
 опнжедспю ForOper;
   оепел e: DECL.EXPRESSION; line, col, LBeg, LEnd, iValue: INTEGER; Value: LONGREAL;
-      T: DECL.pTYPE; name: ЛрХОШ.NODE; id: DECL.IDENT;
+      T: DECL.pTYPE; name: ЛрХОШ.РСсГЕК; id: DECL.IDENT;
   мювюкн
     Next;
     Check(lxIDENT);
