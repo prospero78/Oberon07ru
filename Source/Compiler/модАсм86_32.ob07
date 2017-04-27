@@ -163,7 +163,7 @@
 опнжедспю CopyStr(оеп Dest: люяяхб хг CHAR; Source: люяяхб хг CHAR; оеп di: INTEGER; si: INTEGER);
   мювюкн
     DEC(di);
-    REPEAT
+    онбрнпърэ
       INC(di);
       Dest[di] := Source[si];
       INC(si)
@@ -195,7 +195,7 @@
     еякх LB < RB рнцдю
       L := LB;
       R := RB;
-      REPEAT
+      онбрнпърэ
         онйю (L < RB) & strle(NamePtr[L], NamePtr[LB]) декюрэ
           INC(L)
         йнмеж;
@@ -799,7 +799,7 @@
       йнмеж
     йнмеж;
     cur := current;
-    REPEAT
+    онбрнпърэ
       cur.tcmd := 0;
       cur.clen := 0;
       cur := cur.Prev(ASMLINE)

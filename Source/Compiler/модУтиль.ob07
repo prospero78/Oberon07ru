@@ -157,12 +157,12 @@
   оепел i: INTEGER; buf: люяяхб 11 хг INTEGER;
   мювюкн
     i := 0;
-    REPEAT
+    онбрнпърэ
       buf[i] := x MOD 10;
       x := x DIV 10;
       INC(i)
     онйюме x = 0;
-    REPEAT
+    онбрнпърэ
       DEC(i);
       CharC(CHR(buf[i] + ORD("0")))
     онйюме i = 0
@@ -233,7 +233,7 @@
   оепел i: INTEGER;
   мювюкн
     i := -1;
-    REPEAT
+    онбрнпърэ
       INC(i)
     онйюме (CAP(a[i]) # CAP(b[i])) OR (a[i] = 0X) OR (b[i] = 0X)
     бепмсрэ a[i] = b[i]
@@ -359,7 +359,7 @@
     дкъ i := 0 дн ParamCount - 1 декюрэ
       sys.GET(p + i * 4, str);
       Params[i, 0] := str;
-      REPEAT
+      онбрнпърэ
         sys.GET(str, c);
         INC(str)
       онйюме c = 0X;

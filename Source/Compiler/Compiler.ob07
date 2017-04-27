@@ -34,7 +34,6 @@
   lxBY = 3; lxCASE = 4; lxCONST = 5; lxDIV = 6;
   lxEND = 10; lxIMPORT = 14; lxIN = 15; lxIS = 16;
   lxMOD = 17; lxMODULE = 18; lxOR = 21; lxPOINTER = 22;
-  lxREPEAT = 25; lxRETURN = 26;
 
   lxPlus = 51; lxMinus = 52; lxMult = 53; lxSlash = 54; lxNot = 55; lxAnd = 56; lxComma = 57; lxSemi = 58;
   lxStick = 59; lxLRound = 60; lxLSquare = 61; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
@@ -224,7 +223,7 @@
     йнмеж;
     break := кнфэ;
     guard := кнфэ;
-    REPEAT
+    онбрнпърэ
       CASE SCAN.tLex хг
       |lxDot:
         e.deref := кнфэ;
@@ -243,7 +242,7 @@
         Coord(line, col);
         name := SCAN.id;
         T := e.T;
-        REPEAT
+        онбрнпърэ
           f := DECL.GetField(T, name);
           T := T.Base
         онйюме (f # осярн) OR (T = осярн);
@@ -264,7 +263,7 @@
         Next
       |lxLSquare:
         LoadVar;
-        REPEAT
+        онбрнпърэ
           Assert2(e.T.tType = TARRAY, 102);
           Next;
           Coord(line, col);
@@ -1238,7 +1237,7 @@
     еякх wh рнцдю
       X86.Label(L)
     йнмеж;
-    REPEAT
+    онбрнпърэ
       Next;
       Coord(line, col);
       Expr(e);
@@ -1764,7 +1763,7 @@
     CASE SCAN.tLex хг
     |lxIDENT: IdentOper
     |mConst.lxIF, mConst.lxWHILE: IfWhileOper(SCAN.tLex = mConst.lxWHILE)
-    |lxREPEAT: RepeatOper
+    |mConst.lxREPEAT: RepeatOper
     |mConst.lxFOR: ForOper
     |lxCASE: CaseOper
     хмюве

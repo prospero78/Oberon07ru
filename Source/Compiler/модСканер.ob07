@@ -94,7 +94,7 @@
     мювюкн
         res := осярн;
         cur := Nodes[ORD(Name[0])];
-        REPEAT
+        онбрнпърэ
             еякх Name > cur.Name рнцдю
             еякх cur.Right # осярн рнцдю
         cur := cur.Right

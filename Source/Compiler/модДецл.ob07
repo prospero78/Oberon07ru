@@ -32,7 +32,6 @@
   lxDIV = 6;
   lxIN = 15; lxIS = 16;
   lxMOD = 17; lxOR = 21;
-  lxREPEAT = 25;
 
   lxPlus = 51; lxMinus = 52; lxMult = 53; lxSlash = 54; lxNot = 55; lxAnd = 56; lxComma = 57; lxSemi = 58;
   lxStick = 59; lxLRound = 60; lxLSquare = 61; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
@@ -922,7 +921,7 @@
   мювюкн
     еякх (SCAN.tLex = lxIDENT) OR (SCAN.tLex = mConst.lxVAR) рнцдю
       break := кнфэ;
-      REPEAT
+      онбрнпърэ
         Section(T);
         еякх SCAN.tLex = lxSemi рнцдю
           Next
