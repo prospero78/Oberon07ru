@@ -19,7 +19,7 @@
 
 лндскэ ЛНДюЯЛ86_32;
 
-хлонпр UTILS := ЛНДсРХКЭ,
+хлонпр ЛсРХКЭ := ЛНДсРХКЭ,
     mSys := SYSTEM,
     ЛяЙЮМ := ЛНДяЙЮМЕП,
     ЛйНМЯР := ЛНДйНМЯРЮМРШ;
@@ -64,7 +64,7 @@
 
   PROC = опнжедспю (err: BOOLEAN);
 
-  ASMLINE* = сйюгюрекэ мю гюохяэ (UTILS.tItem)
+  ASMLINE* = сйюгюрекэ мю гюохяэ (ЛсРХКЭ.tItem)
       cmd, clen, varadr, adr, tcmd, codeadr: INTEGER; short: BOOLEAN
     йнмеж;
 
@@ -125,17 +125,17 @@
     йнмеж;
 
 оепел
-  asmlist: UTILS.tpList;
+  asmlist: ЛсРХКЭ.tpList;
   start: ASMLINE; MemErr: PROC; dll, con, gui, kos, elf, obj: BOOLEAN;
     Lcount, reccount, topstk: INTEGER; recarray: люяяхб 2048 хг INTEGER; current*: ASMLINE;
-    callstk: люяяхб 1024, 2 хг ASMLINE; OutFile: UTILS.tString;
+    callstk: люяяхб 1024, 2 хг ASMLINE; OutFile: ЛсРХКЭ.tString;
     Code: люяяхб 4000000 хг CHAR; ccount: INTEGER; Data: люяяхб 1000000 хг CHAR; dcount: INTEGER;
     Labels: люяяхб 200000 хг INTEGER; rdata: люяяхб 400H хг INTEGER; Header: HEADER; etable: ETABLE;
-    ExecName: UTILS.tString;
+    ExecName: ЛсРХКЭ.tString;
     LoadAdr: INTEGER; Reloc: люяяхб 200000 хг CHAR; rcount: INTEGER;
     RtlProc: люяяхб 20 хг INTEGER; OutFilePos: INTEGER;
     RelocSection: SECTION;
-    felf: UTILS.tString;
+    felf: ЛсРХКЭ.tString;
     fpu*: INTEGER; isfpu: BOOLEAN; maxfpu: INTEGER; fpucmd: ASMLINE;
     kosexp: люяяхб 65536 хг гюохяэ
       Name: ЛяЙЮМ.NODE;
@@ -143,7 +143,7 @@
       йнмеж;
     kosexpcount: INTEGER;
 
-опнжедспю setfelf*(name: UTILS.tString);
+опнжедспю setfelf*(name: ЛсРХКЭ.tString);
   мювюкн
     felf := name
   йнмеж setfelf;
@@ -256,14 +256,14 @@
 опнжедспю Err(code: INTEGER);
   мювюкн
     бшанп code хг
-    |1: UTILS.ErrMsg(67); UTILS.OutString(OutFile)
-    |2: UTILS.ErrMsg(69); UTILS.OutString(OutFile)
-    |3: UTILS.ErrMsg(58)
-    |4: UTILS.ErrMsg(88)
+    |1: ЛсРХКЭ.ErrMsg(67); ЛсРХКЭ.OutString(OutFile)
+    |2: ЛсРХКЭ.ErrMsg(69); ЛсРХКЭ.OutString(OutFile)
+    |3: ЛсРХКЭ.ErrMsg(58)
+    |4: ЛсРХКЭ.ErrMsg(88)
     хмюве
     йнмеж;
-    UTILS.Ln;
-    UTILS.HALT(1)
+    ЛсРХКЭ.Ln;
+    ЛсРХКЭ.HALT(1)
   йнмеж Err;
 
 опнжедспю Align*(n, m: INTEGER): INTEGER;
@@ -283,7 +283,7 @@
     йнмеж
   йнмеж PutReloc;
 
-опнжедспю InitArray(оеп adr: INTEGER; chars: UTILS.tString);
+опнжедспю InitArray(оеп adr: INTEGER; chars: ЛсРХКЭ.tString);
   оепел i, x, n: INTEGER;
   мювюкн
     n := LEN(chars) - 1;
@@ -298,7 +298,7 @@
 
 опнжедспю WriteF(F, A, N: INTEGER);
   мювюкн
-    еякх UTILS.Write(F, A, N) # N рнцдю
+    еякх ЛсРХКЭ.Write(F, A, N) # N рнцдю
       Err(2)
     йнмеж
   йнмеж WriteF;
@@ -416,13 +416,13 @@
       Header.structs[5].size := rcount
     йнмеж;
 
-    F := UTILS.CreateF(FName);
+    F := ЛсРХКЭ.CreateF(FName);
     еякх F = 0 рнцдю
       Err(1)
     йнмеж;
-    OutFilePos := UTILS.GetMem(filesize);
+    OutFilePos := ЛсРХКЭ.GetMem(filesize);
     filebuf := OutFilePos;
-    UTILS.MemErr(OutFilePos = 0);
+    ЛсРХКЭ.MemErr(OutFilePos = 0);
 
     Write(mSys.ADR(Header), mSys.SIZE(HEADER));
     еякх dll рнцдю
@@ -455,7 +455,7 @@
       Fill(Align(rcount, 200H) - rcount, 0X)
     йнмеж;
     WriteF(F, filebuf, OutFilePos - filebuf);
-    UTILS.CloseF(F)
+    ЛсРХКЭ.CloseF(F)
   йнмеж WritePE;
 
 опнжедспю New;
@@ -464,7 +464,7 @@
     NEW(nov);
     MemErr(nov = осярн);
     nov.cmd := ccount;
-    UTILS.Insert(asmlist, nov, current);
+    ЛсРХКЭ.Insert(asmlist, nov, current);
     current := current.Next(ASMLINE)
   йнмеж New;
 
@@ -528,7 +528,7 @@
     current.tcmd := POPEDX
   йнмеж PopEDX;
 
-опнжедспю OutCode(cmd: UTILS.tString);
+опнжедспю OutCode(cmd: ЛсРХКЭ.tString);
   оепел a, b: INTEGER;
   мювюкн
     New;
@@ -585,15 +585,15 @@
     obj := UI = 6;
     MemErr := mem;
     Lcount := HALT;
-    asmlist := UTILS.CreateList();
+    asmlist := ЛсРХКЭ.CreateList();
     MemErr(asmlist = осярн);
     NEW(nov);
     MemErr(nov = осярн);
-    UTILS.Push(asmlist, nov);
+    ЛсРХКЭ.Push(asmlist, nov);
     current := nov;
   йнмеж Init;
 
-опнжедспю datastr(str: UTILS.tString);
+опнжедспю datastr(str: ЛсРХКЭ.tString);
   оепел i, n: INTEGER;
   мювюкн
     i := 0;
@@ -659,7 +659,7 @@
     INC(ccount, 4)
   йнмеж CmdN;
 
-опнжедспю IntByte(bytecode, intcode: UTILS.tString; n: INTEGER);
+опнжедспю IntByte(bytecode, intcode: ЛсРХКЭ.tString; n: INTEGER);
   мювюкн
     еякх (n <= 127) & (n >= -128) рнцдю
       OutCode(bytecode);
@@ -709,8 +709,8 @@
 опнжедспю Incfpu;
   мювюкн
     еякх fpu >= FREGS рнцдю
-      UTILS.ErrMsgPos(ЛяЙЮМ.line, ЛяЙЮМ.col, 97);
-      UTILS.HALT(1)
+      ЛсРХКЭ.ErrMsgPos(ЛяЙЮМ.line, ЛяЙЮМ.col, 97);
+      ЛсРХКЭ.HALT(1)
     йнмеж;
     INC(fpu);
     isfpu := хярхмю
@@ -763,7 +763,7 @@
     CmdN(n)
   йнмеж PushInt;
 
-опнжедспю Prolog*(exename: UTILS.tString);
+опнжедспю Prolog*(exename: ЛсРХКЭ.tString);
   мювюкн
     ExecName := exename;
     Labels[hInstance] := -dcount;
@@ -862,7 +862,7 @@
     CallRTL(_disprec)
   йнмеж disprec;
 
-опнжедспю String*(Number, Len: INTEGER; str: UTILS.tString);
+опнжедспю String*(Number, Len: INTEGER; str: ЛсРХКЭ.tString);
   мювюкн
     Labels[Number] := -dcount;
     еякх Len > 1 рнцдю
@@ -940,13 +940,13 @@
     InsertFpuInit
   йнмеж ProcEnd;
 
-опнжедспю Module*(Name: UTILS.tString; Number: INTEGER);
+опнжедспю Module*(Name: ЛсРХКЭ.tString; Number: INTEGER);
   мювюкн
     String(Number + 2, LENGTH(Name), Name);
     jmplong(JMP, Number + 1)
   йнмеж Module;
 
-опнжедспю Asm*(s: UTILS.tString);
+опнжедспю Asm*(s: ЛсРХКЭ.tString);
   мювюкн
     OutCode(s)
   йнмеж Asm;
@@ -1078,8 +1078,8 @@
 опнжедспю OnError*(n: INTEGER);
   мювюкн
     OutByte(68H);
-    OutInt(UTILS.Line * 16 + n);
-    jmplong(JMP, UTILS.Unit + 3)
+    OutInt(ЛсРХКЭ.Line * 16 + n);
+    jmplong(JMP, ЛсРХКЭ.Unit + 3)
   йнмеж OnError;
 
 опнжедспю idivmod*(opmod: BOOLEAN);
@@ -1233,8 +1233,8 @@
   мювюкн
     PopEDX;
     OutCode("85D2751368");
-    OutInt(UTILS.Line * 16 + 1);
-    PushInt(UTILS.Unit + 2);
+    OutInt(ЛсРХКЭ.Line * 16 + 1);
+    PushInt(ЛсРХКЭ.Unit + 2);
     еякх proc = stASSERT рнцдю
       OutCode("6A026A")
     хмюве
@@ -1571,15 +1571,15 @@
     cur: ASMLINE;
     Coff: COFFHEADER;
     sym: люяяхб 18 * 4 хг CHAR;
-    FileName: UTILS.tString;
+    FileName: ЛсРХКЭ.tString;
   мювюкн
-    F := UTILS.CreateF(FName);
+    F := ЛсРХКЭ.CreateF(FName);
     еякх F <= 0 рнцдю
       Err(1)
     йнмеж;
-    OutFilePos := UTILS.GetMem(Align(size, 4) + datasize + 1000H);
+    OutFilePos := ЛсРХКЭ.GetMem(Align(size, 4) + datasize + 1000H);
     filebuf := OutFilePos;
-    UTILS.MemErr(OutFilePos = 0);
+    ЛсРХКЭ.MemErr(OutFilePos = 0);
 
     еякх ~obj рнцдю
       Header.menuet01 := "MENUET01";
@@ -1688,7 +1688,7 @@
       i := 4;
       WriteF(F, mSys.ADR(i), 4)
     йнмеж;
-    UTILS.CloseF(F)
+    ЛсРХКЭ.CloseF(F)
   йнмеж WriteKOS;
 
 опнжедспю WriteELF(FName: люяяхб хг CHAR; code, data, glob: INTEGER);
@@ -1709,14 +1709,14 @@
     йнмеж Sub;
 
   мювюкн
-    F := UTILS.OpenF(felf, 0);
+    F := ЛсРХКЭ.OpenF(felf, 0);
     еякх F = 0 рнцдю
       Err(3)
     йнмеж;
-    еякх UTILS.Read(F, mSys.ADR(bytes), 817H + 55FH + 4900) # 817H + 55FH + 4900 рнцдю
+    еякх ЛсРХКЭ.Read(F, mSys.ADR(bytes), 817H + 55FH + 4900) # 817H + 55FH + 4900 рнцдю
       Err(4)
     йнмеж;
-    UTILS.CloseF(F);
+    ЛсРХКЭ.CloseF(F);
     bytes[0] := 7FX;
 
     DEC(code, 13);
@@ -1752,9 +1752,9 @@
     Add(1C05H); Add(1C15H); Add(1C55H); Add(1C75H); Add(1CA5H); Add(1CB5H); Add(1CE5H); Add(1D05H);
     Add(1D15H); Add(1D25H); Add(1D35H); Add(1D55H); Add(1D75H); Add(1D89H);
 
-    OutFilePos := UTILS.GetMem(code + data + 8000H);
+    OutFilePos := ЛсРХКЭ.GetMem(code + data + 8000H);
     filebuf := OutFilePos;
-    UTILS.MemErr(OutFilePos = 0);
+    ЛсРХКЭ.MemErr(OutFilePos = 0);
 
     Write(mSys.ADR(bytes), 817H);
     Fill(2DDH, 90X);
@@ -1769,12 +1769,12 @@
     Fill(Align(data, 1000H) - data, 0X);
     Write(mSys.ADR(bytes[817H + 55FH + 55FH]), 0DC5H);
 
-    F := UTILS.CreateF(FName);
+    F := ЛсРХКЭ.CreateF(FName);
     еякх F <= 0 рнцдю
       Err(1)
     йнмеж;
     WriteF(F, filebuf, OutFilePos - filebuf);
-    UTILS.CloseF(F)
+    ЛсРХКЭ.CloseF(F)
   йнмеж WriteELF;
 
 опнжедспю FixLabels(FName: люяяхб хг CHAR; stk, gsize, glob: INTEGER);

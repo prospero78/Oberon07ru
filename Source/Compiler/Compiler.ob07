@@ -20,7 +20,7 @@
 
 »ћѕќ–“ DECL := модƒецл,
     м—кан := мод—канер,
-    UTILS := мод”тиль,
+    м”тиль := мод”тиль,
     X86 := модјсм86_32,
     SYSTEM,
     м онст := мод онстанты;
@@ -56,7 +56,7 @@
 
 “»ѕџ
 
-  LABEL = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (UTILS.tItem)
+  LABEL = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м”тиль.tItem)
       a, b: INTEGER
      ќЌ≈÷;
 
@@ -64,7 +64,7 @@
 
   pExpr, pFactor: ѕ–ќ÷≈ƒ”–ј (ѕ≈– e: DECL.EXPRESSION);
   pOpSeq: ѕ–ќ÷≈ƒ”–ј;
-  Lex: UTILS.tString;
+  Lex: м”тиль.tString;
   sttypes: DECL.stTYPES;
 
 ѕ–ќ÷≈ƒ”–ј Load(e: DECL.EXPRESSION);
@@ -1332,7 +1332,7 @@
     Next
    ќЌ≈÷ ForOper;
 
-ѕ–ќ÷≈ƒ”–ј CheckLabel(a, b: INTEGER; Labels: UTILS.tpList): BOOLEAN;
+ѕ–ќ÷≈ƒ”–ј CheckLabel(a, b: INTEGER; Labels: м”тиль.tpList): BOOLEAN;
   ѕ≈–≈ћ cur: LABEL;
   Ќј„јЋќ
     cur := Labels.First(LABEL);
@@ -1358,7 +1358,7 @@
      ќЌ≈÷
    ќЌ≈÷ LabelVal;
 
-ѕ–ќ÷≈ƒ”–ј Label(int: BOOLEAN; Labels: UTILS.tpList; LBeg: INTEGER);
+ѕ–ќ÷≈ƒ”–ј Label(int: BOOLEAN; Labels: м”тиль.tpList; LBeg: INTEGER);
   ѕ≈–≈ћ a, b: INTEGER; label: LABEL; line, col: INTEGER;
   Ќј„јЋќ
     Coord(line, col);
@@ -1374,11 +1374,11 @@
     DECL.MemErr(label = ѕ”—“ќ);
     label.a := a;
     label.b := b;
-    UTILS.Push(Labels, label);
+    м”тиль.Push(Labels, label);
     X86.CaseLabel(a, b, LBeg)
    ќЌ≈÷ Label;
 
-ѕ–ќ÷≈ƒ”–ј Variant(int: BOOLEAN; Labels: UTILS.tpList; EndCase: INTEGER);
+ѕ–ќ÷≈ƒ”–ј Variant(int: BOOLEAN; Labels: м”тиль.tpList; EndCase: INTEGER);
   ѕ≈–≈ћ LBeg, LEnd: INTEGER;
   Ќј„јЋќ
     LBeg := X86.NewLabel();
@@ -1404,7 +1404,7 @@
     e: DECL.EXPRESSION;
     int: BOOLEAN;
     line, col, EndCase: INTEGER;
-    Labels: UTILS.tpList;
+    Labels: м”тиль.tpList;
   Ќј„јЋќ
     Next;
     Coord(line, col);
@@ -1415,7 +1415,7 @@
     Check(м онст.lxOF);
     Load(e);
     X86.Drop;
-    Labels := UTILS.CreateList();
+    Labels := м”тиль.CreateList();
     DECL.MemErr(Labels = ѕ”—“ќ);
     Next;
     EndCase := X86.NewLabel();
@@ -1428,16 +1428,16 @@
       Next;
       pOpSeq
     »Ќј„≈
-      UTILS.UnitLine(DECL.UnitNumber, м—кан.line);
+      м”тиль.UnitLine(DECL.UnitNumber, м—кан.line);
       X86.OnError(7)
      ќЌ≈÷;
     Check(м онст.lxEND);
     X86.Label(EndCase);
     Next;
-    UTILS.Clear(Labels)
+    м”тиль.Clear(Labels)
    ќЌ≈÷ CaseOper;
 
-ѕ–ќ÷≈ƒ”–ј CheckCode(Code: UTILS.tString; Len, line, col: INTEGER);
+ѕ–ќ÷≈ƒ”–ј CheckCode(Code: м”тиль.tString; Len, line, col: INTEGER);
   ѕ≈–≈ћ i: INTEGER;
   Ќј„јЋќ
     Assert(~ODD(Len), line, col, 34);
@@ -1703,7 +1703,7 @@
         ≈—Ћ» s.Len = 1 “ќ√ƒј
           X86.Mono(s.Number)
          ќЌ≈÷;
-        X86.PushConst(UTILS.min(s.Len + 1, e1.T.Len))
+        X86.PushConst(м”тиль.min(s.Len + 1, e1.T.Len))
        ќЌ≈÷;
       X86.Save(e1.T.tType)
     ј≈—Ћ» e1.eType = ePROC “ќ√ƒј
@@ -1758,7 +1758,7 @@
 
 ѕ–ќ÷≈ƒ”–ј Operator;
   Ќј„јЋќ
-    UTILS.UnitLine(DECL.UnitNumber, м—кан.line);
+    м”тиль.UnitLine(DECL.UnitNumber, м—кан.line);
     ¬џЅќ– м—кан.tLex »«
     |lxIDENT: IdentOper
     |м онст.lxIF, м онст.lxWHILE: IfWhileOper(м—кан.tLex = м онст.lxWHILE)
@@ -1780,7 +1780,7 @@
 
 ѕ–ќ÷≈ƒ”–ј Start;
   ѕ≈–≈ћ SelfName, SelfPath, CName, CExt, FName, Path, StdPath,
-      Name, Ext, temp, system, stk, felf: UTILS.tString;
+      Name, Ext, temp, system, stk, felf: м”тиль.tString;
       platform, stksize: INTEGER;
 
     ѕ–ќ÷≈ƒ”–ј getstksize(): INTEGER;
@@ -1849,47 +1849,47 @@
      ќЌ≈÷ getver;
 
   Ќј„јЋќ
-    ≈—Ћ» UTILS.ParamCount < 2 “ќ√ƒј
-      UTILS.ErrMsg(59);
-      UTILS.HALT(1)
+    ≈—Ћ» м”тиль.ParamCount < 2 “ќ√ƒј
+      м”тиль.ErrMsg(59);
+      м”тиль.HALT(1)
      ќЌ≈÷;
-    UTILS.ParamStr(SelfName, 0);
-    UTILS.ParamStr(FName, 1);
-    UTILS.ParamStr(system, 2);
-    UTILS.ParamStr(stk, 3);
+    м”тиль.ParamStr(SelfName, 0);
+    м”тиль.ParamStr(FName, 1);
+    м”тиль.ParamStr(system, 2);
+    м”тиль.ParamStr(stk, 3);
     pExpr := Expr;
     pFactor := Factor;
     pOpSeq := OpSeq;
-    UTILS.Split(FName, Path, Name, Ext);
+    м”тиль.Split(FName, Path, Name, Ext);
     ≈—Ћ» Ext # м онст.Ext “ќ√ƒј
-      UTILS.ErrMsg(121);
-      UTILS.HALT(1)
+      м”тиль.ErrMsg(121);
+      м”тиль.HALT(1)
      ќЌ≈÷;
-    UTILS.Split(SelfName, SelfPath, CName, CExt);
+    м”тиль.Split(SelfName, SelfPath, CName, CExt);
     temp := Name;
-    ≈—Ћ» UTILS.streq(system, "obj") “ќ√ƒј
+    ≈—Ћ» м”тиль.streq(system, "obj") “ќ√ƒј
       platform := 6;
-UTILS.concat(temp, ".obj", temp)
-    ј≈—Ћ» UTILS.streq(system, "elf") “ќ√ƒј
+м”тиль.concat(temp, ".obj", temp)
+    ј≈—Ћ» м”тиль.streq(system, "elf") “ќ√ƒј
       platform := 5;
       felf := SelfPath;
-      UTILS.concat(felf, "Elf", felf);
+      м”тиль.concat(felf, "Elf", felf);
       X86.setfelf(felf)
-    ј≈—Ћ» UTILS.streq(system, "kos") “ќ√ƒј
+    ј≈—Ћ» м”тиль.streq(system, "kos") “ќ√ƒј
       platform := 4;
-      UTILS.concat(temp, ".kex", temp)
-    ј≈—Ћ» UTILS.streq(system, "con") “ќ√ƒј
+      м”тиль.concat(temp, ".kex", temp)
+    ј≈—Ћ» м”тиль.streq(system, "con") “ќ√ƒј
       platform := 3;
-      UTILS.concat(temp, ".exe", temp)
-    ј≈—Ћ» UTILS.streq(system, "gui") “ќ√ƒј
+      м”тиль.concat(temp, ".exe", temp)
+    ј≈—Ћ» м”тиль.streq(system, "gui") “ќ√ƒј
       platform := 2;
-      UTILS.concat(temp, ".exe", temp)
-    ј≈—Ћ» UTILS.streq(system, "dll") “ќ√ƒј
+      м”тиль.concat(temp, ".exe", temp)
+    ј≈—Ћ» м”тиль.streq(system, "dll") “ќ√ƒј
       platform := 1;
-      UTILS.concat(temp, ".dll", temp)
+      м”тиль.concat(temp, ".dll", temp)
     »Ќј„≈
-      UTILS.ErrMsg(60);
-      UTILS.HALT(1)
+      м”тиль.ErrMsg(60);
+      м”тиль.HALT(1)
      ќЌ≈÷;
     ≈—Ћ» platform IN {1,2,3,4} “ќ√ƒј
       stksize := getstksize()
@@ -1899,22 +1899,22 @@ UTILS.concat(temp, ".obj", temp)
     ≈—Ћ» platform = 6 “ќ√ƒј
       stksize := getver()
      ќЌ≈÷;
-    UTILS.concat(SelfPath, "Lib", SelfPath);
-    UTILS.concat(SelfPath, м онст.Slash, SelfPath);
+    м”тиль.concat(SelfPath, "Lib", SelfPath);
+    м”тиль.concat(SelfPath, м онст.Slash, SelfPath);
     ≈—Ћ» platform = 5 “ќ√ƒј
-      UTILS.concat(SelfPath, "Linux32", SelfPath)
+      м”тиль.concat(SelfPath, "Linux32", SelfPath)
     ј≈—Ћ» platform IN {4, 6} “ќ√ƒј
-      UTILS.concat(SelfPath, "KolibriOS", SelfPath)
+      м”тиль.concat(SelfPath, "KolibriOS", SelfPath)
     ј≈—Ћ» platform IN {1, 2, 3} “ќ√ƒј
-      UTILS.concat(SelfPath, "Windows32", SelfPath)
+      м”тиль.concat(SelfPath, "Windows32", SelfPath)
      ќЌ≈÷;
-    UTILS.concat(SelfPath, м онст.Slash, SelfPath);
+    м”тиль.concat(SelfPath, м онст.Slash, SelfPath);
     X86.Init(DECL.MemErr, platform);
     X86.Prolog(temp);
     DECL.Program(SelfPath, Path, Name, Ext, platform IN {1, 2, 3}, OpSeq, Expr, AssComp, sttypes);
     DECL.Compile(platform, stksize);
-    UTILS.OutString("компил€ци€ успешна"); UTILS.Ln;
-    UTILS.Time
+    м”тиль.OutString("компил€ци€ успешна"); м”тиль.Ln;
+    м”тиль.Time
    ќЌ≈÷ Start;
 
 Ќј„јЋќ

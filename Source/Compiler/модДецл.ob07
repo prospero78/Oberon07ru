@@ -20,7 +20,7 @@
 лндскэ ЛНДдЕЖК;
 
 хлонпр ЛяЙЮМ := ЛНДяЙЮМЕП,
-    UTILS := ЛНДсРХКЭ,
+    ЛсРХКЭ := ЛНДсРХКЭ,
     X86 := ЛНДюЯЛ86_32,
     SYSTEM,
     ЛйНМЯР := ЛНДйНМЯРЮМРШ;
@@ -68,26 +68,26 @@
 
 рхош
 
-  pTYPE* = сйюгюрекэ мю гюохяэ (UTILS.tItem)
+  pTYPE* = сйюгюрекэ мю гюохяэ (ЛсРХКЭ.tItem)
       tType*, Size*, Len*, Number*, Align, Call*, Rec: INTEGER;
       Base*: pTYPE;
-      Fields*: UTILS.tpList
+      Fields*: ЛсРХКЭ.tpList
     йнмеж;
 
   IDENT* = сйюгюрекэ мю rIDENT;
 
-  UNIT* = сйюгюрекэ мю гюохяэ (UTILS.tItem)
+  UNIT* = сйюгюрекэ мю гюохяэ (ЛсРХКЭ.tItem)
       Name: ЛяЙЮМ.NODE;
-      File: UTILS.tString;
-      Idents: UTILS.tpList;
-      Import: UTILS.tpList;
+      File: ЛсРХКЭ.tString;
+      Idents: ЛсРХКЭ.tpList;
+      Import: ЛсРХКЭ.tpList;
       IdentBegin: IDENT;
       scanner: ЛяЙЮМ.SCANNER;
       Level*: INTEGER;
       Closed, typedecl, ExportType, Std, sys: BOOLEAN
     йнмеж;
 
-  rIDENT* = гюохяэ (UTILS.tItem)
+  rIDENT* = гюохяэ (ЛсРХКЭ.tItem)
       Name: ЛяЙЮМ.NODE;
       T*: pTYPE;
       Unit*: UNIT;
@@ -98,17 +98,17 @@
       Export: BOOLEAN
     йнмеж;
 
-  PTRBASE = сйюгюрекэ мю гюохяэ (UTILS.tItem)
+  PTRBASE = сйюгюрекэ мю гюохяэ (ЛсРХКЭ.tItem)
       Name: ЛяЙЮМ.NODE;
       line, col: INTEGER;
       Ptr: pTYPE
     йнмеж;
 
-  STRITEM = сйюгюрекэ мю гюохяэ (UTILS.tItem)
-      Str: UTILS.tString
+  STRITEM = сйюгюрекэ мю гюохяэ (ЛсРХКЭ.tItem)
+      Str: ЛсРХКЭ.tString
     йнмеж;
 
-  FIELD* = сйюгюрекэ мю гюохяэ (UTILS.tItem)
+  FIELD* = сйюгюрекэ мю гюохяэ (ЛсРХКЭ.tItem)
       Name: ЛяЙЮМ.NODE;
       T*: pTYPE;
       Offset*: INTEGER;
@@ -116,8 +116,8 @@
       Unit*: UNIT
     йнмеж;
 
-  STRCONST* = сйюгюрекэ мю гюохяэ (UTILS.tItem)
-      Str*: UTILS.tString;
+  STRCONST* = сйюгюрекэ мю гюохяэ (ЛсРХКЭ.tItem)
+      Str*: ЛсРХКЭ.tString;
       Len*, Number*: INTEGER
     йнмеж;
 
@@ -138,13 +138,13 @@
 оепел
 
   sttypes: stTYPES; unit*, sys: UNIT; curBlock*: IDENT;
-  Path, Main, Std, ExtMain: UTILS.tString;
+  Path, Main, Std, ExtMain: ЛсРХКЭ.tString;
   NamePtrBase: ЛяЙЮМ.NODE; ProgSize*, RecCount, UnitNumber*: INTEGER;
-  PtrBases, Strings, types, prog: UTILS.tpList;
+  PtrBases, Strings, types, prog: ЛсРХКЭ.tpList;
   OpSeq: opPROC; Expr: expPROC;
   AssComp: assPROC; main, sizefunc, winplatf, Const*: BOOLEAN;
   pParseType: опнжедспю (оеп line, col: INTEGER): pTYPE;
-  pReadModule: опнжедспю (Path, Name, Ext: UTILS.tString): BOOLEAN;
+  pReadModule: опнжедспю (Path, Name, Ext: ЛсРХКЭ.tString): BOOLEAN;
   Platform: INTEGER;
 
 опнжедспю SetSizeFunc*;
@@ -155,7 +155,7 @@
 опнжедспю MemErr*(err: BOOLEAN);
   мювюкн
     еякх err рнцдю
-      UTILS.MemErr(err)
+      ЛсРХКЭ.MemErr(err)
     йнмеж
   йнмеж MemErr;
 
@@ -166,7 +166,7 @@
     бепмсрэ str
   йнмеж GetString;
 
-опнжедспю AddString*(str: UTILS.tString): STRCONST;
+опнжедспю AddString*(str: ЛсРХКЭ.tString): STRCONST;
   оепел nov: STRCONST;
   мювюкн
     NEW(nov);
@@ -174,7 +174,7 @@
     COPY(str, nov.Str);
     nov.Len := ЛяЙЮМ.count - 1;
     nov.Number := X86.NewLabel();
-    UTILS.Push(Strings, nov);
+    ЛсРХКЭ.Push(Strings, nov);
     X86.String(nov.Number, nov.Len, nov.Str)
     бепмсрэ nov
   йнмеж AddString;
@@ -188,7 +188,7 @@
     nov.Str[1] := 0X;
     nov.Len := 1;
     nov.Number := X86.NewLabel();
-    UTILS.Push(Strings, nov);
+    ЛсРХКЭ.Push(Strings, nov);
     X86.String(nov.Number, nov.Len, nov.Str)
     бепмсрэ nov
   йнмеж AddMono;
@@ -204,7 +204,7 @@
   мювюкн
     res := осярн;
     cur := prog.First(UNIT);
-    онйю (cur # осярн) & UTILS.streq(cur.Name.Name, Name.Name) декюрэ
+    онйю (cur # осярн) & ЛсРХКЭ.streq(cur.Name.Name, Name.Name) декюрэ
       res := cur;
       cur := осярн
     юеякх cur # осярн декюрэ
@@ -216,8 +216,8 @@
 опнжедспю Assert*(cond: BOOLEAN; line, col, code: INTEGER);
   мювюкн
     еякх ~cond рнцдю
-      UTILS.ErrMsgPos(line, col, code);
-      UTILS.HALT(1)
+      ЛсРХКЭ.ErrMsgPos(line, col, code);
+      ЛсРХКЭ.HALT(1)
     йнмеж
   йнмеж Assert;
 
@@ -285,7 +285,7 @@
     ident.Name := осярн;
     ident.iType := IDGUARD;
     ident.T := sttypes[TVOID];
-    UTILS.Push(unit.Idents, ident);
+    ЛсРХКЭ.Push(unit.Idents, ident);
     INC(unit.Level)
   йнмеж Guard;
 
@@ -310,7 +310,7 @@
     ident.Export := Export;
     ident.StProc := StProc;
     ident.Level := unit.Level;
-    UTILS.Push(unit.Idents, ident)
+    ЛсРХКЭ.Push(unit.Idents, ident)
   йнмеж PushIdent;
 
 опнжедспю StTypes;
@@ -321,7 +321,7 @@
       NEW(type);
       MemErr(type = осярн);
       type.tType := i;
-      UTILS.Push(types, type);
+      ЛсРХКЭ.Push(types, type);
       sttypes[i] := type
     йнмеж;
     sttypes[TINTEGER].Size := 4;
@@ -339,22 +339,22 @@
     йнмеж
   йнмеж StTypes;
 
-опнжедспю PushStProc(Name: UTILS.tString; StProc: INTEGER);
+опнжедспю PushStProc(Name: ЛсРХКЭ.tString; StProc: INTEGER);
   мювюкн
     PushIdent(ЛяЙЮМ.AddNode(Name), 0, 0, IDSTPROC, sttypes[TVOID], осярн, кнфэ, StProc)
   йнмеж PushStProc;
 
-опнжедспю PushStType(Name: UTILS.tString; T: INTEGER);
+опнжедспю PushStType(Name: ЛсРХКЭ.tString; T: INTEGER);
   мювюкн
     PushIdent(ЛяЙЮМ.AddNode(Name), 0, 0, IDTYPE, sttypes[T], осярн, кнфэ, 0)
   йнмеж PushStType;
 
-опнжедспю PushSysProc(Name: UTILS.tString; StProc: INTEGER);
+опнжедспю PushSysProc(Name: ЛсРХКЭ.tString; StProc: INTEGER);
   мювюкн
     PushIdent(ЛяЙЮМ.AddNode(Name), 0, 0, IDSYSPROC, sttypes[TVOID], осярн, хярхмю, StProc)
   йнмеж PushSysProc;
 
-опнжедспю PushSysType(Name: UTILS.tString; T: INTEGER);
+опнжедспю PushSysType(Name: ЛсРХКЭ.tString; T: INTEGER);
   мювюкн
     PushIdent(ЛяЙЮМ.AddNode(Name), 0, 0, IDTYPE, sttypes[T], осярн, хярхмю, 0)
   йнмеж PushSysType;
@@ -463,7 +463,7 @@
       res := LONG(FLT(FLOOR(a) MOD FLOOR(b)))
     хмюве
     йнмеж;
-    Assert(~UTILS.IsInf(res), line, col, FOVER);
+    Assert(~ЛсРХКЭ.IsInf(res), line, col, FOVER);
     бшанп T.tType хг
     |TINTEGER:  Assert((res <= LONG(FLT(ЛйНМЯР.maxINT))) & (res >= LONG(FLT(ЛяЙЮМ.minINT))), line, col, IOVER)
     |TREAL:     Assert((res <= LONG(ЛяЙЮМ.maxREAL)) & (res >= -LONG(ЛяЙЮМ.maxREAL)), line, col, FOVER)
@@ -735,7 +735,7 @@
       Assert2(Unique(T, Name), 30);
       NEW(field);
       MemErr(field = осярн);
-      UTILS.Push(T.Fields, field);
+      ЛсРХКЭ.Push(T.Fields, field);
       field.Name := Name;
       field.T := осярн;
       field.Export := кнфэ;
@@ -796,15 +796,15 @@
         n := 4 * (1 + Dim(T) + ORD((cur.VarKind = paramvar) & (T.tType = TRECORD)))
       хмюве
         n := T.Size;
-        Assert2(n <= ЛйНМЯР.maxINT - UTILS.Align(n), 93);
-        n := n + UTILS.Align(n)
+        Assert2(n <= ЛйНМЯР.maxINT - ЛсРХКЭ.Align(n), 93);
+        n := n + ЛсРХКЭ.Align(n)
       йнмеж;
       еякх cur.Level = 3 рнцдю
         cur.Offset := ProgSize;
         Assert2(ProgSize <= ЛйНМЯР.maxINT - n, 93);
         ProgSize := ProgSize + n;
-        Assert2(ProgSize <= ЛйНМЯР.maxINT - UTILS.Align(ProgSize), 93);
-        ProgSize := ProgSize + UTILS.Align(ProgSize)
+        Assert2(ProgSize <= ЛйНМЯР.maxINT - ЛсРХКЭ.Align(ProgSize), 93);
+        ProgSize := ProgSize + ЛсРХКЭ.Align(ProgSize)
       хмюве
         еякх cur.VarKind = 0 рнцдю
           cur.Offset := curBlock.ParamSize - curBlock.VarSize - n
@@ -814,8 +814,8 @@
       йнмеж;
       Assert2(curBlock.VarSize <= ЛйНМЯР.maxINT - n, 93);
       curBlock.VarSize := curBlock.VarSize + n;
-      Assert2(curBlock.VarSize <= ЛйНМЯР.maxINT - UTILS.Align(curBlock.VarSize), 93);
-      curBlock.VarSize := curBlock.VarSize + UTILS.Align(curBlock.VarSize);
+      Assert2(curBlock.VarSize <= ЛйНМЯР.maxINT - ЛсРХКЭ.Align(curBlock.VarSize), 93);
+      curBlock.VarSize := curBlock.VarSize + ЛсРХКЭ.Align(curBlock.VarSize);
       еякх cur.VarKind # 0 рнцдю
         curBlock.ParamSize := curBlock.VarSize
       йнмеж;
@@ -832,7 +832,7 @@
     хмюве
       nov := NewType
     йнмеж;
-    UTILS.Push(types, nov);
+    ЛсРХКЭ.Push(types, nov);
     nov.tType := tType;
     nov.Len := Len;
     nov.Size := Size;
@@ -840,7 +840,7 @@
     nov.Fields := осярн;
     nov.Number := Number;
     еякх Fields рнцдю
-      nov.Fields := UTILS.CreateList();
+      nov.Fields := ЛсРХКЭ.CreateList();
       MemErr(nov.Fields = осярн)
     йнмеж
     бепмсрэ nov
@@ -883,7 +883,7 @@
       Assert2(GetField(T, Name) = осярн, 30);
       NEW(field);
       MemErr(field = осярн);
-      UTILS.Push(T.Fields, field);
+      ЛсРХКЭ.Push(T.Fields, field);
       field.Name := Name;
       field.T := осярн;
       field.ByRef := ByRef;
@@ -941,7 +941,7 @@
     nov.line := line;
     nov.col := col;
     nov.Ptr := T;
-    UTILS.Push(PtrBases, nov)
+    ЛсРХКЭ.Push(PtrBases, nov)
   йнмеж AddPtrBase;
 
 опнжедспю FormalList(T: pTYPE; оеп Res: pTYPE);
@@ -964,7 +964,7 @@
 
 опнжедспю CallFlag(оеп Call: INTEGER): BOOLEAN;
   оепел
-    flag: UTILS.tString;
+    flag: ЛсРХКЭ.tString;
     res: BOOLEAN;
   мювюкн
     res := ЛяЙЮМ.tLex = lxLSquare;
@@ -992,7 +992,7 @@
 
 опнжедспю RecFlag(оеп rec: INTEGER): BOOLEAN;
   оепел
-    flag: UTILS.tString;
+    flag: ЛсРХКЭ.tString;
     res: BOOLEAN;
   мювюкн
     res := ЛяЙЮМ.tLex = lxLSquare;
@@ -1146,7 +1146,7 @@
       cur.Ptr.Base := id.T;
       cur := cur.Next(PTRBASE)
     йнмеж;
-    UTILS.Clear(PtrBases)
+    ЛсРХКЭ.Clear(PtrBases)
   йнмеж LinkPtr;
 
 опнжедспю DeclSeq;
@@ -1183,7 +1183,7 @@
       йнмеж
     йнмеж;
     еякх ЛяЙЮМ.tLex = ЛйНМЯР.lxTYPE рнцдю
-      UTILS.Clear(PtrBases);
+      ЛсРХКЭ.Clear(PtrBases);
       unit.typedecl := хярхмю;
       Next;
       онйю ЛяЙЮМ.tLex = lxIDENT декюрэ
@@ -1259,7 +1259,7 @@
       func := curBlock.T.Base.tType # TVOID;
       еякх func рнцдю
         Check(ЛйНМЯР.lxRETURN);
-        UTILS.UnitLine(UnitNumber, ЛяЙЮМ.line);
+        ЛсРХКЭ.UnitLine(UnitNumber, ЛяЙЮМ.line);
         Next;
         Coord(line, col);
         Expr(e);
@@ -1285,13 +1285,13 @@
 
 опнжедспю Rtl(u: UNIT);
 
-    опнжедспю AddProc(name: UTILS.tString; num: INTEGER);
+    опнжедспю AddProc(name: ЛсРХКЭ.tString; num: INTEGER);
     оепел id: IDENT;
     мювюкн
       id := GetQIdent(u, ЛяЙЮМ.AddNode(name));
       еякх id = осярн рнцдю
-        UTILS.ErrMsg(158);
-        UTILS.HALT(1)
+        ЛсРХКЭ.ErrMsg(158);
+        ЛсРХКЭ.HALT(1)
       йнмеж;
       X86.AddRtlProc(num, id.Number)
     йнмеж AddProc;
@@ -1321,7 +1321,7 @@
 опнжедспю ImportList;
   оепел cond, col, line, namecol, nameline: INTEGER;
       name, alias: ЛяЙЮМ.NODE; u, self: UNIT;
-      FName: UTILS.tString;
+      FName: ЛсРХКЭ.tString;
 
     опнжедспю AddUnit(newcond: INTEGER);
     оепел str: STRITEM;
@@ -1343,7 +1343,7 @@
         ЛяЙЮМ.Recover(self.scanner);
         u := unit;
         unit := self;
-        UTILS.SetFile(unit.File)
+        ЛсРХКЭ.SetFile(unit.File)
       хмюве
         Assert(u.Closed, nameline, namecol, 31)
       йнмеж;
@@ -1351,7 +1351,7 @@
       NEW(str);
       MemErr(str = осярн);
       str.Str := name.Name;
-      UTILS.Push(unit.Import, str);
+      ЛсРХКЭ.Push(unit.Import, str);
       cond := newcond
     йнмеж AddUnit;
 
@@ -1392,7 +1392,7 @@
   мювюкн
     NEW(unit);
     MemErr(unit = осярн);
-    unit.Idents := UTILS.CreateList();
+    unit.Idents := ЛсРХКЭ.CreateList();
     MemErr(unit.Idents = осярн);
     unit.Level := 0;
     unit.Name := Name;
@@ -1421,23 +1421,23 @@
     unit := temp
   йнмеж Pseudo;
 
-опнжедспю ReadModule(Path, Name1, Ext: UTILS.tString): BOOLEAN;
-  оепел FHandle: INTEGER; name, Name, b: UTILS.tString; idmod: IDENT; Res, temp: BOOLEAN;
+опнжедспю ReadModule(Path, Name1, Ext: ЛсРХКЭ.tString): BOOLEAN;
+  оепел FHandle: INTEGER; name, Name, b: ЛсРХКЭ.tString; idmod: IDENT; Res, temp: BOOLEAN;
   мювюкн
     Res := кнфэ;
     name := Name1;
     Name := Name1;
-    UTILS.concat(Path, Name, b);
-    UTILS.concat(b, Ext, Name);
+    ЛсРХКЭ.concat(Path, Name, b);
+    ЛсРХКЭ.concat(b, Ext, Name);
     еякх ЛяЙЮМ.Open(Name, FHandle) рнцдю
       NEW(unit);
       MemErr(unit = осярн);
       unit.sys := кнфэ;
       unit.Std := Path = Std;
-      UTILS.Push(prog, unit);
-      unit.Idents := UTILS.CreateList();
+      ЛсРХКЭ.Push(prog, unit);
+      unit.Idents := ЛсРХКЭ.CreateList();
       MemErr(unit.Idents = осярн);
-      unit.Import := UTILS.CreateList();
+      unit.Import := ЛсРХКЭ.CreateList();
       MemErr(unit.Import = осярн);
       NEW(unit.scanner);
       MemErr(unit.scanner = осярн);
@@ -1446,12 +1446,12 @@
       unit.typedecl := кнфэ;
       unit.ExportType := кнфэ;
       COPY(Name, unit.File);
-      UTILS.SetFile(unit.File);
+      ЛсРХКЭ.SetFile(unit.File);
       StIdent;
       Next; Check(ЛйНМЯР.lxMODULE);
       
       Next; Check(lxIDENT);
-      Assert2(UTILS.streq(ЛяЙЮМ.id.Name, name), 33);
+      Assert2(ЛсРХКЭ.streq(ЛяЙЮМ.id.Name, name), 33);
       unit.Name := ЛяЙЮМ.id;
       PushIdent(unit.Name, ЛяЙЮМ.line, ЛяЙЮМ.col, IDMOD, sttypes[TVOID], unit, кнфэ, 0);
       idmod := unit.Idents.Last(IDENT);
@@ -1464,7 +1464,7 @@
         ImportList;
         main := temp
       йнмеж;
-      UTILS.OutString("ЙНЛОХКХПСЧ "); UTILS.OutString(unit.Name.Name); UTILS.Ln;
+      ЛсРХКЭ.OutString("ЙНЛОХКХПСЧ "); ЛсРХКЭ.OutString(unit.Name.Name); ЛсРХКЭ.Ln;
       X86.Module(idmod.Name.Name, idmod.Number);
       UnitNumber := idmod.Number;
       unit.IdentBegin := unit.Idents.Last(IDENT);
@@ -1481,13 +1481,13 @@
       Next; Check(lxDot);
       X86.Leave;
       unit.Closed := хярхмю;
-      UTILS.Clear(unit.Import);
+      ЛсРХКЭ.Clear(unit.Import);
       Res := хярхмю
     йнмеж
     бепмсрэ Res
   йнмеж ReadModule;
 
-опнжедспю Program*(StdPath, FilePath, NameFile, ExtFile: UTILS.tString; windows: BOOLEAN;
+опнжедспю Program*(StdPath, FilePath, NameFile, ExtFile: ЛсРХКЭ.tString; windows: BOOLEAN;
     OpSeqProc: opPROC; ExprProc: expPROC; AssCompProc: assPROC; оеп stypes: stTYPES);
   мювюкн
     winplatf := windows;
@@ -1498,20 +1498,20 @@
     OpSeq := OpSeqProc;
     Expr := ExprProc;
     AssComp := AssCompProc;
-    prog := UTILS.CreateList();
+    prog := ЛсРХКЭ.CreateList();
     MemErr(prog = осярн);
-    PtrBases := UTILS.CreateList();
+    PtrBases := ЛсРХКЭ.CreateList();
     MemErr(PtrBases = осярн);
-    types := UTILS.CreateList();
+    types := ЛсРХКЭ.CreateList();
     MemErr(types = осярн);
     StTypes;
-    Strings := UTILS.CreateList();
+    Strings := ЛсРХКЭ.CreateList();
     MemErr(Strings = осярн);
     Pseudo;
     stypes := sttypes
   йнмеж Program;
 
-опнжедспю delfirstchar(оеп s: UTILS.tString);
+опнжедспю delfirstchar(оеп s: ЛсРХКЭ.tString);
   оепел i: INTEGER;
   мювюкн
     дкъ i := 0 дн LENGTH(s) - 1 декюрэ
@@ -1520,52 +1520,52 @@
   йнмеж delfirstchar;
 
 опнжедспю Compile*(platform, stksize: INTEGER);
-  оепел full, path, name, ext, temp, path2: UTILS.tString;
+  оепел full, path, name, ext, temp, path2: ЛсРХКЭ.tString;
   мювюкн
     Platform := platform;
     main := кнфэ;
     еякх ReadModule(Std, "RTL", ЛйНМЯР.Ext) рнцдю
       Rtl(unit)
     хмюве
-      UTILS.ErrMsg(65);
-      UTILS.HALT(1)
+      ЛсРХКЭ.ErrMsg(65);
+      ЛсРХКЭ.HALT(1)
     йнмеж;
     main := хярхмю;
     еякх ~ReadModule(Path, Main, ExtMain) рнцдю
       path2 := Path;
-      UTILS.ParamStr(full, 0);
-      UTILS.Split(full, path, name, ext);
+      ЛсРХКЭ.ParamStr(full, 0);
+      ЛсРХКЭ.Split(full, path, name, ext);
       еякх path[0] # 0X рнцдю
         path[LENGTH(path) - 1] := 0X
       йнмеж;
       еякх Path[0] = ЛйНМЯР.Slash рнцдю
         delfirstchar(Path)
       йнмеж;
-      UTILS.concat(path, ЛйНМЯР.Slash, path);
-      UTILS.concat(path, Path, full);
+      ЛсРХКЭ.concat(path, ЛйНМЯР.Slash, path);
+      ЛсРХКЭ.concat(path, Path, full);
       Path := full;
       еякх (ЛйНМЯР.ня = "WIN") & (Path[0] = ЛйНМЯР.Slash) рнцдю
         delfirstchar(Path)
       йнмеж;
       еякх ~ReadModule(Path, Main, ExtMain) рнцдю
-        UTILS.ErrMsg(64);
-        UTILS.OutString(path2);
-        UTILS.OutString(Main);
-        UTILS.OutString(ExtMain);
-        UTILS.Ln;
-        UTILS.HALT(1)
+        ЛсРХКЭ.ErrMsg(64);
+        ЛсРХКЭ.OutString(path2);
+        ЛсРХКЭ.OutString(Main);
+        ЛсРХКЭ.OutString(ExtMain);
+        ЛсРХКЭ.Ln;
+        ЛсРХКЭ.HALT(1)
       йнмеж
     йнмеж;
     temp := Path;
-    UTILS.concat(temp, Main, temp);
+    ЛсРХКЭ.concat(temp, Main, temp);
     еякх platform IN {2, 3} рнцдю
-      UTILS.concat(temp, ".exe", temp)
+      ЛсРХКЭ.concat(temp, ".exe", temp)
     юеякх platform = 1 рнцдю
-      UTILS.concat(temp, ".dll", temp)
+      ЛсРХКЭ.concat(temp, ".dll", temp)
     юеякх platform = 4 рнцдю
-      UTILS.concat(temp, ".kex", temp)
+      ЛсРХКЭ.concat(temp, ".kex", temp)
     юеякх platform = 6 рнцдю
-      UTILS.concat(temp, ".obj", temp)
+      ЛсРХКЭ.concat(temp, ".obj", temp)
     йнмеж;
     еякх platform IN {1, 2, 3, 4} рнцдю
       stksize := stksize * 100000H
