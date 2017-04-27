@@ -167,7 +167,7 @@
       INC(di);
       Dest[di] := Source[si];
       INC(si)
-    UNTIL Dest[di] = 0X
+    онйюме Dest[di] = 0X
   йнмеж CopyStr;
 
 опнжедспю exch(оеп a, b: INTEGER);
@@ -206,7 +206,7 @@
           exch(NamePtr[L], NamePtr[R]);
           exch(Adr[L], Adr[R])
         йнмеж
-      UNTIL L >= R;
+      онйюме L >= R;
       еякх R > LB рнцдю
         exch(NamePtr[LB], NamePtr[R]);
         exch(Adr[LB], Adr[R]);
@@ -803,7 +803,7 @@
       cur.tcmd := 0;
       cur.clen := 0;
       cur := cur.Prev(ASMLINE)
-    UNTIL cur.tcmd = ICMP1;
+    онйюме cur.tcmd = ICMP1;
     cur.tcmd := 0;
     cur.clen := 0
     бепмсрэ c - 16

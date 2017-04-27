@@ -35,7 +35,6 @@
   lxEND = 10; lxIMPORT = 14; lxIN = 15; lxIS = 16;
   lxMOD = 17; lxMODULE = 18; lxOR = 21; lxPOINTER = 22;
   lxREPEAT = 25; lxRETURN = 26;
-  lxUNTIL = 31;
 
   lxPlus = 51; lxMinus = 52; lxMult = 53; lxSlash = 54; lxNot = 55; lxAnd = 56; lxComma = 57; lxSemi = 58;
   lxStick = 59; lxLRound = 60; lxLSquare = 61; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
@@ -247,7 +246,7 @@
         REPEAT
           f := DECL.GetField(T, name);
           T := T.Base
-        UNTIL (f # осярн) OR (T = осярн);
+        онйюме (f # осярн) OR (T = осярн);
         Assert(f # осярн, line, col, 99);
         еякх f.Unit # DECL.unit рнцдю
           Assert(f.Export, line, col, 99)
@@ -290,7 +289,7 @@
             йнмеж
           йнмеж;
           e.T := e.T.Base
-        UNTIL SCAN.tLex # lxComma;
+        онйюме SCAN.tLex # lxComma;
         Check(lxRSquare);
         e.vparam := кнфэ;
         guard := кнфэ;
@@ -346,7 +345,7 @@
       хмюве
         break := хярхмю
       йнмеж
-    UNTIL break;
+    онйюме break;
     LoadVar
   йнмеж Designator;
 
@@ -1256,7 +1255,7 @@
       pOpSeq;
       X86.jmp(X86.JMP, L);
       X86.Label(L3)
-    UNTIL SCAN.tLex # mConst.lxELSIF;
+    онйюме SCAN.tLex # mConst.lxELSIF;
     еякх ~wh & (SCAN.tLex = mConst.lxELSE) рнцдю
       Next;
       pOpSeq
@@ -1275,7 +1274,7 @@
     L := X86.NewLabel();
     X86.Label(L);
     pOpSeq;
-    Check(lxUNTIL);
+    Check(mConst.lxUNTIL);
     Next;
     Coord(line, col);
     Expr(e);

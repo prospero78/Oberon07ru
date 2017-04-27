@@ -161,11 +161,11 @@
       buf[i] := x MOD 10;
       x := x DIV 10;
       INC(i)
-    UNTIL x = 0;
+    онйюме x = 0;
     REPEAT
       DEC(i);
       CharC(CHR(buf[i] + ORD("0")))
-    UNTIL i = 0
+    онйюме i = 0
   йнмеж Int;
 
 опнжедспю Ln*;
@@ -235,7 +235,7 @@
     i := -1;
     REPEAT
       INC(i)
-    UNTIL (CAP(a[i]) # CAP(b[i])) OR (a[i] = 0X) OR (b[i] = 0X)
+    онйюме (CAP(a[i]) # CAP(b[i])) OR (a[i] = 0X) OR (b[i] = 0X)
     бепмсрэ a[i] = b[i]
   йнмеж streq;
 
@@ -362,7 +362,7 @@
       REPEAT
         sys.GET(str, c);
         INC(str)
-      UNTIL c = 0X;
+      онйюме c = 0X;
       Params[i, 1] := str - 1
     йнмеж;
     DEC(ParamCount)

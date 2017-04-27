@@ -33,7 +33,6 @@
   lxIN = 15; lxIS = 16;
   lxMOD = 17; lxOR = 21;
   lxREPEAT = 25;
-  lxUNTIL = 31;
 
   lxPlus = 51; lxMinus = 52; lxMult = 53; lxSlash = 54; lxNot = 55; lxAnd = 56; lxComma = 57; lxSemi = 58;
   lxStick = 59; lxLRound = 60; lxLSquare = 61; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
@@ -259,7 +258,7 @@
       |mConst.lxTHEN:    code := 98
       |lxRSquare: code := 109
       |mConst.lxDO:      code := 118
-      |lxUNTIL:   code := 119
+      |mConst.lxUNTIL:   code := 119
       |lxAssign:  code := 120
       |mConst.lxRETURN:  code := 124
       |lxColon:   code := 157
@@ -930,7 +929,7 @@
         »Õ¿◊≈
           break := »—“»Õ¿
          ŒÕ≈÷
-      UNTIL break
+      œŒ ¿Õ≈ break
      ŒÕ≈÷
    ŒÕ≈÷ ParamType;
 

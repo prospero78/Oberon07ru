@@ -111,7 +111,7 @@
             хмюве
             res := cur
             йнмеж
-        UNTIL res # осярн
+        онйюме res # осярн
         бепмсрэ res
     йнмеж AddNode;
 
