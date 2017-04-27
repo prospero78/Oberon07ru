@@ -903,7 +903,7 @@
       e.Value := 1.0D0;
       X86.PushConst(1);
       Next
-    |мКонст.lxFALSE:
+    |мКонст.ксЛОЖЬ:
       e.T := sttypes[TBOOLEAN];
       e.Value := 0.0D0;
       X86.PushConst(0);
@@ -1252,7 +1252,7 @@
       X86.jmp(X86.JMP, L);
       X86.Label(L3)
     ПОКАНЕ мСкан.tLex # мКонст.lxELSIF;
-    ЕСЛИ ~wh & (мСкан.tLex = мКонст.lxELSE) ТОГДА
+    ЕСЛИ ~wh & (мСкан.tLex = мКонст.ксИНАЧЕ) ТОГДА
       Next;
       pOpSeq
     КОНЕЦ;
@@ -1422,7 +1422,7 @@
       Next;
       Variant(int, Labels, EndCase)
     КОНЕЦ;
-    ЕСЛИ мСкан.tLex = мКонст.lxELSE ТОГДА
+    ЕСЛИ мСкан.tLex = мКонст.ксИНАЧЕ ТОГДА
       Next;
       pOpSeq
     ИНАЧЕ
@@ -1762,7 +1762,7 @@
     |мКонст.lxIF, мКонст.lxWHILE: IfWhileOper(мСкан.tLex = мКонст.lxWHILE)
     |мКонст.ксПОВТОР: RepeatOper
     |мКонст.lxFOR: ForOper
-    |мКонст.lxCASE: CaseOper
+    |мКонст.ксВЫБОР: CaseOper
     ИНАЧЕ
     КОНЕЦ
   КОНЕЦ Operator;

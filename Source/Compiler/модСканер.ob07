@@ -687,8 +687,8 @@
         _version := AddNode("version");
         AddNodeKey("MOD", lxMOD);
         
-        AddNodeKey("CASE", мКонст.lxCASE);
-        AddNodeKey("ВЫБОР", мКонст.lxCASE);
+        AddNodeKey("CASE", мКонст.ксВЫБОР);
+        AddNodeKey("ВЫБОР", мКонст.ксВЫБОР);
         
         AddNodeKey("IF", мКонст.lxIF);
         AddNodeKey("ЕСЛИ", мКонст.lxIF);
@@ -696,8 +696,8 @@
         AddNodeKey("TYPE", мКонст.ксТИПЫ);
         AddNodeKey("ТИПЫ", мКонст.ксТИПЫ);
         
-        AddNodeKey("BEGIN", мКонст.lxBEGIN);
-        AddNodeKey("НАЧАЛО", мКонст.lxBEGIN);
+        AddNodeKey("BEGIN", мКонст.ксНАЧАЛО);
+        AddNodeKey("НАЧАЛО", мКонст.ксНАЧАЛО);
         
         AddNodeKey("DIV", lxDIV);
         
@@ -711,8 +711,8 @@
         AddNodeKey("ПЕРЕМ", мКонст.ксПЕРЕМ);
         AddNodeKey("ПЕР", мКонст.ксПЕРЕМ);
         
-        AddNodeKey("ARRAY", мКонст.lxARRAY);
-        AddNodeKey("МАССИВ", мКонст.lxARRAY);
+        AddNodeKey("ARRAY", мКонст.ксМАССИВ);
+        AddNodeKey("МАССИВ", мКонст.ксМАССИВ);
         
         AddNodeKey("DO", мКонст.lxDO);
         AddNodeKey("ДЕЛАТЬ", мКонст.lxDO);
@@ -736,14 +736,14 @@
         AddNodeKey("IMPORT", мКонст.ксИМПОРТ);
         AddNodeKey("ИМПОРТ", мКонст.ксИМПОРТ);
         
-        AddNodeKey("CONST", мКонст.lxCONST);
-        AddNodeKey("КОНСТ", мКонст.lxCONST);
+        AddNodeKey("CONST", мКонст.ксКОНСТ);
+        AddNodeKey("КОНСТ", мКонст.ксКОНСТ);
         
         AddNodeKey("END", мКонст.lxEND);
         AddNodeKey("КОНЕЦ", мКонст.lxEND);
         
-        AddNodeKey("ELSE", мКонст.lxELSE);
-        AddNodeKey("ИНАЧЕ", мКонст.lxELSE);
+        AddNodeKey("ELSE", мКонст.ксИНАЧЕ);
+        AddNodeKey("ИНАЧЕ", мКонст.ксИНАЧЕ);
         
         AddNodeKey("ELSIF", мКонст.lxELSIF);
         AddNodeKey("АЕСЛИ", мКонст.lxELSIF);
@@ -770,8 +770,8 @@
         AddNodeKey("TRUE", мКонст.ксИСТИНА);
         AddNodeKey("ИСТИНА", мКонст.ксИСТИНА);
         
-        AddNodeKey("FALSE", мКонст.lxFALSE);
-        AddNodeKey("ЛОЖЬ", мКонст.lxFALSE);
+        AddNodeKey("FALSE", мКонст.ксЛОЖЬ);
+        AddNodeKey("ЛОЖЬ", мКонст.ксЛОЖЬ);
         
         AddNodeKey("FOR", мКонст.lxFOR);
         AddNodeKey("ДЛЯ", мКонст.lxFOR);

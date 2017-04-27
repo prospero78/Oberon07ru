@@ -849,7 +849,7 @@
 ПРОЦЕДУРА FormalType(ПЕР line, col: INTEGER): pTYPE;
   ПЕРЕМ TA: pTYPE;
   НАЧАЛО
-    ЕСЛИ мСкан.tLex = мКонст.lxARRAY ТОГДА
+    ЕСЛИ мСкан.tLex = мКонст.ксМАССИВ ТОГДА
       Next;
       Check(мКонст.lxOF);
       Next;
@@ -1019,7 +1019,7 @@
   ПЕРЕМ v: LONGREAL; T, nov: pTYPE; line, col, line2, col2: INTEGER; id_T: BOOLEAN;
   НАЧАЛО
     ВЫБОР мСкан.tLex ИЗ
-    |мКонст.lxARRAY, lxComma:
+    |мКонст.ксМАССИВ, lxComma:
       ЕСЛИ мСкан.tLex = lxComma ТОГДА
         Assert2(Comma, 39)
       КОНЕЦ;
@@ -1167,7 +1167,7 @@
     КОНЕЦ IdentDef;
 
   НАЧАЛО
-    ЕСЛИ мСкан.tLex = мКонст.lxCONST ТОГДА
+    ЕСЛИ мСкан.tLex = мКонст.ксКОНСТ ТОГДА
       Next;
       ПОКА мСкан.tLex = lxIDENT ДЕЛАТЬ
         IdentDef;
@@ -1252,7 +1252,7 @@
       DeclSeq;
       id.LocalSize := id.VarSize - id.ParamSize;
       X86.ProcBeg(id.Number, id.LocalSize, ЛОЖЬ);
-      ЕСЛИ мСкан.tLex = мКонст.lxBEGIN ТОГДА
+      ЕСЛИ мСкан.tLex = мКонст.ксНАЧАЛО ТОГДА
         Next;
         OpSeq
       КОНЕЦ;
@@ -1471,7 +1471,7 @@
       curBlock := idmod;
       DeclSeq;
       X86.ProcBeg(idmod.Number, 0, ИСТИНА);
-      ЕСЛИ мСкан.tLex = мКонст.lxBEGIN ТОГДА
+      ЕСЛИ мСкан.tLex = мКонст.ксНАЧАЛО ТОГДА
         Next;
         OpSeq
       КОНЕЦ;
