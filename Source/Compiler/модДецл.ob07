@@ -257,7 +257,7 @@
       |мКонст.ксТОГДА:    code := 98
       |lxRSquare: code := 109
       |мКонст.lxDO:      code := 118
-      |мКонст.lxUNTIL:   code := 119
+      |мКонст.ксПОКАНЕ:   code := 119
       |lxAssign:  code := 120
       |мКонст.ксВЕРНУТЬ:  code := 124
       |lxColon:   code := 157
@@ -870,9 +870,9 @@
     ЕСЛИ proc ТОГДА
       T := curBlock.T
     КОНЕЦ;
-    Assert2((мСкан.tLex = lxIDENT) ИЛИ (мСкан.tLex = мКонст.lxVAR), 84);
+    Assert2((мСкан.tLex = lxIDENT) ИЛИ (мСкан.tLex = мКонст.ксПЕРЕМ), 84);
     ByRef := ЛОЖЬ;
-    ЕСЛИ мСкан.tLex = мКонст.lxVAR ТОГДА
+    ЕСЛИ мСкан.tLex = мКонст.ксПЕРЕМ ТОГДА
       ByRef := ИСТИНА;
       Next;
       Check(lxIDENT)
@@ -919,7 +919,7 @@
 ПРОЦЕДУРА ParamType(T: pTYPE);
   ПЕРЕМ break: BOOLEAN;
   НАЧАЛО
-    ЕСЛИ (мСкан.tLex = lxIDENT) ИЛИ (мСкан.tLex = мКонст.lxVAR) ТОГДА
+    ЕСЛИ (мСкан.tLex = lxIDENT) ИЛИ (мСкан.tLex = мКонст.ксПЕРЕМ) ТОГДА
       break := ЛОЖЬ;
       ПОВТОРЯТЬ
         Section(T);
@@ -1078,7 +1078,7 @@
         X86.AddRec(0)
       КОНЕЦ;
       Next
-    |мКонст.lxPOINTER:
+    |мКонст.ксУКАЗАТЕЛЬ:
       Next;
       Check(мКонст.lxTO);
       Next;
@@ -1204,7 +1204,7 @@
     LinkPtr;
     unit.typedecl := ЛОЖЬ;
     unit.ExportType := ЛОЖЬ;
-    ЕСЛИ мСкан.tLex = мКонст.lxVAR ТОГДА
+    ЕСЛИ мСкан.tLex = мКонст.ксПЕРЕМ ТОГДА
       Next;
       ПОКА мСкан.tLex = lxIDENT ДЕЛАТЬ
         IdentDef;

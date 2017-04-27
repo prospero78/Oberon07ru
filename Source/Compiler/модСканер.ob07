@@ -15,7 +15,7 @@
 
     You should have received a copy of the GNU General Public License
     along with Compiler. If not, see <http://www.gnu.org/licenses/>.
-  *)
+*)
 
 МОДУЛЬ модСканер;
 
@@ -84,9 +84,9 @@
             res.Left := ПУСТО;
             res.Right := ПУСТО;
             ЕСЛИ Right ТОГДА
-            cur.Right := res
+               cur.Right := res
             ИНАЧЕ
-            cur.Left := res
+               cur.Left := res
             КОНЕЦ
             КОНЕЦ NewNode;
 
@@ -95,19 +95,19 @@
         cur := Nodes[ORD(Name[0])];
         ПОВТОРЯТЬ
             ЕСЛИ Name > cur.Name ТОГДА
-            ЕСЛИ cur.Right # ПУСТО ТОГДА
-        cur := cur.Right
-            ИНАЧЕ
-        NewNode(ИСТИНА)
-            КОНЕЦ
+               ЕСЛИ cur.Right # ПУСТО ТОГДА
+                  cur := cur.Right
+               ИНАЧЕ
+                  NewNode(ИСТИНА)
+               КОНЕЦ
             АЕСЛИ Name < cur.Name ТОГДА
-            ЕСЛИ cur.Left # ПУСТО ТОГДА
-        cur := cur.Left
+               ЕСЛИ cur.Left # ПУСТО ТОГДА
+                  cur := cur.Left
+               ИНАЧЕ
+                  NewNode(ЛОЖЬ)
+               КОНЕЦ
             ИНАЧЕ
-        NewNode(ЛОЖЬ)
-            КОНЕЦ
-            ИНАЧЕ
-            res := cur
+               res := cur
             КОНЕЦ
         ПОКАНЕ res # ПУСТО
         ВЕРНУТЬ res
@@ -703,13 +703,13 @@
         
         AddNodeKey("IN", lxIN);
         
-        AddNodeKey("NIL", мКонст.lxNIL);
-        AddNodeKey("ПУСТО", мКонст.lxNIL);
+        AddNodeKey("NIL", мКонст.ксПУСТО);
+        AddNodeKey("ПУСТО", мКонст.ксПУСТО);
 
         
-        AddNodeKey("VAR", мКонст.lxVAR);
-        AddNodeKey("ПЕРЕМ", мКонст.lxVAR);
-        AddNodeKey("ПЕР", мКонст.lxVAR);
+        AddNodeKey("VAR", мКонст.ксПЕРЕМ);
+        AddNodeKey("ПЕРЕМ", мКонст.ксПЕРЕМ);
+        AddNodeKey("ПЕР", мКонст.ксПЕРЕМ);
         
         AddNodeKey("ARRAY", мКонст.lxARRAY);
         AddNodeKey("МАССИВ", мКонст.lxARRAY);
@@ -748,8 +748,8 @@
         AddNodeKey("ELSIF", мКонст.lxELSIF);
         AddNodeKey("АЕСЛИ", мКонст.lxELSIF);
         
-        AddNodeKey("POINTER", мКонст.lxPOINTER);
-        AddNodeKey("УКАЗАТЕЛЬ", мКонст.lxPOINTER);
+        AddNodeKey("POINTER", мКонст.ксУКАЗАТЕЛЬ);
+        AddNodeKey("УКАЗАТЕЛЬ", мКонст.ксУКАЗАТЕЛЬ);
         
         AddNodeKey("TO", мКонст.lxTO);
         AddNodeKey("НА", мКонст.lxTO);
@@ -767,8 +767,8 @@
         AddNodeKey("OR", мКонст.lxOR);
         AddNodeKey("ИЛИ", мКонст.lxOR);
         
-        AddNodeKey("TRUE", мКонст.lxTRUE);
-        AddNodeKey("ИСТИНА", мКонст.lxTRUE);
+        AddNodeKey("TRUE", мКонст.ксИСТИНА);
+        AddNodeKey("ИСТИНА", мКонст.ксИСТИНА);
         
         AddNodeKey("FALSE", мКонст.lxFALSE);
         AddNodeKey("ЛОЖЬ", мКонст.lxFALSE);
@@ -776,8 +776,8 @@
         AddNodeKey("FOR", мКонст.lxFOR);
         AddNodeKey("ДЛЯ", мКонст.lxFOR);
         
-        AddNodeKey("UNTIL", мКонст.lxUNTIL);
-        AddNodeKey("ПОКАНЕ", мКонст.lxUNTIL);
+        AddNodeKey("UNTIL", мКонст.ксПОКАНЕ);
+        AddNodeKey("ПОКАНЕ", мКонст.ксПОКАНЕ);
         
         AddNodeKey("REPEAT", мКонст.ксПОВТОР);
         AddNodeKey("ПОВТОРЯТЬ", мКонст.ксПОВТОР);

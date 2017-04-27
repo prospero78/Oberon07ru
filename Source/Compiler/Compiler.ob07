@@ -893,12 +893,12 @@
       АЕСЛИ e.eType IN {eSTPROC, eSYSPROC} ТОГДА
         StFunc(e, e.id.StProc)
       КОНЕЦ
-    |мКонст.lxNIL:
+    |мКонст.ксПУСТО:
       e.T := sttypes[TNIL];
       e.Value := 0.0D0;
       X86.PushConst(0);
       Next
-    |мКонст.lxTRUE:
+    |мКонст.ксИСТИНА:
       e.T := sttypes[TBOOLEAN];
       e.Value := 1.0D0;
       X86.PushConst(1);
@@ -1270,7 +1270,7 @@
     L := X86.NewLabel();
     X86.Label(L);
     pOpSeq;
-    Check(мКонст.lxUNTIL);
+    Check(мКонст.ксПОКАНЕ);
     Next;
     Coord(line, col);
     Expr(e);
