@@ -10,7 +10,7 @@
 
  (* למה׃עטכü *)
    ־ׁ* = API.OS;
-   Slash* = API.Slash;
+   סכ‎ר* = API.Slash;
    Ext* = ".ob07";
    MAX_PATH* = 1024;
    MAX_PARAM* = 1024;

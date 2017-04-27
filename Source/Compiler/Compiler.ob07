@@ -27,8 +27,6 @@
 
  ќЌ—“
 
-  Slash = м онст.Slash;
-
   lxEOF = 0; lxINT = -1; lxREAL = -2; lxSTRING = -3; lxIDENT = -4; lxHEX = -5; lxCHX = -6; lxLONGREAL = -7;
   lxBY = 3; lxDIV = 6;
   lxIN = 15; lxIS = 16;
@@ -1900,7 +1898,7 @@
       stksize := getver()
      ќЌ≈÷;
     м”тиль.concat(SelfPath, "Lib", SelfPath);
-    м”тиль.concat(SelfPath, м онст.Slash, SelfPath);
+    м”тиль.concat(SelfPath, м онст.слэш, SelfPath);
     ≈—Ћ» platform = 5 “ќ√ƒј
       м”тиль.concat(SelfPath, "Linux32", SelfPath)
     ј≈—Ћ» platform IN {4, 6} “ќ√ƒј
@@ -1908,7 +1906,7 @@
     ј≈—Ћ» platform IN {1, 2, 3} “ќ√ƒј
       м”тиль.concat(SelfPath, "Windows32", SelfPath)
      ќЌ≈÷;
-    м”тиль.concat(SelfPath, м онст.Slash, SelfPath);
+    м”тиль.concat(SelfPath, м онст.слэш, SelfPath);
     X86.Init(DECL.MemErr, platform);
     X86.Prolog(temp);
     DECL.Program(SelfPath, Path, Name, Ext, platform IN {1, 2, 3}, OpSeq, Expr, AssComp, sttypes);

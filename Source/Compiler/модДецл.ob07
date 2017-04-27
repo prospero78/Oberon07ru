@@ -1538,13 +1538,13 @@
       ЕСЛИ path[0] # 0X ТОГДА
         path[LENGTH(path) - 1] := 0X
       КОНЕЦ;
-      ЕСЛИ Path[0] = мКонст.Slash ТОГДА
+      ЕСЛИ Path[0] = мКонст.слэш ТОГДА
         delfirstchar(Path)
       КОНЕЦ;
-      мУтиль.concat(path, мКонст.Slash, path);
+      мУтиль.concat(path, мКонст.слэш, path);
       мУтиль.concat(path, Path, full);
       Path := full;
-      ЕСЛИ (мКонст.ОС = "WIN") & (Path[0] = мКонст.Slash) ТОГДА
+      ЕСЛИ (мКонст.ОС = "WIN") & (Path[0] = мКонст.слэш) ТОГДА
         delfirstchar(Path)
       КОНЕЦ;
       ЕСЛИ ~ReadModule(Path, Main, ExtMain) ТОГДА
