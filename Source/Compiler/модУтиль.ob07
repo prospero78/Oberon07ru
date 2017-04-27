@@ -19,7 +19,7 @@
 
 лндскэ ЛНДсРХКЭ;
 
-хлонпр sys := SYSTEM,
+хлонпр mSys := SYSTEM,
     API,
     mConst := ЛНДйНМЯРЮМРШ;
 
@@ -54,15 +54,15 @@
   оепел
     h, l: SET;
   мювюкн
-    sys.GET(sys.ADR(x_), l);
-    sys.GET(sys.ADR(x_) + 4, h);
+    mSys.GET(mSys.ADR(x_), l);
+    mSys.GET(mSys.ADR(x_) + 4, h);
     бепмсрэ (h * {20..30} = {20..30}) & (h * {0..19} = {}) & (l * {0..31} = {})
   йнмеж IsInf;
 
 опнжедспю GetChar(adr_: INTEGER): CHAR;
   оепел res: CHAR;
   мювюкн
-    sys.GET(adr_, res)
+    mSys.GET(adr_, res)
     бепмсрэ res
   йнмеж GetChar;
 
@@ -128,14 +128,14 @@
 опнжедспю Read*(F, Buffer, Count: INTEGER): INTEGER;
   оепел res: INTEGER;
   мювюкн
-    API.ReadFile(F, Buffer, Count, sys.ADR(res), 0)
+    API.ReadFile(F, Buffer, Count, mSys.ADR(res), 0)
     бепмсрэ res
   йнмеж Read;
 
 опнжедспю Write*(F, Buffer, Count: INTEGER): INTEGER;
   оепел res: INTEGER;
   мювюкн
-    API.WriteFile(F, Buffer, Count, sys.ADR(res), 0)
+    API.WriteFile(F, Buffer, Count, mSys.ADR(res), 0)
     бепмсрэ res
   йнмеж Write;
 
@@ -147,9 +147,9 @@
   оепел res: INTEGER;
   мювюкн
     еякх win хкх lnx рнцдю
-      res := Write(hConsoleOutput, sys.ADR(x), 1)
+      res := Write(hConsoleOutput, mSys.ADR(x), 1)
     юеякх kos рнцдю
-      API.DebugMsg(sys.ADR(x), 0)
+      API.DebugMsg(mSys.ADR(x), 0)
     йнмеж
   йнмеж CharC;
 
@@ -179,9 +179,9 @@
     s: tString; n: INTEGER;
   мювюкн
     еякх win хкх lnx рнцдю
-      n := Write(hConsoleOutput, sys.ADR(str), LENGTH(str))
+      n := Write(hConsoleOutput, mSys.ADR(str), LENGTH(str))
     юеякх kos рнцдю
-      API.DebugMsg(sys.ADR(str), 0)
+      API.DebugMsg(mSys.ADR(str), 0)
     йнмеж
   йнмеж OutString;
 
@@ -347,20 +347,20 @@
   йнмеж Split;
 
 опнжедспю PChar*(s: люяяхб хг CHAR): INTEGER;
-    бепмсрэ sys.ADR(s)
+    бепмсрэ mSys.ADR(s)
   йнмеж PChar;
 
 опнжедспю LinuxParam;
   оепел p, i, str: INTEGER; c: CHAR;
   мювюкн
     p := API.GetCommandLine();
-    sys.GET(p, ParamCount);
-    sys.GET(p + 4, p);
+    mSys.GET(p, ParamCount);
+    mSys.GET(p + 4, p);
     дкъ i := 0 дн ParamCount - 1 декюрэ
-      sys.GET(p + i * 4, str);
+      mSys.GET(p + i * 4, str);
       Params[i, 0] := str;
       онбрнпърэ
-        sys.GET(str, c);
+        mSys.GET(str, c);
         INC(str)
       онйюме c = 0X;
       Params[i, 1] := str - 1
@@ -402,7 +402,7 @@
   оепел res: INTEGER; memerr: BOOLEAN;
   мювюкн
     еякх win рнцдю
-      res := API.CreateFile(sys.ADR(FName), 0C0000000H, 0, 0, 2, 80H, 0);
+      res := API.CreateFile(mSys.ADR(FName), 0C0000000H, 0, 0, 2, 80H, 0);
       еякх res = -1 рнцдю
         res := 0
       йнмеж
@@ -419,7 +419,7 @@
   оепел ofstr: API.OFSTRUCT; res: INTEGER; memerr: BOOLEAN;
   мювюкн
     еякх win рнцдю
-      res := API.OpenFile(sys.ADR(FName), ofstr, Mode);
+      res := API.OpenFile(mSys.ADR(FName), ofstr, Mode);
       еякх res = -1 рнцдю
         res := 0
       йнмеж

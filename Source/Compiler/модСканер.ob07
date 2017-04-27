@@ -20,7 +20,7 @@
 лндскэ ЛНДяЙЮМЕП;
 
 хлонпр ЛсРХКЭ := ЛНДсРХКЭ,
-    sys := SYSTEM,
+    mSys := SYSTEM,
     ЛйНМЯР := ЛНДйНМЯРЮМРШ;
 
 йнмяр
@@ -162,7 +162,7 @@
     оепел cr: BOOLEAN;
     мювюкн
         cr := кнфэ;
-        sys.GET(bufpos, ch);
+        mSys.GET(bufpos, ch);
         INC(ccol);
         бшанп ch хг
         |0AX: еякх ~CR рнцдю INC(cline) йнмеж; ccol := 0
@@ -188,16 +188,16 @@
             ch := 0X;
             size := ЛсРХКЭ.FileSize(File);
             buf := ЛсРХКЭ.GetMem(size + 1024);
-            sys.PUT(buf + size, 0X);
+            mSys.PUT(buf + size, 0X);
             ЛсРХКЭ.MemErr(buf = 0);
             n := ЛсРХКЭ.Read(File, buf, size);
             ЛсРХКЭ.CloseF(File);
             bufpos := buf;
-            sys.GET(buf, c);
+            mSys.GET(buf, c);
             еякх c = 0EFX рнцдю
-            sys.GET(buf + 1, c);
+            mSys.GET(buf + 1, c);
             еякх c = 0BBX рнцдю
-        sys.GET(buf + 2, c);
+        mSys.GET(buf + 2, c);
         еякх c = 0BFX рнцдю
             INC(bufpos, 3);
             UTF8 := хярхмю
@@ -484,7 +484,7 @@
         tLex := lxERR1
             йнмеж
             юеякх ch = "." рнцдю
-            sys.GET(bufpos, nextchr);
+            mSys.GET(bufpos, nextchr);
             еякх nextchr # "." рнцдю
         tLex := lxREAL;
         PutNext(ch);
@@ -667,7 +667,7 @@
         дкъ i := 0 дн LEN(Nodes) - 1 декюрэ
             NEW(node);
             ЛсРХКЭ.MemErr(node = осярн);
-            sys.PUT(sys.ADR(node.Name), i);
+            mSys.PUT(mSys.ADR(node.Name), i);
             node.Left := осярн;
             node.Right := осярн;
             node.tLex := lxIDENT;

@@ -20,7 +20,7 @@
 лндскэ ЛНДюЯЛ86_32;
 
 хлонпр UTILS := ЛНДсРХКЭ,
-    sys := SYSTEM,
+    mSys := SYSTEM,
     SCAN := ЛНДяЙЮМЕП,
     mConst := ЛНДйНМЯРЮМРШ;
 
@@ -81,27 +81,27 @@
 
   HEADER = гюохяэ
       msdos: люяяхб 180 хг CHAR;
-      typecomp, seccount: sys.CARD16;
+      typecomp, seccount: mSys.CARD16;
       time, reserved1, reserved2: INTEGER;
-      PEoptsize, infflags, PEfile, compver: sys.CARD16;
+      PEoptsize, infflags, PEfile, compver: mSys.CARD16;
       codesize, datasize, initdatasize, startadr,
       codeadr, rdataadr, loadadr, secalign, filealign,
       oldestver, version, oldestverNT, reserved3,
       filesize, headersize, dllcrc: INTEGER;
-      UI, reserved4: sys.CARD16;
+      UI, reserved4: mSys.CARD16;
       stksize, stkalloc, heapsize, heapalloc, reserved5, structcount: INTEGER;
       structs: люяяхб 16 хг гюохяэ adr, size: INTEGER йнмеж;
       sections: люяяхб 3 хг SECTION
     йнмеж;
 
   COFFHEADER = гюохяэ
-      Machine: sys.CARD16;
-      NumberOfSections: sys.CARD16;
+      Machine: mSys.CARD16;
+      NumberOfSections: mSys.CARD16;
       TimeDateStamp,
       PointerToSymbolTable,
       NumberOfSymbols: INTEGER;
       SizeOfOptionalHeader,
-      Characteristics: sys.CARD16;
+      Characteristics: mSys.CARD16;
       text, data, bss: SECTION
     йнмеж;
 
@@ -114,14 +114,14 @@
       reserved1, time, reserved2, dllnameoffset, firstnum, adrcount,
       namecount, arradroffset, arrnameptroffset, arrnumoffset: INTEGER;
       arradr, arrnameptr: люяяхб 10000H хг INTEGER;
-      arrnum: люяяхб 10000H хг sys.CARD16;
+      arrnum: люяяхб 10000H хг mSys.CARD16;
       text: люяяхб 1000000 хг CHAR;
       textlen, size: INTEGER
     йнмеж;
 
   RELOC = гюохяэ
       Page, Size: INTEGER;
-      reloc: люяяхб 1024 хг sys.CARD16
+      reloc: люяяхб 1024 хг mSys.CARD16
     йнмеж;
 
 оепел
@@ -153,10 +153,10 @@
     RtlProc[idx] := proc
   йнмеж AddRtlProc;
 
-опнжедспю IntToCard16(i: INTEGER): sys.CARD16;
-  оепел w: sys.CARD16;
+опнжедспю IntToCard16(i: INTEGER): mSys.CARD16;
+  оепел w: mSys.CARD16;
   мювюкн
-    sys.GET(sys.ADR(i), w)
+    mSys.GET(mSys.ADR(i), w)
     бепмсрэ w
   йнмеж IntToCard16;
 
@@ -273,12 +273,12 @@
 опнжедспю PutReloc(R: RELOC);
   оепел i: INTEGER;
   мювюкн
-    sys.PUT(sys.ADR(Reloc[rcount]), R.Page);
+    mSys.PUT(mSys.ADR(Reloc[rcount]), R.Page);
     INC(rcount, 4);
-    sys.PUT(sys.ADR(Reloc[rcount]), R.Size);
+    mSys.PUT(mSys.ADR(Reloc[rcount]), R.Size);
     INC(rcount, 4);
     дкъ i := 0 дн ASR(R.Size - 8, 1) - 1 декюрэ
-      sys.PUT(sys.ADR(Reloc[rcount]), R.reloc[i]);
+      mSys.PUT(mSys.ADR(Reloc[rcount]), R.reloc[i]);
       INC(rcount, 2)
     йнмеж
   йнмеж PutReloc;
@@ -290,7 +290,7 @@
     i := 0;
     онйю (i < n) & (chars[i] # 0X) декюрэ
       x := SCAN.hex(chars[i]) * 16 + SCAN.hex(chars[i + 1]);
-      sys.PUT(adr, CHR(x));
+      mSys.PUT(adr, CHR(x));
       INC(adr);
       INC(i, 2)
     йнмеж
@@ -305,7 +305,7 @@
 
 опнжедспю Write(A, N: INTEGER);
   мювюкн
-    sys.MOVE(A, OutFilePos, N);
+    mSys.MOVE(A, OutFilePos, N);
     OutFilePos := OutFilePos + N
   йнмеж Write;
 
@@ -313,7 +313,7 @@
   оепел i: INTEGER;
   мювюкн
     дкъ i := 1 дн n декюрэ
-      Write(sys.ADR(c), 1)
+      Write(mSys.ADR(c), 1)
     йнмеж
   йнмеж Fill;
 
@@ -339,7 +339,7 @@
     heapsize := 100000H;
     heapalloc := 100000H;
     acodesize := Align(codesize, 1000H) + 1000H;
-    adr := sys.ADR(rdata);
+    adr := mSys.ADR(rdata);
     filesize := acodesize + Align(rdatasize, 1000H) + Align(datasize, 1000H) + Align(rcount, 1000H);
 
     InitArray(adr, "5000000040000000000000003400000000000000000000006200000000000000");
@@ -355,7 +355,7 @@
     rdata[13] := acodesize + 50H;
     rdata[14] := acodesize + 40H;
 
-    adr := sys.ADR(Header.msdos);
+    adr := mSys.ADR(Header.msdos);
     InitArray(adr, "4D5A90000300000004000000FFFF0000B8000000000000004000000000000000");
     InitArray(adr, "00000000000000000000000000000000000000000000000000000000B0000000");
     InitArray(adr, "0E1FBA0E00B409CD21B8014CCD21546869732070726F6772616D2063616E6E6F");
@@ -424,34 +424,34 @@
     filebuf := OutFilePos;
     UTILS.MemErr(OutFilePos = 0);
 
-    Write(sys.ADR(Header), sys.SIZE(HEADER));
+    Write(mSys.ADR(Header), mSys.SIZE(HEADER));
     еякх dll рнцдю
-      Write(sys.ADR(RelocSection), sys.SIZE(SECTION));
-      Fill(Align(sys.SIZE(HEADER) + sys.SIZE(SECTION), 200H) - (sys.SIZE(HEADER) + sys.SIZE(SECTION)), 0X)
+      Write(mSys.ADR(RelocSection), mSys.SIZE(SECTION));
+      Fill(Align(mSys.SIZE(HEADER) + mSys.SIZE(SECTION), 200H) - (mSys.SIZE(HEADER) + mSys.SIZE(SECTION)), 0X)
     хмюве
-      Fill(Align(sys.SIZE(HEADER), 200H) - sys.SIZE(HEADER), 0X)
+      Fill(Align(mSys.SIZE(HEADER), 200H) - mSys.SIZE(HEADER), 0X)
     йнмеж;
 
     cur := asmlist.First(ASMLINE);
     онйю cur # осярн декюрэ
-      Write(sys.ADR(Code[cur.cmd]), cur.clen);
+      Write(mSys.ADR(Code[cur.cmd]), cur.clen);
       cur := cur.Next(ASMLINE)
     йнмеж;
     Fill(Align(codesize, 200H) - codesize, 0X);
-    Write(sys.ADR(rdata), 0DAH);
+    Write(mSys.ADR(rdata), 0DAH);
     еякх dll рнцдю
       etable.time := Header.time;
-      Write(sys.ADR(etable), 40);
-      Write(sys.ADR(etable.arradr), etable.adrcount * 4);
-      Write(sys.ADR(etable.arrnameptr), etable.namecount * 4);
-      Write(sys.ADR(etable.arrnum), etable.namecount * 2);
-      Write(sys.ADR(etable.text), etable.textlen)
+      Write(mSys.ADR(etable), 40);
+      Write(mSys.ADR(etable.arradr), etable.adrcount * 4);
+      Write(mSys.ADR(etable.arrnameptr), etable.namecount * 4);
+      Write(mSys.ADR(etable.arrnum), etable.namecount * 2);
+      Write(mSys.ADR(etable.text), etable.textlen)
     йнмеж;
     Fill(Align(rdatasize, 200H) - rdatasize, 0X);
-    Write(sys.ADR(Data), datasize);
+    Write(mSys.ADR(Data), datasize);
     Fill(Align(datasize, 200H) - datasize, 0X);
     еякх dll рнцдю
-      Write(sys.ADR(Reloc), rcount);
+      Write(mSys.ADR(Reloc), rcount);
       Fill(Align(rcount, 200H) - rcount, 0X)
     йнмеж;
     WriteF(F, filebuf, OutFilePos - filebuf);
@@ -488,7 +488,7 @@
   мювюкн
     New;
     current.clen := 4;
-    sys.PUT(sys.ADR(Code[ccount]), int);
+    mSys.PUT(mSys.ADR(Code[ccount]), int);
     INC(ccount, 4)
   йнмеж OutInt;
 
@@ -532,7 +532,7 @@
   оепел a, b: INTEGER;
   мювюкн
     New;
-    a := sys.ADR(Code[ccount]);
+    a := mSys.ADR(Code[ccount]);
     b := a;
     InitArray(a, cmd);
     ccount := a - b + ccount;
@@ -609,7 +609,7 @@
 
 опнжедспю dataint(n: INTEGER);
   мювюкн
-    sys.PUT(sys.ADR(Data[dcount]), n);
+    mSys.PUT(mSys.ADR(Data[dcount]), n);
     INC(dcount, 4)
   йнмеж dataint;
 
@@ -629,8 +629,8 @@
     current.clen := n;
     Code[ccount] := jamp;
     INC(ccount);
-    current.codeadr := sys.ADR(Code[ccount]);
-    current.varadr := sys.ADR(Labels[label]);
+    current.codeadr := mSys.ADR(Code[ccount]);
+    current.varadr := mSys.ADR(Labels[label]);
     current.tcmd := JCMD;
     current.short := хярхмю;
     INC(ccount, 4)
@@ -645,7 +645,7 @@
 опнжедспю Label*(label: INTEGER);
   мювюкн
     New;
-    current.varadr := sys.ADR(Labels[label]);
+    current.varadr := mSys.ADR(Labels[label]);
     current.tcmd := LCMD
   йнмеж Label;
 
@@ -653,8 +653,8 @@
   мювюкн
     New;
     current.clen := 4;
-    current.codeadr := sys.ADR(Code[ccount]);
-    current.varadr := sys.ADR(Labels[Number]);
+    current.codeadr := mSys.ADR(Code[ccount]);
+    current.varadr := mSys.ADR(Labels[Number]);
     current.tcmd := OCMD;
     INC(ccount, 4)
   йнмеж CmdN;
@@ -751,8 +751,8 @@
     current.clen := 5;
     Code[ccount] := CALL;
     INC(ccount);
-    current.codeadr := sys.ADR(Code[ccount]);
-    current.varadr := sys.ADR(RtlProc[Proc]);
+    current.codeadr := mSys.ADR(Code[ccount]);
+    current.varadr := mSys.ADR(RtlProc[Proc]);
     current.tcmd := JCMD;
     INC(ccount, 4)
   йнмеж CallRTL;
@@ -955,7 +955,7 @@
   мювюкн
     OutByte(0BAH);
     OutInt(offset);
-    current.codeadr := sys.ADR(Code[ccount - 4]);
+    current.codeadr := mSys.ADR(Code[ccount - 4]);
     current.tcmd := GCMD;
     PushEDX
   йнмеж GlobalAdr;
@@ -1019,7 +1019,7 @@
 опнжедспю PushFlt*(x: LONGREAL);
   оепел f: TFLT; L: INTEGER;
   мювюкн
-    sys.PUT(sys.ADR(f), x);
+    mSys.PUT(mSys.ADR(f), x);
     Incfpu;
     еякх x = 0.0D0 рнцдю
       OutCode("D9EE")
@@ -1584,28 +1584,28 @@
     еякх ~obj рнцдю
       Header.menuet01 := "MENUET01";
       Header.ver := 1;
-      Header.start := sys.SIZE(KOSHEADER);
+      Header.start := mSys.SIZE(KOSHEADER);
       Header.size := Align(size, 4) + datasize;
       Header.mem := Header.size + stk + gsize + strsize * 2 + 1000H;
       Header.sp := Header.size + gsize + stk;
       Header.param := Header.sp;
       Header.path := Header.param + strsize;
 
-      Write(sys.ADR(Header), sys.SIZE(KOSHEADER));
+      Write(mSys.ADR(Header), mSys.SIZE(KOSHEADER));
 
       cur := asmlist.First(ASMLINE);
       онйю cur # осярн декюрэ
-        Write(sys.ADR(Code[cur.cmd]), cur.clen);
+        Write(mSys.ADR(Code[cur.cmd]), cur.clen);
         cur := cur.Next(ASMLINE)
       йнмеж;
       Fill(Align(size, 4) - size, 0X);
-      Write(sys.ADR(Data), datasize);
+      Write(mSys.ADR(Data), datasize);
       WriteF(F, filebuf, OutFilePos - filebuf)
 
     хмюве
 
       size2 := size;
-      size := Align(size, 4) - sys.SIZE(KOSHEADER);
+      size := Align(size, 4) - mSys.SIZE(KOSHEADER);
       Coff.Machine := IntToCard16(014CH);
       Coff.NumberOfSections := IntToCard16(3);
       Coff.TimeDateStamp := mConst.Date;
@@ -1646,9 +1646,9 @@
       cur := asmlist.First(ASMLINE);
       онйю cur # осярн декюрэ
         еякх cur.tcmd IN {OCMD, GCMD} рнцдю
-          sys.GET(sys.ADR(Code[cur.cmd]), a);
+          mSys.GET(mSys.ADR(Code[cur.cmd]), a);
           еякх a < size рнцдю
-            a := a - sys.SIZE(KOSHEADER);
+            a := a - mSys.SIZE(KOSHEADER);
             sec := 1
           юеякх a < size + datasize рнцдю
             a := a - size;
@@ -1657,36 +1657,36 @@
             a := a - size - datasize;
             sec := 3
           йнмеж;
-          sys.PUT(sys.ADR(Code[cur.cmd]), a);
-          sys.PUT(sys.ADR(Reloc[rcount]), cur.adr - sys.SIZE(KOSHEADER));
+          mSys.PUT(mSys.ADR(Code[cur.cmd]), a);
+          mSys.PUT(mSys.ADR(Reloc[rcount]), cur.adr - mSys.SIZE(KOSHEADER));
           INC(rcount, 4);
-          sys.PUT(sys.ADR(Reloc[rcount]), sec);
+          mSys.PUT(mSys.ADR(Reloc[rcount]), sec);
           INC(rcount, 4);
-          sys.PUT(sys.ADR(Reloc[rcount]), 06X); INC(rcount);
-          sys.PUT(sys.ADR(Reloc[rcount]), 00X); INC(rcount);
+          mSys.PUT(mSys.ADR(Reloc[rcount]), 06X); INC(rcount);
+          mSys.PUT(mSys.ADR(Reloc[rcount]), 00X); INC(rcount);
         йнмеж;
-        Write(sys.ADR(Code[cur.cmd]), cur.clen);
+        Write(mSys.ADR(Code[cur.cmd]), cur.clen);
         cur := cur.Next(ASMLINE)
       йнмеж;
       size := size2;
       Fill(Align(size, 4) - size2, 0X);
-      Write(sys.ADR(Data), datasize);
+      Write(mSys.ADR(Data), datasize);
       Coff.text.reserved8 := rcount DIV 10;
       Coff.PointerToSymbolTable := Coff.text.reserved6 + rcount;
       Coff.NumberOfSymbols := 4;
 
-      WriteF(F, sys.ADR(Coff), sys.SIZE(COFFHEADER));
+      WriteF(F, mSys.ADR(Coff), mSys.SIZE(COFFHEADER));
       WriteF(F, filebuf, OutFilePos - filebuf);
-      WriteF(F, sys.ADR(Reloc), rcount);
+      WriteF(F, mSys.ADR(Reloc), rcount);
 
-      adr := sys.ADR(sym);
+      adr := mSys.ADR(sym);
       InitArray(adr, "4558504F52545300000000000100000002002E666C617400000000000000010000000300");
       InitArray(adr, "2E64617461000000000000000200000003002E6273730000000000000000030000000300");
-      sys.PUT(sys.ADR(sym) + 8, Labels[Exports] - sys.SIZE(KOSHEADER));
+      mSys.PUT(mSys.ADR(sym) + 8, Labels[Exports] - mSys.SIZE(KOSHEADER));
 
-      WriteF(F, sys.ADR(sym), LEN(sym));
+      WriteF(F, mSys.ADR(sym), LEN(sym));
       i := 4;
-      WriteF(F, sys.ADR(i), 4)
+      WriteF(F, mSys.ADR(i), 4)
     йнмеж;
     UTILS.CloseF(F)
   йнмеж WriteKOS;
@@ -1697,15 +1697,15 @@
     опнжедспю Add(offset: INTEGER);
     оепел m: INTEGER;
     мювюкн
-      sys.GET(sys.ADR(bytes[offset]), m);
-      sys.PUT(sys.ADR(bytes[offset]), m + delta)
+      mSys.GET(mSys.ADR(bytes[offset]), m);
+      mSys.PUT(mSys.ADR(bytes[offset]), m + delta)
     йнмеж Add;
 
     опнжедспю Sub(offset: INTEGER);
     оепел m: INTEGER;
     мювюкн
-      sys.GET(sys.ADR(bytes[offset]), m);
-      sys.PUT(sys.ADR(bytes[offset]), m - delta)
+      mSys.GET(mSys.ADR(bytes[offset]), m);
+      mSys.PUT(mSys.ADR(bytes[offset]), m - delta)
     йнмеж Sub;
 
   мювюкн
@@ -1713,7 +1713,7 @@
     еякх F = 0 рнцдю
       Err(3)
     йнмеж;
-    еякх UTILS.Read(F, sys.ADR(bytes), 817H + 55FH + 4900) # 817H + 55FH + 4900 рнцдю
+    еякх UTILS.Read(F, mSys.ADR(bytes), 817H + 55FH + 4900) # 817H + 55FH + 4900 рнцдю
       Err(4)
     йнмеж;
     UTILS.CloseF(F);
@@ -1756,18 +1756,18 @@
     filebuf := OutFilePos;
     UTILS.MemErr(OutFilePos = 0);
 
-    Write(sys.ADR(bytes), 817H);
+    Write(mSys.ADR(bytes), 817H);
     Fill(2DDH, 90X);
     cur := asmlist.First(ASMLINE);
     онйю cur # осярн декюрэ
-      Write(sys.ADR(Code[cur.cmd]), cur.clen);
+      Write(mSys.ADR(Code[cur.cmd]), cur.clen);
       cur := cur.Next(ASMLINE)
     йнмеж;
     Fill(Align(code, 1000H) - code, 90X);
-    Write(sys.ADR(bytes[817H]), 55FH);
-    Write(sys.ADR(Data), data);
+    Write(mSys.ADR(bytes[817H]), 55FH);
+    Write(mSys.ADR(Data), data);
     Fill(Align(data, 1000H) - data, 0X);
-    Write(sys.ADR(bytes[817H + 55FH + 55FH]), 0DC5H);
+    Write(mSys.ADR(bytes[817H + 55FH + 55FH]), 0DC5H);
 
     F := UTILS.CreateF(FName);
     еякх F <= 0 рнцдю
@@ -1787,7 +1787,7 @@
     юеякх con хкх gui рнцдю
       LoadAdr := 400000H
     юеякх kos хкх obj рнцдю
-      LoadAdr := sys.SIZE(KOSHEADER)
+      LoadAdr := mSys.SIZE(KOSHEADER)
     юеякх elf рнцдю
       LoadAdr := 134514420 + 1024;
       INC(gsize, 1024)
@@ -1807,7 +1807,7 @@
     онйю cur # осярн декюрэ
       cur.adr := size;
       еякх cur.tcmd = LCMD рнцдю
-        sys.PUT(cur.varadr, size)
+        mSys.PUT(cur.varadr, size)
       йнмеж;
       size := size + cur.clen;
       cur := cur.Next(ASMLINE)
@@ -1818,17 +1818,17 @@
     онйю cur # осярн декюрэ
       cur.adr := size;
       еякх cur.tcmd = LCMD рнцдю
-        sys.PUT(cur.varadr, size)
+        mSys.PUT(cur.varadr, size)
       юеякх (cur.tcmd = JCMD) & cur.short рнцдю
-        sys.GET(cur.varadr, i);
+        mSys.GET(cur.varadr, i);
         temp3 := i - cur.Next(ASMLINE).adr;
         еякх (-131 <= temp3) & (temp3 <= 123) рнцдю
-          sys.GET(cur(ASMLINE).codeadr - 1, c);
+          mSys.GET(cur(ASMLINE).codeadr - 1, c);
           еякх c = JMP рнцдю
-            sys.PUT(cur(ASMLINE).codeadr - 1, 0EBX)
+            mSys.PUT(cur(ASMLINE).codeadr - 1, 0EBX)
           хмюве (*JE, JNE, JLE, JGE, JG, JL*)
-            sys.PUT(cur(ASMLINE).codeadr - 2, ORD(c) - 16);
-            sys.PUT(cur(ASMLINE).codeadr - 1, temp3);
+            mSys.PUT(cur(ASMLINE).codeadr - 2, ORD(c) - 16);
+            mSys.PUT(cur(ASMLINE).codeadr - 1, temp3);
             DEC(cur(ASMLINE).codeadr)
           йнмеж;
           cur.clen := 2
@@ -1855,7 +1855,7 @@
     temp := dcount;
     еякх elf рнцдю
       asize := asize + Align(dcount, 1000H) + 64 + 1024;
-      sys.PUT(sys.ADR(Code[glob + 1]), asize - 1024);
+      mSys.PUT(mSys.ADR(Code[glob + 1]), asize - 1024);
       dcount := 0
     йнмеж;
 
@@ -1888,13 +1888,13 @@
     онйю cur # осярн декюрэ
       бшанп cur.tcmd хг
       |JCMD:
-        sys.GET(cur.varadr, i);
-        sys.PUT(cur.codeadr, i - cur.Next(ASMLINE).adr)
+        mSys.GET(cur.varadr, i);
+        mSys.PUT(cur.codeadr, i - cur.Next(ASMLINE).adr)
       |GCMD:
-        sys.GET(cur.codeadr, i);
-        sys.PUT(cur.codeadr, i + temp3)
+        mSys.GET(cur.codeadr, i);
+        mSys.PUT(cur.codeadr, i + temp3)
       |OCMD:
-        sys.MOVE(cur.varadr, cur.codeadr, 4)
+        mSys.MOVE(cur.varadr, cur.codeadr, 4)
       хмюве
       йнмеж;
       еякх dll & (cur.tcmd IN {GCMD, OCMD}) рнцдю
@@ -1928,79 +1928,79 @@
   йнмеж FixLabels;
 
 опнжедспю OutStringZ(str: люяяхб хг CHAR);
-	оепел i: INTEGER;
-	мювюкн
-	  New;
-	  current.clen := LENGTH(str);
-	  дкъ i := 0 дн current.clen - 1 декюрэ
-		Code[ccount] := str[i];
-		INC(ccount)
-	  йнмеж;
-	  Code[ccount] := 0X;
-	  INC(ccount);
-	  INC(current.clen)
-	йнмеж OutStringZ;
+        оепел i: INTEGER;
+        мювюкн
+          New;
+          current.clen := LENGTH(str);
+          дкъ i := 0 дн current.clen - 1 декюрэ
+                Code[ccount] := str[i];
+                INC(ccount)
+          йнмеж;
+          Code[ccount] := 0X;
+          INC(ccount);
+          INC(current.clen)
+        йнмеж OutStringZ;
 
 опнжедспю Epilog*(gsize: INTEGER; FName: люяяхб хг CHAR; stk: INTEGER);
-	оепел i, glob: INTEGER;
-	мювюкн
-	  glob := 0;
-	  gsize := Align(gsize, 4) + 4;
-	  COPY(FName, OutFile);
-	  Labels[RTABLE] := -dcount;
-	  dataint(recarray[0]);
-	  дкъ i := 1 дн reccount декюрэ
-		dataint(recarray[i])
-	  йнмеж;
-	  current := start;
-	  еякх con хкх gui хкх dll рнцдю
-		PushInt(LoadLibrary);
-		PushInt(GetProcAddress);
-		OutCode("5859FF31FF3054")
-	  юеякх elf рнцдю
-		OutCode("6800000000");
-		glob := current.cmd;
-	  юеякх kos хкх obj рнцдю
-		OutByte(54H)
-	  йнмеж;
-	  GlobalAdr(0);
-	  PushConst(ASR(gsize, 2));
-	  PushInt(RTABLE);
-	  PushInt(SELFNAME);
-	  CallRTL(_init);
-	  current := asmlist.Last(ASMLINE);
-	  еякх dll рнцдю
-		OutCode("B801000000C9C20C00")
-	  йнмеж;
-	  еякх obj рнцдю
-		OutCode("B801000000C9C20400")
-	  йнмеж;
-	  OutCode("EB05");
-	  Label(ASSRT);
-	  CallRTL(_assrt);
-	  OutCode("EB09");
-	  Label(HALT);
-	  OutCode("6A006A00");
-	  CallRTL(_assrt);
-	  OutCode("6A00");
-	  CallRTL(_halt);
-	  OutByte(90H);
-	  еякх obj рнцдю
-		Label(Exports);
-		CmdN(szSTART); CmdN(START);
-		CmdN(szversion); OutInt(stk);
-		дкъ i := 0 дн kosexpcount - 1 декюрэ
-		  CmdN(kosexp[i].NameLabel); CmdN(kosexp[i].Adr)
-		йнмеж;
-		OutInt(0);
-		Label(szSTART); OutStringZ("START");
-		Label(szversion); OutStringZ("version");
-		дкъ i := 0 дн kosexpcount - 1 декюрэ
-		  Label(kosexp[i].NameLabel);
-		  OutStringZ(kosexp[i].Name.Name)
-		йнмеж
-	  йнмеж;
-	  FixLabels(FName, stk, gsize, glob)
-	йнмеж Epilog;
+        оепел i, glob: INTEGER;
+        мювюкн
+          glob := 0;
+          gsize := Align(gsize, 4) + 4;
+          COPY(FName, OutFile);
+          Labels[RTABLE] := -dcount;
+          dataint(recarray[0]);
+          дкъ i := 1 дн reccount декюрэ
+                dataint(recarray[i])
+          йнмеж;
+          current := start;
+          еякх con хкх gui хкх dll рнцдю
+                PushInt(LoadLibrary);
+                PushInt(GetProcAddress);
+                OutCode("5859FF31FF3054")
+          юеякх elf рнцдю
+                OutCode("6800000000");
+                glob := current.cmd;
+          юеякх kos хкх obj рнцдю
+                OutByte(54H)
+          йнмеж;
+          GlobalAdr(0);
+          PushConst(ASR(gsize, 2));
+          PushInt(RTABLE);
+          PushInt(SELFNAME);
+          CallRTL(_init);
+          current := asmlist.Last(ASMLINE);
+          еякх dll рнцдю
+                OutCode("B801000000C9C20C00")
+          йнмеж;
+          еякх obj рнцдю
+                OutCode("B801000000C9C20400")
+          йнмеж;
+          OutCode("EB05");
+          Label(ASSRT);
+          CallRTL(_assrt);
+          OutCode("EB09");
+          Label(HALT);
+          OutCode("6A006A00");
+          CallRTL(_assrt);
+          OutCode("6A00");
+          CallRTL(_halt);
+          OutByte(90H);
+          еякх obj рнцдю
+                Label(Exports);
+                CmdN(szSTART); CmdN(START);
+                CmdN(szversion); OutInt(stk);
+                дкъ i := 0 дн kosexpcount - 1 декюрэ
+                  CmdN(kosexp[i].NameLabel); CmdN(kosexp[i].Adr)
+                йнмеж;
+                OutInt(0);
+                Label(szSTART); OutStringZ("START");
+                Label(szversion); OutStringZ("version");
+                дкъ i := 0 дн kosexpcount - 1 декюрэ
+                  Label(kosexp[i].NameLabel);
+                  OutStringZ(kosexp[i].Name.Name)
+                йнмеж
+          йнмеж;
+          FixLabels(FName, stk, gsize, glob)
+        йнмеж Epilog;
 
 йнмеж ЛНДюЯЛ86_32.
