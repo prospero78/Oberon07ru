@@ -31,9 +31,9 @@
   Slash = mConst.Slash;
 
   lxEOF = 0; lxINT = -1; lxREAL = -2; lxSTRING = -3; lxIDENT = -4; lxHEX = -5; lxCHX = -6; lxLONGREAL = -7;
-  lxBY = 3; lxCASE = 4; lxCONST = 5; lxDIV = 6;
-  lxEND = 10; lxIMPORT = 14; lxIN = 15; lxIS = 16;
-  lxMOD = 17; lxMODULE = 18; lxOR = 21; lxPOINTER = 22;
+  lxBY = 3; lxCASE = 4; lxDIV = 6;
+    lxIN = 15; lxIS = 16;
+  lxMOD = 17; 
 
   lxPlus = 51; lxMinus = 52; lxMult = 53; lxSlash = 54; lxNot = 55; lxAnd = 56; lxComma = 57; lxSemi = 58;
   lxStick = 59; lxLRound = 60; lxLSquare = 61; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
@@ -178,9 +178,9 @@
       bases := DECL.unit.Level - id.Level;
       еякх id.Level = 3 рнцдю
         glob := id.Offset
-      юеякх (id.VarKind = 0) OR (id.VarKind = DECL.param) & ~(id.T.tType IN {TARRAY, TRECORD}) рнцдю
+      юеякх (id.VarKind = 0) хкх (id.VarKind = DECL.param) & ~(id.T.tType IN {TARRAY, TRECORD}) рнцдю
         loc := id.Offset
-      юеякх (id.VarKind = DECL.paramvar) OR (id.T.tType IN {TARRAY, TRECORD}) рнцдю
+      юеякх (id.VarKind = DECL.paramvar) хкх (id.T.tType IN {TARRAY, TRECORD}) рнцдю
         еякх DECL.Dim(e.T) > 0 рнцдю
           n := DECL.Dim(e.T);
           дкъ i := n дн 1 BY -1 декюрэ
@@ -245,7 +245,7 @@
         онбрнпърэ
           f := DECL.GetField(T, name);
           T := T.Base
-        онйюме (f # осярн) OR (T = осярн);
+        онйюме (f # осярн) хкх (T = осярн);
         Assert(f # осярн, line, col, 99);
         еякх f.Unit # DECL.unit рнцдю
           Assert(f.Export, line, col, 99)
@@ -327,7 +327,7 @@
           Check(lxRRound);
           Next;
           еякх e.T.tType = TPOINTER рнцдю
-            еякх (SCAN.tLex = lxDot) OR (SCAN.tLex = lxCaret) рнцдю
+            еякх (SCAN.tLex = lxDot) хкх (SCAN.tLex = lxCaret) рнцдю
               X86.DupLoadCheck
             хмюве
               X86.DupLoad
@@ -402,7 +402,7 @@
   йнмеж Set;
 
 опнжедспю IsString(a: DECL.EXPRESSION): BOOLEAN;
-    бепмсрэ (a.T.tType = TSTRING) OR (a.T.tType = TARRAY) & (a.T.Base.tType = TCHAR)
+    бепмсрэ (a.T.tType = TSTRING) хкх (a.T.tType = TARRAY) & (a.T.Base.tType = TCHAR)
   йнмеж IsString;
 
 опнжедспю Str(e: DECL.EXPRESSION);
@@ -594,10 +594,10 @@
       e.T := sttypes[TINTEGER];
       X86.StFunc(X86.stLENGTH)
     |sysADR:
-      Assert((SCAN.tLex = lxIDENT) OR (SCAN.tLex = lxSTRING) OR (SCAN.tLex = lxCHX), line, col, 43);
+      Assert((SCAN.tLex = lxIDENT) хкх (SCAN.tLex = lxSTRING) хкх (SCAN.tLex = lxCHX), line, col, 43);
       еякх SCAN.tLex = lxIDENT рнцдю
         Designator(e1);
-        Assert((e1.eType = eVAR) OR (e1.eType = ePROC) OR (e1.T = sttypes[TSTRING]), line, col, 43);
+        Assert((e1.eType = eVAR) хкх (e1.eType = ePROC) хкх (e1.T = sttypes[TSTRING]), line, col, 43);
         еякх e1.eType = ePROC рнцдю
           X86.PushInt(e1.id.Number)
         йнмеж
@@ -673,7 +673,7 @@
         i := 0;
         res := кнфэ;
         онйю (i < sp) & ~res декюрэ
-          res := ((stk[i][0] = T1) & (stk[i][1] = T2)) OR ((stk[i][0] = T2) & (stk[i][1] = T1));
+          res := ((stk[i][0] = T1) & (stk[i][1] = T2)) хкх ((stk[i][0] = T2) & (stk[i][1] = T1));
           INC(i)
         йнмеж
         бепмсрэ res
@@ -756,8 +756,8 @@
         йнмеж
       йнмеж
     |TRECORD: Res := BaseOf(T, e.T)
-    |TPOINTER: Res := BaseOf(T, e.T) OR (e.T.tType = TNIL)
-    |TPROC: Res := (e.T.tType = TNIL) OR (e.eType = ePROC) & ProcTypeComp(e.id.T, T) OR
+    |TPOINTER: Res := BaseOf(T, e.T) хкх (e.T.tType = TNIL)
+    |TPROC: Res := (e.T.tType = TNIL) хкх (e.eType = ePROC) & ProcTypeComp(e.id.T, T) хкх
       (e.eType # ePROC) & ProcTypeComp(e.T, T)
     хмюве
       Res := кнфэ
@@ -972,12 +972,12 @@
   йнмеж Factor;
 
 опнжедспю IsChr(a: DECL.EXPRESSION): BOOLEAN;
-    бепмсрэ (a.T.tType = TSTRING) & (LenString(a.Value) = 1) OR (a.T.tType = TCHAR)
+    бепмсрэ (a.T.tType = TSTRING) & (LenString(a.Value) = 1) хкх (a.T.tType = TCHAR)
   йнмеж IsChr;
 
 опнжедспю StrRel(a, b: DECL.EXPRESSION; Op: INTEGER);
   мювюкн
-    еякх ~(IsChr(a) OR IsChr(b)) рнцдю
+    еякх ~(IsChr(a) хкх IsChr(b)) рнцдю
       X86.strcmp(Op, 0)
     юеякх IsChr(a) & IsChr(b) рнцдю
       X86.CmpInt(Op)
@@ -1038,42 +1038,42 @@
       хмюве
         X86.idivmod(Op = lxMOD)
       йнмеж
-    |lxAnd, lxOR:
+    |lxAnd, mConst.lxOR:
       Assert((a.T.tType = TBOOLEAN) & (b.T.tType = TBOOLEAN), line, col, 37)
     |lxIN:
       Assert((a.T.tType = TINTEGER) & (b.T.tType = TSET), line, col, 37);
       X86.inset
     |lxLT, lxLE, lxGT, lxGE:
-      Assert(((a.T.tType IN {TINTEGER, TREAL, TLONGREAL}) & (a.T.tType = b.T.tType)) OR
-        (IsChr(a) OR IsString(a)) & (IsChr(b) OR IsString(b)) OR
-        (a.T.tType = TSET) & (b.T.tType = TSET) & ((Op = lxLE) OR (Op = lxGE)), line, col, 37);
+      Assert(((a.T.tType IN {TINTEGER, TREAL, TLONGREAL}) & (a.T.tType = b.T.tType)) хкх
+        (IsChr(a) хкх IsString(a)) & (IsChr(b) хкх IsString(b)) хкх
+        (a.T.tType = TSET) & (b.T.tType = TSET) & ((Op = lxLE) хкх (Op = lxGE)), line, col, 37);
       еякх a.T.tType IN {TREAL, TLONGREAL} рнцдю
         X86.fcmp(Op)
       юеякх a.T.tType = TSET рнцдю
         X86.Inclusion(Op)
-      юеякх IsString(a) OR IsString(b) рнцдю
+      юеякх IsString(a) хкх IsString(b) рнцдю
         StrRel(a, b, Op)
       хмюве
         X86.CmpInt(Op)
       йнмеж
     |lxEQ, lxNE:
-      Assert(((a.T.tType IN {TINTEGER, TREAL, TLONGREAL, TSET, TBOOLEAN}) & (a.T.tType = b.T.tType)) OR
-        (IsChr(a) OR IsString(a)) & (IsChr(b) OR IsString(b)) OR
-        (a.T.tType IN {TPOINTER, TPROC, TNIL}) & (b.T.tType = TNIL) OR
-        (b.T.tType IN {TPOINTER, TPROC, TNIL}) & (a.T.tType = TNIL) OR
-        (a.T.tType = TPOINTER) & (b.T.tType = TPOINTER) & (BaseOf(a.T, b.T) OR BaseOf(b.T, a.T)) OR
-        (a.T.tType = TPROC) & ProcTypeComp(b.T, a.T) OR (a.eType = ePROC) & ProcTypeComp(b.T, a.id.T) OR
+      Assert(((a.T.tType IN {TINTEGER, TREAL, TLONGREAL, TSET, TBOOLEAN}) & (a.T.tType = b.T.tType)) хкх
+        (IsChr(a) хкх IsString(a)) & (IsChr(b) хкх IsString(b)) хкх
+        (a.T.tType IN {TPOINTER, TPROC, TNIL}) & (b.T.tType = TNIL) хкх
+        (b.T.tType IN {TPOINTER, TPROC, TNIL}) & (a.T.tType = TNIL) хкх
+        (a.T.tType = TPOINTER) & (b.T.tType = TPOINTER) & (BaseOf(a.T, b.T) хкх BaseOf(b.T, a.T)) хкх
+        (a.T.tType = TPROC) & ProcTypeComp(b.T, a.T) хкх (a.eType = ePROC) & ProcTypeComp(b.T, a.id.T) хкх
         (b.eType = ePROC) & ProcTypeComp(a.T, b.id.T), line, col, 37);
       еякх a.T.tType IN {TREAL, TLONGREAL} рнцдю
         X86.fcmp(Op)
-      юеякх IsString(a) OR IsString(b) рнцдю
+      юеякх IsString(a) хкх IsString(b) рнцдю
         StrRel(a, b, Op)
       хмюве
         X86.CmpInt(Op)
       йнмеж
     хмюве
     йнмеж;
-    еякх (a.eType # eCONST) OR (b.eType # eCONST) рнцдю
+    еякх (a.eType # eCONST) хкх (b.eType # eCONST) рнцдю
       a.eType := eEXP;
       еякх DECL.Relation(Op) рнцдю
         a.T := sttypes[TBOOLEAN]
@@ -1088,8 +1088,8 @@
   оепел a: DECL.EXPRESSION; Op, line, col, L: INTEGER;
   мювюкн
     Factor(e);
-    онйю (SCAN.tLex = lxMult) OR (SCAN.tLex = lxSlash) OR
-      (SCAN.tLex = lxDIV) OR (SCAN.tLex = lxMOD) OR
+    онйю (SCAN.tLex = lxMult) хкх (SCAN.tLex = lxSlash) хкх
+      (SCAN.tLex = lxDIV) хкх (SCAN.tLex = lxMOD) хкх
        (SCAN.tLex = lxAnd) декюрэ
       Load(e);
       Coord(line, col);
@@ -1112,7 +1112,7 @@
   оепел a: DECL.EXPRESSION; Op, line, col, uOp, uline, ucol, L: INTEGER;
   мювюкн
     uOp := 0;
-    еякх (SCAN.tLex = lxPlus) OR (SCAN.tLex = lxMinus) рнцдю
+    еякх (SCAN.tLex = lxPlus) хкх (SCAN.tLex = lxMinus) рнцдю
       Coord(uline, ucol);
       uOp := SCAN.tLex;
       Next
@@ -1144,18 +1144,18 @@
       йнмеж;
       e.vparam := кнфэ
     йнмеж;
-    онйю (SCAN.tLex = lxPlus) OR (SCAN.tLex = lxMinus) OR (SCAN.tLex = lxOR) декюрэ
+    онйю (SCAN.tLex = lxPlus) хкх (SCAN.tLex = lxMinus) хкх (SCAN.tLex = mConst.lxOR) декюрэ
       Load(e);
       Coord(line, col);
       Op := SCAN.tLex;
       Next;
-      еякх Op = lxOR рнцдю
+      еякх Op = mConst.lxOR рнцдю
         L := X86.NewLabel();
         X86.IfWhile(L, хярхмю)
       йнмеж;
       Term(a);
       Load(a);
-      еякх Op = lxOR рнцдю
+      еякх Op = mConst.lxOR рнцдю
         X86.Label(L)
       йнмеж;
       Operation(e, a, Op, line, col)
@@ -1259,7 +1259,7 @@
       Next;
       pOpSeq
     йнмеж;
-    Check(lxEND);
+    Check(mConst.lxEND);
     еякх ~wh рнцдю
       X86.Label(L)
     йнмеж;
@@ -1329,7 +1329,7 @@
     X86.For(iValue > 0, LBeg, LEnd);
     pOpSeq;
     X86.NextFor(iValue, LBeg, LEnd);
-    Check(lxEND);
+    Check(mConst.lxEND);
     Next
   йнмеж ForOper;
 
@@ -1337,7 +1337,7 @@
   оепел cur: LABEL;
   мювюкн
     cur := Labels.First(LABEL);
-    онйю (cur # осярн) & ((b < cur.a) OR (a > cur.b)) декюрэ
+    онйю (cur # осярн) & ((b < cur.a) хкх (a > cur.b)) декюрэ
       cur := cur.Next(LABEL)
     йнмеж
     бепмсрэ cur = осярн
@@ -1384,7 +1384,7 @@
   мювюкн
     LBeg := X86.NewLabel();
     LEnd := X86.NewLabel();
-    еякх ~((SCAN.tLex = lxStick) OR (SCAN.tLex = lxEND)) рнцдю
+    еякх ~((SCAN.tLex = lxStick) хкх (SCAN.tLex = mConst.lxEND)) рнцдю
       Label(int, Labels, LBeg);
       онйю SCAN.tLex = lxComma декюрэ
         Next;
@@ -1432,7 +1432,7 @@
       UTILS.UnitLine(DECL.UnitNumber, SCAN.line);
       X86.OnError(7)
     йнмеж;
-    Check(lxEND);
+    Check(mConst.lxEND);
     X86.Label(EndCase);
     Next;
     UTILS.Clear(Labels)
@@ -1708,7 +1708,7 @@
       йнмеж;
       X86.Save(e1.T.tType)
     юеякх e1.eType = ePROC рнцдю
-      Assert((e1.id.T.Base.tType = TVOID) OR (e1.id.T.Call = DECL.winapi), line, col, 132);
+      Assert((e1.id.T.Base.tType = TVOID) хкх (e1.id.T.Call = DECL.winapi), line, col, 132);
       еякх e1.id.ParamCount > 0 рнцдю
         Check(lxLRound);
         Next;
@@ -1733,7 +1733,7 @@
     юеякх (e1.eType = eVAR) & (e1.T.tType = TPROC) рнцдю
       еякх SCAN.tLex = lxLRound рнцдю
         Next;
-        Assert((e1.T.Base.tType = TVOID) OR (e1.T.Call = DECL.winapi), line, col, 132);
+        Assert((e1.T.Base.tType = TVOID) хкх (e1.T.Call = DECL.winapi), line, col, 132);
         X86.PushCall(begcall);
         Call(e1.T.Fields.First(DECL.FIELD));
         X86.EndCall;
@@ -1751,7 +1751,7 @@
         X86.Save(TPROC)
       хмюве
         Assert2(e1.T.Fields.Count = 0, 155);
-        Assert((e1.T.Base.tType = TVOID) OR (e1.T.Call = DECL.winapi), line, col, 132);
+        Assert((e1.T.Base.tType = TVOID) хкх (e1.T.Call = DECL.winapi), line, col, 132);
         X86.CallVar(кнфэ, кнфэ, e1.T.Call, e1.T.Len, DECL.curBlock.LocalSize)
       йнмеж
     йнмеж
@@ -1806,8 +1806,8 @@
     оепел res, i: INTEGER; err: BOOLEAN;
 
       опнжедспю hexdgt(c: CHAR): BOOLEAN;
-        бепмсрэ ("0" <= c) & (c <= "9") OR
-               ("A" <= c) & (c <= "F") OR
+        бепмсрэ ("0" <= c) & (c <= "9") хкх
+               ("A" <= c) & (c <= "F") хкх
                ("a" <= c) & (c <= "f")
       йнмеж hexdgt;
 
@@ -1828,11 +1828,11 @@
       res := 0;
       i := 0;
       err := stk[i] # "0"; INC(i);
-      err := err OR (stk[i] # "x"); INC(i);
+      err := err хкх (stk[i] # "x"); INC(i);
       онйю ~err & hexdgt(stk[i]) декюрэ
         INC(i)
       йнмеж;
-      err := err OR (i = 2);
+      err := err хкх (i = 2);
       еякх stk[i] <= 20X рнцдю
         stk[i] := 0X
       хмюве

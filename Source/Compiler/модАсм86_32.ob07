@@ -1784,19 +1784,19 @@
     еякх dll рнцдю
       LoadAdr := 10000000H;
       PackExport(ExecName)
-    юеякх con OR gui рнцдю
+    юеякх con хкх gui рнцдю
       LoadAdr := 400000H
-    юеякх kos OR obj рнцдю
+    юеякх kos хкх obj рнцдю
       LoadAdr := sys.SIZE(KOSHEADER)
     юеякх elf рнцдю
       LoadAdr := 134514420 + 1024;
       INC(gsize, 1024)
     йнмеж;
 
-    еякх dll OR con OR gui рнцдю
+    еякх dll хкх con хкх gui рнцдю
       rdatasize := 0DAH + etable.size;
       size := 1000H + LoadAdr;
-    юеякх kos OR elf OR obj рнцдю
+    юеякх kos хкх elf хкх obj рнцдю
       rdatasize := 0;
       size := LoadAdr
     йнмеж;
@@ -1838,9 +1838,9 @@
       cur := cur.Next(ASMLINE)
     йнмеж;
 
-    еякх dll OR con OR gui рнцдю
+    еякх dll хкх con хкх gui рнцдю
       asize := Align(size, 1000H)
-    юеякх kos OR obj рнцдю
+    юеякх kos хкх obj рнцдю
       asize := Align(size, 4)
     юеякх elf рнцдю
       asize := 134514420 + 6508 + Align(size - 13 - LoadAdr, 1000H)
@@ -1871,7 +1871,7 @@
       etable.dllnameoffset := etable.dllnameoffset + asize;
       asize := asize + LoadAdr - 0DAH
     йнмеж;
-    еякх dll OR con OR gui рнцдю
+    еякх dll хкх con хкх gui рнцдю
       Labels[LoadLibrary] := asize + 4;
       Labels[GetProcAddress] := asize;
       R.Page := 0;
@@ -1918,9 +1918,9 @@
     еякх R.Size # 0 рнцдю
       PutReloc(R)
     йнмеж;
-    еякх dll OR con OR gui рнцдю
+    еякх dll хкх con хкх gui рнцдю
       WritePE(FName, stk, size - 1000H - LoadAdr, dcount, rdatasize, gsize)
-    юеякх kos OR obj рнцдю
+    юеякх kos хкх obj рнцдю
       WriteKOS(FName, Align(stk, 4), size, dcount, gsize, obj)
     юеякх elf рнцдю
       WriteELF(FName, size - LoadAdr, temp, gsize)
@@ -1953,14 +1953,14 @@
 		dataint(recarray[i])
 	  йнмеж;
 	  current := start;
-	  еякх con OR gui OR dll рнцдю
+	  еякх con хкх gui хкх dll рнцдю
 		PushInt(LoadLibrary);
 		PushInt(GetProcAddress);
 		OutCode("5859FF31FF3054")
 	  юеякх elf рнцдю
 		OutCode("6800000000");
 		glob := current.cmd;
-	  юеякх kos OR obj рнцдю
+	  юеякх kos хкх obj рнцдю
 		OutByte(54H)
 	  йнмеж;
 	  GlobalAdr(0);

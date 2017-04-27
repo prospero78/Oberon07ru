@@ -31,7 +31,7 @@
   lxBY = 3; lxCASE = 4;
   lxDIV = 6;
   lxIN = 15; lxIS = 16;
-  lxMOD = 17; lxOR = 21;
+  lxMOD = 17;
 
   lxPlus = 51; lxMinus = 52; lxMult = 53; lxSlash = 54; lxNot = 55; lxAnd = 56; lxComma = 57; lxSemi = 58;
   lxStick = 59; lxLRound = 60; lxLSquare = 61; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
@@ -470,11 +470,11 @@
     |TLONGREAL: Assert((res <= max) & (res >= -max), line, col, FOVER)
     »Õ¿◊≈
      ŒÕ≈÷;
-    ≈—À» (res = 0.0D0) & (T.tType IN {TREAL, TLONGREAL}) OR (ABS(res) < LONG(SCAN.minREAL)) & (T.tType = TREAL) “Œ√ƒ¿
+    ≈—À» (res = 0.0D0) & (T.tType IN {TREAL, TLONGREAL}) »À» (ABS(res) < LONG(SCAN.minREAL)) & (T.tType = TREAL) “Œ√ƒ¿
       CASE Op »«
       |lxPlus:  Assert(a = -b, line, col, UNDER)
       |lxMinus: Assert(a = b, line, col, UNDER)
-      |lxMult:  Assert((a = 0.0D0) OR (b = 0.0D0), line, col, UNDER)
+      |lxMult:  Assert((a = 0.0D0) »À» (b = 0.0D0), line, col, UNDER)
       |lxSlash: Assert((a = 0.0D0), line, col, UNDER)
       »Õ¿◊≈
        ŒÕ≈÷
@@ -529,9 +529,9 @@
     |lxAnd:
       Assert(Ta.tType = TBOOLEAN, line, col, 37);
       Res := LONG(FLT(ORD((ai # 0) & (bi # 0))))
-    |lxOR:
+    |mConst.lxOR:
       Assert(Ta.tType = TBOOLEAN, line, col, 37);
-      Res := LONG(FLT(ORD((ai # 0) OR (bi # 0))))
+      Res := LONG(FLT(ORD((ai # 0) »À» (bi # 0))))
     |lxEQ, lxNE:
       ≈—À» Ta.tType = TSTRING “Œ√ƒ¿
         Res := strcmp(a, b, Op)
@@ -573,7 +573,7 @@
       Res := LONG(FLT(ORD(ai IN BITS(bi))))
     »Õ¿◊≈
      ŒÕ≈÷;
-    ≈—À» Relation(Op) OR (Op = lxAnd) OR (Op = lxOR) “Œ√ƒ¿
+    ≈—À» Relation(Op) »À» (Op = lxAnd) »À» (Op = mConst.lxOR) “Œ√ƒ¿
       TRes := sttypes[TBOOLEAN]
      ŒÕ≈÷
    ŒÕ≈÷ Calc;
@@ -713,7 +713,7 @@
     œŒ ¿ (T # œ”—“Œ) & res ƒ≈À¿“‹
       field := GetField(T, Name);
       ≈—À» field # œ”—“Œ “Œ√ƒ¿
-        ≈—À» (field.Unit = unit) OR field.Export “Œ√ƒ¿
+        ≈—À» (field.Unit = unit) »À» field.Export “Œ√ƒ¿
           res := ÀŒ∆‹
          ŒÕ≈÷
        ŒÕ≈÷;
@@ -792,7 +792,7 @@
       ≈—À» cur.Export “Œ√ƒ¿
         Assert(~(T.tType IN {TRECORD, TARRAY}), cur.line, cur.col, 90)
        ŒÕ≈÷;
-      ≈—À»(cur.VarKind = paramvar) OR (cur.VarKind = param) & (T.tType IN {TRECORD, TARRAY}) “Œ√ƒ¿
+      ≈—À»(cur.VarKind = paramvar) »À» (cur.VarKind = param) & (T.tType IN {TRECORD, TARRAY}) “Œ√ƒ¿
         n := 4 * (1 + Dim(T) + ORD((cur.VarKind = paramvar) & (T.tType = TRECORD)))
       »Õ¿◊≈
         n := T.Size;
@@ -870,7 +870,7 @@
     ≈—À» proc “Œ√ƒ¿
       T := curBlock.T
      ŒÕ≈÷;
-    Assert2((SCAN.tLex = lxIDENT) OR (SCAN.tLex = mConst.lxVAR), 84);
+    Assert2((SCAN.tLex = lxIDENT) »À» (SCAN.tLex = mConst.lxVAR), 84);
     ByRef := ÀŒ∆‹;
     ≈—À» SCAN.tLex = mConst.lxVAR “Œ√ƒ¿
       ByRef := »—“»Õ¿;
@@ -919,7 +919,7 @@
 œ–Œ÷≈ƒ”–¿ ParamType(T: pTYPE);
   œ≈–≈Ã break: BOOLEAN;
   Õ¿◊¿ÀŒ
-    ≈—À» (SCAN.tLex = lxIDENT) OR (SCAN.tLex = mConst.lxVAR) “Œ√ƒ¿
+    ≈—À» (SCAN.tLex = lxIDENT) »À» (SCAN.tLex = mConst.lxVAR) “Œ√ƒ¿
       break := ÀŒ∆‹;
       œŒ¬“Œ–ﬂ“‹
         Section(T);
@@ -1331,7 +1331,7 @@
         self := unit;
         SCAN.Backup(unit.scanner);
         COPY(name.Name, FName);
-        ≈—À» ~((~self.Std & pReadModule(Path, FName, mConst.Ext)) OR
+        ≈—À» ~((~self.Std & pReadModule(Path, FName, mConst.Ext)) »À»
                                 pReadModule(Std, FName, mConst.Ext)) “Œ√ƒ¿
           ≈—À» FName = "SYSTEM" “Œ√ƒ¿
             unit := sys;

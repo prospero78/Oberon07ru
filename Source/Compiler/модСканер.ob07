@@ -220,9 +220,9 @@
         
         result: BOOLEAN;
     мювюкн
-        ch_eng := (ch >= "A") & (ch <= "Z") OR (ch >= "a") & (ch <= "z") OR (ch = "_");
-        ch_rus := (ch >= "ю") & (ch <= "ъ") OR (ch >= "Ю") & (ch <= "Ъ");
-        result := ch_eng OR ch_rus;
+        ch_eng := (ch >= "A") & (ch <= "Z") хкх (ch >= "a") & (ch <= "z") хкх (ch = "_");
+        ch_rus := (ch >= "ю") & (ch <= "ъ") хкх (ch >= "Ю") & (ch <= "Ъ");
+        result := ch_eng хкх ch_rus;
         бепмсрэ result
     йнмеж Letter;
 
@@ -231,7 +231,7 @@
     йнмеж Digit;
 
 опнжедспю HexDigit*(ch: CHAR): BOOLEAN;
-        бепмсрэ (ch >= "A") & (ch <= "F") OR (ch >= "0") & (ch <= "9")
+        бепмсрэ (ch >= "A") & (ch <= "F") хкх (ch >= "0") & (ch <= "9")
     йнмеж HexDigit;
 
 опнжедспю PutChar(ch: CHAR);
@@ -251,7 +251,7 @@
 опнжедспю Ident;
     мювюкн
         tLex := lxIDENT;
-        онйю Letter(ch) OR Digit(ch) декюрэ
+        онйю Letter(ch) хкх Digit(ch) декюрэ
             PutNext(ch)
         йнмеж;
         PutChar(0X);
@@ -299,7 +299,7 @@
     оепел res: INTEGER;
     мювюкн
         res := StrToInt16(str);
-        еякх (res < 0) OR (res > 0FFH) рнцдю
+        еякх (res < 0) хкх (res > 0FFH) рнцдю
             tLex := lxERR6;
             res := 0
         йнмеж
@@ -361,7 +361,7 @@
             nez := кнфэ;
             cont := хярхмю;
             онйю cont & Digit(str[i]) декюрэ
-            nez := nez OR (str[i] # "0");
+            nez := nez хкх (str[i] # "0");
             res := res * 10.0D0 + LONG(FLT(ORD(str[i]) - ORD("0")));
             Inf(cont, i)
             йнмеж
@@ -374,7 +374,7 @@
             INC(i);
             cont := хярхмю;
             онйю cont & Digit(str[i]) декюрэ
-            nez := nez OR (str[i] # "0");
+            nez := nez хкх (str[i] # "0");
             d := d / 10.0D0;
             res := res + LONG(FLT(ORD(str[i]) - ORD("0"))) * d;
             Inf(cont, i)
@@ -389,7 +389,7 @@
             еякх str[i] = 0X рнцдю
               еякх res > LONG(maxREAL) рнцдю
                 Error(lxERR7, cont)
-              юеякх nez & ((res = 0.0D0) OR (res < LONG(minREAL)) & (tLex = lxREAL)) рнцдю
+              юеякх nez & ((res = 0.0D0) хкх (res < LONG(minREAL)) & (tLex = lxREAL)) рнцдю
                 Error(lxERR9, cont)
               йнмеж
             йнмеж
@@ -442,7 +442,7 @@
             res := res * m;
             Inf(cont, i)
             йнмеж;
-            еякх cont & (nez & (res = 0.0D0) OR (res > 0.0D0) & (res < LONG(minREAL)) & (tLex = lxREAL)) рнцдю
+            еякх cont & (nez & (res = 0.0D0) хкх (res > 0.0D0) & (res < LONG(minREAL)) & (tLex = lxREAL)) рнцдю
             Error(lxERR9, cont)
             юеякх cont & (tLex = lxREAL) & (res > LONG(maxREAL)) рнцдю
             Error(lxERR7, cont)
@@ -491,9 +491,9 @@
         онйю Digit(ch) декюрэ
             PutNext(ch)
         йнмеж;
-        еякх (ch = "E") OR (ch = "D") рнцдю
+        еякх (ch = "E") хкх (ch = "D") рнцдю
             PutNext(ch);
-            еякх (ch = "+") OR (ch = "-") рнцдю
+            еякх (ch = "+") хкх (ch = "-") рнцдю
             PutNext(ch)
             йнмеж;
             еякх ~Digit(ch) рнцдю
@@ -607,7 +607,7 @@
             tLex := Delim(ch);
             PutNext(ch);
             еякх ch = "/" рнцдю
-            онйю (ch >= 20X) OR (ch = 9X) декюрэ
+            онйю (ch >= 20X) хкх (ch = 9X) декюрэ
         PutNext(ch)
             йнмеж;
             GetLex

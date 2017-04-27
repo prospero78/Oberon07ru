@@ -146,7 +146,7 @@
 опнжедспю CharC*(x: CHAR);
   оепел res: INTEGER;
   мювюкн
-    еякх win OR lnx рнцдю
+    еякх win хкх lnx рнцдю
       res := Write(hConsoleOutput, sys.ADR(x), 1)
     юеякх kos рнцдю
       API.DebugMsg(sys.ADR(x), 0)
@@ -178,7 +178,7 @@
   оепел
     s: tString; n: INTEGER;
   мювюкн
-    еякх win OR lnx рнцдю
+    еякх win хкх lnx рнцдю
       n := Write(hConsoleOutput, sys.ADR(str), LENGTH(str))
     юеякх kos рнцдю
       API.DebugMsg(sys.ADR(str), 0)
@@ -235,7 +235,7 @@
     i := -1;
     онбрнпърэ
       INC(i)
-    онйюме (CAP(a[i]) # CAP(b[i])) OR (a[i] = 0X) OR (b[i] = 0X)
+    онйюме (CAP(a[i]) # CAP(b[i])) хкх (a[i] = 0X) хкх (b[i] = 0X)
     бепмсрэ a[i] = b[i]
   йнмеж streq;
 
