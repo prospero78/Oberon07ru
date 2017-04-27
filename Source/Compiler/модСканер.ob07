@@ -733,8 +733,8 @@
         AddNodeKey("MODULE", мКонст.ксМОДУЛЬ);
         AddNodeKey("МОДУЛЬ", мКонст.ксМОДУЛЬ);
         
-        AddNodeKey("IMPORT", мКонст.lxIMPORT);
-        AddNodeKey("ИМПОРТ", мКонст.lxIMPORT);
+        AddNodeKey("IMPORT", мКонст.ксИМПОРТ);
+        AddNodeKey("ИМПОРТ", мКонст.ксИМПОРТ);
         
         AddNodeKey("CONST", мКонст.lxCONST);
         AddNodeKey("КОНСТ", мКонст.lxCONST);
@@ -755,14 +755,14 @@
         AddNodeKey("НА", мКонст.lxTO);
         AddNodeKey("ДО", мКонст.lxTO);
         
-        AddNodeKey("RECORD", мКонст.lxRECORD);
-        AddNodeKey("ЗАПИСЬ", мКонст.lxRECORD);
+        AddNodeKey("RECORD", мКонст.ксЗАПИСЬ);
+        AddNodeKey("ЗАПИСЬ", мКонст.ксЗАПИСЬ);
         
-        AddNodeKey("RETURN", мКонст.lxRETURN);
-        AddNodeKey("ВЕРНУТЬ", мКонст.lxRETURN);
+        AddNodeKey("RETURN", мКонст.ксВЕРНУТЬ);
+        AddNodeKey("ВЕРНУТЬ", мКонст.ксВЕРНУТЬ);
         
-        AddNodeKey("PROCEDURE", мКонст.lxPROCEDURE);
-        AddNodeKey("ПРОЦЕДУРА", мКонст.lxPROCEDURE);
+        AddNodeKey("PROCEDURE", мКонст.ксПРОЦЕДУРА);
+        AddNodeKey("ПРОЦЕДУРА", мКонст.ксПРОЦЕДУРА);
         
         AddNodeKey("OR", мКонст.lxOR);
         AddNodeKey("ИЛИ", мКонст.lxOR);
@@ -779,8 +779,8 @@
         AddNodeKey("UNTIL", мКонст.lxUNTIL);
         AddNodeKey("ПОКАНЕ", мКонст.lxUNTIL);
         
-        AddNodeKey("REPEAT", мКонст.lxREPEAT);
-        AddNodeKey("ПОВТОРЯТЬ", мКонст.lxREPEAT);
+        AddNodeKey("REPEAT", мКонст.ксПОВТОР);
+        AddNodeKey("ПОВТОРЯТЬ", мКонст.ксПОВТОР);
         
     КОНЕЦ Init;
 

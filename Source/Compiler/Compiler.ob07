@@ -1760,7 +1760,7 @@
     ВЫБОР мСкан.tLex ИЗ
     |lxIDENT: IdentOper
     |мКонст.lxIF, мКонст.lxWHILE: IfWhileOper(мСкан.tLex = мКонст.lxWHILE)
-    |мКонст.lxREPEAT: RepeatOper
+    |мКонст.ксПОВТОР: RepeatOper
     |мКонст.lxFOR: ForOper
     |мКонст.lxCASE: CaseOper
     ИНАЧЕ

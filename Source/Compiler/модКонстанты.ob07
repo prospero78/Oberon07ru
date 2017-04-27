@@ -30,17 +30,17 @@
    lxFALSE* = 11;
    lxFOR* = 12;
    lxIF* = 13;
-   lxIMPORT* = 14;
+   ЙЯхлонпр* = 14;
    
    ЙЯлндскэ* = 18;
    lxNIL* = 19;
    lxOF* = 20;
    lxOR* = 21;
    lxPOINTER* = 22;
-   lxPROCEDURE* = 23;
-   lxRECORD* = 24;
-   lxREPEAT* = 25;
-   lxRETURN* = 26;
+   ЙЯопнжедспю* = 23;
+   ЙЯгюохяэ* = 24;
+   ЙЯонбрнп* = 25;
+   ЙЯбепмсрэ* = 26;
    lxTHEN* = 27;
    lxTO* = 28;
    lxTRUE* = 29;

@@ -259,7 +259,7 @@
       |мКонст.lxDO:      code := 118
       |мКонст.lxUNTIL:   code := 119
       |lxAssign:  code := 120
-      |мКонст.lxRETURN:  code := 124
+      |мКонст.ксВЕРНУТЬ:  code := 124
       |lxColon:   code := 157
       ИНАЧЕ
       КОНЕЦ;
@@ -1044,7 +1044,7 @@
       Assert2(nov.Base.Size <= мКонст.целое_макс DIV nov.Len, 83);
       nov.Size := nov.Base.Size * nov.Len;
       nov.Align := nov.Base.Align
-    |мКонст.lxRECORD:
+    |мКонст.ксЗАПИСЬ:
       Next;
       INC(RecCount);
       nov := CreateType(TRECORD, 0, 0, RecCount, ПУСТО, ИСТИНА, NewType);
@@ -1092,7 +1092,7 @@
       ИНАЧЕ
         Assert(nov.Base.tType = TRECORD, line, col, 81)
       КОНЕЦ
-    |мКонст.lxPROCEDURE:
+    |мКонст.ксПРОЦЕДУРА:
       Next;
       nov := CreateType(TPROC, 0, 4, 0, sttypes[TVOID], ИСТИНА, NewType);
       Coord(line, col);
@@ -1225,7 +1225,7 @@
         КОНЕЦ
       КОНЕЦ
     КОНЕЦ;
-    ПОКА мСкан.tLex = мКонст.lxPROCEDURE ДЕЛАТЬ
+    ПОКА мСкан.tLex = мКонст.ксПРОЦЕДУРА ДЕЛАТЬ
       Next;
       Coord(line, col);
       ЕСЛИ CallFlag(Call) ТОГДА
@@ -1258,7 +1258,7 @@
       КОНЕЦ;
       func := curBlock.T.Base.tType # TVOID;
       ЕСЛИ func ТОГДА
-        Check(мКонст.lxRETURN);
+        Check(мКонст.ксВЕРНУТЬ);
         мУтиль.UnitLine(UnitNumber, мСкан.line);
         Next;
         Coord(line, col);
@@ -1268,7 +1268,7 @@
           X86.Load(e.T.tType)
         КОНЕЦ
       ИНАЧЕ
-        Assert2(мСкан.tLex # мКонст.lxRETURN, 123)
+        Assert2(мСкан.tLex # мКонст.ксВЕРНУТЬ, 123)
       КОНЕЦ;
       Check(мКонст.lxEND);
       Next;
@@ -1458,7 +1458,7 @@
       Guard;
       Next; Check(lxSemi);
       Next;
-      ЕСЛИ мСкан.tLex = мКонст.lxIMPORT ТОГДА
+      ЕСЛИ мСкан.tLex = мКонст.ксИМПОРТ ТОГДА
         temp := main;
         main := ЛОЖЬ;
         ImportList;
