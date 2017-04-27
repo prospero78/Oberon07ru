@@ -41,7 +41,9 @@
    lxTO* = 28;
    lxTRUE* = 29;
    lxTYPE* = 30;
+   lxUNTIL* = 31;
    lxVAR* = 32;
    lxWHILE* = 33;
+   
   
 КОНЕЦ модКонстанты.
