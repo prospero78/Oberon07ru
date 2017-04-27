@@ -23,6 +23,7 @@
     м”тиль := мод”тиль,
     X86 := модјсм86_32,
     SYSTEM,
+    м“ипы := мод“ипы,
     м онст := мод онстанты;
 
  ќЌ—“
@@ -61,7 +62,7 @@
 
   pExpr, pFactor: ѕ–ќ÷≈ƒ”–ј (ѕ≈– e: DECL.EXPRESSION);
   pOpSeq: ѕ–ќ÷≈ƒ”–ј;
-  Lex: м”тиль.tString;
+  Lex: м“ипы.tString;
   sttypes: DECL.stTYPES;
 
 ѕ–ќ÷≈ƒ”–ј Load(e: DECL.EXPRESSION);
@@ -567,8 +568,8 @@
       pExpr(e1);
       Assert(e1.T.tType = TLONGREAL, line, col, 70);
       ≈—Ћ» e1.eType = eCONST “ќ√ƒј
-        Assert(ABS(e1.Value) <= LONG(м онст.maxREAL), line, col, DECL.FOVER);
-        Assert(ABS(e1.Value) >= LONG(м онст.minREAL), line, col, DECL.UNDER);
+        Assert(ABS(e1.Value) <= LONG(м онст.вещ_макс), line, col, DECL.FOVER);
+        Assert(ABS(e1.Value) >= LONG(м онст.вещ_мин), line, col, DECL.UNDER);
         e.Value := e1.Value;
         e.eType := eCONST
        ќЌ≈÷;
@@ -1434,7 +1435,7 @@
     м”тиль.Clear(Labels)
    ќЌ≈÷ CaseOper;
 
-ѕ–ќ÷≈ƒ”–ј CheckCode(Code: м”тиль.tString; Len, line, col: INTEGER);
+ѕ–ќ÷≈ƒ”–ј CheckCode(Code: м“ипы.tString; Len, line, col: INTEGER);
   ѕ≈–≈ћ i: INTEGER;
   Ќј„јЋќ
     Assert(~ODD(Len), line, col, 34);
@@ -1777,7 +1778,7 @@
 
 ѕ–ќ÷≈ƒ”–ј Start;
   ѕ≈–≈ћ SelfName, SelfPath, CName, CExt, FName, Path, StdPath,
-      Name, Ext, temp, system, stk, felf: м”тиль.tString;
+      Name, Ext, temp, system, stk, felf: м“ипы.tString;
       platform, stksize: INTEGER;
 
     ѕ–ќ÷≈ƒ”–ј getstksize(): INTEGER;

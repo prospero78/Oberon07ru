@@ -21,11 +21,11 @@
 
 хлонпр ЛсРХКЭ := ЛНДсРХКЭ,
     mSys := SYSTEM,
-    ЛйНМЯР := ЛНДйНМЯРЮМРШ;
+    ЛйНМЯР := ЛНДйНМЯРЮМРШ,
+    ЛрХОШ := ЛНДрХОШ;
 
 йнмяр
-    
-    
+
     maxDBL* = 1.69D308;
     
     IDLENGTH = 255;
@@ -49,13 +49,13 @@
     NODE* = сйюгюрекэ мю гюохяэ
             Left, Right: NODE;
             tLex: INTEGER;
-            Name*: ЛсРХКЭ.tString
+            Name*: ЛрХОШ.tString
         йнмеж;
 
     SCANNER* = сйюгюрекэ мю гюохяэ
             File, ccol, cline, count, col, line, tLex, vINT: INTEGER;
             ch, vCHX: CHAR;
-            Lex: ЛсРХКЭ.tString;
+            Lex: ЛрХОШ.tString;
             vFLT: LONGREAL;
             id: NODE;
             buf, bufpos: INTEGER;
@@ -64,14 +64,14 @@
 
 оепел
 
-    Lex: ЛсРХКЭ.tString;
+    Lex: ЛрХОШ.tString;
     File, ccol, cline, count*, col*, line*, tLex*, vINT*: INTEGER;
     vFLT*: LONGREAL; id*: NODE; ch, vCHX*: CHAR;
     buf, bufpos: INTEGER; CR, UTF8: BOOLEAN;
     Nodes: люяяхб 256 хг NODE;
     _START*, _version*: NODE;
 
-опнжедспю AddNode*(Name: ЛсРХКЭ.tString): NODE;
+опнжедспю AddNode*(Name: ЛрХОШ.tString): NODE;
     оепел cur, res: NODE;
 
         опнжедспю NewNode(Right: BOOLEAN);
@@ -112,7 +112,7 @@
         бепмсрэ res
     йнмеж AddNode;
 
-опнжедспю GetLexStr*(оеп L: ЛсРХКЭ.tString);
+опнжедспю GetLexStr*(оеп L: ЛрХОШ.tString);
     мювюкн
         L := Lex
     йнмеж GetLexStr;
@@ -280,7 +280,7 @@
         бепмсрэ Res
     йнмеж hex;
 
-опнжедспю StrToInt16(str: ЛсРХКЭ.tString): INTEGER;
+опнжедспю StrToInt16(str: ЛрХОШ.tString): INTEGER;
     оепел i, res, n: INTEGER; flag: BOOLEAN;
     мювюкн
         res := 0;
@@ -303,7 +303,7 @@
         бепмсрэ res
     йнмеж StrToInt16;
 
-опнжедспю StrToChx(str: ЛсРХКЭ.tString): CHAR;
+опнжедспю StrToChx(str: ЛрХОШ.tString): CHAR;
     оепел res: INTEGER;
     мювюкн
         res := StrToInt16(str);
@@ -314,7 +314,7 @@
         бепмсрэ CHR(res)
     йнмеж StrToChx;
 
-опнжедспю StrToInt*(str: ЛсРХКЭ.tString): INTEGER;
+опнжедспю StrToInt*(str: ЛрХОШ.tString): INTEGER;
     оепел
         i, res: INTEGER;
         flag: BOOLEAN;
@@ -342,7 +342,7 @@
         бепмсрэ res
     йнмеж StrToInt;
 
-опнжедспю StrToFloat(str: ЛсРХКЭ.tString): LONGREAL;
+опнжедспю StrToFloat(str: ЛрХОШ.tString): LONGREAL;
     оепел
         i, scale: INTEGER; res, m, d: LONGREAL; minus, nez: BOOLEAN;
 
@@ -396,9 +396,9 @@
           мювюкн
             cont := хярхмю;
             еякх str[i] = 0X рнцдю
-              еякх res > LONG(ЛйНМЯР.maxREAL) рнцдю
+              еякх res > LONG(ЛйНМЯР.БЕЫ_ЛЮЙЯ) рнцдю
                 Error(lxERR7, cont)
-              юеякх nez & ((res = 0.0D0) хкх (res < LONG(ЛйНМЯР.minREAL)) & (tLex = lxREAL)) рнцдю
+              юеякх nez & ((res = 0.0D0) хкх (res < LONG(ЛйНМЯР.БЕЫ_ЛХМ)) & (tLex = lxREAL)) рнцдю
                 Error(lxERR9, cont)
               йнмеж
             йнмеж
@@ -451,9 +451,9 @@
             res := res * m;
             Inf(cont, i)
             йнмеж;
-            еякх cont & (nez & (res = 0.0D0) хкх (res > 0.0D0) & (res < LONG(ЛйНМЯР.minREAL)) & (tLex = lxREAL)) рнцдю
+            еякх cont & (nez & (res = 0.0D0) хкх (res > 0.0D0) & (res < LONG(ЛйНМЯР.БЕЫ_ЛХМ)) & (tLex = lxREAL)) рнцдю
             Error(lxERR9, cont)
-            юеякх cont & (tLex = lxREAL) & (res > LONG(ЛйНМЯР.maxREAL)) рнцдю
+            юеякх cont & (tLex = lxREAL) & (res > LONG(ЛйНМЯР.БЕЫ_ЛЮЙЯ)) рнцдю
             Error(lxERR7, cont)
             йнмеж
             бепмсрэ cont
@@ -663,7 +663,7 @@
         йнмеж
     йнмеж GetLex;
 
-опнжедспю AddNodeKey(Name: ЛсРХКЭ.tString; key: INTEGER);
+опнжедспю AddNodeKey(Name: ЛрХОШ.tString; key: INTEGER);
     оепел node: NODE;
     мювюкн
         node := AddNode(Name);
