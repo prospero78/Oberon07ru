@@ -38,8 +38,6 @@
     lxMOD = 17;
     lxOR = 21; 
     lxREPEAT = 25;
-     
-    lxUNTIL = 31; 
 
     lxPlus = 51; lxMinus = 52; lxMult = 53; lxSlash = 54; lxNot = 55; lxAnd = 56; lxComma = 57; lxSemi = 58;
     lxStick = 59; lxLRound = 60; lxLSquare = 61; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
@@ -622,8 +620,8 @@
             PutNext(ch);
             ЕСЛИ ch = "=" ТОГДА
             CASE tLex ИЗ
-            |lxLT:	tLex := lxLE
-            |lxGT:	tLex := lxGE
+            |lxLT:  tLex := lxLE
+            |lxGT:  tLex := lxGE
             |lxColon: tLex := lxAssign
             ИНАЧЕ
             КОНЕЦ;
@@ -682,16 +680,16 @@
         AddNodeKey("MOD", lxMOD);
         
         AddNodeKey("CASE", lxCASE);
-		
+        
         AddNodeKey("IF", мКонст.lxIF);
-		AddNodeKey("ЕСЛИ", мКонст.lxIF);
+        AddNodeKey("ЕСЛИ", мКонст.lxIF);
         
         AddNodeKey("TYPE", мКонст.lxTYPE);
-		AddNodeKey("ТИПЫ", мКонст.lxTYPE);
-		
+        AddNodeKey("ТИПЫ", мКонст.lxTYPE);
+        
         AddNodeKey("BEGIN", мКонст.lxBEGIN);
-		AddNodeKey("НАЧАЛО", мКонст.lxBEGIN);
-		
+        AddNodeKey("НАЧАЛО", мКонст.lxBEGIN);
+        
         AddNodeKey("DIV", lxDIV);
         
         AddNodeKey("IN", lxIN);
@@ -701,26 +699,26 @@
 
         
         AddNodeKey("VAR", мКонст.lxVAR);
-		AddNodeKey("ПЕРЕМ", мКонст.lxVAR);
-		AddNodeKey("ПЕР", мКонст.lxVAR);
-		
+        AddNodeKey("ПЕРЕМ", мКонст.lxVAR);
+        AddNodeKey("ПЕР", мКонст.lxVAR);
+        
         AddNodeKey("ARRAY", мКонст.lxARRAY);
-		AddNodeKey("МАССИВ", мКонст.lxARRAY);
-		
+        AddNodeKey("МАССИВ", мКонст.lxARRAY);
+        
         AddNodeKey("DO", мКонст.lxDO);
-		AddNodeKey("ДЕЛАТЬ", мКонст.lxDO);
-		
+        AddNodeKey("ДЕЛАТЬ", мКонст.lxDO);
+        
         AddNodeKey("IS", lxIS);
-		
+        
         AddNodeKey("OF", мКонст.lxOF);
-		AddNodeKey("ИЗ", мКонст.lxOF);
+        AddNodeKey("ИЗ", мКонст.lxOF);
         
         AddNodeKey("THEN", мКонст.lxTHEN);
-		AddNodeKey("ТОГДА", мКонст.lxTHEN);
-		
+        AddNodeKey("ТОГДА", мКонст.lxTHEN);
+        
         AddNodeKey("WHILE", мКонст.lxWHILE);
-		AddNodeKey("ПОКА", мКонст.lxWHILE);
-		
+        AddNodeKey("ПОКА", мКонст.lxWHILE);
+        
         AddNodeKey("BY", lxBY);
         
         AddNodeKey("MODULE", мКонст.lxMODULE);
@@ -753,9 +751,9 @@
         
         AddNodeKey("RETURN", мКонст.lxRETURN);
         AddNodeKey("ВЕРНУТЬ", мКонст.lxRETURN);
-		
-		AddNodeKey("PROCEDURE", мКонст.lxPROCEDURE);
-		AddNodeKey("ПРОЦЕДУРА", мКонст.lxPROCEDURE);
+        
+        AddNodeKey("PROCEDURE", мКонст.lxPROCEDURE);
+        AddNodeKey("ПРОЦЕДУРА", мКонст.lxPROCEDURE);
         
         AddNodeKey("OR", lxOR);
         AddNodeKey("REPEAT", lxREPEAT);
@@ -769,7 +767,8 @@
         AddNodeKey("FOR", мКонст.lxFOR);
         AddNodeKey("ДЛЯ", мКонст.lxFOR);
         
-        AddNodeKey("UNTIL", lxUNTIL);
+        AddNodeKey("UNTIL", мКонст.lxUNTIL);
+        AddNodeKey("ПОКАНЕ", мКонст.lxUNTIL);
         
     КОНЕЦ Init;
 
