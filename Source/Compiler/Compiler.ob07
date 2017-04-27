@@ -29,7 +29,7 @@
 
   lxEOF = 0; lxINT = -1; lxREAL = -2; lxSTRING = -3; lxIDENT = -4; lxHEX = -5; lxCHX = -6; lxLONGREAL = -7;
   lxBY = 3; lxDIV = 6;
-  lxIN = 15; lxIS = 16;
+  lxIS = 16;
   lxMOD = 17; 
 
   lxPlus = 51; lxMinus = 52; lxMult = 53; lxSlash = 54; lxNot = 55; lxAnd = 56; lxComma = 57; lxSemi = 58;
@@ -1037,7 +1037,7 @@
       КОНЕЦ
     |lxAnd, мКонст.lxOR:
       Assert((a.T.tType = TBOOLEAN) & (b.T.tType = TBOOLEAN), line, col, 37)
-    |lxIN:
+    |мКонст.ксВ:
       Assert((a.T.tType = TINTEGER) & (b.T.tType = TSET), line, col, 37);
       X86.inset
     |lxLT, lxLE, lxGT, lxGE:
@@ -1241,7 +1241,7 @@
       Assert(e.T.tType = TBOOLEAN, line, col, 117);
       Load(e);
       ЕСЛИ wh ТОГДА
-        Check(мКонст.lxDO)
+        Check(мКонст.ксДЕЛАТЬ)
       ИНАЧЕ
         Check(мКонст.ксТОГДА)
       КОНЕЦ;
@@ -1251,12 +1251,12 @@
       pOpSeq;
       X86.jmp(X86.JMP, L);
       X86.Label(L3)
-    ПОКАНЕ мСкан.tLex # мКонст.lxELSIF;
+    ПОКАНЕ мСкан.tLex # мКонст.ксАЕСЛИ;
     ЕСЛИ ~wh & (мСкан.tLex = мКонст.ксИНАЧЕ) ТОГДА
       Next;
       pOpSeq
     КОНЕЦ;
-    Check(мКонст.lxEND);
+    Check(мКонст.ксКОНЕЦ);
     ЕСЛИ ~wh ТОГДА
       X86.Label(L)
     КОНЕЦ;
@@ -1321,12 +1321,12 @@
       iValue := FLOOR(Value);
       Assert(iValue # 0, line, col, 122)
     КОНЕЦ;
-    Check(мКонст.lxDO);
+    Check(мКонст.ксДЕЛАТЬ);
     Next;
     X86.For(iValue > 0, LBeg, LEnd);
     pOpSeq;
     X86.NextFor(iValue, LBeg, LEnd);
-    Check(мКонст.lxEND);
+    Check(мКонст.ксКОНЕЦ);
     Next
   КОНЕЦ ForOper;
 
@@ -1381,7 +1381,7 @@
   НАЧАЛО
     LBeg := X86.NewLabel();
     LEnd := X86.NewLabel();
-    ЕСЛИ ~((мСкан.tLex = lxStick) ИЛИ (мСкан.tLex = мКонст.lxEND)) ТОГДА
+    ЕСЛИ ~((мСкан.tLex = lxStick) ИЛИ (мСкан.tLex = мКонст.ксКОНЕЦ)) ТОГДА
       Label(int, Labels, LBeg);
       ПОКА мСкан.tLex = lxComma ДЕЛАТЬ
         Next;
@@ -1429,7 +1429,7 @@
       мУтиль.UnitLine(DECL.UnitNumber, мСкан.line);
       X86.OnError(7)
     КОНЕЦ;
-    Check(мКонст.lxEND);
+    Check(мКонст.ксКОНЕЦ);
     X86.Label(EndCase);
     Next;
     мУтиль.Clear(Labels)
@@ -1759,9 +1759,9 @@
     мУтиль.UnitLine(DECL.UnitNumber, мСкан.line);
     ВЫБОР мСкан.tLex ИЗ
     |lxIDENT: IdentOper
-    |мКонст.lxIF, мКонст.lxWHILE: IfWhileOper(мСкан.tLex = мКонст.lxWHILE)
+    |мКонст.ксЕСЛИ, мКонст.ксПОКА: IfWhileOper(мСкан.tLex = мКонст.ксПОКА)
     |мКонст.ксПОВТОР: RepeatOper
-    |мКонст.lxFOR: ForOper
+    |мКонст.ксДЛЯ: ForOper
     |мКонст.ксВЫБОР: CaseOper
     ИНАЧЕ
     КОНЕЦ

@@ -30,7 +30,7 @@
   lxEOF = 0; lxINT = -1; lxREAL = -2; lxSTRING = -3; lxIDENT = -4; lxHEX = -5; lxCHX = -6; lxLONGREAL = -7;
   lxBY = 3;
   lxDIV = 6;
-  lxIN = 15; lxIS = 16;
+  lxIS = 16;
   lxMOD = 17;
 
   lxPlus = 51; lxMinus = 52; lxMult = 53; lxSlash = 54; lxNot = 55; lxAnd = 56; lxComma = 57; lxSemi = 58;
@@ -245,7 +245,7 @@
       |мКонст.ксМОДУЛЬ:  code := 21
       |lxIDENT:   code := 22
       |lxSemi:    code := 23
-      |мКонст.lxEND:     code := 24
+      |мКонст.ксКОНЕЦ:     code := 24
       |lxDot:     code := 25
       |lxEQ:      code := 35
       |lxRRound:  code := 38
@@ -256,7 +256,7 @@
       |lxComma:   code := 61
       |мКонст.ксТОГДА:    code := 98
       |lxRSquare: code := 109
-      |мКонст.lxDO:      code := 118
+      |мКонст.ксДЕЛАТЬ:      code := 118
       |мКонст.ксПОКАНЕ:   code := 119
       |lxAssign:  code := 120
       |мКонст.ксВЕРНУТЬ:  code := 124
@@ -437,7 +437,7 @@
   НАЧАЛО
     ВЫБОР Op ИЗ
     |lxEQ, lxNE, lxLT, lxGT,
-     lxLE, lxGE, lxIN, lxIS:
+     lxLE, lxGE, мКонст.ксВ, lxIS:
       Res := ИСТИНА
     ИНАЧЕ
       Res := ЛОЖЬ
@@ -501,7 +501,7 @@
   НАЧАЛО
     ai := FLOOR(a);
     bi := FLOOR(b);
-    ЕСЛИ Op # lxIN ТОГДА
+    ЕСЛИ Op # мКонст.ксВ ТОГДА
       Assert(Ta = Tb, line, col, 37)
     КОНЕЦ;
     ВЫБОР Op ИЗ
@@ -567,7 +567,7 @@
       ИНАЧЕ
         Res := LONG(FLT(ORD(a <= b)))
       КОНЕЦ
-    |lxIN:
+    |мКонст.ксВ:
       Assert((Ta.tType = TINTEGER) & (Tb.tType = TSET), line, col, 37);
       Assert(ASR(ai, 5) = 0, line, col, 49);
       Res := LONG(FLT(ORD(ai IN BITS(bi))))
@@ -763,7 +763,7 @@
           Next;
           Check(lxIDENT)
         ИНАЧЕ
-          Assert2(мСкан.tLex = мКонст.lxEND, 86)
+          Assert2(мСкан.tLex = мКонст.ксКОНЕЦ, 86)
         КОНЕЦ
       ИНАЧЕ
         Assert2(ЛОЖЬ, 85)
@@ -1070,7 +1070,7 @@
         Assert(nov.Base.Rec = record, line2, col2, 113)
       КОНЕЦ;
       ReadFields(nov);
-      Check(мКонст.lxEND);
+      Check(мКонст.ксКОНЕЦ);
       nov.Size := X86.Align(nov.Size, nov.Align);
       ЕСЛИ nov.Base # ПУСТО ТОГДА
         X86.AddRec(nov.Base.Number)
@@ -1270,7 +1270,7 @@
       ИНАЧЕ
         Assert2(мСкан.tLex # мКонст.ксВЕРНУТЬ, 123)
       КОНЕЦ;
-      Check(мКонст.lxEND);
+      Check(мКонст.ксКОНЕЦ);
       Next;
       Check(lxIDENT);
       Assert2(мСкан.id = Name, 87);
@@ -1475,7 +1475,7 @@
         Next;
         OpSeq
       КОНЕЦ;
-      Check(мКонст.lxEND);
+      Check(мКонст.ксКОНЕЦ);
       Next; Check(lxIDENT);
       Assert2(мСкан.id = unit.Name, 26);
       Next; Check(lxDot);
