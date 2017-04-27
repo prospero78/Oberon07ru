@@ -1,0 +1,778 @@
+(*
+    Copyright 2013 Krotov Anton
+
+    This file is part of Compiler.
+
+    Compiler is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Compiler is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Compiler. If not, see <http://www.gnu.org/licenses/>.
+  *)
+
+лндскэ ЛНДяЙЮМЕП;
+
+хлонпр ЛсРХКЭ := ЛНДсРХКЭ,
+    sys := SYSTEM,
+    ЛйНМЯР := ЛНДйНМЯРЮМРШ;
+
+йнмяр
+    minINT* = 80000000H;
+    maxREAL* = 3.39E38;
+    maxDBL* = 1.69D308;
+    minREAL* = 1.41E-45;
+    IDLENGTH = 255;
+    STRLENGTH* = 256;
+
+    lxEOF = 0; lxINT = -1; lxREAL = -2; lxSTRING = -3; lxIDENT = -4; lxHEX = -5; lxCHX = -6; lxLONGREAL = -7;
+    lxBY = 3; lxCASE = 4; lxDIV = 6; 
+     
+    lxIN = 15; lxIS = 16;
+    lxMOD = 17;
+    lxOR = 21; 
+    lxREPEAT = 25;
+     
+    lxUNTIL = 31; 
+
+    lxPlus = 51; lxMinus = 52; lxMult = 53; lxSlash = 54; lxNot = 55; lxAnd = 56; lxComma = 57; lxSemi = 58;
+    lxStick = 59; lxLRound = 60; lxLSquare = 61; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
+    lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69; lxColon = 70;
+    lxEQ = 71; lxNE = 72; lxLT = 73; lxGT = 74; lxLE = 75; lxGE = 76;
+
+    lxERR0 = 100; lxERR1 = 101; lxERR2 = 102; lxERR3 = 103; lxERR4 = 104; lxERR5 = 105; lxERR6 = 106;
+    lxERR7 = 107; lxERR8 = 108; lxERR9 = 109; lxERR10 = 110; lxERR11 = 111; lxERR20 = 120;
+
+рхош
+
+    NODE* = сйюгюрекэ мю гюохяэ
+            Left, Right: NODE;
+            tLex: INTEGER;
+            Name*: ЛсРХКЭ.tString
+        йнмеж;
+
+    SCANNER* = сйюгюрекэ мю гюохяэ
+            File, ccol, cline, count, col, line, tLex, vINT: INTEGER;
+            ch, vCHX: CHAR;
+            Lex: ЛсРХКЭ.tString;
+            vFLT: LONGREAL;
+            id: NODE;
+            buf, bufpos: INTEGER;
+            CR, UTF8: BOOLEAN
+        йнмеж;
+
+оепел
+
+    Lex: ЛсРХКЭ.tString;
+    File, ccol, cline, count*, col*, line*, tLex*, vINT*: INTEGER;
+    vFLT*: LONGREAL; id*: NODE; ch, vCHX*: CHAR;
+    buf, bufpos: INTEGER; CR, UTF8: BOOLEAN;
+    Nodes: люяяхб 256 хг NODE;
+    _START*, _version*: NODE;
+
+опнжедспю AddNode*(Name: ЛсРХКЭ.tString): NODE;
+    оепел cur, res: NODE;
+
+        опнжедспю NewNode(Right: BOOLEAN);
+            мювюкн
+            NEW(res);
+            ЛсРХКЭ.MemErr(res = осярн);
+            res.Name := Name;
+            res.tLex := lxIDENT;
+            res.Left := осярн;
+            res.Right := осярн;
+            еякх Right рнцдю
+            cur.Right := res
+            хмюве
+            cur.Left := res
+            йнмеж
+            йнмеж NewNode;
+
+    мювюкн
+        res := осярн;
+        cur := Nodes[ORD(Name[0])];
+        REPEAT
+            еякх Name > cur.Name рнцдю
+            еякх cur.Right # осярн рнцдю
+        cur := cur.Right
+            хмюве
+        NewNode(хярхмю)
+            йнмеж
+            юеякх Name < cur.Name рнцдю
+            еякх cur.Left # осярн рнцдю
+        cur := cur.Left
+            хмюве
+        NewNode(кнфэ)
+            йнмеж
+            хмюве
+            res := cur
+            йнмеж
+        UNTIL res # осярн
+        бепмсрэ res
+    йнмеж AddNode;
+
+опнжедспю GetLexStr*(оеп L: ЛсРХКЭ.tString);
+    мювюкн
+        L := Lex
+    йнмеж GetLexStr;
+
+опнжедспю Backup*(scanner: SCANNER);
+    мювюкн
+        scanner.File := File;
+        scanner.ccol := ccol;
+        scanner.cline := cline;
+        scanner.ch := ch;
+        scanner.Lex := Lex;
+        scanner.count := count;
+        scanner.col := col;
+        scanner.line := line;
+        scanner.tLex := tLex;
+        scanner.vINT := vINT;
+        scanner.vFLT := vFLT;
+        scanner.vCHX := vCHX;
+        scanner.buf := buf;
+        scanner.bufpos := bufpos;
+        scanner.CR := CR;
+        scanner.UTF8 := UTF8
+    йнмеж Backup;
+
+опнжедспю Recover*(scanner: SCANNER);
+    мювюкн
+        File := scanner.File;
+        ccol := scanner.ccol;
+        cline := scanner.cline;
+        ch := scanner.ch;
+        Lex := scanner.Lex;
+        count := scanner.count;
+        col := scanner.col;
+        line := scanner.line;
+        tLex := scanner.tLex;
+        vINT := scanner.vINT;
+        vFLT := scanner.vFLT;
+        vCHX := scanner.vCHX;
+        buf := scanner.buf;
+        bufpos := scanner.bufpos;
+        CR := scanner.CR;
+        UTF8 := scanner.UTF8
+    йнмеж Recover;
+
+опнжедспю Next;
+    оепел cr: BOOLEAN;
+    мювюкн
+        cr := кнфэ;
+        sys.GET(bufpos, ch);
+        INC(ccol);
+        CASE ch хг
+        |0AX: еякх ~CR рнцдю INC(cline) йнмеж; ccol := 0
+        |0DX: INC(cline); ccol := 0; cr := хярхмю
+        |09X: DEC(ccol); ccol := ccol + ЛйНМЯР.Tab - (ccol - 1) MOD ЛйНМЯР.Tab - 1
+        |80X..0BFX: еякх UTF8 рнцдю DEC(ccol) йнмеж
+        хмюве
+        йнмеж;
+        CR := cr;
+        INC(bufpos)
+    йнмеж Next;
+
+опнжедспю Open*(FName: люяяхб хг CHAR; оеп FHandle: INTEGER): BOOLEAN;
+    оепел n, size: INTEGER; c: CHAR;
+    мювюкн
+        File := ЛсРХКЭ.OpenF(FName, 0);
+        FHandle := File;
+        еякх File # 0 рнцдю
+            CR := кнфэ;
+            UTF8 := кнфэ;
+            ccol := 0;
+            cline := 1;
+            ch := 0X;
+            size := ЛсРХКЭ.FileSize(File);
+            buf := ЛсРХКЭ.GetMem(size + 1024);
+            sys.PUT(buf + size, 0X);
+            ЛсРХКЭ.MemErr(buf = 0);
+            n := ЛсРХКЭ.Read(File, buf, size);
+            ЛсРХКЭ.CloseF(File);
+            bufpos := buf;
+            sys.GET(buf, c);
+            еякх c = 0EFX рнцдю
+            sys.GET(buf + 1, c);
+            еякх c = 0BBX рнцдю
+        sys.GET(buf + 2, c);
+        еякх c = 0BFX рнцдю
+            INC(bufpos, 3);
+            UTF8 := хярхмю
+        йнмеж
+            йнмеж
+            йнмеж;
+            Next
+        йнмеж
+        бепмсрэ (File # 0) & (n = size)
+    йнмеж Open;
+
+опнжедспю Space(ch: CHAR): BOOLEAN;
+    бепмсрэ (ch <= 20X) & (ch > 0X)
+    йнмеж Space;
+
+опнжедспю Letter(ch: CHAR): BOOLEAN;
+    оепел
+        ch_eng: BOOLEAN;
+        ch_rus: BOOLEAN;
+        
+        result: BOOLEAN;
+    мювюкн
+        ch_eng := (ch >= "A") & (ch <= "Z") OR (ch >= "a") & (ch <= "z") OR (ch = "_");
+        ch_rus := (ch >= "ю") & (ch <= "ъ") OR (ch >= "Ю") & (ch <= "Ъ");
+        result := ch_eng OR ch_rus;
+        бепмсрэ result
+    йнмеж Letter;
+
+опнжедспю Digit*(ch: CHAR): BOOLEAN;
+        бепмсрэ (ch >= "0") & (ch <= "9")
+    йнмеж Digit;
+
+опнжедспю HexDigit*(ch: CHAR): BOOLEAN;
+        бепмсрэ (ch >= "A") & (ch <= "F") OR (ch >= "0") & (ch <= "9")
+    йнмеж HexDigit;
+
+опнжедспю PutChar(ch: CHAR);
+    мювюкн
+        Lex[count] := ch;
+        еякх ch # 0X рнцдю
+            INC(count)
+        йнмеж
+    йнмеж PutChar;
+
+опнжедспю PutNext(ch: CHAR);
+    мювюкн
+        PutChar(ch);
+        Next
+    йнмеж PutNext;
+
+опнжедспю Ident;
+    мювюкн
+        tLex := lxIDENT;
+        онйю Letter(ch) OR Digit(ch) декюрэ
+            PutNext(ch)
+        йнмеж;
+        PutChar(0X);
+        еякх count > IDLENGTH рнцдю
+            tLex := lxERR10
+        йнмеж
+    йнмеж Ident;
+
+опнжедспю hex*(ch: CHAR): INTEGER;
+    оепел Res: INTEGER;
+    мювюкн
+        Res := ORD(ch);
+        CASE ch хг
+        |"0".."9": DEC(Res, ORD("0"))
+        |"A".."F": DEC(Res, ORD("A") - 10)
+        хмюве
+        йнмеж
+        бепмсрэ Res
+    йнмеж hex;
+
+опнжедспю StrToInt16(str: ЛсРХКЭ.tString): INTEGER;
+    оепел i, res, n: INTEGER; flag: BOOLEAN;
+    мювюкн
+        res := 0;
+        i := 0;
+        n := 0;
+        онйю str[i] = "0" декюрэ
+            INC(i)
+        йнмеж;
+        flag := хярхмю;
+        онйю flag & (str[i] # "X") & (str[i] # "H") декюрэ
+            INC(n);
+            еякх n > 8 рнцдю
+            tLex := lxERR5;
+            flag := кнфэ
+            хмюве
+            res := LSL(res, 4) + hex(str[i]);
+            INC(i)
+            йнмеж
+        йнмеж
+        бепмсрэ res
+    йнмеж StrToInt16;
+
+опнжедспю StrToChx(str: ЛсРХКЭ.tString): CHAR;
+    оепел res: INTEGER;
+    мювюкн
+        res := StrToInt16(str);
+        еякх (res < 0) OR (res > 0FFH) рнцдю
+            tLex := lxERR6;
+            res := 0
+        йнмеж
+        бепмсрэ CHR(res)
+    йнмеж StrToChx;
+
+опнжедспю StrToInt*(str: ЛсРХКЭ.tString): INTEGER;
+    оепел
+        i, res: INTEGER;
+        flag: BOOLEAN;
+    мювюкн
+        res := 0;
+        i := 0;
+        flag := хярхмю;
+        онйю flag & (str[i] # 0X) декюрэ
+            еякх res > ЛйНМЯР.maxINT DIV 10 рнцдю
+            tLex := lxERR5;
+            flag := кнфэ;
+            res := 0
+            хмюве
+            res := res * 10;
+            еякх res > ЛйНМЯР.maxINT - (ORD(str[i]) - ORD("0")) рнцдю
+        tLex := lxERR5;
+        flag := кнфэ;
+        res := 0
+            хмюве
+        res := res + (ORD(str[i]) - ORD("0"));
+        INC(i)
+            йнмеж
+            йнмеж
+        йнмеж
+        бепмсрэ res
+    йнмеж StrToInt;
+
+опнжедспю StrToFloat(str: ЛсРХКЭ.tString): LONGREAL;
+    оепел i, scale: INTEGER; res, m, d: LONGREAL; minus, nez: BOOLEAN;
+
+        опнжедспю Error(e: INTEGER; оеп cont: BOOLEAN);
+          мювюкн
+            tLex := e;
+            res := 0.0D0;
+            cont := кнфэ
+          йнмеж Error;
+
+        опнжедспю Inf(оеп cont: BOOLEAN; оеп i: INTEGER);
+          мювюкн
+            еякх ЛсРХКЭ.IsInf(res) рнцдю
+              Error(lxERR7, cont)
+            йнмеж;
+            INC(i)
+          йнмеж Inf;
+
+        опнжедспю part1(): BOOLEAN;
+          оепел cont: BOOLEAN;
+          мювюкн
+            res := 0.0D0;
+            i := 0;
+            d := 1.0D0;
+            nez := кнфэ;
+            cont := хярхмю;
+            онйю cont & Digit(str[i]) декюрэ
+            nez := nez OR (str[i] # "0");
+            res := res * 10.0D0 + LONG(FLT(ORD(str[i]) - ORD("0")));
+            Inf(cont, i)
+            йнмеж
+            бепмсрэ cont
+          йнмеж part1;
+
+        опнжедспю part2(): BOOLEAN;
+          оепел cont: BOOLEAN;
+          мювюкн
+            INC(i);
+            cont := хярхмю;
+            онйю cont & Digit(str[i]) декюрэ
+            nez := nez OR (str[i] # "0");
+            d := d / 10.0D0;
+            res := res + LONG(FLT(ORD(str[i]) - ORD("0"))) * d;
+            Inf(cont, i)
+            йнмеж
+            бепмсрэ cont
+          йнмеж part2;
+
+        опнжедспю part3(): BOOLEAN;
+          оепел cont: BOOLEAN;
+          мювюкн
+            cont := хярхмю;
+            еякх str[i] = 0X рнцдю
+              еякх res > LONG(maxREAL) рнцдю
+                Error(lxERR7, cont)
+              юеякх nez & ((res = 0.0D0) OR (res < LONG(minREAL)) & (tLex = lxREAL)) рнцдю
+                Error(lxERR9, cont)
+              йнмеж
+            йнмеж
+            бепмсрэ cont
+          йнмеж part3;
+
+        опнжедспю part4(): BOOLEAN;
+          оепел cont: BOOLEAN;
+          мювюкн
+            еякх str[i] = "D" рнцдю
+              tLex := lxLONGREAL
+            йнмеж;
+            INC(i);
+            m := 10.0D0;
+            minus := кнфэ;
+            еякх str[i] = "+" рнцдю
+              INC(i)
+            юеякх str[i] = "-" рнцдю
+              minus := хярхмю;
+              INC(i);
+              m := 0.1D0
+            йнмеж;
+            scale := 0;
+            cont := хярхмю;
+            онйю cont & Digit(str[i]) декюрэ
+              еякх scale > ЛйНМЯР.maxINT DIV 10 рнцдю
+                Error(lxERR8, cont)
+              хмюве
+                scale := scale * 10;
+                еякх scale > ЛйНМЯР.maxINT - (ORD(str[i]) - ORD("0")) рнцдю
+                    Error(lxERR8, cont)
+                хмюве
+                    scale := scale + (ORD(str[i]) - ORD("0"));
+                    INC(i)
+                йнмеж
+              йнмеж
+            йнмеж
+            бепмсрэ cont
+        йнмеж part4;
+
+        опнжедспю part5(): BOOLEAN;
+          оепел cont: BOOLEAN; i: INTEGER;
+          мювюкн
+            cont := хярхмю;
+            еякх scale = ЛйНМЯР.maxINT рнцдю
+            Error(lxERR8, cont)
+            йнмеж;
+            i := 1;
+            онйю cont & (i <= scale) декюрэ
+            res := res * m;
+            Inf(cont, i)
+            йнмеж;
+            еякх cont & (nez & (res = 0.0D0) OR (res > 0.0D0) & (res < LONG(minREAL)) & (tLex = lxREAL)) рнцдю
+            Error(lxERR9, cont)
+            юеякх cont & (tLex = lxREAL) & (res > LONG(maxREAL)) рнцдю
+            Error(lxERR7, cont)
+            йнмеж
+            бепмсрэ cont
+          йнмеж part5;
+
+    мювюкн
+        еякх part1() & part2() & part3() & part4() & part5() рнцдю йнмеж
+        бепмсрэ res
+    йнмеж StrToFloat;
+
+опнжедспю Number;
+    оепел nextchr: CHAR;
+    мювюкн
+        tLex := lxINT;
+        онйю Digit(ch) декюрэ
+            PutNext(ch)
+        йнмеж;
+        еякх ch = "H" рнцдю
+            tLex := lxHEX
+        юеякх ch = "X" рнцдю
+            tLex := lxCHX
+        йнмеж;
+        еякх tLex # lxINT рнцдю
+            PutNext(ch)
+        хмюве
+            онйю HexDigit(ch) декюрэ
+            tLex := lxHEX;
+            PutNext(ch)
+            йнмеж;
+            еякх tLex = lxHEX рнцдю
+            еякх ch = "H" рнцдю
+        PutNext(ch)
+            юеякх ch = "X" рнцдю
+        tLex := lxCHX;
+        PutNext(ch)
+            хмюве
+        tLex := lxERR1
+            йнмеж
+            юеякх ch = "." рнцдю
+            sys.GET(bufpos, nextchr);
+            еякх nextchr # "." рнцдю
+        tLex := lxREAL;
+        PutNext(ch);
+        онйю Digit(ch) декюрэ
+            PutNext(ch)
+        йнмеж;
+        еякх (ch = "E") OR (ch = "D") рнцдю
+            PutNext(ch);
+            еякх (ch = "+") OR (ch = "-") рнцдю
+            PutNext(ch)
+            йнмеж;
+            еякх ~Digit(ch) рнцдю
+            tLex := lxERR2
+            хмюве
+            онйю Digit(ch) декюрэ
+            PutNext(ch)
+            йнмеж
+            йнмеж
+        йнмеж
+            йнмеж
+            йнмеж
+        йнмеж;
+        PutChar(0X)
+    йнмеж Number;
+
+опнжедспю Delim(ch: CHAR): INTEGER;
+    оепел Res: INTEGER;
+    мювюкн
+        CASE ch хг
+        |"+": Res := lxPlus
+        |"-": Res := lxMinus
+        |"*": Res := lxMult
+        |"/": Res := lxSlash
+        |"~": Res := lxNot
+        |"&": Res := lxAnd
+        |",": Res := lxComma
+        |";": Res := lxSemi
+        |"|": Res := lxStick
+        |"[": Res := lxLSquare
+        |"{": Res := lxLCurly
+        |"^": Res := lxCaret
+        |"=": Res := lxEQ
+        |"#": Res := lxNE
+        |")": Res := lxRRound
+        |"]": Res := lxRSquare
+        |"}": Res := lxRCurly
+        |">": Res := lxGT
+        |"<": Res := lxLT
+        |":": Res := lxColon
+        хмюве
+        йнмеж
+        бепмсрэ Res
+    йнмеж Delim;
+
+опнжедспю Comment;
+    оепел c, level: INTEGER; cont: BOOLEAN;
+    мювюкн
+        c := 1;
+        level := 1;
+        cont := хярхмю;
+        онйю cont & (level > 0) декюрэ
+            Next;
+            CASE ch хг
+            |"(": c := 2
+            |")": еякх c = 3 рнцдю DEC(level) йнмеж; c := 1
+            |"*": еякх c = 2 рнцдю INC(level); c := 1 хмюве c := 3 йнмеж
+            |0X : cont := кнфэ
+            хмюве
+            c := 1
+            йнмеж;
+        йнмеж;
+        еякх cont рнцдю
+            Next
+        йнмеж
+    йнмеж Comment;
+
+опнжедспю GetLex*;
+    мювюкн
+        онйю Space(ch) декюрэ
+            Next
+        йнмеж;
+        col := ccol;
+        line := cline;
+        count := 0;
+        CASE ch хг
+        |"A".."Z", "a".."z", "_": (* eng *)
+            Ident;
+            id := AddNode(Lex);
+            tLex := id.tLex;
+        |"ю".."ъ", "Ю".."Ъ": (* rus *)
+            Ident;
+            id := AddNode(Lex);
+            tLex := id.tLex;
+        |"0".."9":
+            Number;
+            CASE tLex хг
+            |lxINT:  vINT := StrToInt(Lex)
+            |lxHEX:  vINT := StrToInt16(Lex)
+            |lxCHX:  vCHX := StrToChx(Lex)
+            |lxREAL: vFLT := StrToFloat(Lex)
+            хмюве
+            йнмеж
+        |22X:
+            tLex := lxSTRING;
+            Next;
+            онйю (ch # 22X) & (ch >= 20X) декюрэ
+            PutNext(ch)
+            йнмеж;
+            еякх ch = 22X рнцдю
+            Next
+            хмюве
+            tLex := lxERR3
+            йнмеж;
+            PutChar(0X);
+            INC(count);
+            еякх count > STRLENGTH рнцдю
+            tLex := lxERR11
+            йнмеж
+        |"/":
+            tLex := Delim(ch);
+            PutNext(ch);
+            еякх ch = "/" рнцдю
+            онйю (ch >= 20X) OR (ch = 9X) декюрэ
+        PutNext(ch)
+            йнмеж;
+            GetLex
+            йнмеж;
+            PutChar(0X)
+        |">", "<", ":":
+            tLex := Delim(ch);
+            PutNext(ch);
+            еякх ch = "=" рнцдю
+            CASE tLex хг
+            |lxLT:	tLex := lxLE
+            |lxGT:	tLex := lxGE
+            |lxColon: tLex := lxAssign
+            хмюве
+            йнмеж;
+            PutNext(ch)
+            йнмеж;
+            PutChar(0X)
+        |".":
+            tLex := lxDot;
+            PutNext(ch);
+            еякх ch = "." рнцдю
+            tLex := lxDbl;
+            PutNext(ch)
+            йнмеж;
+            PutChar(0X)
+        |"(":
+            tLex := lxLRound;
+            PutNext(ch);
+            еякх ch = "*" рнцдю
+            Comment;
+            GetLex
+            йнмеж;
+            PutChar(0X)
+        |"+", "-", "*", "~", "&", ",", ";", "|", "[", "{", "^", "=", "#", ")", "]", "}":
+            tLex := Delim(ch);
+            PutChar(ch);
+            PutNext(0X)
+        |0X:
+            tLex := lxEOF;
+            PutChar(0X)
+        хмюве
+            tLex := lxERR4
+        йнмеж
+    йнмеж GetLex;
+
+опнжедспю AddNodeKey(Name: ЛсРХКЭ.tString; key: INTEGER);
+    оепел node: NODE;
+    мювюкн
+        node := AddNode(Name);
+        node.tLex := key
+    йнмеж AddNodeKey;
+
+опнжедспю Init;
+    оепел i: INTEGER; node: NODE;
+    мювюкн
+        дкъ i := 0 дн LEN(Nodes) - 1 декюрэ
+            NEW(node);
+            ЛсРХКЭ.MemErr(node = осярн);
+            sys.PUT(sys.ADR(node.Name), i);
+            node.Left := осярн;
+            node.Right := осярн;
+            node.tLex := lxIDENT;
+            Nodes[i] := node
+        йнмеж;
+        _START := AddNode("START");
+        _version := AddNode("version");
+        AddNodeKey("MOD", lxMOD);
+        
+        AddNodeKey("CASE", lxCASE);
+		
+        AddNodeKey("IF", ЛйНМЯР.lxIF);
+		AddNodeKey("еякх", ЛйНМЯР.lxIF);
+        
+        AddNodeKey("TYPE", ЛйНМЯР.lxTYPE);
+		AddNodeKey("рхош", ЛйНМЯР.lxTYPE);
+		
+        AddNodeKey("BEGIN", ЛйНМЯР.lxBEGIN);
+		AddNodeKey("мювюкн", ЛйНМЯР.lxBEGIN);
+		
+        AddNodeKey("DIV", lxDIV);
+        
+        AddNodeKey("IN", lxIN);
+        
+        AddNodeKey("NIL", ЛйНМЯР.lxNIL);
+        AddNodeKey("осярн", ЛйНМЯР.lxNIL);
+
+        
+        AddNodeKey("VAR", ЛйНМЯР.lxVAR);
+		AddNodeKey("оепел", ЛйНМЯР.lxVAR);
+		AddNodeKey("оеп", ЛйНМЯР.lxVAR);
+		
+        AddNodeKey("ARRAY", ЛйНМЯР.lxARRAY);
+		AddNodeKey("люяяхб", ЛйНМЯР.lxARRAY);
+		
+        AddNodeKey("DO", ЛйНМЯР.lxDO);
+		AddNodeKey("декюрэ", ЛйНМЯР.lxDO);
+		
+        AddNodeKey("IS", lxIS);
+		
+        AddNodeKey("OF", ЛйНМЯР.lxOF);
+		AddNodeKey("хг", ЛйНМЯР.lxOF);
+        
+        AddNodeKey("THEN", ЛйНМЯР.lxTHEN);
+		AddNodeKey("рнцдю", ЛйНМЯР.lxTHEN);
+		
+        AddNodeKey("WHILE", ЛйНМЯР.lxWHILE);
+		AddNodeKey("онйю", ЛйНМЯР.lxWHILE);
+		
+        AddNodeKey("BY", lxBY);
+        
+        AddNodeKey("MODULE", ЛйНМЯР.lxMODULE);
+        AddNodeKey("лндскэ", ЛйНМЯР.lxMODULE);
+        
+        AddNodeKey("IMPORT", ЛйНМЯР.lxIMPORT);
+        AddNodeKey("хлонпр", ЛйНМЯР.lxIMPORT);
+        
+        AddNodeKey("CONST", ЛйНМЯР.lxCONST);
+        AddNodeKey("йнмяр", ЛйНМЯР.lxCONST);
+        
+        AddNodeKey("END", ЛйНМЯР.lxEND);
+        AddNodeKey("йнмеж", ЛйНМЯР.lxEND);
+        
+        AddNodeKey("ELSE", ЛйНМЯР.lxELSE);
+        AddNodeKey("хмюве", ЛйНМЯР.lxELSE);
+        
+        AddNodeKey("ELSIF", ЛйНМЯР.lxELSIF);
+        AddNodeKey("юеякх", ЛйНМЯР.lxELSIF);
+        
+        AddNodeKey("POINTER", ЛйНМЯР.lxPOINTER);
+        AddNodeKey("сйюгюрекэ", ЛйНМЯР.lxPOINTER);
+        
+        AddNodeKey("TO", ЛйНМЯР.lxTO);
+        AddNodeKey("мю", ЛйНМЯР.lxTO);
+        AddNodeKey("дн", ЛйНМЯР.lxTO);
+        
+        AddNodeKey("RECORD", ЛйНМЯР.lxRECORD);
+        AddNodeKey("гюохяэ", ЛйНМЯР.lxRECORD);
+        
+        AddNodeKey("RETURN", ЛйНМЯР.lxRETURN);
+        AddNodeKey("бепмсрэ", ЛйНМЯР.lxRETURN);
+		
+		AddNodeKey("PROCEDURE", ЛйНМЯР.lxPROCEDURE);
+		AddNodeKey("опнжедспю", ЛйНМЯР.lxPROCEDURE);
+        
+        AddNodeKey("OR", lxOR);
+        AddNodeKey("REPEAT", lxREPEAT);
+        
+        AddNodeKey("TRUE", ЛйНМЯР.lxTRUE);
+        AddNodeKey("хярхмю", ЛйНМЯР.lxTRUE);
+        
+        AddNodeKey("FALSE", ЛйНМЯР.lxFALSE);
+        AddNodeKey("кнфэ", ЛйНМЯР.lxFALSE);
+        
+        AddNodeKey("FOR", ЛйНМЯР.lxFOR);
+        AddNodeKey("дкъ", ЛйНМЯР.lxFOR);
+        
+        AddNodeKey("UNTIL", lxUNTIL);
+        
+    йнмеж Init;
+
+мювюкн
+    Init
+йнмеж ЛНДяЙЮМЕП.
