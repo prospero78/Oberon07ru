@@ -370,7 +370,7 @@
       Header.seccount := IntToCard16(0003H);
       Header.infflags := IntToCard16(010FH)
     КОНЕЦ;
-    Header.time := мКонст.Date;
+    Header.time := мКонст.дата;
     Header.PEoptsize := IntToCard16(00E0H);
     Header.PEfile := IntToCard16(010BH);
     Header.compver := IntToCard16(compver);
@@ -1608,7 +1608,7 @@
       size := Align(size, 4) - mSys.SIZE(KOSHEADER);
       Coff.Machine := IntToCard16(014CH);
       Coff.NumberOfSections := IntToCard16(3);
-      Coff.TimeDateStamp := мКонст.Date;
+      Coff.TimeDateStamp := мКонст.дата;
       Coff.SizeOfOptionalHeader := IntToCard16(0);
       Coff.Characteristics := IntToCard16(0184H);
 

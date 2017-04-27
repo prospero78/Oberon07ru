@@ -25,7 +25,7 @@
 
 ТИПЫ
 
-  tString* = МАССИВ мКонст.MAX_PATH ИЗ CHAR;
+  tString* = МАССИВ мКонст.макс_дл_пути ИЗ CHAR;
 
   tpItem* = УКАЗАТЕЛЬ НА tItem;
 
@@ -40,7 +40,7 @@
 
 ПЕРЕМ
 
-  Params: МАССИВ мКонст.MAX_PARAM, 2 ИЗ INTEGER;
+  Params: МАССИВ мКонст.макс_парам, 2 ИЗ INTEGER;
   hConsoleOutput, hConsoleInput, ParamCount*, Line*, Unit*: INTEGER;
   win, kos, lnx: BOOLEAN;
   FileName: tString;
@@ -83,7 +83,7 @@
   НАЧАЛО
     p := API.GetCommandLine();
     cond := 0;
-    ПОКА (count < мКонст.MAX_PARAM) & (cond # 6) ДЕЛАТЬ
+    ПОКА (count < мКонст.макс_парам) & (cond # 6) ДЕЛАТЬ
       c := GetChar(p);
       ВЫБОР cond ИЗ
       |0: ChangeCond(0, 4, 1); ЕСЛИ cond = 1 ТОГДА Params[count, 0] := p КОНЕЦ

@@ -159,16 +159,25 @@
     йнмеж Recover;
 
 опнжедспю Next;
-    оепел cr: BOOLEAN;
+    оепел
+        cr: BOOLEAN;
     мювюкн
         cr := кнфэ;
         mSys.GET(bufpos, ch);
         INC(ccol);
         бшанп ch хг
-        |0AX: еякх ~CR рнцдю INC(cline) йнмеж; ccol := 0
-        |0DX: INC(cline); ccol := 0; cr := хярхмю
-        |09X: DEC(ccol); ccol := ccol + ЛйНМЯР.Tab - (ccol - 1) MOD ЛйНМЯР.Tab - 1
-        |80X..0BFX: еякх UTF8 рнцдю DEC(ccol) йнмеж
+            |0AX: еякх ~CR рнцдю
+                    INC(cline)
+                    йнмеж;
+                    ccol := 0
+            |0DX: INC(cline);
+                ccol := 0;
+                cr := хярхмю
+            |09X: DEC(ccol);
+                ccol := ccol + ЛйНМЯР.РЮА - (ccol - 1) MOD ЛйНМЯР.РЮА - 1
+            |80X..0BFX: еякх UTF8 рнцдю
+                            DEC(ccol)
+                        йнмеж
         хмюве
         йнмеж;
         CR := cr;
