@@ -1,0 +1,465 @@
+(*
+    дЕФСПМШИ ЙНЛЛЕМРЮПХИ
+    Copyright 2013 Krotov Anton
+
+    This file is part of Compiler.
+
+    Compiler is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Compiler is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Compiler. If not, see <http://www.gnu.org/licenses/>.
+  *)
+
+лндскэ ЛНДсРХКЭ;
+
+хлонпр sys := SYSTEM,
+    API,
+    mConst := ЛНДйНМЯРЮМРШ;
+
+рхош
+
+  tString* = люяяхб mConst.MAX_PATH хг CHAR;
+
+  tpItem* = сйюгюрекэ мю tItem;
+
+  tItem* = гюохяэ
+      Next*, Prev*: tpItem
+    йнмеж;
+
+  tpList* = сйюгюрекэ мю гюохяэ
+      First*, Last*: tpItem;
+      Count*: INTEGER
+    йнмеж;
+
+оепел
+
+  Params: люяяхб mConst.MAX_PARAM, 2 хг INTEGER;
+  hConsoleOutput, hConsoleInput, ParamCount*, Line*, Unit*: INTEGER;
+  win, kos, lnx: BOOLEAN;
+  FileName: tString;
+
+опнжедспю SetFile*(F_: tString);
+  мювюкн
+    FileName := F_
+  йнмеж SetFile;
+
+опнжедспю IsInf*(x_: LONGREAL): BOOLEAN;
+  оепел
+    h, l: SET;
+  мювюкн
+    sys.GET(sys.ADR(x_), l);
+    sys.GET(sys.ADR(x_) + 4, h);
+    бепмсрэ (h * {20..30} = {20..30}) & (h * {0..19} = {}) & (l * {0..31} = {})
+  йнмеж IsInf;
+
+опнжедспю GetChar(adr_: INTEGER): CHAR;
+  оепел res: CHAR;
+  мювюкн
+    sys.GET(adr_, res)
+    бепмсрэ res
+  йнмеж GetChar;
+
+опнжедспю ParamParse(count: INTEGER);
+  оепел c: CHAR; cond, p: INTEGER;
+
+    опнжедспю ChangeCond(A, B, C: INTEGER);
+    мювюкн
+      cond := C;
+      CASE c хг
+      |0X: cond := 6
+      |1X..20X: cond := A
+      |22X: cond := B
+      хмюве
+      йнмеж
+    йнмеж ChangeCond;
+
+  мювюкн
+    p := API.GetCommandLine();
+    cond := 0;
+    онйю (count < mConst.MAX_PARAM) & (cond # 6) декюрэ
+      c := GetChar(p);
+      CASE cond хг
+      |0: ChangeCond(0, 4, 1); еякх cond = 1 рнцдю Params[count, 0] := p йнмеж
+      |4: ChangeCond(5, 0, 5); еякх cond = 5 рнцдю Params[count, 0] := p йнмеж
+      |1: ChangeCond(0, 3, 1); еякх cond IN {0, 6} рнцдю Params[count, 1] := p - 1; INC(count) йнмеж
+      |3, 5: ChangeCond(cond, 1, cond); еякх cond = 6 рнцдю Params[count, 1] := p - 1; INC(count) йнмеж
+      хмюве
+      йнмеж;
+      INC(p)
+    йнмеж;
+    ParamCount := count - 1
+  йнмеж ParamParse;
+
+опнжедспю ParamStr*(оеп str: люяяхб хг CHAR; n: INTEGER);
+  оепел i, j, len: INTEGER; c: CHAR;
+  мювюкн
+    j := 0;
+    еякх n <= ParamCount рнцдю
+      len := LEN(str) - 1;
+      i := Params[n, 0];
+      онйю (j < len) & (i <= Params[n, 1]) декюрэ
+        c := GetChar(i);
+        еякх c # 22X рнцдю
+          str[j] := c;
+          INC(j)
+        йнмеж;
+        INC(i)
+      йнмеж
+    йнмеж;
+    str[j] := 0X
+  йнмеж ParamStr;
+
+опнжедспю GetMem*(n: INTEGER): INTEGER;
+    бепмсрэ API.Alloc(64, n)
+  йнмеж GetMem;
+
+опнжедспю CloseF*(F: INTEGER);
+  мювюкн
+    API.CloseHandle(F)
+  йнмеж CloseF;
+
+опнжедспю Read*(F, Buffer, Count: INTEGER): INTEGER;
+  оепел res: INTEGER;
+  мювюкн
+    API.ReadFile(F, Buffer, Count, sys.ADR(res), 0)
+    бепмсрэ res
+  йнмеж Read;
+
+опнжедспю Write*(F, Buffer, Count: INTEGER): INTEGER;
+  оепел res: INTEGER;
+  мювюкн
+    API.WriteFile(F, Buffer, Count, sys.ADR(res), 0)
+    бепмсрэ res
+  йнмеж Write;
+
+опнжедспю FileSize*(F: INTEGER): INTEGER;
+    бепмсрэ API.FileSize(F)
+  йнмеж FileSize;
+
+опнжедспю CharC*(x: CHAR);
+  оепел res: INTEGER;
+  мювюкн
+    еякх win OR lnx рнцдю
+      res := Write(hConsoleOutput, sys.ADR(x), 1)
+    юеякх kos рнцдю
+      API.DebugMsg(sys.ADR(x), 0)
+    йнмеж
+  йнмеж CharC;
+
+опнжедспю Int*(x: INTEGER);
+  оепел i: INTEGER; buf: люяяхб 11 хг INTEGER;
+  мювюкн
+    i := 0;
+    REPEAT
+      buf[i] := x MOD 10;
+      x := x DIV 10;
+      INC(i)
+    UNTIL x = 0;
+    REPEAT
+      DEC(i);
+      CharC(CHR(buf[i] + ORD("0")))
+    UNTIL i = 0
+  йнмеж Int;
+
+опнжедспю Ln*;
+  мювюкн
+    CharC(0DX);
+    CharC(0AX)
+  йнмеж Ln;
+
+опнжедспю OutString*(str: люяяхб хг CHAR);
+  оепел
+    s: tString; n: INTEGER;
+  мювюкн
+    еякх win OR lnx рнцдю
+      n := Write(hConsoleOutput, sys.ADR(str), LENGTH(str))
+    юеякх kos рнцдю
+      API.DebugMsg(sys.ADR(str), 0)
+    йнмеж
+  йнмеж OutString;
+
+опнжедспю ErrMsg*(code: INTEGER);
+  мювюкн
+    OutString("error: "); Int(code); Ln;
+  йнмеж ErrMsg;
+
+опнжедспю ErrMsgPos*(line, col, code: INTEGER);
+  оепел
+    s: tString;
+  мювюкн
+    OutString("error: "); Int(code); Ln;
+    OutString("file:  "); OutString(FileName); Ln;
+    OutString("line:  "); Int(line); Ln;
+    OutString("pos:   "); Int(col); Ln;
+  йнмеж ErrMsgPos;
+
+опнжедспю UnitLine*(newUnit, newLine: INTEGER);
+  мювюкн
+    Unit := newUnit;
+    Line := newLine
+  йнмеж UnitLine;
+
+опнжедспю min*(a, b: INTEGER): INTEGER;
+  оепел Res: INTEGER;
+  мювюкн
+    еякх a < b рнцдю
+      Res := a
+    хмюве
+      Res := b
+    йнмеж
+    бепмсрэ Res
+  йнмеж min;
+
+опнжедспю Align*(n: INTEGER): INTEGER;
+    бепмсрэ (4 - n MOD 4) MOD 4
+  йнмеж Align;
+
+опнжедспю CAP(x: CHAR): CHAR;
+  мювюкн
+    еякх (x >= "a") & (x <= "z") рнцдю
+      x := CHR(ORD(x) - 32)
+    йнмеж
+    бепмсрэ x
+  йнмеж CAP;
+
+опнжедспю streq*(a, b: люяяхб хг CHAR): BOOLEAN;
+  оепел i: INTEGER;
+  мювюкн
+    i := -1;
+    REPEAT
+      INC(i)
+    UNTIL (CAP(a[i]) # CAP(b[i])) OR (a[i] = 0X) OR (b[i] = 0X)
+    бепмсрэ a[i] = b[i]
+  йнмеж streq;
+
+опнжедспю concat*(L, R: люяяхб хг CHAR; оеп Res: люяяхб хг CHAR);
+  оепел i, j: INTEGER;
+  мювюкн
+    i := 0;
+    онйю (L[i] # 0X) & (i - 1 < LEN(Res)) декюрэ
+      Res[i] := L[i];
+      INC(i)
+    йнмеж;
+    j := 0;
+    онйю (R[j] # 0X) & (j + i - 1 < LEN(Res)) декюрэ
+      Res[j + i] := R[j];
+      INC(j)
+    йнмеж;
+    Res[j + i] := 0X
+  йнмеж concat;
+
+опнжедспю Push*(this: tpList; item: tpItem);
+  мювюкн
+    еякх this.Count = 0 рнцдю
+      this.First := item;
+      item.Prev := осярн
+    хмюве
+      this.Last.Next := item;
+      item.Prev := this.Last
+    йнмеж;
+    INC(this.Count);
+    this.Last := item;
+    item.Next := осярн
+  йнмеж Push;
+
+опнжедспю Insert*(this: tpList; item, prev: tpItem);
+  мювюкн
+    еякх prev # this.Last рнцдю
+      item.Next := prev.Next;
+      item.Prev := prev;
+      prev.Next := item;
+      item.Next.Prev := item;
+      INC(this.Count)
+    хмюве
+      Push(this, item)
+    йнмеж
+  йнмеж Insert;
+
+опнжедспю Clear*(this: tpList);
+  мювюкн
+    this.First := осярн;
+    this.Last := осярн;
+    this.Count := 0
+  йнмеж Clear;
+
+опнжедспю CreateList*(): tpList;
+  оепел
+    nov: tpList;
+  мювюкн
+    NEW(nov)
+    бепмсрэ nov
+  йнмеж CreateList;
+
+опнжедспю Revers(оеп str: tString);
+  оепел a, b: INTEGER; c: CHAR;
+  мювюкн
+    a := 0;
+    b := LENGTH(str) - 1;
+    онйю a < b декюрэ
+      c := str[a];
+      str[a] := str[b];
+      str[b] := c;
+      INC(a);
+      DEC(b)
+    йнмеж
+  йнмеж Revers;
+
+опнжедспю Split*(FName: tString; оеп Path, Name, Ext: tString);
+  оепел i, j, k: INTEGER;
+  мювюкн
+    i := LENGTH(FName) - 1;
+    j := 0;
+    онйю (i >= 0) & (FName[i] # API.Slash) декюрэ
+      Name[j] := FName[i];
+      DEC(i);
+      INC(j)
+    йнмеж;
+    Name[j] := 0X;
+    Revers(Name);
+    j := 0;
+    k := LENGTH(Name) - 1;
+    онйю (k >= 0) & (Name[k] # ".") декюрэ
+      Ext[j] := Name[k];
+      DEC(k);
+      INC(j)
+    йнмеж;
+    еякх k >= 0 рнцдю
+      Name[k] := 0X;
+      Ext[j] := ".";
+      INC(j)
+    хмюве
+      j := 0
+    йнмеж;
+    Ext[j] := 0X;
+    Revers(Ext);
+    j := i;
+    дкъ i := 0 дн j декюрэ
+      Path[i] := FName[i]
+    йнмеж;
+    Path[j + 1] := 0X
+  йнмеж Split;
+
+опнжедспю PChar*(s: люяяхб хг CHAR): INTEGER;
+    бепмсрэ sys.ADR(s)
+  йнмеж PChar;
+
+опнжедспю LinuxParam;
+  оепел p, i, str: INTEGER; c: CHAR;
+  мювюкн
+    p := API.GetCommandLine();
+    sys.GET(p, ParamCount);
+    sys.GET(p + 4, p);
+    дкъ i := 0 дн ParamCount - 1 декюрэ
+      sys.GET(p + i * 4, str);
+      Params[i, 0] := str;
+      REPEAT
+        sys.GET(str, c);
+        INC(str)
+      UNTIL c = 0X;
+      Params[i, 1] := str - 1
+    йнмеж;
+    DEC(ParamCount)
+  йнмеж LinuxParam;
+
+опнжедспю Time*;
+  оепел sec, dsec: INTEGER;
+  мювюкн
+    OutString("ГЮРПЮВЕМН БПЕЛЕМХ ");
+    API.Time(sec, dsec);
+    sec := sec - API.sec;
+    dsec := dsec - API.dsec;
+    dsec := dsec + sec * 100;
+    Int(dsec DIV 100); CharC(".");
+    dsec := dsec MOD 100;
+    еякх dsec < 10 рнцдю
+      Int(0)
+    йнмеж;
+    Int(dsec); OutString(" ЯЕЙ"); Ln
+  йнмеж Time;
+
+опнжедспю HALT*(n: INTEGER);
+  мювюкн
+    Time;
+    API.ExitProcess(n)
+  йнмеж HALT;
+
+опнжедспю MemErr*(err: BOOLEAN);
+  мювюкн
+    еякх err рнцдю
+      ErrMsg(72);
+      HALT(1)
+    йнмеж
+  йнмеж MemErr;
+
+опнжедспю CreateF*(FName: люяяхб хг CHAR): INTEGER;
+  оепел res: INTEGER; memerr: BOOLEAN;
+  мювюкн
+    еякх win рнцдю
+      res := API.CreateFile(sys.ADR(FName), 0C0000000H, 0, 0, 2, 80H, 0);
+      еякх res = -1 рнцдю
+        res := 0
+      йнмеж
+    юеякх kos рнцдю
+      res := API.kos_OCFile(FName, 2, memerr);
+      MemErr(memerr)
+    юеякх lnx рнцдю
+      res := API.lnx_CreateFile(FName)
+    йнмеж
+    бепмсрэ res
+  йнмеж CreateF;
+
+опнжедспю OpenF*(FName: люяяхб хг CHAR; Mode: INTEGER): INTEGER;
+  оепел ofstr: API.OFSTRUCT; res: INTEGER; memerr: BOOLEAN;
+  мювюкн
+    еякх win рнцдю
+      res := API.OpenFile(sys.ADR(FName), ofstr, Mode);
+      еякх res = -1 рнцдю
+        res := 0
+      йнмеж
+    юеякх kos рнцдю
+      res := API.kos_OCFile(FName, 5, memerr);
+      MemErr(memerr)
+    юеякх lnx рнцдю
+      res := API.lnx_OpenFile(FName)
+    йнмеж
+    бепмсрэ res
+  йнмеж OpenF;
+
+опнжедспю Init;
+  оепел p, count: INTEGER;
+
+    опнжедспю last(оеп p: INTEGER);
+    мювюкн
+      онйю GetChar(p) # 0X декюрэ INC(p) йнмеж;
+      DEC(p)
+    йнмеж last;
+
+  мювюкн
+    еякх win рнцдю
+      hConsoleOutput := API.GetStdHandle(-11);
+      ParamParse(0)
+    юеякх kos рнцдю
+      ParamParse(1);
+      Params[0, 0] := API.GetName();
+      Params[0, 1] := Params[0, 0];
+      last(Params[0, 1])
+    юеякх lnx рнцдю
+      hConsoleOutput := API.GetStdHandle(-11);
+      LinuxParam
+    йнмеж
+  йнмеж Init;
+
+мювюкн
+  win := API.OS = "WIN";
+  kos := API.OS = "KOS";
+  lnx := API.OS = "LNX";
+  Init
+йнмеж ЛНДсРХКЭ.
