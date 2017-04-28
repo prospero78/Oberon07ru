@@ -1,7 +1,7 @@
 (*
     Copyright 2013 Krotov Anton
 
-    This file is part of Compiler.
+This file is part of Compiler.
 
     Compiler is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -15,6 +15,7 @@
 
     You should have received a copy of the GNU General Public License
     along with Compiler. If not, see <http://www.gnu.org/licenses/>.
+
 *)
 
 лндскэ ЛНДяЙЮМЕП;
@@ -44,9 +45,6 @@
     lxERR0 = 100; lxERR1 = 101; lxERR2 = 102; lxERR3 = 103; lxERR4 = 104; lxERR5 = 105; lxERR6 = 106;
     lxERR7 = 107; lxERR8 = 108; lxERR9 = 109; lxERR10 = 110; lxERR11 = 111; lxERR20 = 120;
 
-рхош
-
-    
 
 оепел
 
@@ -60,7 +58,7 @@
 опнжедспю AddNode*(Name: ЛрХОШ.РяРПНЙЮ): ЛрХОШ.РСсГЕК;
     оепел cur, res: ЛрХОШ.РСсГЕК;
 
-        опнжедспю NewNode(Right: BOOLEAN);
+        опнжедспю сГЕК_мНБШИ(Right: BOOLEAN);
             мювюкн
             NEW(res);
             ЛсРХКЭ.MemErr(res = осярн);
@@ -73,7 +71,7 @@
             хмюве
                cur.Left := res
             йнмеж
-            йнмеж NewNode;
+            йнмеж сГЕК_мНБШИ;
 
     мювюкн
         res := осярн;
@@ -83,13 +81,13 @@
                еякх cur.Right # осярн рнцдю
                   cur := cur.Right
                хмюве
-                  NewNode(хярхмю)
+                  сГЕК_мНБШИ(хярхмю)
                йнмеж
             юеякх Name < cur.Name рнцдю
                еякх cur.Left # осярн рнцдю
                   cur := cur.Left
                хмюве
-                  NewNode(кнфэ)
+                  сГЕК_мНБШИ(кнфэ)
                йнмеж
             хмюве
                res := cur
