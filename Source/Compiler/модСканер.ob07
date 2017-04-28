@@ -62,14 +62,14 @@ This file is part of Compiler.
             мювюкн
             NEW(res);
             ЛсРХКЭ.MemErr(res = осярн);
-            res.Name := Name;
+            res.ХЛЪ := Name;
             res.tLex := lxIDENT;
-            res.Left := осярн;
-            res.Right := осярн;
+            res.КЕБШИ := осярн;
+            res.ОПЮБШИ := осярн;
             еякх Right рнцдю
-               cur.Right := res
+               cur.ОПЮБШИ := res
             хмюве
-               cur.Left := res
+               cur.КЕБШИ := res
             йнмеж
             йнмеж сГЕК_мНБШИ;
 
@@ -77,15 +77,15 @@ This file is part of Compiler.
         res := осярн;
         cur := Nodes[ORD(Name[0])];
         онбрнпърэ
-            еякх Name > cur.Name рнцдю
-               еякх cur.Right # осярн рнцдю
-                  cur := cur.Right
+            еякх Name > cur.ХЛЪ рнцдю
+               еякх cur.ОПЮБШИ # осярн рнцдю
+                  cur := cur.ОПЮБШИ
                хмюве
                   сГЕК_мНБШИ(хярхмю)
                йнмеж
-            юеякх Name < cur.Name рнцдю
-               еякх cur.Left # осярн рнцдю
-                  cur := cur.Left
+            юеякх Name < cur.ХЛЪ рнцдю
+               еякх cur.КЕБШИ # осярн рнцдю
+                  cur := cur.КЕБШИ
                хмюве
                   сГЕК_мНБШИ(кнфэ)
                йнмеж
@@ -101,7 +101,7 @@ This file is part of Compiler.
         L := Lex
     йнмеж GetLexStr;
 
-опнжедспю Backup*(scanner: ЛрХОШ.SCANNER);
+опнжедспю Backup*(scanner: ЛрХОШ.РСяЙЮМЕП);
     мювюкн
         scanner.File := File;
         scanner.ccol := ccol;
@@ -121,7 +121,7 @@ This file is part of Compiler.
         scanner.UTF8 := UTF8
     йнмеж Backup;
 
-опнжедспю Recover*(scanner: ЛрХОШ.SCANNER);
+опнжедспю Recover*(scanner: ЛрХОШ.РСяЙЮМЕП);
     мювюкн
         File := scanner.File;
         ccol := scanner.ccol;
@@ -662,9 +662,9 @@ This file is part of Compiler.
         дкъ i := 0 дн LEN(Nodes) - 1 декюрэ
             NEW(node);
             ЛсРХКЭ.MemErr(node = осярн);
-            mSys.PUT(mSys.ADR(node.Name), i);
-            node.Left := осярн;
-            node.Right := осярн;
+            mSys.PUT(mSys.ADR(node.ХЛЪ), i);
+            node.КЕБШИ := осярн;
+            node.ОПЮБШИ := осярн;
             node.tLex := lxIDENT;
             Nodes[i] := node
         йнмеж;

@@ -82,7 +82,7 @@
       Idents: м”тиль.tpList;
       Import: м”тиль.tpList;
       IdentBegin: IDENT;
-      scanner: м“ипы.SCANNER;
+      scanner: м“ипы.ту—канер;
       Level*: INTEGER;
       Closed, typedecl, ExportType, Std, sys: BOOLEAN
      ќЌ≈÷;
@@ -204,7 +204,7 @@
   Ќј„јЋќ
     res := ѕ”—“ќ;
     cur := prog.First(UNIT);
-    ѕќ ј (cur # ѕ”—“ќ) & м”тиль.streq(cur.Name.Name, Name.Name) ƒ≈Ћј“№
+    ѕќ ј (cur # ѕ”—“ќ) & м”тиль.streq(cur.Name.им€, Name.им€) ƒ≈Ћј“№
       res := cur;
       cur := ѕ”—“ќ
     ј≈—Ћ» cur # ѕ”—“ќ ƒ≈Ћј“№
@@ -1330,7 +1330,7 @@
       ≈—Ћ» u = ѕ”—“ќ “ќ√ƒј
         self := unit;
         м—кан.Backup(unit.scanner);
-        COPY(name.Name, FName);
+        COPY(name.им€, FName);
         ≈—Ћ» ~((~self.Std & pReadModule(Path, FName, м онст.расшир)) »Ћ»
                                 pReadModule(Std, FName, м онст.расшир)) “ќ√ƒј
           ≈—Ћ» FName = "SYSTEM" “ќ√ƒј
@@ -1350,7 +1350,7 @@
       PushIdent(alias, line, col, IDMOD, sttypes[TVOID], u, Ћќ∆№, 0);
       NEW(str);
       MemErr(str = ѕ”—“ќ);
-      str.Str := name.Name;
+      str.Str := name.им€;
       м”тиль.Push(unit.Import, str);
       cond := newcond
      ќЌ≈÷ AddUnit;
@@ -1451,7 +1451,7 @@
       Next; Check(м онст.ксћќƒ”Ћ№);
       
       Next; Check(lxIDENT);
-      Assert2(м”тиль.streq(м—кан.id.Name, name), 33);
+      Assert2(м”тиль.streq(м—кан.id.им€, name), 33);
       unit.Name := м—кан.id;
       PushIdent(unit.Name, м—кан.line, м—кан.col, IDMOD, sttypes[TVOID], unit, Ћќ∆№, 0);
       idmod := unit.Idents.Last(IDENT);
@@ -1464,8 +1464,8 @@
         ImportList;
         main := temp
        ќЌ≈÷;
-      м”тиль.OutString("компилирую "); м”тиль.OutString(unit.Name.Name); м”тиль.Ln;
-      X86.Module(idmod.Name.Name, idmod.Number);
+      м”тиль.OutString("компилирую "); м”тиль.OutString(unit.Name.им€); м”тиль.Ln;
+      X86.Module(idmod.Name.им€, idmod.Number);
       UnitNumber := idmod.Number;
       unit.IdentBegin := unit.Idents.Last(IDENT);
       curBlock := idmod;

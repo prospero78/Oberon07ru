@@ -26,12 +26,6 @@
 
 “»œ€
 
-  tpItem* = ” ¿«¿“≈À‹ Õ¿ tItem;
-
-  tItem* = «¿œ»—‹
-      Next*, Prev*: tpItem
-     ŒÕ≈÷;
-
   tpList* = ” ¿«¿“≈À‹ Õ¿ «¿œ»—‹
       First*, Last*: tpItem;
       Count*: INTEGER
