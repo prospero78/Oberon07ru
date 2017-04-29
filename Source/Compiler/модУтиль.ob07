@@ -22,12 +22,13 @@
 хлонпр mSys := SYSTEM,
     API,
     ЛйНМЯР := ЛНДйНМЯРЮМРШ,
-    ЛрХОШ := ЛНДрХОШ;
+    ЛрХОШ := ЛНДрХОШ(*,
+    ЛнЬ := ЛНДнЬХАЙХ*);
 
 рхош
 
   tpList* = сйюгюрекэ мю гюохяэ
-      First*, Last*: tpItem;
+      First*, Last*: ЛрХОШ.tpItem;
       Count*: INTEGER
     йнмеж;
 
@@ -181,6 +182,7 @@
 опнжедспю ErrMsg*(code: INTEGER);
   мювюкн
     OutString("НЬХАЙЮ: "); Int(code); Ln;
+    (* ЛнЬ.яННАЫ(code); *)
   йнмеж ErrMsg;
 
 опнжедспю ErrMsgPos*(line, col, code: INTEGER);
@@ -248,7 +250,7 @@
     Res[j + i] := 0X
   йнмеж concat;
 
-опнжедспю Push*(this: tpList; item: tpItem);
+опнжедспю Push*(this: tpList; item: ЛрХОШ.tpItem);
   мювюкн
     еякх this.Count = 0 рнцдю
       this.First := item;
@@ -262,7 +264,7 @@
     item.Next := осярн
   йнмеж Push;
 
-опнжедспю Insert*(this: tpList; item, prev: tpItem);
+опнжедспю Insert*(this: tpList; item, prev: ЛрХОШ.tpItem);
   мювюкн
     еякх prev # this.Last рнцдю
       item.Next := prev.Next;

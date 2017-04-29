@@ -25,9 +25,9 @@ BSD-2 *)
             CR*, UTF8*: BOOLEAN
          ŒÕ≈÷;
     
-    tpItem* = ” ¿«¿“≈À‹ Õ¿ tItem;
+   tpItem* = ” ¿«¿“≈À‹ Õ¿ tItem;
 
-  tItem* = «¿œ»—‹
+   tItem* = «¿œ»—‹
       Next*, Prev*: tpItem
      ŒÕ≈÷;
     

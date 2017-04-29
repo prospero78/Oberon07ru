@@ -65,7 +65,7 @@
 
   PROC = опнжедспю (err: BOOLEAN);
 
-  ASMLINE* = сйюгюрекэ мю гюохяэ (ЛсРХКЭ.tItem)
+  ASMLINE* = сйюгюрекэ мю гюохяэ (ЛрХОШ.tItem)
       cmd, clen, varadr, adr, tcmd, codeadr: INTEGER; short: BOOLEAN
     йнмеж;
 

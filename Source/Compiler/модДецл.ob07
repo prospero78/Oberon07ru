@@ -68,7 +68,7 @@
 
 “»ѕџ
 
-  pTYPE* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м”тиль.tItem)
+  pTYPE* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.tItem)
       tType*, Size*, Len*, Number*, Align, Call*, Rec: INTEGER;
       Base*: pTYPE;
       Fields*: м”тиль.tpList
@@ -76,7 +76,7 @@
 
   IDENT* = ” ј«ј“≈Ћ№ Ќј rIDENT;
 
-  UNIT* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м”тиль.tItem)
+  UNIT* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.tItem)
       Name: м“ипы.ту”зел;
       File: м“ипы.т—трока;
       Idents: м”тиль.tpList;
@@ -87,7 +87,7 @@
       Closed, typedecl, ExportType, Std, sys: BOOLEAN
      ќЌ≈÷;
 
-  rIDENT* = «јѕ»—№ (м”тиль.tItem)
+  rIDENT* = «јѕ»—№ (м“ипы.tItem)
       Name: м“ипы.ту”зел;
       T*: pTYPE;
       Unit*: UNIT;
@@ -98,17 +98,17 @@
       Export: BOOLEAN
      ќЌ≈÷;
 
-  PTRBASE = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м”тиль.tItem)
+  PTRBASE = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.tItem)
       Name: м“ипы.ту”зел;
       line, col: INTEGER;
       Ptr: pTYPE
      ќЌ≈÷;
 
-  STRITEM = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м”тиль.tItem)
+  STRITEM = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.tItem)
       Str: м“ипы.т—трока
      ќЌ≈÷;
 
-  FIELD* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м”тиль.tItem)
+  FIELD* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.tItem)
       Name: м“ипы.ту”зел;
       T*: pTYPE;
       Offset*: INTEGER;
@@ -116,7 +116,7 @@
       Unit*: UNIT
      ќЌ≈÷;
 
-  STRCONST* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м”тиль.tItem)
+  STRCONST* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.tItem)
       Str*: м“ипы.т—трока;
       Len*, Number*: INTEGER
      ќЌ≈÷;
