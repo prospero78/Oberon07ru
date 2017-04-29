@@ -126,12 +126,13 @@
     бепмсрэ res
   йнмеж Read;
 
-опнжедспю Write*(F, Buffer, Count: INTEGER): INTEGER;
-  оепел res: INTEGER;
-  мювюкн
-    API.WriteFile(F, Buffer, Count, mSys.ADR(res), 0)
-    бепмсрэ res
-  йнмеж Write;
+опнжедспю гЮОХЯЮРЭ*(F, Buffer, Count: INTEGER): INTEGER;
+   оепел
+      res: INTEGER;
+   мювюкн
+      API.WriteFile(F, Buffer, Count, mSys.ADR(res), 0)
+      бепмсрэ res
+   йнмеж гЮОХЯЮРЭ*;
 
 опнжедспю FileSize*(F: INTEGER): INTEGER;
     бепмсрэ API.FileSize(F)
