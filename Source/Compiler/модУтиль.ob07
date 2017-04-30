@@ -256,17 +256,17 @@
       this.предыдущ := item;
       item.Prev := ПУСТО
     ИНАЧЕ
-      this.Last.Next := item;
-      item.Prev := this.Last
+      this.следующ.Next := item;
+      item.Prev := this.следующ
     КОНЕЦ;
     INC(this.Count);
-    this.Last := item;
+    this.следующ := item;
     item.Next := ПУСТО
   КОНЕЦ Push;
 
 ПРОЦЕДУРА Insert*(this: мТипы.туСписок; item, prev: мТипы.туПункт);
   НАЧАЛО
-    ЕСЛИ prev # this.Last ТОГДА
+    ЕСЛИ prev # this.следующ ТОГДА
       item.Next := prev.Next;
       item.Prev := prev;
       prev.Next := item;
@@ -280,7 +280,7 @@
 ПРОЦЕДУРА Clear*(this: мТипы.туСписок);
   НАЧАЛО
     this.предыдущ := ПУСТО;
-    this.Last := ПУСТО;
+    this.следующ := ПУСТО;
     this.Count := 0
   КОНЕЦ Clear;
 

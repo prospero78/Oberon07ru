@@ -270,7 +270,7 @@
 опнжедспю CheckIdent(Name: ЛрХОШ.РСсГЕК): BOOLEAN;
   оепел cur: IDENT;
   мювюкн
-    cur := unit.Idents.Last(IDENT);
+    cur := unit.Idents.ЯКЕДСЧЫ(IDENT);
     онйю (cur.iType # IDGUARD) & (cur.Name # Name) декюрэ
       cur := cur.Prev(IDENT)
     йнмеж
@@ -422,7 +422,7 @@
   мювюкн
     res := осярн;
     Coord(line, col);
-    cur := unit.Idents.Last(IDENT);
+    cur := unit.Idents.ЯКЕДСЧЫ(IDENT);
     онйю (cur # осярн) & (cur.Name = Name) декюрэ
       res := cur;
       cur := осярн
@@ -723,7 +723,7 @@
   йнмеж Unique;
 
 опнжедспю notrecurs(id: BOOLEAN; T: pTYPE): BOOLEAN;
-    бепмсрэ ~(id & (unit.Idents.Last(IDENT).iType = IDTYPE) & (unit.Idents.Last(IDENT).T = T) &
+    бепмсрэ ~(id & (unit.Idents.ЯКЕДСЧЫ(IDENT).iType = IDTYPE) & (unit.Idents.ЯКЕДСЧЫ(IDENT).T = T) &
             (T.tType IN {TRECORD, TARRAY}))
   йнмеж notrecurs;
 
@@ -782,7 +782,7 @@
 опнжедспю SetVars(T: pTYPE);
   оепел cur: IDENT; n: INTEGER;
   мювюкн
-    cur := unit.Idents.Last(IDENT);
+    cur := unit.Idents.ЯКЕДСЧЫ(IDENT);
     онйю cur.T = осярн декюрэ
       cur := cur.Prev(IDENT)
     йнмеж;
@@ -890,7 +890,7 @@
       еякх proc рнцдю
         PushIdent(Name, line, col, IDVAR, осярн, осярн, кнфэ, 0);
         INC(curBlock.ParamCount);
-        fp := unit.Idents.Last(IDENT);
+        fp := unit.Idents.ЯКЕДСЧЫ(IDENT);
         еякх ByRef рнцдю
           fp.VarKind := paramvar
         хмюве
@@ -1121,7 +1121,7 @@
 опнжедспю PopBlock;
   оепел cur: IDENT; n: INTEGER;
   мювюкн
-    cur := unit.Idents.Last(IDENT);
+    cur := unit.Idents.ЯКЕДСЧЫ(IDENT);
     n := 0;
     онйю cur.iType # IDGUARD декюрэ
       cur := cur.Prev(IDENT);
@@ -1130,7 +1130,7 @@
     cur := cur.Prev(IDENT);
     INC(n);
     unit.Idents.Count := unit.Idents.Count - n;
-    unit.Idents.Last := cur;
+    unit.Idents.ЯКЕДСЧЫ := cur;
     cur.Next := осярн;
     DEC(unit.Level)
   йнмеж PopBlock;
@@ -1172,7 +1172,7 @@
       онйю ЛяЙЮМ.tLex = lxIDENT декюрэ
         IdentDef;
         PushIdent(Name, line, col, IDCONST, осярн, осярн, Export, 0);
-        last := unit.Idents.Last(IDENT);
+        last := unit.Idents.ЯКЕДСЧЫ(IDENT);
         Check(lxEQ);
         Next;
         ConstExpr(Value, T);
@@ -1189,7 +1189,7 @@
       онйю ЛяЙЮМ.tLex = lxIDENT декюрэ
         IdentDef;
         PushIdent(Name, line, col, IDTYPE, осярн, осярн, Export, 0);
-        last := unit.Idents.Last(IDENT);
+        last := unit.Idents.ЯКЕДСЧЫ(IDENT);
         unit.ExportType := Export;
         Check(lxEQ);
         Next;
@@ -1235,7 +1235,7 @@
       Check(lxIDENT);
       IdentDef;
       PushIdent(Name, line, col, IDPROC, CreateType(TPROC, 0, 4, 0, sttypes[TVOID], хярхмю, осярн), осярн, Export, 0);
-      id := unit.Idents.Last(IDENT);
+      id := unit.Idents.ЯКЕДСЧЫ(IDENT);
       еякх id.Export & main рнцдю
         еякх Platform = 6 рнцдю
           Assert((Name # ЛяЙЮМ._START) & (Name # ЛяЙЮМ._version), line, col, 133)
@@ -1399,7 +1399,7 @@
     Guard; Guard;
     PushIdent(unit.Name, 0, 0, IDMOD, sttypes[TVOID], unit, кнфэ, 0);
     Guard;
-    unit.IdentBegin := unit.Idents.Last(IDENT);
+    unit.IdentBegin := unit.Idents.ЯКЕДСЧЫ(IDENT);
     unit.Closed := хярхмю
   йнмеж Header;
 
@@ -1454,7 +1454,7 @@
       Assert2(ЛсРХКЭ.streq(ЛяЙЮМ.id.ХЛЪ, name), 33);
       unit.Name := ЛяЙЮМ.id;
       PushIdent(unit.Name, ЛяЙЮМ.line, ЛяЙЮМ.col, IDMOD, sttypes[TVOID], unit, кнфэ, 0);
-      idmod := unit.Idents.Last(IDENT);
+      idmod := unit.Idents.ЯКЕДСЧЫ(IDENT);
       Guard;
       Next; Check(lxSemi);
       Next;
@@ -1467,7 +1467,7 @@
       ЛсРХКЭ.OutString("ЙНЛОХКХПСЧ "); ЛсРХКЭ.OutString(unit.Name.ХЛЪ); ЛсРХКЭ.Ln;
       X86.Module(idmod.Name.ХЛЪ, idmod.Number);
       UnitNumber := idmod.Number;
-      unit.IdentBegin := unit.Idents.Last(IDENT);
+      unit.IdentBegin := unit.Idents.ЯКЕДСЧЫ(IDENT);
       curBlock := idmod;
       DeclSeq;
       X86.ProcBeg(idmod.Number, 0, хярхмю);

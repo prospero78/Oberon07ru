@@ -543,8 +543,8 @@
 опнжедспю Del*(last: ASMLINE);
   мювюкн
     last.Next := current.Next;
-    еякх current = asmlist.Last рнцдю
-      asmlist.Last := last
+    еякх current = asmlist.ЯКЕДСЧЫ рнцдю
+      asmlist.ЯКЕДСЧЫ := last
     йнмеж;
     current := last
   йнмеж Del;
@@ -779,7 +779,7 @@
     юеякх obj рнцдю
       OutCode("558BEC")
     йнмеж;
-    start := asmlist.Last(ASMLINE)
+    start := asmlist.ЯКЕДСЧЫ(ASMLINE)
   йнмеж Prolog;
 
 опнжедспю AddRec*(base: INTEGER);
@@ -1969,7 +1969,7 @@
           PushInt(RTABLE);
           PushInt(SELFNAME);
           CallRTL(_init);
-          current := asmlist.Last(ASMLINE);
+          current := asmlist.ЯКЕДСЧЫ(ASMLINE);
           еякх dll рнцдю
                 OutCode("B801000000C9C20C00")
           йнмеж;
