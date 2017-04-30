@@ -684,13 +684,13 @@
         Res := ИСТИНА
       ИНАЧЕ
         ЕСЛИ (T1.tType = TPROC) & (T2.tType = TPROC) & (T1 # T2) ТОГДА
-          Res := (T1.Call = T2.Call) & (T1.Fields.Count = T2.Fields.Count) & ProcTypeComp1(T1.Base, T2.Base);
+          Res := (T1.Call = T2.Call) & (T1.Fields.счетчик = T2.Fields.счетчик) & ProcTypeComp1(T1.Base, T2.Base);
           fp := T1.Fields.предыдущ(DECL.FIELD);
           ft := T2.Fields.предыдущ(DECL.FIELD);
           ПОКА Res & (fp # ПУСТО) ДЕЛАТЬ
             Res := (fp.ByRef = ft.ByRef) & TypeComp(fp.T, ft.T);
-            fp := fp.Next(DECL.FIELD);
-            ft := ft.Next(DECL.FIELD)
+            fp := fp.следующ(DECL.FIELD);
+            ft := ft.следующ(DECL.FIELD)
           КОНЕЦ
         ИНАЧЕ
           Res := T1 = T2
@@ -841,7 +841,7 @@
           X86.ExtArray(A, n, DECL.Dim(e1.T))
         КОНЕЦ
       КОНЕЦ;
-      param := param.Next(DECL.FIELD);
+      param := param.следующ(DECL.FIELD);
       ЕСЛИ param # ПУСТО ТОГДА
         Check(lxComma);
         Next
@@ -1335,7 +1335,7 @@
   НАЧАЛО
     cur := Labels.предыдущ(LABEL);
     ПОКА (cur # ПУСТО) & ((b < cur.a) ИЛИ (a > cur.b)) ДЕЛАТЬ
-      cur := cur.Next(LABEL)
+      cur := cur.следующ(LABEL)
     КОНЕЦ
     ВЕРНУТЬ cur = ПУСТО
   КОНЕЦ CheckLabel;
@@ -1747,7 +1747,7 @@
         КОНЕЦ;
         X86.Save(TPROC)
       ИНАЧЕ
-        Assert2(e1.T.Fields.Count = 0, 155);
+        Assert2(e1.T.Fields.счетчик = 0, 155);
         Assert((e1.T.Base.tType = TVOID) ИЛИ (e1.T.Call = DECL.winapi), line, col, 132);
         X86.CallVar(ЛОЖЬ, ЛОЖЬ, e1.T.Call, e1.T.Len, DECL.curBlock.LocalSize)
       КОНЕЦ

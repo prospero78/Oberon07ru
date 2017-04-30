@@ -208,7 +208,7 @@
       res := cur;
       cur := осярн
     юеякх cur # осярн декюрэ
-      cur := cur.Next(UNIT)
+      cur := cur.ЯКЕДСЧЫ(UNIT)
     йнмеж
     бепмсрэ res
   йнмеж GetModule;
@@ -401,7 +401,7 @@
   мювюкн
     res := осярн;
     Coord(line, col);
-    cur := Unit.IdentBegin.Next(IDENT);
+    cur := Unit.IdentBegin.ЯКЕДСЧЫ(IDENT);
     онйю (cur # осярн) & (cur.iType # IDGUARD) декюрэ
       еякх cur.Name = Name рнцдю
         еякх (Unit # unit) & ~cur.Export рнцдю
@@ -411,7 +411,7 @@
         йнмеж;
         cur := осярн
       хмюве
-        cur := cur.Next(IDENT)
+        cur := cur.ЯКЕДСЧЫ(IDENT)
       йнмеж
     йнмеж
     бепмсрэ res
@@ -663,7 +663,7 @@
   мювюкн
     cur := Tr.Fields.ОПЕДШДСЫ(FIELD);
     онйю cur.T # осярн декюрэ
-      cur := cur.Next(FIELD)
+      cur := cur.ЯКЕДСЧЫ(FIELD)
     йнмеж;
     онйю cur # осярн декюрэ
       cur.T := Tf;
@@ -688,7 +688,7 @@
       хмюве
         Tr.Len := Tr.Len + 4 * (ORD((Tf.tType = TRECORD) & cur.ByRef) + Dim(Tf) + ORD((Tf.tType = TLONGREAL) & ~cur.ByRef) + 1)
       йнмеж;
-      cur := cur.Next(FIELD)
+      cur := cur.ЯКЕДСЧЫ(FIELD)
     йнмеж
   йнмеж SetFields;
 
@@ -701,7 +701,7 @@
       Res := cur;
       cur := осярн
     юеякх cur # осярн декюрэ
-      cur := cur.Next(FIELD)
+      cur := cur.ЯКЕДСЧЫ(FIELD)
     йнмеж
     бепмсрэ Res
   йнмеж GetField;
@@ -786,7 +786,7 @@
     онйю cur.T = осярн декюрэ
       cur := cur.Prev(IDENT)
     йнмеж;
-    cur := cur.Next(IDENT);
+    cur := cur.ЯКЕДСЧЫ(IDENT);
     онйю cur # осярн декюрэ
       cur.T := T;
       еякх cur.Export рнцдю
@@ -819,7 +819,7 @@
       еякх cur.VarKind # 0 рнцдю
         curBlock.ParamSize := curBlock.VarSize
       йнмеж;
-      cur := cur.Next(IDENT)
+      cur := cur.ЯКЕДСЧЫ(IDENT)
     йнмеж
   йнмеж SetVars;
 
@@ -1129,9 +1129,9 @@
     йнмеж;
     cur := cur.Prev(IDENT);
     INC(n);
-    unit.Idents.Count := unit.Idents.Count - n;
+    unit.Idents.ЯВЕРВХЙ := unit.Idents.ЯВЕРВХЙ - n;
     unit.Idents.ЯКЕДСЧЫ := cur;
-    cur.Next := осярн;
+    cur.ЯКЕДСЧЫ := осярн;
     DEC(unit.Level)
   йнмеж PopBlock;
 
@@ -1144,7 +1144,7 @@
       Assert(id # осярн, cur.line, cur.col, 42);
       Assert(id.T.tType = TRECORD, cur.line, cur.col, 81);
       cur.Ptr.Base := id.T;
-      cur := cur.Next(PTRBASE)
+      cur := cur.ЯКЕДСЧЫ(PTRBASE)
     йнмеж;
     ЛсРХКЭ.Clear(PtrBases)
   йнмеж LinkPtr;

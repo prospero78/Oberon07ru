@@ -436,7 +436,7 @@
     cur := asmlist.предыдущ(ASMLINE);
     ПОКА cur # ПУСТО ДЕЛАТЬ
       Write(mSys.ADR(Code[cur.cmd]), cur.clen);
-      cur := cur.Next(ASMLINE)
+      cur := cur.следующ(ASMLINE)
     КОНЕЦ;
     Fill(Align(codesize, 200H) - codesize, 0X);
     Write(mSys.ADR(rdata), 0DAH);
@@ -466,7 +466,7 @@
     MemErr(nov = ПУСТО);
     nov.cmd := ccount;
     мУтиль.Insert(asmlist, nov, current);
-    current := current.Next(ASMLINE)
+    current := current.следующ(ASMLINE)
   КОНЕЦ New;
 
 ПРОЦЕДУРА Empty(varadr: INTEGER);
@@ -542,7 +542,7 @@
 
 ПРОЦЕДУРА Del*(last: ASMLINE);
   НАЧАЛО
-    last.Next := current.Next;
+    last.следующ := current.следующ;
     ЕСЛИ current = asmlist.следующ ТОГДА
       asmlist.следующ := last
     КОНЕЦ;
@@ -1546,21 +1546,21 @@
       flag := ЛОЖЬ;
       ВЫБОР cur.tcmd ИЗ
       |PUSHEAX:
-        flag := cur.Next(ASMLINE).tcmd = POPEAX
+        flag := cur.следующ(ASMLINE).tcmd = POPEAX
       |PUSHECX:
-        flag := cur.Next(ASMLINE).tcmd = POPECX
+        flag := cur.следующ(ASMLINE).tcmd = POPECX
       |PUSHEDX:
-        flag := cur.Next(ASMLINE).tcmd = POPEDX
+        flag := cur.следующ(ASMLINE).tcmd = POPEDX
       ИНАЧЕ
       КОНЕЦ;
       ЕСЛИ flag ТОГДА
         cur.clen := 0;
         cur.tcmd := 0;
-        cur := cur.Next(ASMLINE);
+        cur := cur.следующ(ASMLINE);
         cur.clen := 0;
         cur.tcmd := 0
       КОНЕЦ;
-      cur := cur.Next(ASMLINE)
+      cur := cur.следующ(ASMLINE)
     КОНЕЦ
   КОНЕЦ Optimization;
 
@@ -1597,7 +1597,7 @@
       cur := asmlist.предыдущ(ASMLINE);
       ПОКА cur # ПУСТО ДЕЛАТЬ
         Write(mSys.ADR(Code[cur.cmd]), cur.clen);
-        cur := cur.Next(ASMLINE)
+        cur := cur.следующ(ASMLINE)
       КОНЕЦ;
       Fill(Align(size, 4) - size, 0X);
       Write(mSys.ADR(Data), datasize);
@@ -1667,7 +1667,7 @@
           mSys.PUT(mSys.ADR(Reloc[rcount]), 00X); INC(rcount);
         КОНЕЦ;
         Write(mSys.ADR(Code[cur.cmd]), cur.clen);
-        cur := cur.Next(ASMLINE)
+        cur := cur.следующ(ASMLINE)
       КОНЕЦ;
       size := size2;
       Fill(Align(size, 4) - size2, 0X);
@@ -1762,7 +1762,7 @@
     cur := asmlist.предыдущ(ASMLINE);
     ПОКА cur # ПУСТО ДЕЛАТЬ
       Write(mSys.ADR(Code[cur.cmd]), cur.clen);
-      cur := cur.Next(ASMLINE)
+      cur := cur.следующ(ASMLINE)
     КОНЕЦ;
     Fill(Align(code, 1000H) - code, 90X);
     Write(mSys.ADR(bytes[817H]), 55FH);
@@ -1811,7 +1811,7 @@
         mSys.PUT(cur.varadr, size)
       КОНЕЦ;
       size := size + cur.clen;
-      cur := cur.Next(ASMLINE)
+      cur := cur.следующ(ASMLINE)
     КОНЕЦ;
 
     size := temp2;
@@ -1822,7 +1822,7 @@
         mSys.PUT(cur.varadr, size)
       АЕСЛИ (cur.tcmd = JCMD) & cur.short ТОГДА
         mSys.GET(cur.varadr, i);
-        temp3 := i - cur.Next(ASMLINE).adr;
+        temp3 := i - cur.следующ(ASMLINE).adr;
         ЕСЛИ (-131 <= temp3) & (temp3 <= 123) ТОГДА
           mSys.GET(cur(ASMLINE).codeadr - 1, c);
           ЕСЛИ c = JMP ТОГДА
@@ -1836,7 +1836,7 @@
         КОНЕЦ
       КОНЕЦ;
       size := size + cur.clen;
-      cur := cur.Next(ASMLINE)
+      cur := cur.следующ(ASMLINE)
     КОНЕЦ;
 
     ЕСЛИ dll ИЛИ con ИЛИ gui ТОГДА
@@ -1890,7 +1890,7 @@
       ВЫБОР cur.tcmd ИЗ
       |JCMD:
         mSys.GET(cur.varadr, i);
-        mSys.PUT(cur.codeadr, i - cur.Next(ASMLINE).adr)
+        mSys.PUT(cur.codeadr, i - cur.следующ(ASMLINE).adr)
       |GCMD:
         mSys.GET(cur.codeadr, i);
         mSys.PUT(cur.codeadr, i + temp3)
@@ -1914,7 +1914,7 @@
           RCount := 1
         КОНЕЦ
       КОНЕЦ;
-      cur := cur.Next(ASMLINE)
+      cur := cur.следующ(ASMLINE)
     КОНЕЦ;
     ЕСЛИ R.Size # 0 ТОГДА
       PutReloc(R)

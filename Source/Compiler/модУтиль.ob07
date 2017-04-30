@@ -252,26 +252,26 @@
 
 ПРОЦЕДУРА Push*(this: мТипы.туСписок; item: мТипы.туПункт);
   НАЧАЛО
-    ЕСЛИ this.Count = 0 ТОГДА
+    ЕСЛИ this.счетчик = 0 ТОГДА
       this.предыдущ := item;
       item.Prev := ПУСТО
     ИНАЧЕ
-      this.следующ.Next := item;
+      this.следующ.следующ := item;
       item.Prev := this.следующ
     КОНЕЦ;
-    INC(this.Count);
+    INC(this.счетчик);
     this.следующ := item;
-    item.Next := ПУСТО
+    item.следующ := ПУСТО
   КОНЕЦ Push;
 
 ПРОЦЕДУРА Insert*(this: мТипы.туСписок; item, prev: мТипы.туПункт);
   НАЧАЛО
     ЕСЛИ prev # this.следующ ТОГДА
-      item.Next := prev.Next;
+      item.следующ := prev.следующ;
       item.Prev := prev;
-      prev.Next := item;
-      item.Next.Prev := item;
-      INC(this.Count)
+      prev.следующ := item;
+      item.следующ.Prev := item;
+      INC(this.счетчик)
     ИНАЧЕ
       Push(this, item)
     КОНЕЦ
@@ -281,7 +281,7 @@
   НАЧАЛО
     this.предыдущ := ПУСТО;
     this.следующ := ПУСТО;
-    this.Count := 0
+    this.счетчик := 0
   КОНЕЦ Clear;
 
 ПРОЦЕДУРА CreateList*(): мТипы.туСписок;
