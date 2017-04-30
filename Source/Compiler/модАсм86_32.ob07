@@ -586,7 +586,7 @@
     obj := UI = 6;
     MemErr := mem;
     Lcount := HALT;
-    asmlist := м”тиль.CreateList();
+    asmlist := м”тиль.—писок_—оздать();
     MemErr(asmlist = ѕ”—“ќ);
     NEW(nov);
     MemErr(nov = ѕ”—“ќ);

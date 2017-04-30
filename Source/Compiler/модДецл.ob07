@@ -341,22 +341,22 @@
 
 ѕ–ќ÷≈ƒ”–ј PushStProc(Name: м“ипы.т—трока; StProc: INTEGER);
   Ќј„јЋќ
-    PushIdent(м—кан.AddNode(Name), 0, 0, IDSTPROC, sttypes[TVOID], ѕ”—“ќ, Ћќ∆№, StProc)
+    PushIdent(м—кан.”зел_ƒобав(Name), 0, 0, IDSTPROC, sttypes[TVOID], ѕ”—“ќ, Ћќ∆№, StProc)
    ќЌ≈÷ PushStProc;
 
 ѕ–ќ÷≈ƒ”–ј PushStType(Name: м“ипы.т—трока; T: INTEGER);
   Ќј„јЋќ
-    PushIdent(м—кан.AddNode(Name), 0, 0, IDTYPE, sttypes[T], ѕ”—“ќ, Ћќ∆№, 0)
+    PushIdent(м—кан.”зел_ƒобав(Name), 0, 0, IDTYPE, sttypes[T], ѕ”—“ќ, Ћќ∆№, 0)
    ќЌ≈÷ PushStType;
 
 ѕ–ќ÷≈ƒ”–ј PushSysProc(Name: м“ипы.т—трока; StProc: INTEGER);
   Ќј„јЋќ
-    PushIdent(м—кан.AddNode(Name), 0, 0, IDSYSPROC, sttypes[TVOID], ѕ”—“ќ, »—“»Ќј, StProc)
+    PushIdent(м—кан.”зел_ƒобав(Name), 0, 0, IDSYSPROC, sttypes[TVOID], ѕ”—“ќ, »—“»Ќј, StProc)
    ќЌ≈÷ PushSysProc;
 
 ѕ–ќ÷≈ƒ”–ј PushSysType(Name: м“ипы.т—трока; T: INTEGER);
   Ќј„јЋќ
-    PushIdent(м—кан.AddNode(Name), 0, 0, IDTYPE, sttypes[T], ѕ”—“ќ, »—“»Ќј, 0)
+    PushIdent(м—кан.”зел_ƒобав(Name), 0, 0, IDTYPE, sttypes[T], ѕ”—“ќ, »—“»Ќј, 0)
    ќЌ≈÷ PushSysType;
 
 ѕ–ќ÷≈ƒ”–ј StIdent;
@@ -840,7 +840,7 @@
     nov.Fields := ѕ”—“ќ;
     nov.Number := Number;
     ≈—Ћ» Fields “ќ√ƒј
-      nov.Fields := м”тиль.CreateList();
+      nov.Fields := м”тиль.—писок_—оздать();
       MemErr(nov.Fields = ѕ”—“ќ)
      ќЌ≈÷
     ¬≈–Ќ”“№ nov
@@ -1288,7 +1288,7 @@
     ѕ–ќ÷≈ƒ”–ј AddProc(name: м“ипы.т—трока; num: INTEGER);
     ѕ≈–≈ћ id: IDENT;
     Ќј„јЋќ
-      id := GetQIdent(u, м—кан.AddNode(name));
+      id := GetQIdent(u, м—кан.”зел_ƒобав(name));
       ≈—Ћ» id = ѕ”—“ќ “ќ√ƒј
         м”тиль.ErrMsg(158);
         м”тиль.HALT(1)
@@ -1392,7 +1392,7 @@
   Ќј„јЋќ
     NEW(unit);
     MemErr(unit = ѕ”—“ќ);
-    unit.Idents := м”тиль.CreateList();
+    unit.Idents := м”тиль.—писок_—оздать();
     MemErr(unit.Idents = ѕ”—“ќ);
     unit.Level := 0;
     unit.Name := Name;
@@ -1407,7 +1407,7 @@
   ѕ≈–≈ћ temp: UNIT;
   Ќј„јЋќ
     temp := unit;
-    Header(м—кан.AddNode("SYSTEM"));
+    Header(м—кан.”зел_ƒобав("SYSTEM"));
     PushSysProc("ADR",     sysADR);
     PushSysProc("SIZE",    sysSIZE);
     PushSysProc("TYPEID",  sysTYPEID);
@@ -1429,15 +1429,15 @@
     Name := Name1;
     м”тиль.concat(Path, Name, b);
     м”тиль.concat(b, Ext, Name);
-    ≈—Ћ» м—кан.Open(Name, FHandle) “ќ√ƒј
+    ≈—Ћ» м—кан.‘айл_ќткрыть(Name, FHandle) “ќ√ƒј
       NEW(unit);
       MemErr(unit = ѕ”—“ќ);
       unit.sys := Ћќ∆№;
       unit.Std := Path = Std;
       м”тиль.Push(prog, unit);
-      unit.Idents := м”тиль.CreateList();
+      unit.Idents := м”тиль.—писок_—оздать();
       MemErr(unit.Idents = ѕ”—“ќ);
-      unit.Import := м”тиль.CreateList();
+      unit.Import := м”тиль.—писок_—оздать();
       MemErr(unit.Import = ѕ”—“ќ);
       NEW(unit.scanner);
       MemErr(unit.scanner = ѕ”—“ќ);
@@ -1498,14 +1498,14 @@
     OpSeq := OpSeqProc;
     Expr := ExprProc;
     AssComp := AssCompProc;
-    prog := м”тиль.CreateList();
+    prog := м”тиль.—писок_—оздать();
     MemErr(prog = ѕ”—“ќ);
-    PtrBases := м”тиль.CreateList();
+    PtrBases := м”тиль.—писок_—оздать();
     MemErr(PtrBases = ѕ”—“ќ);
-    types := м”тиль.CreateList();
+    types := м”тиль.—писок_—оздать();
     MemErr(types = ѕ”—“ќ);
     StTypes;
-    Strings := м”тиль.CreateList();
+    Strings := м”тиль.—писок_—оздать();
     MemErr(Strings = ѕ”—“ќ);
     Pseudo;
     stypes := sttypes

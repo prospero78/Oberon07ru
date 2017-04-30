@@ -1413,7 +1413,7 @@
     Check(м онст.кс»«);
     Load(e);
     X86.Drop;
-    Labels := м”тиль.CreateList();
+    Labels := м”тиль.—писок_—оздать();
     DECL.MemErr(Labels = ѕ”—“ќ);
     Next;
     EndCase := X86.NewLabel();

@@ -55,8 +55,9 @@ This file is part of Compiler.
     Nodes: МАССИВ 256 ИЗ мТипы.туУзел;
     _START*, _version*: мТипы.туУзел;
 
-ПРОЦЕДУРА AddNode*(Name: мТипы.тСтрока): мТипы.туУзел;
-    ПЕРЕМ cur, res: мТипы.туУзел;
+ПРОЦЕДУРА Узел_Добав*(Name: мТипы.тСтрока): мТипы.туУзел;
+    ПЕРЕМ
+      cur, res: мТипы.туУзел;
 
         ПРОЦЕДУРА Узел_Новый(Right: BOOLEAN);
             НАЧАЛО
@@ -94,7 +95,7 @@ This file is part of Compiler.
             КОНЕЦ
         ПОКАНЕ res # ПУСТО
         ВЕРНУТЬ res
-    КОНЕЦ AddNode;
+    КОНЕЦ Узел_Добав;
 
 ПРОЦЕДУРА GetLexStr*(ПЕР L: мТипы.тСтрока);
     НАЧАЛО
@@ -167,8 +168,9 @@ This file is part of Compiler.
         INC(bufpos)
     КОНЕЦ Next;
 
-ПРОЦЕДУРА Open*(FName: МАССИВ ИЗ CHAR; ПЕР FHandle: INTEGER): BOOLEAN;
-    ПЕРЕМ n, size: INTEGER; c: CHAR;
+ПРОЦЕДУРА Файл_Открыть*(FName: МАССИВ ИЗ CHAR; ПЕР FHandle: INTEGER): BOOLEAN;
+    ПЕРЕМ
+      n, size: INTEGER; c: CHAR;
     НАЧАЛО
         File := мУтиль.OpenF(FName, 0);
         FHandle := File;
@@ -199,7 +201,7 @@ This file is part of Compiler.
             Next
         КОНЕЦ
         ВЕРНУТЬ (File # 0) & (n = size)
-    КОНЕЦ Open;
+    КОНЕЦ Файл_Открыть;
 
 ПРОЦЕДУРА Space(ch: CHAR): BOOLEAN;
     ВЕРНУТЬ (ch <= 20X) & (ch > 0X)
@@ -565,11 +567,11 @@ This file is part of Compiler.
         ВЫБОР ch ИЗ
         |"A".."Z", "a".."z", "_": (* eng *)
             Ident;
-            id := AddNode(Lex);
+            id := Узел_Добав(Lex);
             tLex := id.tLex;
         |"А".."Я", "а".."я": (* rus *)
             Ident;
-            id := AddNode(Lex);
+            id := Узел_Добав(Lex);
             tLex := id.tLex;
         |"0".."9":
             Number;
@@ -650,11 +652,11 @@ This file is part of Compiler.
 ПРОЦЕДУРА AddNodeKey(Name: мТипы.тСтрока; key: INTEGER);
     ПЕРЕМ node: мТипы.туУзел;
     НАЧАЛО
-        node := AddNode(Name);
+        node := Узел_Добав(Name);
         node.tLex := key
     КОНЕЦ AddNodeKey;
 
-ПРОЦЕДУРА Init;
+ПРОЦЕДУРА Настроить;
     ПЕРЕМ
       i: INTEGER;
       node: мТипы.туУзел;
@@ -668,8 +670,8 @@ This file is part of Compiler.
             node.tLex := lxIDENT;
             Nodes[i] := node
         КОНЕЦ;
-        _START := AddNode("START");
-        _version := AddNode("version");
+        _START := Узел_Добав("START");
+        _version := Узел_Добав("version");
         AddNodeKey("MOD", lxMOD);
         
         AddNodeKey("CASE", мКонст.ксВЫБОР);
@@ -769,8 +771,8 @@ This file is part of Compiler.
         AddNodeKey("REPEAT", мКонст.ксПОВТОР);
         AddNodeKey("ПОВТОРЯТЬ", мКонст.ксПОВТОР);
         
-    КОНЕЦ Init;
+   КОНЕЦ Настроить;
 
 НАЧАЛО
-    Init
+   Настроить
 КОНЕЦ модСканер.
