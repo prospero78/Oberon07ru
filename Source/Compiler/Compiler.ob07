@@ -1849,7 +1849,7 @@
   Ќј„јЋќ
     ≈—Ћ» м”тиль.ParamCount < 2 “ќ√ƒј
       м”тиль.ErrMsg(59);
-      м”тиль.HALT(1)
+      м”тиль.«акончить(1)
      ќЌ≈÷;
     м”тиль.ParamStr(SelfName, 0);
     м”тиль.ParamStr(FName, 1);
@@ -1861,7 +1861,7 @@
     м”тиль.Split(FName, Path, Name, Ext);
     ≈—Ћ» Ext # м онст.расшир “ќ√ƒј
       м”тиль.ErrMsg(121);
-      м”тиль.HALT(1)
+      м”тиль.«акончить(1)
      ќЌ≈÷;
     м”тиль.Split(SelfName, SelfPath, CName, CExt);
     temp := Name;
@@ -1887,7 +1887,7 @@
       м”тиль.concat(temp, ".dll", temp)
     »Ќј„≈
       м”тиль.ErrMsg(60);
-      м”тиль.HALT(1)
+      м”тиль.«акончить(1)
      ќЌ≈÷;
     ≈—Ћ» platform IN {1,2,3,4} “ќ√ƒј
       stksize := getstksize()
@@ -1912,7 +1912,7 @@
     DECL.Program(SelfPath, Path, Name, Ext, platform IN {1, 2, 3}, OpSeq, Expr, AssComp, sttypes);
     DECL.Compile(platform, stksize);
     м”тиль.OutString("компил€ци€ успешна"); м”тиль.Ln;
-    м”тиль.Time
+    м”тиль.¬рем€_«атрачено
    ќЌ≈÷ Start;
 
 Ќј„јЋќ

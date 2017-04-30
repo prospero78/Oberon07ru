@@ -364,10 +364,10 @@
     DEC(ParamCount)
   КОНЕЦ LinuxParam;
 
-ПРОЦЕДУРА Time*;
+ПРОЦЕДУРА Время_Затрачено*;
   ПЕРЕМ sec, dsec: INTEGER;
   НАЧАЛО
-    OutString("затрачено времени ");
+    OutString("затрачено времени: ");
     API.Time(sec, dsec);
     sec := sec - API.sec;
     dsec := dsec - API.dsec;
@@ -378,19 +378,19 @@
       Int(0)
     КОНЕЦ;
     Int(dsec); OutString(" сек"); Ln
-  КОНЕЦ Time;
+  КОНЕЦ Время_Затрачено;
 
-ПРОЦЕДУРА HALT*(n: INTEGER);
+ПРОЦЕДУРА Закончить*(n: INTEGER);
   НАЧАЛО
-    Time;
+    Время_Затрачено;
     API.ExitProcess(n)
-  КОНЕЦ HALT;
+  КОНЕЦ Закончить;
 
 ПРОЦЕДУРА MemErr*(err: BOOLEAN);
   НАЧАЛО
     ЕСЛИ err ТОГДА
       ErrMsg(72);
-      HALT(1)
+      Закончить(1)
     КОНЕЦ
   КОНЕЦ MemErr;
 

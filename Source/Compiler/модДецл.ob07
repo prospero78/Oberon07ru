@@ -217,7 +217,7 @@
   Ќј„јЋќ
     ≈—Ћ» ~cond “ќ√ƒј
       м”тиль.ErrMsgPos(line, col, code);
-      м”тиль.HALT(1)
+      м”тиль.«акончить(1)
      ќЌ≈÷
    ќЌ≈÷ Assert;
 
@@ -1291,7 +1291,7 @@
       id := GetQIdent(u, м—кан.”зел_ƒобав(name));
       ≈—Ћ» id = ѕ”—“ќ “ќ√ƒј
         м”тиль.ErrMsg(158);
-        м”тиль.HALT(1)
+        м”тиль.«акончить(1)
        ќЌ≈÷;
       X86.AddRtlProc(num, id.Number)
      ќЌ≈÷ AddProc;
@@ -1528,7 +1528,7 @@
       Rtl(unit)
     »Ќј„≈
       м”тиль.ErrMsg(65);
-      м”тиль.HALT(1)
+      м”тиль.«акончить(1)
      ќЌ≈÷;
     main := »—“»Ќј;
     ≈—Ћ» ~ReadModule(Path, Main, ExtMain) “ќ√ƒј
@@ -1553,7 +1553,7 @@
         м”тиль.OutString(Main);
         м”тиль.OutString(ExtMain);
         м”тиль.Ln;
-        м”тиль.HALT(1)
+        м”тиль.«акончить(1)
        ќЌ≈÷
      ќЌ≈÷;
     temp := Path;
