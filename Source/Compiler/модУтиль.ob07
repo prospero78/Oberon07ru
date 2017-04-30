@@ -132,7 +132,7 @@
    мювюкн
       API.WriteFile(F, Buffer, Count, mSys.ADR(res), 0)
       бепмсрэ res
-   йнмеж гЮОХЯЮРЭ*;
+   йнмеж гЮОХЯЮРЭ;
 
 опнжедспю FileSize*(F: INTEGER): INTEGER;
     бепмсрэ API.FileSize(F)
@@ -142,7 +142,7 @@
   оепел res: INTEGER;
   мювюкн
     еякх win хкх lnx рнцдю
-      res := Write(hConsoleOutput, mSys.ADR(x), 1)
+      res := гЮОХЯЮРЭ(hConsoleOutput, mSys.ADR(x), 1)
     юеякх kos рнцдю
       API.DebugMsg(mSys.ADR(x), 0)
     йнмеж
@@ -174,7 +174,7 @@
     s: ЛрХОШ.РяРПНЙЮ; n: INTEGER;
   мювюкн
     еякх win хкх lnx рнцдю
-      n := Write(hConsoleOutput, mSys.ADR(str), LENGTH(str))
+      n := гЮОХЯЮРЭ(hConsoleOutput, mSys.ADR(str), LENGTH(str))
     юеякх kos рнцдю
       API.DebugMsg(mSys.ADR(str), 0)
     йнмеж
