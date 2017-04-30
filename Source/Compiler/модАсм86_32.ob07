@@ -257,8 +257,8 @@
 ѕ–ќ÷≈ƒ”–ј Err(code: INTEGER);
   Ќј„јЋќ
     ¬џЅќ– code »«
-    |1: м”тиль.ErrMsg(67); м”тиль.OutString(OutFile)
-    |2: м”тиль.ErrMsg(69); м”тиль.OutString(OutFile)
+    |1: м”тиль.ErrMsg(67); м”тиль.—трока_ѕечать(OutFile)
+    |2: м”тиль.ErrMsg(69); м”тиль.—трока_ѕечать(OutFile)
     |3: м”тиль.ErrMsg(58)
     |4: м”тиль.ErrMsg(88)
     »Ќј„≈

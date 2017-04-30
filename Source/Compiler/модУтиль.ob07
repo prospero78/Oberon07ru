@@ -164,7 +164,7 @@
     CharC(0AX)
   КОНЕЦ Ln;
 
-ПРОЦЕДУРА OutString*(str: МАССИВ ИЗ CHAR);
+ПРОЦЕДУРА Строка_Печать*(str: МАССИВ ИЗ CHAR);
   ПЕРЕМ
     s: мТипы.тСтрока; n: INTEGER;
   НАЧАЛО
@@ -173,11 +173,11 @@
     АЕСЛИ kos ТОГДА
       API.DebugMsg(mSys.ADR(str), 0)
     КОНЕЦ
-  КОНЕЦ OutString;
+  КОНЕЦ Строка_Печать;
 
 ПРОЦЕДУРА ErrMsg*(code: INTEGER);
   НАЧАЛО
-    OutString("ошибка: "); Int(code); Ln;
+    Строка_Печать("Ошибка: "); Int(code); Ln;
     (* мОш.Сообщ(code); *)
   КОНЕЦ ErrMsg;
 
@@ -185,10 +185,10 @@
   ПЕРЕМ
     s: мТипы.тСтрока;
   НАЧАЛО
-    OutString("ошибка: "); Int(code); Ln;
-    OutString("файл:   "); OutString(Файл_имя); Ln;
-    OutString("строка: "); Int(line); Ln;
-    OutString("поз:    "); Int(col); Ln;
+    Строка_Печать("ошибка: "); Int(code); Ln;
+    Строка_Печать("файл:   "); Строка_Печать(Файл_имя); Ln;
+    Строка_Печать("строка: "); Int(line); Ln;
+    Строка_Печать("поз:    "); Int(col); Ln;
   КОНЕЦ ErrMsgPos;
 
 ПРОЦЕДУРА UnitLine*(newUnit, newLine: INTEGER);
@@ -363,7 +363,7 @@
 ПРОЦЕДУРА Время_Затрачено*;
   ПЕРЕМ sec, dsec: INTEGER;
   НАЧАЛО
-    OutString("затрачено времени: ");
+    Строка_Печать("Затрачено времени: ");
     API.Time(sec, dsec);
     sec := sec - API.sec;
     dsec := dsec - API.dsec;
@@ -373,7 +373,7 @@
     ЕСЛИ dsec < 10 ТОГДА
       Int(0)
     КОНЕЦ;
-    Int(dsec); OutString(" сек"); Ln
+    Int(dsec); Строка_Печать(" сек."); Ln
   КОНЕЦ Время_Затрачено;
 
 ПРОЦЕДУРА Закончить*(n: INTEGER);

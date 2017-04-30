@@ -1465,7 +1465,7 @@
         ImportList;
         main := temp
        ќЌ≈÷;
-      м”тиль.OutString("компилирую "); м”тиль.OutString(unit.Name.им€); м”тиль.Ln;
+      м”тиль.—трока_ѕечать(" омпилирую: "); м”тиль.—трока_ѕечать(unit.Name.им€); м”тиль.—трока_ѕечать("."); м”тиль.Ln;
       X86.Module(idmod.Name.им€, idmod.Number);
       UnitNumber := idmod.Number;
       unit.IdentBegin := unit.Idents.следующ(IDENT);
@@ -1550,9 +1550,9 @@
        ќЌ≈÷;
       ≈—Ћ» ~ReadModule(Path, Main, ExtMain) “ќ√ƒј
         м”тиль.ErrMsg(64);
-        м”тиль.OutString(path2);
-        м”тиль.OutString(Main);
-        м”тиль.OutString(ExtMain);
+        м”тиль.—трока_ѕечать(path2);
+        м”тиль.—трока_ѕечать(Main);
+        м”тиль.—трока_ѕечать(ExtMain);
         м”тиль.Ln;
         м”тиль.«акончить(1)
        ќЌ≈÷

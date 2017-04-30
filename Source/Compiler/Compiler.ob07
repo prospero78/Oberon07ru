@@ -1911,7 +1911,7 @@
     X86.Prolog(temp);
     DECL.Program(SelfPath, Path, Name, Ext, platform IN {1, 2, 3}, OpSeq, Expr, AssComp, sttypes);
     DECL.Compile(platform, stksize);
-    м”тиль.OutString("компил€ци€ успешна"); м”тиль.Ln;
+    м”тиль.—трока_ѕечать("   + омпил€ци€ успешна!"); м”тиль.Ln;
     м”тиль.¬рем€_«атрачено
    ќЌ≈÷ Start;
 
