@@ -250,10 +250,10 @@
     Res[j + i] := 0X
    ќЌ≈÷ concat;
 
-ѕ–ќ÷≈ƒ”–ј Push*(this: м“ипы.ту—писок; item: м“ипы.tpItem);
+ѕ–ќ÷≈ƒ”–ј Push*(this: м“ипы.ту—писок; item: м“ипы.туѕункт);
   Ќј„јЋќ
     ≈—Ћ» this.Count = 0 “ќ√ƒј
-      this.First := item;
+      this.предыдущ := item;
       item.Prev := ѕ”—“ќ
     »Ќј„≈
       this.Last.Next := item;
@@ -264,7 +264,7 @@
     item.Next := ѕ”—“ќ
    ќЌ≈÷ Push;
 
-ѕ–ќ÷≈ƒ”–ј Insert*(this: м“ипы.ту—писок; item, prev: м“ипы.tpItem);
+ѕ–ќ÷≈ƒ”–ј Insert*(this: м“ипы.ту—писок; item, prev: м“ипы.туѕункт);
   Ќј„јЋќ
     ≈—Ћ» prev # this.Last “ќ√ƒј
       item.Next := prev.Next;
@@ -279,7 +279,7 @@
 
 ѕ–ќ÷≈ƒ”–ј Clear*(this: м“ипы.ту—писок);
   Ќј„јЋќ
-    this.First := ѕ”—“ќ;
+    this.предыдущ := ѕ”—“ќ;
     this.Last := ѕ”—“ќ;
     this.Count := 0
    ќЌ≈÷ Clear;

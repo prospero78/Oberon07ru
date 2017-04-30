@@ -203,7 +203,7 @@
   оепел cur, res: UNIT;
   мювюкн
     res := осярн;
-    cur := prog.First(UNIT);
+    cur := prog.ОПЕДШДСЫ(UNIT);
     онйю (cur # осярн) & ЛсРХКЭ.streq(cur.Name.ХЛЪ, Name.ХЛЪ) декюрэ
       res := cur;
       cur := осярн
@@ -661,7 +661,7 @@
 опнжедспю SetFields(Tr, Tf: pTYPE; Rec: BOOLEAN);
   оепел cur: FIELD;
   мювюкн
-    cur := Tr.Fields.First(FIELD);
+    cur := Tr.Fields.ОПЕДШДСЫ(FIELD);
     онйю cur.T # осярн декюрэ
       cur := cur.Next(FIELD)
     йнмеж;
@@ -696,7 +696,7 @@
   оепел cur, Res: FIELD;
   мювюкн
     Res := осярн;
-    cur := T.Fields.First(FIELD);
+    cur := T.Fields.ОПЕДШДСЫ(FIELD);
     онйю (cur # осярн) & (cur.Name = Name) декюрэ
       Res := cur;
       cur := осярн
@@ -1138,7 +1138,7 @@
 опнжедспю LinkPtr;
   оепел cur: PTRBASE; id: IDENT;
   мювюкн
-    cur := PtrBases.First(PTRBASE);
+    cur := PtrBases.ОПЕДШДСЫ(PTRBASE);
     онйю cur # осярн декюрэ
       id := GetIdent(cur.Name);
       Assert(id # осярн, cur.line, cur.col, 42);

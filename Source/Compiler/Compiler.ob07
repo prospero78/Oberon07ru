@@ -685,8 +685,8 @@
       ИНАЧЕ
         ЕСЛИ (T1.tType = TPROC) & (T2.tType = TPROC) & (T1 # T2) ТОГДА
           Res := (T1.Call = T2.Call) & (T1.Fields.Count = T2.Fields.Count) & ProcTypeComp1(T1.Base, T2.Base);
-          fp := T1.Fields.First(DECL.FIELD);
-          ft := T2.Fields.First(DECL.FIELD);
+          fp := T1.Fields.предыдущ(DECL.FIELD);
+          ft := T2.Fields.предыдущ(DECL.FIELD);
           ПОКА Res & (fp # ПУСТО) ДЕЛАТЬ
             Res := (fp.ByRef = ft.ByRef) & TypeComp(fp.T, ft.T);
             fp := fp.Next(DECL.FIELD);
@@ -865,7 +865,7 @@
           Assert2(e.id.T.Base.tType # TVOID, 73);
           Next;
           X86.PushCall(begcall);
-          Call(e.id.T.Fields.First(DECL.FIELD));
+          Call(e.id.T.Fields.предыдущ(DECL.FIELD));
           X86.EndCall;
           e.eType := eEXP;
           e.T := e.id.T.Base;
@@ -885,7 +885,7 @@
         Assert2(e.T.Base.tType # TVOID, 73);
         Next;
         X86.PushCall(begcall);
-        Call(e.T.Fields.First(DECL.FIELD));
+        Call(e.T.Fields.предыдущ(DECL.FIELD));
         X86.EndCall;
         e.eType := eEXP;
         X86.CallVar(ИСТИНА, e.T.Base.tType IN {TREAL, TLONGREAL}, e.T.Call, e.T.Len, DECL.curBlock.LocalSize);
@@ -1333,7 +1333,7 @@
 ПРОЦЕДУРА CheckLabel(a, b: INTEGER; Labels: мТипы.туСписок): BOOLEAN;
   ПЕРЕМ cur: LABEL;
   НАЧАЛО
-    cur := Labels.First(LABEL);
+    cur := Labels.предыдущ(LABEL);
     ПОКА (cur # ПУСТО) & ((b < cur.a) ИЛИ (a > cur.b)) ДЕЛАТЬ
       cur := cur.Next(LABEL)
     КОНЕЦ
@@ -1710,7 +1710,7 @@
         Check(lxLRound);
         Next;
         X86.PushCall(begcall);
-        Call(e1.id.T.Fields.First(DECL.FIELD));
+        Call(e1.id.T.Fields.предыдущ(DECL.FIELD));
         X86.EndCall
       АЕСЛИ мСкан.tLex = lxLRound ТОГДА
         Next;
@@ -1732,7 +1732,7 @@
         Next;
         Assert((e1.T.Base.tType = TVOID) ИЛИ (e1.T.Call = DECL.winapi), line, col, 132);
         X86.PushCall(begcall);
-        Call(e1.T.Fields.First(DECL.FIELD));
+        Call(e1.T.Fields.предыдущ(DECL.FIELD));
         X86.EndCall;
         X86.CallVar(ЛОЖЬ, ЛОЖЬ, e1.T.Call, e1.T.Len, DECL.curBlock.LocalSize)
       АЕСЛИ мСкан.tLex = lxAssign ТОГДА

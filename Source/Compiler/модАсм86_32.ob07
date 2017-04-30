@@ -433,7 +433,7 @@
       Fill(Align(mSys.SIZE(HEADER), 200H) - mSys.SIZE(HEADER), 0X)
     йнмеж;
 
-    cur := asmlist.First(ASMLINE);
+    cur := asmlist.ОПЕДШДСЫ(ASMLINE);
     онйю cur # осярн декюрэ
       Write(mSys.ADR(Code[cur.cmd]), cur.clen);
       cur := cur.Next(ASMLINE)
@@ -1541,7 +1541,7 @@
 опнжедспю Optimization;
   оепел cur: ASMLINE; flag: BOOLEAN;
   мювюкн
-    cur := asmlist.First(ASMLINE);
+    cur := asmlist.ОПЕДШДСЫ(ASMLINE);
     онйю cur # осярн декюрэ
       flag := кнфэ;
       бшанп cur.tcmd хг
@@ -1594,7 +1594,7 @@
 
       Write(mSys.ADR(Header), mSys.SIZE(KOSHEADER));
 
-      cur := asmlist.First(ASMLINE);
+      cur := asmlist.ОПЕДШДСЫ(ASMLINE);
       онйю cur # осярн декюрэ
         Write(mSys.ADR(Code[cur.cmd]), cur.clen);
         cur := cur.Next(ASMLINE)
@@ -1644,7 +1644,7 @@
 
       size := Align(size2, 4);
       rcount := 0;
-      cur := asmlist.First(ASMLINE);
+      cur := asmlist.ОПЕДШДСЫ(ASMLINE);
       онйю cur # осярн декюрэ
         еякх cur.tcmd IN {OCMD, GCMD} рнцдю
           mSys.GET(mSys.ADR(Code[cur.cmd]), a);
@@ -1759,7 +1759,7 @@
 
     Write(mSys.ADR(bytes), 817H);
     Fill(2DDH, 90X);
-    cur := asmlist.First(ASMLINE);
+    cur := asmlist.ОПЕДШДСЫ(ASMLINE);
     онйю cur # осярн декюрэ
       Write(mSys.ADR(Code[cur.cmd]), cur.clen);
       cur := cur.Next(ASMLINE)
@@ -1804,7 +1804,7 @@
 
     Optimization;
     temp2 := size;
-    cur := asmlist.First(ASMLINE);
+    cur := asmlist.ОПЕДШДСЫ(ASMLINE);
     онйю cur # осярн декюрэ
       cur.adr := size;
       еякх cur.tcmd = LCMD рнцдю
@@ -1815,7 +1815,7 @@
     йнмеж;
 
     size := temp2;
-    cur := asmlist.First(ASMLINE);
+    cur := asmlist.ОПЕДШДСЫ(ASMLINE);
     онйю cur # осярн декюрэ
       cur.adr := size;
       еякх cur.tcmd = LCMD рнцдю
@@ -1879,7 +1879,7 @@
       R.Size := 0;
       RCount := 0;
     йнмеж;
-    cur := asmlist.First(ASMLINE);
+    cur := asmlist.ОПЕДШДСЫ(ASMLINE);
 
     дкъ i := 0 дн LEN(RtlProc) - 1 декюрэ
       RtlProc[i] := Labels[RtlProc[i]]
