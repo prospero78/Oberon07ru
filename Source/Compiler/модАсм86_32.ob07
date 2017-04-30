@@ -65,7 +65,7 @@
 
   PROC = ПРОЦЕДУРА (err: BOOLEAN);
 
-  ASMLINE* = УКАЗАТЕЛЬ НА ЗАПИСЬ (мТипы.tItem)
+  ASMLINE* = УКАЗАТЕЛЬ НА ЗАПИСЬ (мТипы.тПункт)
       cmd, clen, varadr, adr, tcmd, codeadr: INTEGER; short: BOOLEAN
     КОНЕЦ;
 
@@ -126,7 +126,7 @@
     КОНЕЦ;
 
 ПЕРЕМ
-  asmlist: мТипы.tpList;
+  asmlist: мТипы.туСписок;
   start: ASMLINE; MemErr: PROC; dll, con, gui, kos, elf, obj: BOOLEAN;
     Lcount, reccount, topstk: INTEGER; recarray: МАССИВ 2048 ИЗ INTEGER; current*: ASMLINE;
     callstk: МАССИВ 1024, 2 ИЗ ASMLINE; OutFile: мТипы.тСтрока;

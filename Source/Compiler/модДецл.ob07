@@ -68,26 +68,26 @@
 
 “»ѕџ
 
-  pTYPE* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.tItem)
+  pTYPE* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.тѕункт)
       tType*, Size*, Len*, Number*, Align, Call*, Rec: INTEGER;
       Base*: pTYPE;
-      Fields*: м“ипы.tpList
+      Fields*: м“ипы.ту—писок
      ќЌ≈÷;
 
   IDENT* = ” ј«ј“≈Ћ№ Ќј rIDENT;
 
-  UNIT* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.tItem)
+  UNIT* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.тѕункт)
       Name: м“ипы.ту”зел;
       File: м“ипы.т—трока;
-      Idents: м“ипы.tpList;
-      Import: м“ипы.tpList;
+      Idents: м“ипы.ту—писок;
+      Import: м“ипы.ту—писок;
       IdentBegin: IDENT;
       scanner: м“ипы.ту—канер;
       Level*: INTEGER;
       Closed, typedecl, ExportType, Std, sys: BOOLEAN
      ќЌ≈÷;
 
-  rIDENT* = «јѕ»—№ (м“ипы.tItem)
+  rIDENT* = «јѕ»—№ (м“ипы.тѕункт)
       Name: м“ипы.ту”зел;
       T*: pTYPE;
       Unit*: UNIT;
@@ -98,17 +98,17 @@
       Export: BOOLEAN
      ќЌ≈÷;
 
-  PTRBASE = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.tItem)
+  PTRBASE = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.тѕункт)
       Name: м“ипы.ту”зел;
       line, col: INTEGER;
       Ptr: pTYPE
      ќЌ≈÷;
 
-  STRITEM = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.tItem)
+  STRITEM = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.тѕункт)
       Str: м“ипы.т—трока
      ќЌ≈÷;
 
-  FIELD* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.tItem)
+  FIELD* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.тѕункт)
       Name: м“ипы.ту”зел;
       T*: pTYPE;
       Offset*: INTEGER;
@@ -116,7 +116,7 @@
       Unit*: UNIT
      ќЌ≈÷;
 
-  STRCONST* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.tItem)
+  STRCONST* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.тѕункт)
       Str*: м“ипы.т—трока;
       Len*, Number*: INTEGER
      ќЌ≈÷;
@@ -140,7 +140,7 @@
   sttypes: stTYPES; unit*, sys: UNIT; curBlock*: IDENT;
   Path, Main, Std, ExtMain: м“ипы.т—трока;
   NamePtrBase: м“ипы.ту”зел; ProgSize*, RecCount, UnitNumber*: INTEGER;
-  PtrBases, Strings, types, prog: м“ипы.tpList;
+  PtrBases, Strings, types, prog: м“ипы.ту—писок;
   OpSeq: opPROC; Expr: expPROC;
   AssComp: assPROC; main, sizefunc, winplatf, Const*: BOOLEAN;
   pParseType: ѕ–ќ÷≈ƒ”–ј (ѕ≈– line, col: INTEGER): pTYPE;

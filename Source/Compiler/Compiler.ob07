@@ -54,7 +54,7 @@
 
 рхош
 
-  LABEL = сйюгюрекэ мю гюохяэ (ЛрХОШ.tItem)
+  LABEL = сйюгюрекэ мю гюохяэ (ЛрХОШ.РоСМЙР)
       a, b: INTEGER
     йнмеж;
 
@@ -1330,7 +1330,7 @@
     Next
   йнмеж ForOper;
 
-опнжедспю CheckLabel(a, b: INTEGER; Labels: ЛрХОШ.tpList): BOOLEAN;
+опнжедспю CheckLabel(a, b: INTEGER; Labels: ЛрХОШ.РСяОХЯНЙ): BOOLEAN;
   оепел cur: LABEL;
   мювюкн
     cur := Labels.First(LABEL);
@@ -1356,7 +1356,7 @@
     йнмеж
   йнмеж LabelVal;
 
-опнжедспю Label(int: BOOLEAN; Labels: ЛрХОШ.tpList; LBeg: INTEGER);
+опнжедспю Label(int: BOOLEAN; Labels: ЛрХОШ.РСяОХЯНЙ; LBeg: INTEGER);
   оепел a, b: INTEGER; label: LABEL; line, col: INTEGER;
   мювюкн
     Coord(line, col);
@@ -1376,7 +1376,7 @@
     X86.CaseLabel(a, b, LBeg)
   йнмеж Label;
 
-опнжедспю Variant(int: BOOLEAN; Labels: ЛрХОШ.tpList; EndCase: INTEGER);
+опнжедспю Variant(int: BOOLEAN; Labels: ЛрХОШ.РСяОХЯНЙ; EndCase: INTEGER);
   оепел LBeg, LEnd: INTEGER;
   мювюкн
     LBeg := X86.NewLabel();
@@ -1402,7 +1402,7 @@
     e: DECL.EXPRESSION;
     int: BOOLEAN;
     line, col, EndCase: INTEGER;
-    Labels: ЛрХОШ.tpList;
+    Labels: ЛрХОШ.РСяОХЯНЙ;
   мювюкн
     Next;
     Coord(line, col);

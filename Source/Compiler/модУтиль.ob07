@@ -250,7 +250,7 @@
     Res[j + i] := 0X
   йнмеж concat;
 
-опнжедспю Push*(this: ЛрХОШ.tpList; item: ЛрХОШ.tpItem);
+опнжедспю Push*(this: ЛрХОШ.РСяОХЯНЙ; item: ЛрХОШ.tpItem);
   мювюкн
     еякх this.Count = 0 рнцдю
       this.First := item;
@@ -264,7 +264,7 @@
     item.Next := осярн
   йнмеж Push;
 
-опнжедспю Insert*(this: ЛрХОШ.tpList; item, prev: ЛрХОШ.tpItem);
+опнжедспю Insert*(this: ЛрХОШ.РСяОХЯНЙ; item, prev: ЛрХОШ.tpItem);
   мювюкн
     еякх prev # this.Last рнцдю
       item.Next := prev.Next;
@@ -277,16 +277,16 @@
     йнмеж
   йнмеж Insert;
 
-опнжедспю Clear*(this: ЛрХОШ.tpList);
+опнжедспю Clear*(this: ЛрХОШ.РСяОХЯНЙ);
   мювюкн
     this.First := осярн;
     this.Last := осярн;
     this.Count := 0
   йнмеж Clear;
 
-опнжедспю CreateList*(): ЛрХОШ.tpList;
+опнжедспю CreateList*(): ЛрХОШ.РСяОХЯНЙ;
   оепел
-    nov: ЛрХОШ.tpList;
+    nov: ЛрХОШ.РСяОХЯНЙ;
   мювюкн
     NEW(nov)
     бепмсрэ nov

@@ -25,13 +25,13 @@ BSD-2 *)
             CR*, UTF8*: BOOLEAN
         КОНЕЦ;
     
-   tpItem* = УКАЗАТЕЛЬ НА tItem;
+   tpItem* = УКАЗАТЕЛЬ НА тПункт;
 
-   tItem* = ЗАПИСЬ
+   тПункт* = ЗАПИСЬ
       Next*, Prev*: tpItem
     КОНЕЦ;
     
-   tpList* = УКАЗАТЕЛЬ НА ЗАПИСЬ
+   туСписок* = УКАЗАТЕЛЬ НА ЗАПИСЬ
       First*, Last*: tpItem;
       Count*: INTEGER
     КОНЕЦ;
