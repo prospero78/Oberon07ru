@@ -22,24 +22,20 @@
 ИМПОРТ mSys := SYSTEM,
     API,
     мКонст := модКонстанты,
-    мТипы := модТипы(*,
-    мОш := модОшибки*);
-
-ТИПЫ
-
-
+    мТипы := модТипы,
+    мФайл := модФайл;
 
 ПЕРЕМ
 
   Params: МАССИВ мКонст.макс_парам, 2 ИЗ INTEGER;
   hConsoleOutput, hConsoleInput, ParamCount*, Line*, Unit*: INTEGER;
   win, kos, lnx: BOOLEAN;
-  Файл_имя: мТипы.тСтрока;
+  Файл_имя:мТипы.тСтрока;
 
 ПРОЦЕДУРА ФайлИмя_Уст*(имя_: мТипы.тСтрока);
-  НАЧАЛО
-    Файл_имя := имя_
-  КОНЕЦ ФайлИмя_Уст;
+   НАЧАЛО
+      Файл_имя := имя_
+   КОНЕЦ ФайлИмя_Уст;
 
 ПРОЦЕДУРА IsInf*(x_: LONGREAL): BOOLEAN;
   ПЕРЕМ
@@ -113,35 +109,35 @@
       ВЕРНУТЬ API.Alloc(64, n)
   КОНЕЦ Память_Получ;
 
-ПРОЦЕДУРА CloseF*(F: INTEGER);
+ПРОЦЕДУРА Файл_Закрыть*(F: INTEGER);
   НАЧАЛО
     API.CloseHandle(F)
-  КОНЕЦ CloseF;
+  КОНЕЦ Файл_Закрыть;
 
-ПРОЦЕДУРА Read*(F, Buffer, Count: INTEGER): INTEGER;
+ПРОЦЕДУРА Файл_Читать*(F, Buffer, Count: INTEGER): INTEGER;
   ПЕРЕМ res: INTEGER;
   НАЧАЛО
     API.ReadFile(F, Buffer, Count, mSys.ADR(res), 0)
     ВЕРНУТЬ res
-  КОНЕЦ Read;
+  КОНЕЦ Файл_Читать;
 
-ПРОЦЕДУРА Записать*(F, Buffer, Count: INTEGER): INTEGER;
+ПРОЦЕДУРА Файл_Записать*(F, Buffer, Count: INTEGER): INTEGER;
    ПЕРЕМ
       res: INTEGER;
    НАЧАЛО
       API.WriteFile(F, Buffer, Count, mSys.ADR(res), 0)
       ВЕРНУТЬ res
-   КОНЕЦ Записать;
+   КОНЕЦ Файл_Записать;
 
-ПРОЦЕДУРА FileSize*(F: INTEGER): INTEGER;
-    ВЕРНУТЬ API.FileSize(F)
-  КОНЕЦ FileSize;
+ПРОЦЕДУРА ФайлРазмер_Получ*(F: INTEGER): INTEGER;
+      ВЕРНУТЬ API.FileSize(F)
+   КОНЕЦ ФайлРазмер_Получ;
 
 ПРОЦЕДУРА CharC*(x: CHAR);
   ПЕРЕМ res: INTEGER;
   НАЧАЛО
     ЕСЛИ win ИЛИ lnx ТОГДА
-      res := Записать(hConsoleOutput, mSys.ADR(x), 1)
+      res := Файл_Записать(hConsoleOutput, mSys.ADR(x), 1)
     АЕСЛИ kos ТОГДА
       API.DebugMsg(mSys.ADR(x), 0)
     КОНЕЦ
@@ -173,7 +169,7 @@
     s: мТипы.тСтрока; n: INTEGER;
   НАЧАЛО
     ЕСЛИ win ИЛИ lnx ТОГДА
-      n := Записать(hConsoleOutput, mSys.ADR(str), LENGTH(str))
+      n := Файл_Записать(hConsoleOutput, mSys.ADR(str), LENGTH(str))
     АЕСЛИ kos ТОГДА
       API.DebugMsg(mSys.ADR(str), 0)
     КОНЕЦ
