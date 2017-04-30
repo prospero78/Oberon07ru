@@ -27,10 +27,7 @@
 
 рхош
 
-  tpList* = сйюгюрекэ мю гюохяэ
-      First*, Last*: ЛрХОШ.tpItem;
-      Count*: INTEGER
-    йнмеж;
+
 
 оепел
 
@@ -39,9 +36,9 @@
   win, kos, lnx: BOOLEAN;
   тЮИК_ХЛЪ: ЛрХОШ.РяРПНЙЮ;
 
-опнжедспю тЮИКхЛЪ_сЯР*(F_: ЛрХОШ.РяРПНЙЮ);
+опнжедспю тЮИКхЛЪ_сЯР*(ХЛЪ_: ЛрХОШ.РяРПНЙЮ);
   мювюкн
-    тЮИК_ХЛЪ := F_
+    тЮИК_ХЛЪ := ХЛЪ_
   йнмеж тЮИКхЛЪ_сЯР;
 
 опнжедспю IsInf*(x_: LONGREAL): BOOLEAN;
@@ -253,7 +250,7 @@
     Res[j + i] := 0X
   йнмеж concat;
 
-опнжедспю Push*(this: tpList; item: ЛрХОШ.tpItem);
+опнжедспю Push*(this: ЛрХОШ.tpList; item: ЛрХОШ.tpItem);
   мювюкн
     еякх this.Count = 0 рнцдю
       this.First := item;
@@ -267,7 +264,7 @@
     item.Next := осярн
   йнмеж Push;
 
-опнжедспю Insert*(this: tpList; item, prev: ЛрХОШ.tpItem);
+опнжедспю Insert*(this: ЛрХОШ.tpList; item, prev: ЛрХОШ.tpItem);
   мювюкн
     еякх prev # this.Last рнцдю
       item.Next := prev.Next;
@@ -280,16 +277,16 @@
     йнмеж
   йнмеж Insert;
 
-опнжедспю Clear*(this: tpList);
+опнжедспю Clear*(this: ЛрХОШ.tpList);
   мювюкн
     this.First := осярн;
     this.Last := осярн;
     this.Count := 0
   йнмеж Clear;
 
-опнжедспю CreateList*(): tpList;
+опнжедспю CreateList*(): ЛрХОШ.tpList;
   оепел
-    nov: tpList;
+    nov: ЛрХОШ.tpList;
   мювюкн
     NEW(nov)
     бепмсрэ nov

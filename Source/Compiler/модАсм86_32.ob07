@@ -126,7 +126,7 @@
      ќЌ≈÷;
 
 ѕ≈–≈ћ
-  asmlist: м”тиль.tpList;
+  asmlist: м“ипы.tpList;
   start: ASMLINE; MemErr: PROC; dll, con, gui, kos, elf, obj: BOOLEAN;
     Lcount, reccount, topstk: INTEGER; recarray: ћј——»¬ 2048 »« INTEGER; current*: ASMLINE;
     callstk: ћј——»¬ 1024, 2 »« ASMLINE; OutFile: м“ипы.т—трока;

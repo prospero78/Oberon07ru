@@ -71,7 +71,7 @@
   pTYPE* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.tItem)
       tType*, Size*, Len*, Number*, Align, Call*, Rec: INTEGER;
       Base*: pTYPE;
-      Fields*: м”тиль.tpList
+      Fields*: м“ипы.tpList
      ќЌ≈÷;
 
   IDENT* = ” ј«ј“≈Ћ№ Ќј rIDENT;
@@ -79,8 +79,8 @@
   UNIT* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.tItem)
       Name: м“ипы.ту”зел;
       File: м“ипы.т—трока;
-      Idents: м”тиль.tpList;
-      Import: м”тиль.tpList;
+      Idents: м“ипы.tpList;
+      Import: м“ипы.tpList;
       IdentBegin: IDENT;
       scanner: м“ипы.ту—канер;
       Level*: INTEGER;
@@ -140,7 +140,7 @@
   sttypes: stTYPES; unit*, sys: UNIT; curBlock*: IDENT;
   Path, Main, Std, ExtMain: м“ипы.т—трока;
   NamePtrBase: м“ипы.ту”зел; ProgSize*, RecCount, UnitNumber*: INTEGER;
-  PtrBases, Strings, types, prog: м”тиль.tpList;
+  PtrBases, Strings, types, prog: м“ипы.tpList;
   OpSeq: opPROC; Expr: expPROC;
   AssComp: assPROC; main, sizefunc, winplatf, Const*: BOOLEAN;
   pParseType: ѕ–ќ÷≈ƒ”–ј (ѕ≈– line, col: INTEGER): pTYPE;

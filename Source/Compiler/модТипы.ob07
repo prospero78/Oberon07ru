@@ -31,4 +31,9 @@ BSD-2 *)
       Next*, Prev*: tpItem
     йнмеж;
     
+   tpList* = сйюгюрекэ мю гюохяэ
+      First*, Last*: tpItem;
+      Count*: INTEGER
+    йнмеж;
+    
 йнмеж ЛНДрХОШ.
