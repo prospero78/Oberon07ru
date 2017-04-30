@@ -103,14 +103,14 @@ This file is part of Compiler.
 
 ѕ–ќ÷≈ƒ”–ј Backup*(scanner: м“ипы.ту—канер);
     Ќј„јЋќ
-        scanner.File := File;
+        scanner.файл_ном := File;
         scanner.ccol := ccol;
         scanner.cline := cline;
         scanner.ch := ch;
         scanner.Lex := Lex;
-        scanner.count := count;
+        scanner.счетчик := count;
         scanner.col := col;
-        scanner.line := line;
+        scanner.строка_ном := line;
         scanner.tLex := tLex;
         scanner.vINT := vINT;
         scanner.vFLT := vFLT;
@@ -123,14 +123,14 @@ This file is part of Compiler.
 
 ѕ–ќ÷≈ƒ”–ј Recover*(scanner: м“ипы.ту—канер);
     Ќј„јЋќ
-        File := scanner.File;
+        File := scanner.файл_ном;
         ccol := scanner.ccol;
         cline := scanner.cline;
         ch := scanner.ch;
         Lex := scanner.Lex;
-        count := scanner.count;
+        count := scanner.счетчик;
         col := scanner.col;
-        line := scanner.line;
+        line := scanner.строка_ном;
         tLex := scanner.tLex;
         vINT := scanner.vINT;
         vFLT := scanner.vFLT;

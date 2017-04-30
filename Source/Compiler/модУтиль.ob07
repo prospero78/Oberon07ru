@@ -254,10 +254,10 @@
   НАЧАЛО
     ЕСЛИ this.счетчик = 0 ТОГДА
       this.предыдущ := item;
-      item.Prev := ПУСТО
+      item.предыдущ := ПУСТО
     ИНАЧЕ
       this.следующ.следующ := item;
-      item.Prev := this.следующ
+      item.предыдущ := this.следующ
     КОНЕЦ;
     INC(this.счетчик);
     this.следующ := item;
@@ -268,9 +268,9 @@
   НАЧАЛО
     ЕСЛИ prev # this.следующ ТОГДА
       item.следующ := prev.следующ;
-      item.Prev := prev;
+      item.предыдущ := prev;
       prev.следующ := item;
-      item.следующ.Prev := item;
+      item.следующ.предыдущ := item;
       INC(this.счетчик)
     ИНАЧЕ
       Push(this, item)

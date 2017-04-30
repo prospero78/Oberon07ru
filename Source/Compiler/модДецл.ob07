@@ -272,7 +272,7 @@
   НАЧАЛО
     cur := unit.Idents.следующ(IDENT);
     ПОКА (cur.iType # IDGUARD) & (cur.Name # Name) ДЕЛАТЬ
-      cur := cur.Prev(IDENT)
+      cur := cur.предыдущ(IDENT)
     КОНЕЦ
     ВЕРНУТЬ cur.iType = IDGUARD
   КОНЕЦ CheckIdent;
@@ -427,7 +427,7 @@
       res := cur;
       cur := ПУСТО
     АЕСЛИ cur # ПУСТО ДЕЛАТЬ
-      cur := cur.Prev(IDENT)
+      cur := cur.предыдущ(IDENT)
     КОНЕЦ
     ВЕРНУТЬ res
   КОНЕЦ GetIdent;
@@ -784,7 +784,7 @@
   НАЧАЛО
     cur := unit.Idents.следующ(IDENT);
     ПОКА cur.T = ПУСТО ДЕЛАТЬ
-      cur := cur.Prev(IDENT)
+      cur := cur.предыдущ(IDENT)
     КОНЕЦ;
     cur := cur.следующ(IDENT);
     ПОКА cur # ПУСТО ДЕЛАТЬ
@@ -1124,10 +1124,10 @@
     cur := unit.Idents.следующ(IDENT);
     n := 0;
     ПОКА cur.iType # IDGUARD ДЕЛАТЬ
-      cur := cur.Prev(IDENT);
+      cur := cur.предыдущ(IDENT);
       INC(n)
     КОНЕЦ;
-    cur := cur.Prev(IDENT);
+    cur := cur.предыдущ(IDENT);
     INC(n);
     unit.Idents.счетчик := unit.Idents.счетчик - n;
     unit.Idents.следующ := cur;

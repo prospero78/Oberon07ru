@@ -791,7 +791,7 @@
 опнжедспю CmpOpt(inv: BOOLEAN): INTEGER;
   оепел cur: ASMLINE; c: INTEGER;
   мювюкн
-    c := ORD(Code[current.Prev.Prev(ASMLINE).cmd]);
+    c := ORD(Code[current.ОПЕДШДСЫ.ОПЕДШДСЫ(ASMLINE).cmd]);
     еякх inv рнцдю
       еякх ODD(c) рнцдю
         DEC(c)
@@ -803,7 +803,7 @@
     онбрнпърэ
       cur.tcmd := 0;
       cur.clen := 0;
-      cur := cur.Prev(ASMLINE)
+      cur := cur.ОПЕДШДСЫ(ASMLINE)
     онйюме cur.tcmd = ICMP1;
     cur.tcmd := 0;
     cur.clen := 0
@@ -813,7 +813,7 @@
 опнжедспю ifwh*(L: INTEGER);
   оепел c: INTEGER;
   мювюкн
-    еякх current.Prev(ASMLINE).tcmd = ICMP2 рнцдю
+    еякх current.ОПЕДШДСЫ(ASMLINE).tcmd = ICMP2 рнцдю
       c := CmpOpt(хярхмю);
       OutCode("5A583BC2");
       jmp(CHR(c), L)
@@ -827,14 +827,14 @@
 опнжедспю PushConst*(Number: INTEGER);
   мювюкн
     IntByte("6A", "68", Number);
-    current.Prev(ASMLINE).varadr := Number
+    current.ОПЕДШДСЫ(ASMLINE).varadr := Number
   йнмеж PushConst;
 
 опнжедспю IfWhile*(L: INTEGER; orop: BOOLEAN);
   оепел c, L1: INTEGER;
   мювюкн
     L1 := NewLabel();
-    еякх current.Prev(ASMLINE).tcmd = ICMP2 рнцдю
+    еякх current.ОПЕДШДСЫ(ASMLINE).tcmd = ICMP2 рнцдю
       c := CmpOpt(orop);
       OutCode("5A583BC2");
       jmp(CHR(c), L1);
@@ -1271,11 +1271,11 @@
     мювюкн
       lastcmd.tcmd := 0;
       offset := lastcmd.varadr;
-      lastcmd := lastcmd.Prev(ASMLINE);
+      lastcmd := lastcmd.ОПЕДШДСЫ(ASMLINE);
       онйю lastcmd.tcmd # ECMD декюрэ
         lastcmd.clen := 0;
         lastcmd.tcmd := 0;
-        lastcmd := lastcmd.Prev(ASMLINE)
+        lastcmd := lastcmd.ОПЕДШДСЫ(ASMLINE)
       йнмеж;
       lastcmd.tcmd := 0
     йнмеж del;
