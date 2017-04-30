@@ -1343,7 +1343,7 @@
         м—кан.Recover(self.scanner);
         u := unit;
         unit := self;
-        м”тиль.SetFile(unit.File)
+        м”тиль.‘айл»м€_”ст(unit.File)
       »Ќј„≈
         Assert(u.Closed, nameline, namecol, 31)
        ќЌ≈÷;
@@ -1446,7 +1446,7 @@
       unit.typedecl := Ћќ∆№;
       unit.ExportType := Ћќ∆№;
       COPY(Name, unit.File);
-      м”тиль.SetFile(unit.File);
+      м”тиль.‘айл»м€_”ст(unit.File);
       StIdent;
       Next; Check(м онст.ксћќƒ”Ћ№);
       

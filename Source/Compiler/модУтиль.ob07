@@ -37,12 +37,12 @@
   Params: люяяхб ЛйНМЯР.ЛЮЙЯ_ОЮПЮЛ, 2 хг INTEGER;
   hConsoleOutput, hConsoleInput, ParamCount*, Line*, Unit*: INTEGER;
   win, kos, lnx: BOOLEAN;
-  FileName: ЛрХОШ.РяРПНЙЮ;
+  тЮИК_ХЛЪ: ЛрХОШ.РяРПНЙЮ;
 
-опнжедспю SetFile*(F_: ЛрХОШ.РяРПНЙЮ);
+опнжедспю тЮИКхЛЪ_сЯР*(F_: ЛрХОШ.РяРПНЙЮ);
   мювюкн
-    FileName := F_
-  йнмеж SetFile;
+    тЮИК_ХЛЪ := F_
+  йнмеж тЮИКхЛЪ_сЯР;
 
 опнжедспю IsInf*(x_: LONGREAL): BOOLEAN;
   оепел
@@ -53,12 +53,13 @@
     бепмсрэ (h * {20..30} = {20..30}) & (h * {0..19} = {}) & (l * {0..31} = {})
   йнмеж IsInf;
 
-опнжедспю GetChar(adr_: INTEGER): CHAR;
-  оепел res: CHAR;
+опнжедспю яХБНК_оНКСВ(adr_: INTEGER): CHAR;
+  оепел
+   res: CHAR;
   мювюкн
     mSys.GET(adr_, res)
     бепмсрэ res
-  йнмеж GetChar;
+  йнмеж яХБНК_оНКСВ;
 
 опнжедспю ParamParse(count: INTEGER);
    оепел c: CHAR; cond, p: INTEGER;
@@ -78,7 +79,7 @@
       p := API.GetCommandLine();
       cond := 0;
       онйю (count < ЛйНМЯР.ЛЮЙЯ_ОЮПЮЛ) & (cond # 6) декюрэ
-         c := GetChar(p);
+         c := яХБНК_оНКСВ(p);
          бшанп cond хг
             |0: ChangeCond(0, 4, 1); еякх cond = 1 рнцдю Params[count, 0] := p йнмеж
             |4: ChangeCond(5, 0, 5); еякх cond = 5 рнцдю Params[count, 0] := p йнмеж
@@ -92,14 +93,15 @@
    йнмеж ParamParse;
 
 опнжедспю ParamStr*(оеп str: люяяхб хг CHAR; n: INTEGER);
-  оепел i, j, len: INTEGER; c: CHAR;
+  оепел
+   i, j, len: INTEGER; c: CHAR;
   мювюкн
     j := 0;
     еякх n <= ParamCount рнцдю
       len := LEN(str) - 1;
       i := Params[n, 0];
       онйю (j < len) & (i <= Params[n, 1]) декюрэ
-        c := GetChar(i);
+        c := яХБНК_оНКСВ(i);
         еякх c # 22X рнцдю
           str[j] := c;
           INC(j)
@@ -110,9 +112,9 @@
     str[j] := 0X
   йнмеж ParamStr;
 
-опнжедспю GetMem*(n: INTEGER): INTEGER;
-    бепмсрэ API.Alloc(64, n)
-  йнмеж GetMem;
+опнжедспю оЮЛЪРЭ_оНКСВ*(n: INTEGER): INTEGER;
+      бепмсрэ API.Alloc(64, n)
+  йнмеж оЮЛЪРЭ_оНКСВ;
 
 опнжедспю CloseF*(F: INTEGER);
   мювюкн
@@ -191,7 +193,7 @@
     s: ЛрХОШ.РяРПНЙЮ;
   мювюкн
     OutString("НЬХАЙЮ: "); Int(code); Ln;
-    OutString("ТЮИК:   "); OutString(FileName); Ln;
+    OutString("ТЮИК:   "); OutString(тЮИК_ХЛЪ); Ln;
     OutString("ЯРПНЙЮ: "); Int(line); Ln;
     OutString("ОНГ:    "); Int(col); Ln;
   йнмеж ErrMsgPos;
@@ -430,11 +432,14 @@
   йнмеж OpenF;
 
 опнжедспю Init;
-  оепел p, count: INTEGER;
+  оепел
+   p, count: INTEGER;
 
     опнжедспю last(оеп p: INTEGER);
     мювюкн
-      онйю GetChar(p) # 0X декюрэ INC(p) йнмеж;
+      онйю яХБНК_оНКСВ(p) # 0X декюрэ
+         INC(p)
+      йнмеж;
       DEC(p)
     йнмеж last;
 
