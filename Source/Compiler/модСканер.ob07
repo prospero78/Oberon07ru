@@ -23,6 +23,7 @@ This file is part of Compiler.
 »ћѕќ–“ м”тиль := мод”тиль,
     mSys := SYSTEM,
     м онст := мод онстанты,
+    м‘айл := мод‘айл,
     м“ипы := мод“ипы;
 
  ќЌ—“
@@ -172,7 +173,7 @@ This file is part of Compiler.
     ѕ≈–≈ћ
       n, size: INTEGER; c: CHAR;
     Ќј„јЋќ
-        File := м”тиль.OpenF(FName, 0);
+        File := м”тиль.‘айл_ќткрыть(FName, 0);
         FHandle := File;
         ≈—Ћ» File # 0 “ќ√ƒј
             CR := Ћќ∆№;
@@ -185,7 +186,7 @@ This file is part of Compiler.
             mSys.PUT(buf + size, 0X);
             м”тиль.MemErr(buf = 0);
             n := м”тиль.‘айл_„итать(File, buf, size);
-            м”тиль.‘айл_«акрыть(File);
+            м‘айл.‘айл_«акрыть(File);
             bufpos := buf;
             mSys.GET(buf, c);
             ≈—Ћ» c = 0EFX “ќ√ƒј

@@ -32,10 +32,118 @@
   win, kos, lnx: BOOLEAN;
   Файл_имя:мТипы.тСтрока;
 
+ПРОЦЕДУРА Строка_Печать*(str: МАССИВ ИЗ CHAR);
+   ПЕРЕМ
+    s: мТипы.тСтрока; n: INTEGER;
+  НАЧАЛО
+    ЕСЛИ win ИЛИ lnx ТОГДА
+      n := мФайл.Файл_Записать(hConsoleOutput, mSys.ADR(str), LENGTH(str))
+    АЕСЛИ kos ТОГДА
+      API.DebugMsg(mSys.ADR(str), 0)
+    КОНЕЦ
+  КОНЕЦ Строка_Печать;
+
+ПРОЦЕДУРА CharC*(x: CHAR);
+   ПЕРЕМ res: INTEGER;
+  НАЧАЛО
+    ЕСЛИ win ИЛИ lnx ТОГДА
+      res := мФайл.Файл_Записать(hConsoleOutput, mSys.ADR(x), 1)
+    АЕСЛИ kos ТОГДА
+      API.DebugMsg(mSys.ADR(x), 0)
+    КОНЕЦ
+  КОНЕЦ CharC;
+
+ПРОЦЕДУРА Int*(x: INTEGER);
+   ПЕРЕМ i: INTEGER; buf: МАССИВ 11 ИЗ INTEGER;
+  НАЧАЛО
+    i := 0;
+    ПОВТОРЯТЬ
+      buf[i] := x MOD 10;
+      x := x DIV 10;
+      INC(i)
+    ПОКАНЕ x = 0;
+    ПОВТОРЯТЬ
+      DEC(i);
+      CharC(CHR(buf[i] + ORD("0")))
+    ПОКАНЕ i = 0
+  КОНЕЦ Int;
+
+ПРОЦЕДУРА Ln*;
+  НАЧАЛО
+    CharC(0DX);
+    CharC(0AX)
+  КОНЕЦ Ln;
+
+ПРОЦЕДУРА Время_Затрачено*;
+   ПЕРЕМ
+      sec, dsec: INTEGER;
+   НАЧАЛО
+      Строка_Печать("Затрачено времени: ");
+      API.Time(sec, dsec);
+      sec := sec - API.sec;
+      dsec := dsec - API.dsec;
+      dsec := dsec + sec * 100;
+      Int(dsec DIV 100); CharC(".");
+      dsec := dsec MOD 100;
+      ЕСЛИ dsec < 10 ТОГДА
+         Int(0)
+      КОНЕЦ;
+      Int(dsec);
+      Строка_Печать(" сек."); Ln
+   КОНЕЦ Время_Затрачено;
+
+ПРОЦЕДУРА Закончить*(n: INTEGER);
+  НАЧАЛО
+    Время_Затрачено;
+    API.ExitProcess(n)
+  КОНЕЦ Закончить;
+
+ПРОЦЕДУРА ErrMsg*(code: INTEGER);
+   НАЧАЛО
+    Строка_Печать("Ошибка: "); Int(code); Ln;
+    (* мОш.Сообщ(code); *)
+  КОНЕЦ ErrMsg;
+
+ПРОЦЕДУРА MemErr*(err: BOOLEAN);
+  НАЧАЛО
+    ЕСЛИ err ТОГДА
+      ErrMsg(72);
+      Закончить(1)
+    КОНЕЦ
+  КОНЕЦ MemErr;
+
 ПРОЦЕДУРА ФайлИмя_Уст*(имя_: мТипы.тСтрока);
    НАЧАЛО
       Файл_имя := имя_
    КОНЕЦ ФайлИмя_Уст;
+
+ПРОЦЕДУРА Файл_Читать*(F, Buffer, Count: INTEGER): INTEGER;
+  ПЕРЕМ res: INTEGER;
+  НАЧАЛО
+    API.ReadFile(F, Buffer, Count, mSys.ADR(res), 0)
+    ВЕРНУТЬ res
+  КОНЕЦ Файл_Читать;
+
+ПРОЦЕДУРА ФайлРазмер_Получ*(F: INTEGER): INTEGER;
+      ВЕРНУТЬ API.FileSize(F)
+   КОНЕЦ ФайлРазмер_Получ;
+
+ПРОЦЕДУРА Файл_Открыть*(FName: МАССИВ ИЗ CHAR; Mode: INTEGER): INTEGER;
+  ПЕРЕМ ofstr: API.OFSTRUCT; res: INTEGER; memerr: BOOLEAN;
+  НАЧАЛО
+    ЕСЛИ win ТОГДА
+      res := API.OpenFile(mSys.ADR(FName), ofstr, Mode);
+      ЕСЛИ res = -1 ТОГДА
+        res := 0
+      КОНЕЦ
+    АЕСЛИ kos ТОГДА
+      res := API.kos_OCFile(FName, 5, memerr);
+      MemErr(memerr)
+    АЕСЛИ lnx ТОГДА
+      res := API.lnx_OpenFile(FName)
+    КОНЕЦ
+    ВЕРНУТЬ res
+  КОНЕЦ Файл_Открыть;
 
 ПРОЦЕДУРА IsInf*(x_: LONGREAL): BOOLEAN;
   ПЕРЕМ
@@ -108,78 +216,6 @@
 ПРОЦЕДУРА Память_Получ*(n: INTEGER): INTEGER;
       ВЕРНУТЬ API.Alloc(64, n)
   КОНЕЦ Память_Получ;
-
-ПРОЦЕДУРА Файл_Закрыть*(F: INTEGER);
-  НАЧАЛО
-    API.CloseHandle(F)
-  КОНЕЦ Файл_Закрыть;
-
-ПРОЦЕДУРА Файл_Читать*(F, Buffer, Count: INTEGER): INTEGER;
-  ПЕРЕМ res: INTEGER;
-  НАЧАЛО
-    API.ReadFile(F, Buffer, Count, mSys.ADR(res), 0)
-    ВЕРНУТЬ res
-  КОНЕЦ Файл_Читать;
-
-ПРОЦЕДУРА Файл_Записать*(F, Buffer, Count: INTEGER): INTEGER;
-   ПЕРЕМ
-      res: INTEGER;
-   НАЧАЛО
-      API.WriteFile(F, Buffer, Count, mSys.ADR(res), 0)
-      ВЕРНУТЬ res
-   КОНЕЦ Файл_Записать;
-
-ПРОЦЕДУРА ФайлРазмер_Получ*(F: INTEGER): INTEGER;
-      ВЕРНУТЬ API.FileSize(F)
-   КОНЕЦ ФайлРазмер_Получ;
-
-ПРОЦЕДУРА CharC*(x: CHAR);
-  ПЕРЕМ res: INTEGER;
-  НАЧАЛО
-    ЕСЛИ win ИЛИ lnx ТОГДА
-      res := Файл_Записать(hConsoleOutput, mSys.ADR(x), 1)
-    АЕСЛИ kos ТОГДА
-      API.DebugMsg(mSys.ADR(x), 0)
-    КОНЕЦ
-  КОНЕЦ CharC;
-
-ПРОЦЕДУРА Int*(x: INTEGER);
-  ПЕРЕМ i: INTEGER; buf: МАССИВ 11 ИЗ INTEGER;
-  НАЧАЛО
-    i := 0;
-    ПОВТОРЯТЬ
-      buf[i] := x MOD 10;
-      x := x DIV 10;
-      INC(i)
-    ПОКАНЕ x = 0;
-    ПОВТОРЯТЬ
-      DEC(i);
-      CharC(CHR(buf[i] + ORD("0")))
-    ПОКАНЕ i = 0
-  КОНЕЦ Int;
-
-ПРОЦЕДУРА Ln*;
-  НАЧАЛО
-    CharC(0DX);
-    CharC(0AX)
-  КОНЕЦ Ln;
-
-ПРОЦЕДУРА Строка_Печать*(str: МАССИВ ИЗ CHAR);
-  ПЕРЕМ
-    s: мТипы.тСтрока; n: INTEGER;
-  НАЧАЛО
-    ЕСЛИ win ИЛИ lnx ТОГДА
-      n := Файл_Записать(hConsoleOutput, mSys.ADR(str), LENGTH(str))
-    АЕСЛИ kos ТОГДА
-      API.DebugMsg(mSys.ADR(str), 0)
-    КОНЕЦ
-  КОНЕЦ Строка_Печать;
-
-ПРОЦЕДУРА ErrMsg*(code: INTEGER);
-  НАЧАЛО
-    Строка_Печать("Ошибка: "); Int(code); Ln;
-    (* мОш.Сообщ(code); *)
-  КОНЕЦ ErrMsg;
 
 ПРОЦЕДУРА ErrMsgPos*(line, col, code: INTEGER);
   ПЕРЕМ
@@ -360,36 +396,6 @@
     DEC(ParamCount)
   КОНЕЦ LinuxParam;
 
-ПРОЦЕДУРА Время_Затрачено*;
-  ПЕРЕМ sec, dsec: INTEGER;
-  НАЧАЛО
-    Строка_Печать("Затрачено времени: ");
-    API.Time(sec, dsec);
-    sec := sec - API.sec;
-    dsec := dsec - API.dsec;
-    dsec := dsec + sec * 100;
-    Int(dsec DIV 100); CharC(".");
-    dsec := dsec MOD 100;
-    ЕСЛИ dsec < 10 ТОГДА
-      Int(0)
-    КОНЕЦ;
-    Int(dsec); Строка_Печать(" сек."); Ln
-  КОНЕЦ Время_Затрачено;
-
-ПРОЦЕДУРА Закончить*(n: INTEGER);
-  НАЧАЛО
-    Время_Затрачено;
-    API.ExitProcess(n)
-  КОНЕЦ Закончить;
-
-ПРОЦЕДУРА MemErr*(err: BOOLEAN);
-  НАЧАЛО
-    ЕСЛИ err ТОГДА
-      ErrMsg(72);
-      Закончить(1)
-    КОНЕЦ
-  КОНЕЦ MemErr;
-
 ПРОЦЕДУРА CreateF*(FName: МАССИВ ИЗ CHAR): INTEGER;
   ПЕРЕМ res: INTEGER; memerr: BOOLEAN;
   НАЧАЛО
@@ -406,23 +412,6 @@
     КОНЕЦ
     ВЕРНУТЬ res
   КОНЕЦ CreateF;
-
-ПРОЦЕДУРА OpenF*(FName: МАССИВ ИЗ CHAR; Mode: INTEGER): INTEGER;
-  ПЕРЕМ ofstr: API.OFSTRUCT; res: INTEGER; memerr: BOOLEAN;
-  НАЧАЛО
-    ЕСЛИ win ТОГДА
-      res := API.OpenFile(mSys.ADR(FName), ofstr, Mode);
-      ЕСЛИ res = -1 ТОГДА
-        res := 0
-      КОНЕЦ
-    АЕСЛИ kos ТОГДА
-      res := API.kos_OCFile(FName, 5, memerr);
-      MemErr(memerr)
-    АЕСЛИ lnx ТОГДА
-      res := API.lnx_OpenFile(FName)
-    КОНЕЦ
-    ВЕРНУТЬ res
-  КОНЕЦ OpenF;
 
 ПРОЦЕДУРА Init;
   ПЕРЕМ
