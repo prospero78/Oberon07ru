@@ -413,7 +413,7 @@
     бепмсрэ res
   йнмеж CreateF;
 
-опнжедспю Init;
+опнжедспю мЮЯРПНХРЭ;
   оепел
    p, count: INTEGER;
 
@@ -438,11 +438,11 @@
       hConsoleOutput := API.GetStdHandle(-11);
       LinuxParam
     йнмеж
-  йнмеж Init;
+  йнмеж мЮЯРПНХРЭ;
 
 мювюкн
   win := API.OS = "WIN";
   kos := API.OS = "KOS";
   lnx := API.OS = "LNX";
-  Init
+  мЮЯРПНХРЭ
 йнмеж ЛНДсРХКЭ.
