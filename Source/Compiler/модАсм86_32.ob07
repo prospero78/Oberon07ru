@@ -457,7 +457,7 @@
       Fill(Align(rcount, 200H) - rcount, 0X)
     КОНЕЦ;
     WriteF(F, filebuf, OutFilePos - filebuf);
-    мФайл.Файл_Закрыть(F)
+    мФайл.Закрыть(F)
   КОНЕЦ WritePE;
 
 ПРОЦЕДУРА New;
@@ -1690,12 +1690,12 @@
       i := 4;
       WriteF(F, mSys.ADR(i), 4)
     КОНЕЦ;
-    мФайл.Файл_Закрыть(F)
+    мФайл.Закрыть(F)
   КОНЕЦ WriteKOS;
 
 ПРОЦЕДУРА WriteELF(FName: МАССИВ ИЗ CHAR; code, data, glob: INTEGER);
-  ПЕРЕМ F, res, delta, filebuf: INTEGER; cur: ASMLINE; bytes: МАССИВ 817H + 55FH + 4900 ИЗ CHAR;
-
+  ПЕРЕМ
+    F, res, delta, filebuf: INTEGER; cur: ASMLINE; bytes: МАССИВ 817H + 55FH + 4900 ИЗ CHAR;
     ПРОЦЕДУРА Add(offset: INTEGER);
     ПЕРЕМ m: INTEGER;
     НАЧАЛО
@@ -1718,7 +1718,7 @@
     ЕСЛИ мУтиль.Файл_Читать(F, mSys.ADR(bytes), 817H + 55FH + 4900) # 817H + 55FH + 4900 ТОГДА
       Err(4)
     КОНЕЦ;
-    мФайл.Файл_Закрыть(F);
+    мФайл.Закрыть(F);
     bytes[0] := 7FX;
 
     DEC(code, 13);
@@ -1776,7 +1776,7 @@
       Err(1)
     КОНЕЦ;
     WriteF(F, filebuf, OutFilePos - filebuf);
-    мФайл.Файл_Закрыть(F)
+    мФайл.Закрыть(F)
   КОНЕЦ WriteELF;
 
 ПРОЦЕДУРА FixLabels(FName: МАССИВ ИЗ CHAR; stk, gsize, glob: INTEGER);
