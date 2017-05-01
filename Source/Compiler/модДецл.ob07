@@ -1423,7 +1423,8 @@
   КОНЕЦ Pseudo;
 
 ПРОЦЕДУРА ReadModule(Path, Name1, Ext: мТипы.тСтрока): BOOLEAN;
-  ПЕРЕМ FHandle: INTEGER; name, Name, b: мТипы.тСтрока; idmod: IDENT; Res, temp: BOOLEAN;
+  ПЕРЕМ
+    FHandle: INTEGER; name, Name, b: мТипы.тСтрока; idmod: IDENT; Res, temp: BOOLEAN;
   НАЧАЛО
     Res := ЛОЖЬ;
     name := Name1;
@@ -1465,7 +1466,7 @@
         ImportList;
         main := temp
       КОНЕЦ;
-      мУтиль.Строка_Печать("Компилирую: "); мУтиль.Строка_Печать(unit.Name.имя); мУтиль.Строка_Печать("."); мУтиль.Ln;
+      мУтиль.Строка_Печать("Компилирую: "); мУтиль.Строка_Печать(unit.Name.имя); мУтиль.Строка_Печать("."); мУтиль.НовСтр;
       X86.Module(idmod.Name.имя, idmod.Number);
       UnitNumber := idmod.Number;
       unit.IdentBegin := unit.Idents.следующ(IDENT);
@@ -1553,7 +1554,7 @@
         мУтиль.Строка_Печать(path2);
         мУтиль.Строка_Печать(Main);
         мУтиль.Строка_Печать(ExtMain);
-        мУтиль.Ln;
+        мУтиль.НовСтр;
         мУтиль.Закончить(1)
       КОНЕЦ
     КОНЕЦ;

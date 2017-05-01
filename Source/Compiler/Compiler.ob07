@@ -1867,7 +1867,7 @@
     temp := Name;
     ≈—Ћ» м”тиль.streq(system, "obj") “ќ√ƒј
       platform := 6;
-м”тиль.concat(temp, ".obj", temp)
+    м”тиль.concat(temp, ".obj", temp)
     ј≈—Ћ» м”тиль.streq(system, "elf") “ќ√ƒј
       platform := 5;
       felf := SelfPath;
@@ -1911,7 +1911,7 @@
     X86.Prolog(temp);
     DECL.Program(SelfPath, Path, Name, Ext, platform IN {1, 2, 3}, OpSeq, Expr, AssComp, sttypes);
     DECL.Compile(platform, stksize);
-    м”тиль.—трока_ѕечать("   + омпил€ци€ успешна!"); м”тиль.Ln;
+    м”тиль.—трока_ѕечать("   + омпил€ци€ успешна!"); м”тиль.Ќов—тр;
     м”тиль.¬рем€_«атрачено
    ќЌ≈÷ Start;
 

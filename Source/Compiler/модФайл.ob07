@@ -7,17 +7,17 @@
 ИМПОРТ API,
    mSys := SYSTEM;
 
-ПРОЦЕДУРА Записать*(F, Buffer, Count: INTEGER): INTEGER;
+ПРОЦЕДУРА Записать*(файл_ном_, Buffer, Count: INTEGER): INTEGER;
    ПЕРЕМ
       res: INTEGER;
    НАЧАЛО
-      API.WriteFile(F, Buffer, Count, mSys.ADR(res), 0)
+      API.WriteFile(файл_ном_, Buffer, Count, mSys.ADR(res), 0)
       ВЕРНУТЬ res
    КОНЕЦ Записать;
 
-ПРОЦЕДУРА Закрыть*(F: INTEGER);
+ПРОЦЕДУРА Закрыть*(файл_ном_: INTEGER);
   НАЧАЛО
-     API.CloseHandle(F)
+     API.CloseHandle(файл_ном_)
   КОНЕЦ Закрыть;
 
 КОНЕЦ модФайл.
