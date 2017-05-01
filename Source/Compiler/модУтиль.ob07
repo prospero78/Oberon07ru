@@ -396,8 +396,9 @@
     DEC(ParamCount)
   йнмеж LinuxParam;
 
-опнжедспю CreateF*(FName: люяяхб хг CHAR): INTEGER;
-  оепел res: INTEGER; memerr: BOOLEAN;
+опнжедспю тЮИК_яНГДЮРЭ*(FName: люяяхб хг CHAR): INTEGER;
+  оепел
+     res: INTEGER; memerr: BOOLEAN;
   мювюкн
     еякх win рнцдю
       res := API.CreateFile(mSys.ADR(FName), 0C0000000H, 0, 0, 2, 80H, 0);
@@ -411,19 +412,19 @@
       res := API.lnx_CreateFile(FName)
     йнмеж
     бепмсрэ res
-  йнмеж CreateF;
+  йнмеж тЮИК_яНГДЮРЭ;
 
 опнжедспю мЮЯРПНХРЭ;
-  оепел
-   p, count: INTEGER;
+   оепел
+      p, count: INTEGER;
 
     опнжедспю last(оеп p: INTEGER);
-    мювюкн
-      онйю яХБНК_оНКСВ(p) # 0X декюрэ
-         INC(p)
-      йнмеж;
-      DEC(p)
-    йнмеж last;
+      мювюкн
+         онйю яХБНК_оНКСВ(p) # 0X декюрэ
+            INC(p)
+         йнмеж;
+           DEC(p)
+      йнмеж last;
 
   мювюкн
     еякх win рнцдю

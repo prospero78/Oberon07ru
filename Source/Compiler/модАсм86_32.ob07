@@ -418,7 +418,7 @@
       Header.structs[5].size := rcount
      ќЌ≈÷;
 
-    F := м”тиль.CreateF(FName);
+    F := м”тиль.‘айл_—оздать(FName);
     ≈—Ћ» F = 0 “ќ√ƒј
       Err(1)
      ќЌ≈÷;
@@ -1575,7 +1575,7 @@
     sym: ћј——»¬ 18 * 4 »« CHAR;
     FileName: м“ипы.т—трока;
   Ќј„јЋќ
-    F := м”тиль.CreateF(FName);
+    F := м”тиль.‘айл_—оздать(FName);
     ≈—Ћ» F <= 0 “ќ√ƒј
       Err(1)
      ќЌ≈÷;
@@ -1771,7 +1771,7 @@
     Fill(Align(data, 1000H) - data, 0X);
     Write(mSys.ADR(bytes[817H + 55FH + 55FH]), 0DC5H);
 
-    F := м”тиль.CreateF(FName);
+    F := м”тиль.‘айл_—оздать(FName);
     ≈—Ћ» F <= 0 “ќ√ƒј
       Err(1)
      ќЌ≈÷;
