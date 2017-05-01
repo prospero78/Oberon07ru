@@ -24,7 +24,8 @@
     X86 := модАсм86_32,
     SYSTEM,
     мТипы := модТипы,
-    мКонст := модКонстанты;
+    мКонст := модКонстанты,
+    мКонс := модКонсоль;
 
 КОНСТ
 
@@ -1776,7 +1777,7 @@
     КОНЕЦ
   КОНЕЦ OpSeq;
 
-ПРОЦЕДУРА Start;
+ПРОЦЕДУРА Старт;
   ПЕРЕМ SelfName, SelfPath, CName, CExt, FName, Path, StdPath,
       Name, Ext, temp, system, stk, felf: мТипы.тСтрока;
       platform, stksize: INTEGER;
@@ -1911,10 +1912,10 @@
     X86.Prolog(temp);
     DECL.Program(SelfPath, Path, Name, Ext, platform IN {1, 2, 3}, OpSeq, Expr, AssComp, sttypes);
     DECL.Compile(platform, stksize);
-    мУтиль.Строка_Печать("   +Компиляция успешна!"); мУтиль.НовСтр;
+    мУтиль.Строка_Печать("   +Компиляция успешна!"); мКонс.НовСтр;
     мУтиль.Время_Затрачено
-  КОНЕЦ Start;
+  КОНЕЦ Старт;
 
 НАЧАЛО
-  Start
+  Старт
 КОНЕЦ Compiler.

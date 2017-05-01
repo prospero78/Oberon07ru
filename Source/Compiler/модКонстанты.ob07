@@ -9,6 +9,9 @@
 Ê־ֽׁׂ
 
  (* למה׃עטכü *)
+   win* = (API.OS = "WIN");
+   kol* = (API.OS = "KOS");
+   lin* = (API.OS = "LNX");
    ־ׁ* = API.OS;
    סכ‎ר* = API.Slash;
    נאסרטנ* = ".ob07";
