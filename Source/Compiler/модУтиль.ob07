@@ -28,7 +28,7 @@
 ПЕРЕМ
 
   Params: МАССИВ мКонст.макс_парам, 2 ИЗ INTEGER;
-  hConsoleOutput, hConsoleInput, ParamCount*, Line*, Unit*: INTEGER;
+  цКонсольВывод, hConsoleInput, ParamCount*, Line*, Unit*: INTEGER;
   win, kos, lnx: BOOLEAN;
   Файл_имя:мТипы.тСтрока;
 
@@ -37,7 +37,7 @@
     s: мТипы.тСтрока; n: INTEGER;
   НАЧАЛО
     ЕСЛИ win ИЛИ lnx ТОГДА
-      n := мФайл.Файл_Записать(hConsoleOutput, mSys.ADR(str), LENGTH(str))
+      n := мФайл.Файл_Записать(цКонсольВывод, mSys.ADR(str), LENGTH(str))
     АЕСЛИ kos ТОГДА
       API.DebugMsg(mSys.ADR(str), 0)
     КОНЕЦ
@@ -47,7 +47,7 @@
    ПЕРЕМ res: INTEGER;
   НАЧАЛО
     ЕСЛИ win ИЛИ lnx ТОГДА
-      res := мФайл.Файл_Записать(hConsoleOutput, mSys.ADR(x), 1)
+      res := мФайл.Файл_Записать(цКонсольВывод, mSys.ADR(x), 1)
     АЕСЛИ kos ТОГДА
       API.DebugMsg(mSys.ADR(x), 0)
     КОНЕЦ
@@ -428,7 +428,7 @@
 
   НАЧАЛО
     ЕСЛИ win ТОГДА
-      hConsoleOutput := API.GetStdHandle(-11);
+      цКонсольВывод := API.GetStdHandle(-11);
       ParamParse(0)
     АЕСЛИ kos ТОГДА
       ParamParse(1);
@@ -436,7 +436,7 @@
       Params[0, 1] := Params[0, 0];
       last(Params[0, 1])
     АЕСЛИ lnx ТОГДА
-      hConsoleOutput := API.GetStdHandle(-11);
+      цКонсольВывод := API.GetStdHandle(-11);
       LinuxParam
     КОНЕЦ
   КОНЕЦ Настроить;
