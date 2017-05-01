@@ -27,7 +27,7 @@
 
 ПЕРЕМ
 
-  Params: МАССИВ мКонст.макс_парам, 2 ИЗ INTEGER;
+  масПараметры: МАССИВ мКонст.макс_парам, 2 ИЗ INTEGER;
   цКонсольВывод, ParamCount*, Line*, Unit*: INTEGER;
   win, kos, lnx: BOOLEAN;
   Файл_имя:мТипы.тСтрока;
@@ -182,10 +182,24 @@
       ПОКА (count < мКонст.макс_парам) & (cond # 6) ДЕЛАТЬ
          c := Сивол_Получ(p);
          ВЫБОР cond ИЗ
-            |0: ChangeCond(0, 4, 1); ЕСЛИ cond = 1 ТОГДА Params[count, 0] := p КОНЕЦ
-            |4: ChangeCond(5, 0, 5); ЕСЛИ cond = 5 ТОГДА Params[count, 0] := p КОНЕЦ
-            |1: ChangeCond(0, 3, 1); ЕСЛИ cond IN {0, 6} ТОГДА Params[count, 1] := p - 1; INC(count) КОНЕЦ
-            |3, 5: ChangeCond(cond, 1, cond); ЕСЛИ cond = 6 ТОГДА Params[count, 1] := p - 1; INC(count) КОНЕЦ
+            |0: ChangeCond(0, 4, 1);
+               ЕСЛИ cond = 1 ТОГДА
+                  масПараметры[count, 0] := p
+               КОНЕЦ
+            |4: ChangeCond(5, 0, 5);
+                ЕСЛИ cond = 5 ТОГДА
+                  масПараметры[count, 0] := p
+                КОНЕЦ
+            |1: ChangeCond(0, 3, 1);
+                ЕСЛИ cond IN {0, 6} ТОГДА
+                  масПараметры[count, 1] := p - 1;
+                  INC(count)
+                КОНЕЦ
+            |3, 5: ChangeCond(cond, 1, cond);
+                   ЕСЛИ cond = 6 ТОГДА
+                     масПараметры[count, 1] := p - 1;
+                     INC(count)
+                   КОНЕЦ
          ИНАЧЕ
          КОНЕЦ;
          INC(p)
@@ -200,8 +214,8 @@
     j := 0;
     ЕСЛИ n <= ParamCount ТОГДА
       len := LEN(str) - 1;
-      i := Params[n, 0];
-      ПОКА (j < len) & (i <= Params[n, 1]) ДЕЛАТЬ
+      i := масПараметры[n, 0];
+      ПОКА (j < len) & (i <= масПараметры[n, 1]) ДЕЛАТЬ
         c := Сивол_Получ(i);
         ЕСЛИ c # 22X ТОГДА
           str[j] := c;
@@ -379,19 +393,20 @@
   КОНЕЦ PChar;
 
 ПРОЦЕДУРА LinuxParam;
-  ПЕРЕМ p, i, str: INTEGER; c: CHAR;
+  ПЕРЕМ
+     p, i, str: INTEGER; c: CHAR;
   НАЧАЛО
     p := API.GetCommandLine();
     mSys.GET(p, ParamCount);
     mSys.GET(p + 4, p);
     ДЛЯ i := 0 ДО ParamCount - 1 ДЕЛАТЬ
       mSys.GET(p + i * 4, str);
-      Params[i, 0] := str;
+      масПараметры[i, 0] := str;
       ПОВТОРЯТЬ
         mSys.GET(str, c);
         INC(str)
       ПОКАНЕ c = 0X;
-      Params[i, 1] := str - 1
+      масПараметры[i, 1] := str - 1
     КОНЕЦ;
     DEC(ParamCount)
   КОНЕЦ LinuxParam;
@@ -432,9 +447,9 @@
       ParamParse(0)
     АЕСЛИ kos ТОГДА
       ParamParse(1);
-      Params[0, 0] := API.GetName();
-      Params[0, 1] := Params[0, 0];
-      last(Params[0, 1])
+      масПараметры[0, 0] := API.GetName();
+      масПараметры[0, 1] := масПараметры[0, 0];
+      last(масПараметры[0, 1])
     АЕСЛИ lnx ТОГДА
       цКонсольВывод := API.GetStdHandle(-11);
       LinuxParam
