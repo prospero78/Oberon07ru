@@ -28,7 +28,7 @@
 ѕ≈–≈ћ
 
   Params: ћј——»¬ м онст.макс_парам, 2 »« INTEGER;
-  ц онсоль¬ывод, hConsoleInput, ParamCount*, Line*, Unit*: INTEGER;
+  ц онсоль¬ывод, ParamCount*, Line*, Unit*: INTEGER;
   win, kos, lnx: BOOLEAN;
   ‘айл_им€:м“ипы.т—трока;
 
