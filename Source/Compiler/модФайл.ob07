@@ -7,13 +7,13 @@
 ИМПОРТ API,
    mSys := SYSTEM;
 
-ПРОЦЕДУРА Файл_Записать*(F, Buffer, Count: INTEGER): INTEGER;
+ПРОЦЕДУРА Записать*(F, Buffer, Count: INTEGER): INTEGER;
    ПЕРЕМ
       res: INTEGER;
    НАЧАЛО
       API.WriteFile(F, Buffer, Count, mSys.ADR(res), 0)
       ВЕРНУТЬ res
-   КОНЕЦ Файл_Записать;
+   КОНЕЦ Записать;
 
 ПРОЦЕДУРА Файл_Закрыть*(F: INTEGER);
   НАЧАЛО

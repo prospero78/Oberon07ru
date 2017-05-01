@@ -37,7 +37,7 @@
     s: мТипы.тСтрока; n: INTEGER;
   НАЧАЛО
     ЕСЛИ win ИЛИ lnx ТОГДА
-      n := мФайл.Файл_Записать(цКонсольВывод, mSys.ADR(str), LENGTH(str))
+      n := мФайл.Записать(цКонсольВывод, mSys.ADR(str), LENGTH(str))
     АЕСЛИ kos ТОГДА
       API.DebugMsg(mSys.ADR(str), 0)
     КОНЕЦ
@@ -48,7 +48,7 @@
       res: INTEGER;
   НАЧАЛО
     ЕСЛИ win ИЛИ lnx ТОГДА
-      res := мФайл.Файл_Записать(цКонсольВывод, mSys.ADR(x), 1)
+      res := мФайл.Записать(цКонсольВывод, mSys.ADR(x), 1)
     АЕСЛИ kos ТОГДА
       API.DebugMsg(mSys.ADR(x), 0)
     КОНЕЦ
