@@ -1445,7 +1445,7 @@
   НАЧАЛО
     Assert(~ODD(Len), line, col, 34);
     ДЛЯ i := 0 ДО Len - 1 ДЕЛАТЬ
-      Assert(мСкан.HexDigit(Code[i]), line, col, 34)
+      Assert(мСкан.Число16_Получ(Code[i]), line, col, 34)
     КОНЕЦ
   КОНЕЦ CheckCode;
 

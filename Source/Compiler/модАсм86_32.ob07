@@ -298,7 +298,7 @@
     n := LEN(chars) - 1;
     i := 0;
     ѕќ ј (i < n) & (chars[i] # 0X) ƒ≈Ћј“№
-      x := м—кан.hex(chars[i]) * 16 + м—кан.hex(chars[i + 1]);
+      x := м—кан.„исло16_в_÷елое(chars[i]) * 16 + м—кан.„исло16_в_÷елое(chars[i + 1]);
       mSys.PUT(adr, CHR(x));
       INC(adr);
       INC(i, 2)

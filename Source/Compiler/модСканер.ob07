@@ -228,9 +228,9 @@
         бепмсрэ (ch >= "0") & (ch <= "9")
     йнмеж Digit;
 
-опнжедспю HexDigit*(ch: CHAR): BOOLEAN;
+опнжедспю вХЯКН16_оНКСВ*(ch: CHAR): BOOLEAN;
         бепмсрэ (ch >= "A") & (ch <= "F") хкх (ch >= "0") & (ch <= "9")
-    йнмеж HexDigit;
+    йнмеж вХЯКН16_оНКСВ;
 
 опнжедспю PutChar(ch: CHAR);
     мювюкн
@@ -246,7 +246,7 @@
         Next
     йнмеж PutNext;
 
-опнжедспю Ident;
+опнжедспю хЛЪ_оНКСВ;
     мювюкн
         tLex := lxIDENT;
         онйю Letter(ch) хкх Digit(ch) декюрэ
@@ -256,19 +256,20 @@
         еякх count > IDLENGTH рнцдю
             tLex := lxERR10
         йнмеж
-    йнмеж Ident;
+    йнмеж хЛЪ_оНКСВ;
 
-опнжедспю hex*(ch: CHAR): INTEGER;
-    оепел Res: INTEGER;
+опнжедспю вХЯКН16_Б_жЕКНЕ*(ch: CHAR): INTEGER;
+    оепел
+        Res: INTEGER;
     мювюкн
         Res := ORD(ch);
         бшанп ch хг
-        |"0".."9": DEC(Res, ORD("0"))
-        |"A".."F": DEC(Res, ORD("A") - 10)
+            |"0".."9": DEC(Res, ORD("0"))
+            |"A".."F": DEC(Res, ORD("A") - 10)
         хмюве
         йнмеж
         бепмсрэ Res
-    йнмеж hex;
+    йнмеж вХЯКН16_Б_жЕКНЕ;
 
 опнжедспю яРП_Б_жЕК16*(str: ЛяРП.РяРПНЙЮ): INTEGER;
     оепел i, res, n: INTEGER; flag: BOOLEAN;
@@ -286,14 +287,14 @@
             tLex := lxERR5;
             flag := кнфэ
             хмюве
-            res := LSL(res, 4) + hex(str[i]);
+            res := LSL(res, 4) + вХЯКН16_Б_жЕКНЕ(str[i]);
             INC(i)
             йнмеж
         йнмеж
         бепмсрэ res
     йнмеж яРП_Б_жЕК16;
 
-опнжедспю StrToChx(str: ЛяРП.РяРПНЙЮ): CHAR;
+опнжедспю яРП_Б_яХЛБ(str: ЛяРП.РяРПНЙЮ): CHAR;
     оепел res: INTEGER;
     мювюкн
         res := яРП_Б_жЕК16(str);
@@ -302,7 +303,7 @@
             res := 0
         йнмеж
         бепмсрэ CHR(res)
-    йнмеж StrToChx;
+    йнмеж яРП_Б_яХЛБ;
 
 опнжедспю яРП_Б_жЕК*(str: ЛяРП.РяРПНЙЮ): INTEGER;
     оепел
@@ -472,41 +473,41 @@
         еякх tLex # lxINT рнцдю
             PutNext(ch)
         хмюве
-            онйю HexDigit(ch) декюрэ
-            tLex := lxHEX;
-            PutNext(ch)
+            онйю вХЯКН16_оНКСВ(ch) декюрэ
+                tLex := lxHEX;
+                PutNext(ch)
             йнмеж;
             еякх tLex = lxHEX рнцдю
-            еякх ch = "H" рнцдю
-        PutNext(ch)
-            юеякх ch = "X" рнцдю
-        tLex := lxCHX;
-        PutNext(ch)
-            хмюве
-        tLex := lxERR1
-            йнмеж
+                еякх ch = "H" рнцдю
+                    PutNext(ch)
+                юеякх ch = "X" рнцдю
+                    tLex := lxCHX;
+                    PutNext(ch)
+                хмюве
+                    tLex := lxERR1
+                йнмеж
             юеякх ch = "." рнцдю
-            mSys.GET(bufpos, nextchr);
-            еякх nextchr # "." рнцдю
-        tLex := lxREAL;
-        PutNext(ch);
-        онйю Digit(ch) декюрэ
-            PutNext(ch)
-        йнмеж;
-        еякх (ch = "E") хкх (ch = "D") рнцдю
-            PutNext(ch);
-            еякх (ch = "+") хкх (ch = "-") рнцдю
-            PutNext(ch)
-            йнмеж;
-            еякх ~Digit(ch) рнцдю
-            tLex := lxERR2
-            хмюве
-            онйю Digit(ch) декюрэ
-            PutNext(ch)
-            йнмеж
-            йнмеж
-        йнмеж
-            йнмеж
+                mSys.GET(bufpos, nextchr);
+                еякх nextchr # "." рнцдю
+                    tLex := lxREAL;
+                    PutNext(ch);
+                    онйю Digit(ch) декюрэ
+                        PutNext(ch)
+                    йнмеж;
+                    еякх (ch = "E") хкх (ch = "D") рнцдю
+                        PutNext(ch);
+                        еякх (ch = "+") хкх (ch = "-") рнцдю
+                            PutNext(ch)
+                        йнмеж;
+                        еякх ~Digit(ch) рнцдю
+                            tLex := lxERR2
+                        хмюве
+                            онйю Digit(ch) декюрэ
+                                PutNext(ch)
+                            йнмеж
+                        йнмеж
+                    йнмеж
+                йнмеж
             йнмеж
         йнмеж;
         PutChar(0X)
@@ -584,11 +585,11 @@
         count := 0;
         бшанп ch хг
         |"A".."Z", "a".."z", "_": (* eng *)
-            Ident;
+            хЛЪ_оНКСВ;
             id := сГЕК_дНАЮБ(Lex);
             tLex := id.tLex;
         |"ю".."ъ", "Ю".."Ъ": (* rus *)
-            Ident;
+            хЛЪ_оНКСВ;
             id := сГЕК_дНАЮБ(Lex);
             tLex := id.tLex;
         |"0".."9":
@@ -596,7 +597,7 @@
             бшанп tLex хг
                 |lxINT:  vINT := яРП_Б_жЕК(Lex)
                 |lxHEX:  vINT := яРП_Б_жЕК16(Lex)
-                |lxCHX:  vCHX := StrToChx(Lex)
+                |lxCHX:  vCHX := яРП_Б_яХЛБ(Lex)
                 |lxREAL: vFLT := яРП_Б_бЕЫ(Lex)
             хмюве
             йнмеж
