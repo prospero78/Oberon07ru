@@ -77,19 +77,13 @@
     КОНЕЦ
   КОНЕЦ Выраж_Загрузить;
 
-ПРОЦЕДУРА LenString(adr: LONGREAL): INTEGER;
+ПРОЦЕДУРА Стр_Длина(adr: LONGREAL): INTEGER;
   ПЕРЕМ
     s: DECL.туКонстСтр;
   НАЧАЛО
     s := DECL.Стр_Получ(adr)
     ВЕРНУТЬ s.Len
-  КОНЕЦ LenString;
-
-ПРОЦЕДУРА Coord(ПЕР line, col: INTEGER);
-  НАЧАЛО
-    line := мСкан.line;
-    col := мСкан.col
-  КОНЕЦ Coord;
+  КОНЕЦ Стр_Длина;
 
 ПРОЦЕДУРА Assert(cond: BOOLEAN; line, col, code: INTEGER);
   НАЧАЛО
@@ -154,7 +148,7 @@
   НАЧАЛО
     glob := -1;
     loc := -1;
-    Coord(line, col);
+    DECL.Коорд_Уст(line, col);
     Check(lxIDENT);
     name := мСкан.id;
     id := DECL.GetIdent(name);
@@ -163,7 +157,7 @@
       Check(lxDot);
       Next;
       Check(lxIDENT);
-      Coord(line, col);
+      DECL.Коорд_Уст(line, col);
       name := мСкан.id;
       imp := id.Unit # DECL.unit;
       id := DECL.GetQIdent(id.Unit, name)
@@ -247,7 +241,7 @@
         КОНЕЦ;
         Next;
         Check(lxIDENT);
-        Coord(line, col);
+        DECL.Коорд_Уст(line, col);
         name := мСкан.id;
         T := e.T;
         ПОВТОРЯТЬ
@@ -274,7 +268,7 @@
         ПОВТОРЯТЬ
           Assert2(e.T.tType = TARRAY, 102);
           Next;
-          Coord(line, col);
+          DECL.Коорд_Уст(line, col);
           pExpr(e1);
           Assert(e1.T.tType = TINTEGER, line, col, 52);
           Выраж_Загрузить(e1);
@@ -322,7 +316,7 @@
           КОНЕЦ;
           Next;
           Check(lxIDENT);
-          Coord(line, col);
+          DECL.Коорд_Уст(line, col);
           T := DECL.IdType(line, col);
           Assert(T # ПУСТО, line, col, 42);
           ЕСЛИ e.T.tType = TRECORD ТОГДА
@@ -371,7 +365,7 @@
     flag := ИСТИНА;
     X86.PushConst(0);
     ПОКА мСкан.tLex # lxRCurly ДЕЛАТЬ
-      Coord(line, col);
+      DECL.Коорд_Уст(line, col);
       pExpr(a);
       Assert(a.T.tType = TINTEGER, line, col, 52);
       ЕСЛИ a.eType = eCONST ТОГДА
@@ -381,7 +375,7 @@
       b := a;
       ЕСЛИ мСкан.tLex = lxDbl ТОГДА
         Next;
-        Coord(line, col);
+        DECL.Коорд_Уст(line, col);
         pExpr(b);
         Assert(b.T.tType = TINTEGER, line, col, 52);
         ЕСЛИ b.eType = eCONST ТОГДА
@@ -424,7 +418,7 @@
       A[0] := e.T.Len;
       X86.OpenArray(A, 1)
     АЕСЛИ e.T.tType = TSTRING ТОГДА
-      A[0] := LenString(e.Value) + 1;
+      A[0] := Стр_Длина(e.Value) + 1;
       ЕСЛИ A[0] # 2 ТОГДА
         X86.OpenArray(A, 1)
       КОНЕЦ
@@ -440,10 +434,10 @@
   НАЧАЛО
     e.vparam := ЛОЖЬ;
     e.eType := eEXP;
-    Coord(line2, col2);
+    DECL.Коорд_Уст(line2, col2);
     Check(lxLRound);
     Next;
-    Coord(line, col);
+    DECL.Коорд_Уст(line, col);
     ВЫБОР func ИЗ
     |stABS:
       pExpr(e1);
@@ -485,7 +479,7 @@
       Выраж_Загрузить(e1);
       Check(lxComma);
       Next;
-      Coord(line, col);
+      DECL.Коорд_Уст(line, col);
       pExpr(e2);
       Assert(e2.T.tType = TINTEGER, line, col, 52);
       Выраж_Загрузить(e2);
@@ -535,7 +529,7 @@
       pExpr(e1);
       Assert(e1.T.tType IN {TCHAR, TBOOLEAN, TSET, TSTRING}, line, col, 68);
       ЕСЛИ e1.T.tType = TSTRING ТОГДА
-        Assert(LenString(e1.Value) = 1, line, col, 94)
+        Assert(Стр_Длина(e1.Value) = 1, line, col, 94)
       КОНЕЦ;
       Выраж_Загрузить(e1);
       ЕСЛИ e1.eType = eCONST ТОГДА
@@ -634,7 +628,7 @@
       Выраж_Загрузить(e1);
       Check(lxComma);
       Next;
-      Coord(line, col);
+      DECL.Коорд_Уст(line, col);
       pExpr(e1);
       Assert(e1.T.tType = TINTEGER, line, col, 52);
       Выраж_Загрузить(e1);
@@ -751,7 +745,7 @@
       Res := e.T = T
     |TCHAR:
       ЕСЛИ e.T.tType = TSTRING ТОГДА
-        Res := LenString(e.Value) = 1
+        Res := Стр_Длина(e.Value) = 1
       ИНАЧЕ
         Res := e.T.tType = TCHAR
       КОНЕЦ
@@ -765,7 +759,7 @@
           КОНЕЦ
         ИНАЧЕ
           ЕСЛИ (T.Base.tType = TCHAR) & (e.T.tType = TSTRING) ТОГДА
-            Res := LenString(e.Value) <= T.Len
+            Res := Стр_Длина(e.Value) <= T.Len
           ИНАЧЕ
             Res := e.T = T
           КОНЕЦ
@@ -774,7 +768,7 @@
         ЕСЛИ T.Len = 0 ТОГДА
           Res := ЛОЖЬ
         АЕСЛИ (T.Base.tType = TCHAR) & (e.T.tType = TSTRING) ТОГДА
-          Res := LenString(e.Value) <= T.Len
+          Res := Стр_Длина(e.Value) <= T.Len
         ИНАЧЕ
           Res := e.T = T
         КОНЕЦ
@@ -829,7 +823,7 @@
     TA: DECL.туТип;
   НАЧАЛО
     ПОКА param # ПУСТО ДЕЛАТЬ
-      Coord(line, col);
+      DECL.Коорд_Уст(line, col);
       X86.Param;
       pExpr(e1);
       Assert(ParamComp(e1, param.T, param.ByRef), line, col, 114);
@@ -986,7 +980,7 @@
       Next
     |lxNot:
       Next;
-      Coord(line, col);
+      DECL.Коорд_Уст(line, col);
       Factor(e);
       Assert(e.T.tType = TBOOLEAN, line, col, 37);
       Выраж_Загрузить(e);
@@ -1005,7 +999,7 @@
   КОНЕЦ Factor;
 
 ПРОЦЕДУРА IsChr(a: DECL.тВыражение): BOOLEAN;
-    ВЕРНУТЬ (a.T.tType = TSTRING) & (LenString(a.Value) = 1) ИЛИ (a.T.tType = TCHAR)
+    ВЕРНУТЬ (a.T.tType = TSTRING) & (Стр_Длина(a.Value) = 1) ИЛИ (a.T.tType = TCHAR)
   КОНЕЦ IsChr;
 
 ПРОЦЕДУРА StrRel(a, b: DECL.тВыражение; Op: INTEGER);
@@ -1127,7 +1121,7 @@
       (мСкан.tLex = lxDIV) ИЛИ (мСкан.tLex = lxMOD) ИЛИ
        (мСкан.tLex = lxAnd) ДЕЛАТЬ
       Выраж_Загрузить(e);
-      Coord(line, col);
+      DECL.Коорд_Уст(line, col);
       Op := мСкан.tLex;
       Next;
       ЕСЛИ Op = lxAnd ТОГДА
@@ -1150,7 +1144,7 @@
   НАЧАЛО
     uOp := 0;
     ЕСЛИ (мСкан.tLex = lxPlus) ИЛИ (мСкан.tLex = lxMinus) ТОГДА
-      Coord(uline, ucol);
+      DECL.Коорд_Уст(uline, ucol);
       uOp := мСкан.tLex;
       Next
     КОНЕЦ;
@@ -1183,7 +1177,7 @@
     КОНЕЦ;
     ПОКА (мСкан.tLex = lxPlus) ИЛИ (мСкан.tLex = lxMinus) ИЛИ (мСкан.tLex = мКонст.lxOR) ДЕЛАТЬ
       Выраж_Загрузить(e);
-      Coord(line, col);
+      DECL.Коорд_Уст(line, col);
       Op := мСкан.tLex;
       Next;
       ЕСЛИ Op = мКонст.lxOR ТОГДА
@@ -1211,7 +1205,7 @@
     beg := X86.current;
     Simple(e);
     ЕСЛИ DECL.Relation(мСкан.tLex) ТОГДА
-      Coord(line, col);
+      DECL.Коорд_Уст(line, col);
       Op := мСкан.tLex;
       Next;
       ЕСЛИ Op = мКонст.ксЕСТЬ ТОГДА
@@ -1220,7 +1214,7 @@
           Assert(e.vparam, line, col, 37)
         КОНЕЦ;
         Check(lxIDENT);
-        Coord(line2, col2);
+        DECL.Коорд_Уст(line2, col2);
         T := DECL.IdType(line2, col2);
         Assert(T # ПУСТО, line2, col2, 42);
         ЕСЛИ e.T.tType = TRECORD ТОГДА
@@ -1283,7 +1277,7 @@
     КОНЕЦ;
     ПОВТОРЯТЬ
       Next;
-      Coord(line, col);
+      DECL.Коорд_Уст(line, col);
       Expr(e);
       Assert(e.T.tType = TBOOLEAN, line, col, 117);
       Выраж_Загрузить(e);
@@ -1321,7 +1315,7 @@
     pOpSeq;
     Check(мКонст.ксПОКАНЕ);
     Next;
-    Coord(line, col);
+    DECL.Коорд_Уст(line, col);
     Expr(e);
     Assert(e.T.tType = TBOOLEAN, line, col, 117);
     Выраж_Загрузить(e);
@@ -1349,7 +1343,7 @@
     Next;
     Check(lxAssign);
     Next;
-    Coord(line, col);
+    DECL.Коорд_Уст(line, col);
     ЕСЛИ id.Level = 3 ТОГДА
       X86.GlobalAdr(id.Offset)
     ИНАЧЕ
@@ -1362,14 +1356,14 @@
     X86.Save(TINTEGER);
     Check(мКонст.ксДО);
     Next;
-    Coord(line, col);
+    DECL.Коорд_Уст(line, col);
     Expr(e);
     Assert(e.T.tType = TINTEGER, line, col, 52);
     Выраж_Загрузить(e);
     iValue := 1;
     ЕСЛИ мСкан.tLex = lxBY ТОГДА
       Next;
-      Coord(line, col);
+      DECL.Коорд_Уст(line, col);
       DECL.ConstExpr(Value, T);
       Assert(T.tType = TINTEGER, line, col, 52);
       iValue := FLOOR(Value);
@@ -1402,7 +1396,7 @@
     s: DECL.туКонстСтр;
     line, col: INTEGER;
   НАЧАЛО
-    Coord(line, col);
+    DECL.Коорд_Уст(line, col);
     DECL.ConstExpr(Value, T);
     ЕСЛИ int ТОГДА
       Assert(T.tType = TINTEGER, line, col, 161);
@@ -1421,7 +1415,7 @@
     label: тМетка;
     line, col: INTEGER;
   НАЧАЛО
-    Coord(line, col);
+    DECL.Коорд_Уст(line, col);
     LabelVal(a, int);
     b := a;
     ЕСЛИ мСкан.tLex = lxDbl ТОГДА
@@ -1467,10 +1461,10 @@
     Labels: мТипы.туСписок;
   НАЧАЛО
     Next;
-    Coord(line, col);
+    DECL.Коорд_Уст(line, col);
     Expr(e);
     Assert(e.T.tType IN {TCHAR, TSTRING, TINTEGER}, line, col, 156);
-    Assert(~((e.T.tType = TSTRING) & (LenString(e.Value) # 1)), line, col, 94);
+    Assert(~((e.T.tType = TSTRING) & (Стр_Длина(e.Value) # 1)), line, col, 94);
     int := e.T.tType = TINTEGER;
     Check(мКонст.ксИЗ);
     Выраж_Загрузить(e);
@@ -1515,10 +1509,10 @@
     str: DECL.туКонстСтр;
     begcall: X86.туПунктАсм;
   НАЧАЛО
-    Coord(line2, col2);
+    DECL.Коорд_Уст(line2, col2);
     Check(lxLRound);
     Next;
-    Coord(line, col);
+    DECL.Коорд_Уст(line, col);
     ВЫБОР proc ИЗ
     |stINC, stDEC:
       Designator(e1);
@@ -1527,7 +1521,7 @@
       Assert(e1.T.tType = TINTEGER, line, col, 128);
       ЕСЛИ мСкан.tLex = lxComma ТОГДА
         Next;
-        Coord(line, col);
+        DECL.Коорд_Уст(line, col);
         DECL.ConstExpr(Value, T);
         Assert(T.tType = TINTEGER, line, col, 52);
         iValue := FLOOR(Value);
@@ -1568,7 +1562,7 @@
       Assert(e1.T.tType = TSET, line, col, 138);
       Check(lxComma);
       Next;
-      Coord(line, col);
+      DECL.Коорд_Уст(line, col);
       DECL.ConstExpr(Value, T);
       Assert(T.tType = TINTEGER, line, col, 52);
       iValue := FLOOR(Value);
@@ -1593,7 +1587,7 @@
       КОНЕЦ;
       Str(e1);
       Next;
-      Coord(line, col);
+      DECL.Коорд_Уст(line, col);
       Designator(e2);
       Assert(e2.eType = eVAR, line, col, 63);
       Assert(IsString(e2), line, col, 143);
@@ -1618,7 +1612,7 @@
       Выраж_Загрузить(e1);
       ЕСЛИ мСкан.tLex = lxComma ТОГДА
         Next;
-        Coord(line, col);
+        DECL.Коорд_Уст(line, col);
         DECL.ConstExpr(Value, T);
         Assert(T.tType = TINTEGER, line, col, 52);
         Assert((Value >= 0.0D0) & (Value <= 127.0D0), line, col, 95);
@@ -1633,7 +1627,7 @@
       Assert(~e1.Read, line, col, 115);
       Check(lxComma);
       Next;
-      Coord(line, col);
+      DECL.Коорд_Уст(line, col);
       ЕСЛИ proc = stUNPK ТОГДА
         Designator(e2);
         Assert(e2.eType = eVAR, line, col, 63);
@@ -1660,7 +1654,7 @@
       Выраж_Загрузить(e1);
       Check(lxComma);
       Next;
-      Coord(line, col);
+      DECL.Коорд_Уст(line, col);
       Expr(e1);
       Assert(e1.T.tType = TINTEGER, line, col, 52);
       Выраж_Загрузить(e1)
@@ -1671,7 +1665,7 @@
       Выраж_Загрузить(e1);
       Check(lxComma);
       Next;
-      Coord(line, col);
+      DECL.Коорд_Уст(line, col);
       ЕСЛИ proc = sysGET ТОГДА
         X86.PushCall(begcall);
         X86.Param;
@@ -1686,7 +1680,7 @@
         Expr(e2);
         Assert(e2.T.tType IN {TINTEGER, TREAL, TLONGREAL, TCHAR, TSET, TBOOLEAN, TCARD16, TSTRING}, line, col, 153);
         ЕСЛИ e2.T.tType = TSTRING ТОГДА
-          Assert(LenString(e2.Value) = 1, line, col, 94)
+          Assert(Стр_Длина(e2.Value) = 1, line, col, 94)
         КОНЕЦ;
         Выраж_Загрузить(e2);
         X86.Save(e2.T.tType)
@@ -1706,14 +1700,14 @@
       X86.PushCall(begcall);
       X86.Param;
       Next;
-      Coord(line, col);
+      DECL.Коорд_Уст(line, col);
       Expr(e1);
       Assert(e1.T.tType = TINTEGER, line, col, 52);
       Выраж_Загрузить(e1);
       Check(lxComma);
       X86.Вызов_Закончить;
       Next;
-      Coord(line, col);
+      DECL.Коорд_Уст(line, col);
       Expr(e1);
       Assert(e1.T.tType = TINTEGER, line, col, 52);
       Выраж_Загрузить(e1);
@@ -1727,7 +1721,7 @@
     АЕСЛИ proc = sysBIT ТОГДА
       Check(lxAssign);
       Next;
-      Coord(line, col);
+      DECL.Коорд_Уст(line, col);
       Expr(e1);
       Assert(e1.T.tType = TBOOLEAN, line, col, 117);
       Выраж_Загрузить(e1);
@@ -1742,7 +1736,7 @@
     begcall: X86.туПунктАсм;
     s: DECL.туКонстСтр;
   НАЧАЛО
-    Coord(line, col);
+    DECL.Коорд_Уст(line, col);
     begcall := X86.current;
     Designator(e1);
     Assert(e1.eType # eCONST, line, col, 130);
@@ -1750,7 +1744,7 @@
       Check(lxAssign);
       Assert(~e1.Read, line, col, 115);
       Next;
-      Coord(line, col);
+      DECL.Коорд_Уст(line, col);
       Expr(e2);
       Assert(AssComp(e2, e1.T, ЛОЖЬ), line, col, 131);
       Выраж_Загрузить(e2);
@@ -1809,7 +1803,7 @@
       АЕСЛИ мСкан.tLex = lxAssign ТОГДА
         Assert(~e1.Read, line, col, 115);
         Next;
-        Coord(line, col);
+        DECL.Коорд_Уст(line, col);
         Expr(e2);
         Assert(AssComp(e2, e1.T, ЛОЖЬ), line, col, 131);
         Assert(~((e2.eType = ePROC) & (e2.id.Level > 3)), line, col, 116);
