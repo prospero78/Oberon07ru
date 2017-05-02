@@ -16,8 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with Compiler. If not, see <http://www.gnu.org/licenses/>.
 
-*)
-
+  *)
 ћќƒ”Ћ№ мод—канер;
 
 »ћѕќ–“ м”тиль := мод”тиль,
@@ -57,7 +56,6 @@
     buf, bufpos: INTEGER; CR, UTF8: BOOLEAN;
     Nodes: ћј——»¬ 256 »« м“ипы.ту”зел;
     _START*, _version*: м“ипы.ту”зел;
-    
 
 ѕ–ќ÷≈ƒ”–ј ”зел_ƒобав*(Name: м—тр.т—трока): м“ипы.ту”зел;
     ѕ≈–≈ћ
@@ -126,7 +124,7 @@
         scanner.UTF8 := UTF8
      ќЌ≈÷ Backup;
 
-ѕ–ќ÷≈ƒ”–ј Recover*(scanner: м“ипы.ту—канер);
+ѕ–ќ÷≈ƒ”–ј ¬ернуть*(scanner: м“ипы.ту—канер);
     Ќј„јЋќ
         File := scanner.файл_ном;
         ccol := scanner.ccol;
@@ -144,7 +142,7 @@
         bufpos := scanner.bufpos;
         CR := scanner.CR;
         UTF8 := scanner.UTF8
-     ќЌ≈÷ Recover;
+     ќЌ≈÷ ¬ернуть;
 
 ѕ–ќ÷≈ƒ”–ј Next;
     ѕ≈–≈ћ

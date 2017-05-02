@@ -1349,7 +1349,7 @@
             Assert(Ћќ∆№, nameline, namecol, 32)
            ќЌ≈÷
          ќЌ≈÷;
-        м—кан.Recover(self.scanner);
+        м—кан.¬ернуть(self.scanner);
         u := unit;
         unit := self;
         м‘айл.»м€_”ст(unit.File)
