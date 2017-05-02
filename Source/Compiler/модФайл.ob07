@@ -27,7 +27,7 @@
       бепмсрэ API.FileSize(F)
    йнмеж пЮГЛЕП_оНКСВ;
 
-опнжедспю тЮИК_нРЙПШРЭ*(FName: люяяхб хг CHAR; Mode: INTEGER): INTEGER;
+опнжедспю нРЙПШРЭ*(FName: люяяхб хг CHAR; Mode: INTEGER): INTEGER;
   оепел
     ofstr: API.OFSTRUCT; res: INTEGER; memerr: BOOLEAN;
   мювюкн
@@ -43,7 +43,7 @@
       res := API.lnx_OpenFile(FName)
     йнмеж
     бепмсрэ res
-  йнмеж тЮИК_нРЙПШРЭ;
+  йнмеж нРЙПШРЭ;
 
 опнжедспю вХРЮРЭ*(F, Buffer, Count: INTEGER): INTEGER;
   оепел res: INTEGER;

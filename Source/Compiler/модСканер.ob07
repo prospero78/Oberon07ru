@@ -174,7 +174,7 @@ This file is part of Compiler.
     ѕ≈–≈ћ
       n, size: INTEGER; c: CHAR;
     Ќј„јЋќ
-        File := м‘айл.‘айл_ќткрыть(FName, 0);
+        File := м‘айл.ќткрыть(FName, 0);
         FHandle := File;
         ≈—Ћ» File # 0 “ќ√ƒј
             CR := Ћќ∆№;
