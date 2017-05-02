@@ -185,7 +185,7 @@ This file is part of Compiler.
             buf := м”тиль.ѕам€ть_ѕолуч(size + 1024);
             mSys.PUT(buf + size, 0X);
             м”тиль.MemErr(buf = 0);
-            n := м”тиль.‘айл_„итать(File, buf, size);
+            n := м‘айл.„итать(File, buf, size);
             м‘айл.«акрыть(File);
             bufpos := buf;
             mSys.GET(buf, c);

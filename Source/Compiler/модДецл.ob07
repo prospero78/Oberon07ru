@@ -1321,9 +1321,10 @@
    ќЌ≈÷ Rtl;
 
 ѕ–ќ÷≈ƒ”–ј ImportList;
-  ѕ≈–≈ћ cond, col, line, namecol, nameline: INTEGER;
-      name, alias: м“ипы.ту”зел; u, self: UNIT;
-      FName: м“ипы.т—трока;
+  ѕ≈–≈ћ
+    cond, col, line, namecol, nameline: INTEGER;
+    name, alias: м“ипы.ту”зел; u, self: UNIT;
+    FName: м“ипы.т—трока;
 
     ѕ–ќ÷≈ƒ”–ј AddUnit(newcond: INTEGER);
     ѕ≈–≈ћ str: STRITEM;
@@ -1345,7 +1346,7 @@
         м—кан.Recover(self.scanner);
         u := unit;
         unit := self;
-        м”тиль.‘айл»м€_”ст(unit.File)
+        м‘айл.»м€_”ст(unit.File)
       »Ќј„≈
         Assert(u.Closed, nameline, namecol, 31)
        ќЌ≈÷;
@@ -1449,7 +1450,7 @@
       unit.typedecl := Ћќ∆№;
       unit.ExportType := Ћќ∆№;
       COPY(Name, unit.File);
-      м”тиль.‘айл»м€_”ст(unit.File);
+      м‘айл.»м€_”ст(unit.File);
       StIdent;
       Next; Check(м онст.ксћќƒ”Ћ№);
       
