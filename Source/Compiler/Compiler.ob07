@@ -1705,7 +1705,7 @@
         еякх s.Len = 1 рнцдю
           X86.Mono(s.Number)
         йнмеж;
-        X86.PushConst(ЛсРХКЭ.min(s.Len + 1, e1.T.Len))
+        X86.PushConst(ЛсРХКЭ.лХМХЛСЛ(s.Len + 1, e1.T.Len))
       йнмеж;
       X86.Save(e1.T.tType)
     юеякх e1.eType = ePROC рнцдю
