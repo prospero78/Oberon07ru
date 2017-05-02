@@ -229,20 +229,13 @@
     ВЕРНУТЬ res
   КОНЕЦ GetModule;
 
-ПРОЦЕДУРА Assert2(cond: BOOLEAN; code: INTEGER);
-  НАЧАЛО
-    ЕСЛИ ~cond ТОГДА
-      мПров.Тест(ЛОЖЬ, мСкан.line, мСкан.col, code)
-    КОНЕЦ
-  КОНЕЦ Assert2;
-
 ПРОЦЕДУРА Next*;
   НАЧАЛО
     мСкан.Лексема_Получ;
     ЕСЛИ (мСкан.tLex > lxERR0) & (мСкан.tLex < lxERR20) ТОГДА
       мПров.Тест(ЛОЖЬ, мСкан.line, мСкан.col + мСкан.count, мСкан.tLex - lxERR0)
     КОНЕЦ;
-    Assert2(мСкан.tLex # lxEOF, 27)
+    мПров.Тест2(мСкан.tLex # lxEOF, 27)
   КОНЕЦ Next;
 
 ПРОЦЕДУРА Check*(key: INTEGER);
@@ -271,7 +264,7 @@
       |lxColon:   code := 157
       ИНАЧЕ
       КОНЕЦ;
-      Assert2(ЛОЖЬ, code)
+      мПров.Тест2(ЛОЖЬ, code)
     КОНЕЦ
   КОНЕЦ Check;
 
@@ -644,26 +637,26 @@
         NamePtrBase := Name;
         id := GetQIdent(Unit, Name);
         ЕСЛИ Unit # unit ТОГДА
-          Assert2(id # ПУСТО, 42);
-          Assert2(id.iType = IDTYPE, 77);
+          мПров.Тест2(id # ПУСТО, 42);
+          мПров.Тест2(id.iType = IDTYPE, 77);
           Coord(line, col);
           Next;
           Res := id.T
         ИНАЧЕ
           ЕСЛИ id = ПУСТО ТОГДА
-            Assert2((unit.Level = 3) & unit.typedecl, 42);
+            мПров.Тест2((unit.Level = 3) & unit.typedecl, 42);
             Coord(line, col);
             Next;
             Res := ПУСТО
           ИНАЧЕ
-            Assert2(id.iType = IDTYPE, 77);
+            мПров.Тест2(id.iType = IDTYPE, 77);
             Coord(line, col);
             Next;
             Res := id.T
           КОНЕЦ
         КОНЕЦ
       ИНАЧЕ
-        Assert2(ЛОЖЬ, 77)
+        мПров.Тест2(ЛОЖЬ, 77)
       КОНЕЦ
     КОНЕЦ
     ВЕРНУТЬ Res
@@ -671,7 +664,7 @@
 
 ПРОЦЕДУРА FieldOffset(Align, RecSize: INTEGER): INTEGER;
   НАЧАЛО
-    Assert2(RecSize <= мКонст.целое_макс - (Align - RecSize MOD Align) MOD Align, 83)
+    мПров.Тест2(RecSize <= мКонст.целое_макс - (Align - RecSize MOD Align) MOD Align, 83)
     ВЕРНУТЬ RecSize + (Align - RecSize MOD Align) MOD Align
   КОНЕЦ FieldOffset;
 
@@ -702,11 +695,11 @@
         КОНЕЦ;
         ЕСЛИ Tr.Rec = record ТОГДА
           cur.Offset := FieldOffset(Tf.Align, Tr.Size);
-          Assert2(cur.Offset <= мКонст.целое_макс - Tf.Size, 83);
+          мПров.Тест2(cur.Offset <= мКонст.целое_макс - Tf.Size, 83);
           Tr.Size := cur.Offset + Tf.Size
         АЕСЛИ Tr.Rec = noalign ТОГДА
           cur.Offset := FieldOffset(1, Tr.Size);
-          Assert2(cur.Offset <= мКонст.целое_макс - Tf.Size, 83);
+          мПров.Тест2(cur.Offset <= мКонст.целое_макс - Tf.Size, 83);
           Tr.Size := cur.Offset + Tf.Size
         АЕСЛИ Tr.Rec = union ТОГДА
           ЕСЛИ Tf.Size > Tr.Size ТОГДА
@@ -769,7 +762,7 @@
   НАЧАЛО
     ПОКА мСкан.tLex = lxIDENT ДЕЛАТЬ
       Name := мСкан.id;
-      Assert2(Unique(T, Name), 30);
+      мПров.Тест2(Unique(T, Name), 30);
       NEW(field);
       ПамОш_Проверить(field = ПУСТО);
       мСпис.Добавить(T.Fields, field);
@@ -779,9 +772,9 @@
       field.Unit := unit;
       Next;
       ЕСЛИ мСкан.tLex = lxMult ТОГДА
-        Assert2(unit.Level = 3, 89);
-        Assert2(unit.typedecl, 91);
-        Assert2(unit.ExportType, 92);
+        мПров.Тест2(unit.Level = 3, 89);
+        мПров.Тест2(unit.typedecl, 91);
+        мПров.Тест2(unit.ExportType, 92);
         field.Export := ИСТИНА;
         Next
       КОНЕЦ;
@@ -800,10 +793,10 @@
           Next;
           Check(lxIDENT)
         ИНАЧЕ
-          Assert2(мСкан.tLex = мКонст.ксКОНЕЦ, 86)
+          мПров.Тест2(мСкан.tLex = мКонст.ксКОНЕЦ, 86)
         КОНЕЦ
       ИНАЧЕ
-        Assert2(ЛОЖЬ, 85)
+        мПров.Тест2(ЛОЖЬ, 85)
       КОНЕЦ
     КОНЕЦ
   КОНЕЦ ReadFields;
@@ -835,14 +828,14 @@
         n := 4 * (1 + Dim(T) + ORD((cur.VarKind = paramvar) & (T.tType = TRECORD)))
       ИНАЧЕ
         n := T.Size;
-        Assert2(n <= мКонст.целое_макс - мПам.Выровнять(n), 93);
+        мПров.Тест2(n <= мКонст.целое_макс - мПам.Выровнять(n), 93);
         n := n + мПам.Выровнять(n)
       КОНЕЦ;
       ЕСЛИ cur.Level = 3 ТОГДА
         cur.Offset := ProgSize;
-        Assert2(ProgSize <= мКонст.целое_макс - n, 93);
+        мПров.Тест2(ProgSize <= мКонст.целое_макс - n, 93);
         ProgSize := ProgSize + n;
-        Assert2(ProgSize <= мКонст.целое_макс - мПам.Выровнять(ProgSize), 93);
+        мПров.Тест2(ProgSize <= мКонст.целое_макс - мПам.Выровнять(ProgSize), 93);
         ProgSize := ProgSize + мПам.Выровнять(ProgSize)
       ИНАЧЕ
         ЕСЛИ cur.VarKind = 0 ТОГДА
@@ -851,9 +844,9 @@
           cur.Offset := curBlock.VarSize - 8 + 4 * (cur.Level + ORD((cur.VarKind = paramvar) & (T.tType = TRECORD)))
         КОНЕЦ
       КОНЕЦ;
-      Assert2(curBlock.VarSize <= мКонст.целое_макс - n, 93);
+      мПров.Тест2(curBlock.VarSize <= мКонст.целое_макс - n, 93);
       curBlock.VarSize := curBlock.VarSize + n;
-      Assert2(curBlock.VarSize <= мКонст.целое_макс - мПам.Выровнять(curBlock.VarSize), 93);
+      мПров.Тест2(curBlock.VarSize <= мКонст.целое_макс - мПам.Выровнять(curBlock.VarSize), 93);
       curBlock.VarSize := curBlock.VarSize + мПам.Выровнять(curBlock.VarSize);
       ЕСЛИ cur.VarKind # 0 ТОГДА
         curBlock.ParamSize := curBlock.VarSize
@@ -917,7 +910,7 @@
     ЕСЛИ proc ТОГДА
       T := curBlock.T
     КОНЕЦ;
-    Assert2((мСкан.tLex = lxIDENT) ИЛИ (мСкан.tLex = мКонст.ксПЕРЕМ), 84);
+    мПров.Тест2((мСкан.tLex = lxIDENT) ИЛИ (мСкан.tLex = мКонст.ксПЕРЕМ), 84);
     ByRef := ЛОЖЬ;
     ЕСЛИ мСкан.tLex = мКонст.ксПЕРЕМ ТОГДА
       ByRef := ИСТИНА;
@@ -927,7 +920,7 @@
     cont := ИСТИНА;
     ПОКА cont ДЕЛАТЬ
       Name := мСкан.id;
-      Assert2(GetField(T, Name) = ПУСТО, 30);
+      мПров.Тест2(GetField(T, Name) = ПУСТО, 30);
       NEW(field);
       ПамОш_Проверить(field = ПУСТО);
       мСпис.Добавить(T.Fields, field);
@@ -958,7 +951,7 @@
         КОНЕЦ;
         cont := ЛОЖЬ
       ИНАЧЕ
-        Assert2(ЛОЖЬ, 85)
+        мПров.Тест2(ЛОЖЬ, 85)
       КОНЕЦ
     КОНЕЦ
   КОНЕЦ Section;
@@ -1023,10 +1016,10 @@
       АЕСЛИ flag = "stdcall" ТОГДА
         Call := stdcall
       АЕСЛИ flag = "winapi" ТОГДА
-        Assert2(winplatf, 50);
+        мПров.Тест2(winplatf, 50);
         Call := winapi
       ИНАЧЕ
-        Assert2(ЛОЖЬ, 44)
+        мПров.Тест2(ЛОЖЬ, 44)
       КОНЕЦ;
       Next;
       Check(lxRSquare);
@@ -1051,7 +1044,7 @@
       АЕСЛИ flag = "noalign" ТОГДА
         rec := noalign
       ИНАЧЕ
-        Assert2(ЛОЖЬ, 103)
+        мПров.Тест2(ЛОЖЬ, 103)
       КОНЕЦ;
       Next;
       Check(lxRSquare);
@@ -1072,7 +1065,7 @@
     ВЫБОР мСкан.tLex ИЗ
     |мКонст.ксМАССИВ, lxComma:
       ЕСЛИ мСкан.tLex = lxComma ТОГДА
-        Assert2(Comma, 39)
+        мПров.Тест2(Comma, 39)
       КОНЕЦ;
       Next;
       Coord(line, col);
@@ -1090,9 +1083,9 @@
         мПров.Тест(nov.Base # ПУСТО, line, col, 42);
         мПров.Тест(notrecurs(id_T, nov.Base), line, col, 96)
       ИНАЧЕ
-        Assert2(ЛОЖЬ, 79)
+        мПров.Тест2(ЛОЖЬ, 79)
       КОНЕЦ;
-      Assert2(nov.Base.Size <= мКонст.целое_макс DIV nov.Len, 83);
+      мПров.Тест2(nov.Base.Size <= мКонст.целое_макс DIV nov.Len, 83);
       nov.Size := nov.Base.Size * nov.Len;
       nov.Align := nov.Base.Align
     |мКонст.ксЗАПИСЬ:
@@ -1153,7 +1146,7 @@
       nov.Align := 4;
       FormalList(nov, nov.Base)
     ИНАЧЕ
-      Assert2(ЛОЖЬ, 39)
+      мПров.Тест2(ЛОЖЬ, 39)
     КОНЕЦ
     ВЕРНУТЬ nov
   КОНЕЦ StructType;
@@ -1222,7 +1215,7 @@
       Next;
       Export := ЛОЖЬ;
       ЕСЛИ мСкан.tLex = lxMult ТОГДА
-        Assert2(unit.Level = 3, 89);
+        мПров.Тест2(unit.Level = 3, 89);
         Export := ИСТИНА;
         Next
       КОНЕЦ
@@ -1283,7 +1276,7 @@
           Check(lxSemi);
           Next
         ИНАЧЕ
-          Assert2(ЛОЖЬ, 85)
+          мПров.Тест2(ЛОЖЬ, 85)
         КОНЕЦ
       КОНЕЦ
     КОНЕЦ;
@@ -1330,12 +1323,12 @@
           X86.Load(e.T.tType)
         КОНЕЦ
       ИНАЧЕ
-        Assert2(мСкан.tLex # мКонст.ксВЕРНУТЬ, 123)
+        мПров.Тест2(мСкан.tLex # мКонст.ксВЕРНУТЬ, 123)
       КОНЕЦ;
       Check(мКонст.ксКОНЕЦ);
       Next;
       Check(lxIDENT);
-      Assert2(мСкан.id = Name, 87);
+      мПров.Тест2(мСкан.id = Name, 87);
       Next;
       Check(lxSemi);
       Next;
@@ -1437,7 +1430,7 @@
           |lxSemi:   AddUnit(4); Next
           |lxAssign: cond := 2
           ИНАЧЕ
-            Assert2(ЛОЖЬ, 28)
+            мПров.Тест2(ЛОЖЬ, 28)
           КОНЕЦ
       |2: Check(lxIDENT);
           name := мСкан.id;
@@ -1447,7 +1440,7 @@
           |lxComma: AddUnit(0)
           |lxSemi:  AddUnit(4); Next
           ИНАЧЕ
-            Assert2(ЛОЖЬ, 29)
+            мПров.Тест2(ЛОЖЬ, 29)
           КОНЕЦ
       ИНАЧЕ
       КОНЕЦ
@@ -1522,7 +1515,7 @@
       Next; Check(мКонст.ксМОДУЛЬ);
       
       Next; Check(lxIDENT);
-      Assert2(мУтиль.streq(мСкан.id.имя, name), 33);
+      мПров.Тест2(мУтиль.streq(мСкан.id.имя, name), 33);
       unit.Name := мСкан.id;
       PushIdent(unit.Name, мСкан.line, мСкан.col, IDMOD, sttypes[TVOID], unit, ЛОЖЬ, 0);
       idmod := unit.Idents.следующ(туИмя);
@@ -1548,7 +1541,7 @@
       КОНЕЦ;
       Check(мКонст.ксКОНЕЦ);
       Next; Check(lxIDENT);
-      Assert2(мСкан.id = unit.Name, 26);
+      мПров.Тест2(мСкан.id = unit.Name, 26);
       Next; Check(lxDot);
       X86.Leave;
       unit.Closed := ИСТИНА;
