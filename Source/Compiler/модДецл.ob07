@@ -221,7 +221,7 @@
 опнжедспю Assert*(cond: BOOLEAN; line, col, code: INTEGER);
   мювюкн
     еякх ~cond рнцдю
-      ЛсРХКЭ.ErrMsgPos(line, col, code);
+      ЛнЬ.ErrMsgPos(line, col, code);
       ЛоПНЖ.гЮЙНМВХРЭ(1)
     йнмеж
   йнмеж Assert;
