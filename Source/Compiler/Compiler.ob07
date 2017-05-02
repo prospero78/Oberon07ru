@@ -1430,7 +1430,7 @@
       Next;
       pOpSeq
     »Ќј„≈
-      м”тиль.UnitLine(DECL.UnitNumber, м—кан.line);
+      м”тиль. од—трока_”ст(DECL.UnitNumber, м—кан.line);
       X86.OnError(7)
      ќЌ≈÷;
     Check(м онст.кс ќЌ≈÷);
@@ -1760,7 +1760,7 @@
 
 ѕ–ќ÷≈ƒ”–ј Operator;
   Ќј„јЋќ
-    м”тиль.UnitLine(DECL.UnitNumber, м—кан.line);
+    м”тиль. од—трока_”ст(DECL.UnitNumber, м—кан.line);
     ¬џЅќ– м—кан.tLex »«
     |lxIDENT: IdentOper
     |м онст.кс≈—Ћ», м онст.ксѕќ ј: IfWhileOper(м—кан.tLex = м онст.ксѕќ ј)

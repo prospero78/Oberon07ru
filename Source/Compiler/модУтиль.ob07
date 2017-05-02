@@ -31,7 +31,7 @@
 
   масПараметры: МАССИВ мКонст.макс_парам, 2 ИЗ INTEGER;
   ParamCount*, Line*, Unit*: INTEGER;
-  (* win, kos, lnx: BOOLEAN; *)
+  (* код_строка : МАССИВ 128 ИЗ CHAR; *)
 
 ПРОЦЕДУРА Бесконеч*(x_: LONGREAL): BOOLEAN;
   ПЕРЕМ
@@ -115,11 +115,11 @@
     str[j] := 0X
   КОНЕЦ СтрПарам;
 
-ПРОЦЕДУРА UnitLine*(newUnit, newLine: INTEGER);
+ПРОЦЕДУРА КодСтрока_Уст*(newUnit, newLine: INTEGER);
   НАЧАЛО
     Unit := newUnit;
     Line := newLine
-  КОНЕЦ UnitLine;
+  КОНЕЦ КодСтрока_Уст;
 
 ПРОЦЕДУРА min*(a, b: INTEGER): INTEGER;
   ПЕРЕМ Res: INTEGER;

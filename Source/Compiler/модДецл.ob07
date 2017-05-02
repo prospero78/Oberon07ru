@@ -1265,7 +1265,7 @@
       func := curBlock.T.Base.tType # TVOID;
       ≈—Ћ» func “ќ√ƒј
         Check(м онст.кс¬≈–Ќ”“№);
-        м”тиль.UnitLine(UnitNumber, м—кан.line);
+        м”тиль. од—трока_”ст(UnitNumber, м—кан.line);
         Next;
         Coord(line, col);
         Expr(e);
