@@ -158,17 +158,17 @@
   pReadModule: ПРОЦЕДУРА (Path, Name, Ext: мСтр.тСтрока): BOOLEAN;
   Platform: INTEGER;
 
-ПРОЦЕДУРА SetSizeFunc*;
+ПРОЦЕДУРА ПроцедурРазм_Уст*;
   НАЧАЛО
     sizefunc := ИСТИНА
-  КОНЕЦ SetSizeFunc;
+  КОНЕЦ ПроцедурРазм_Уст;
 
-ПРОЦЕДУРА MemErr*(err: BOOLEAN);
+ПРОЦЕДУРА ПамОш_Проверить*(err: BOOLEAN);
   НАЧАЛО
     ЕСЛИ err ТОГДА
       мПам.Ошибка(err)
     КОНЕЦ
-  КОНЕЦ MemErr;
+  КОНЕЦ ПамОш_Проверить;
 
 ПРОЦЕДУРА GetString*(adr: LONGREAL): туКонстСтр;
   ПЕРЕМ
@@ -183,7 +183,7 @@
     nov: туКонстСтр;
   НАЧАЛО
     NEW(nov);
-    MemErr(nov = ПУСТО);
+    ПамОш_Проверить(nov = ПУСТО);
     COPY(str, nov.Str);
     nov.Len := мСкан.count - 1;
     nov.Number := X86.NewLabel();
@@ -197,7 +197,7 @@
     nov: туКонстСтр;
   НАЧАЛО
     NEW(nov);
-    MemErr(nov = ПУСТО);
+    ПамОш_Проверить(nov = ПУСТО);
     nov.Str[0] := c;
     nov.Str[1] := 0X;
     nov.Len := 1;
@@ -298,7 +298,7 @@
     ident: туИмя;
   НАЧАЛО
     NEW(ident);
-    MemErr(ident = ПУСТО);
+    ПамОш_Проверить(ident = ПУСТО);
     ident.Name := ПУСТО;
     ident.iType := IDGUARD;
     ident.T := sttypes[TVOID];
@@ -313,7 +313,7 @@
   НАЧАЛО
     Assert(CheckIdent(Name), line, col, 30);
     NEW(ident);
-    MemErr(ident = ПУСТО);
+    ПамОш_Проверить(ident = ПУСТО);
     ident.Name := Name;
     ident.line := line;
     ident.col := col;
@@ -339,7 +339,7 @@
     sttypes[0] := ПУСТО;
     ДЛЯ i := TINTEGER ДО TSTRING ДЕЛАТЬ
       NEW(type);
-      MemErr(type = ПУСТО);
+      ПамОш_Проверить(type = ПУСТО);
       type.tType := i;
       мСпис.Добавить(types, type);
       sttypes[i] := type
@@ -775,7 +775,7 @@
       Name := мСкан.id;
       Assert2(Unique(T, Name), 30);
       NEW(field);
-      MemErr(field = ПУСТО);
+      ПамОш_Проверить(field = ПУСТО);
       мСпис.Добавить(T.Fields, field);
       field.Name := Name;
       field.T := ПУСТО;
@@ -872,7 +872,7 @@
   НАЧАЛО
     ЕСЛИ NewType = ПУСТО ТОГДА
       NEW(nov);
-      MemErr(nov = ПУСТО)
+      ПамОш_Проверить(nov = ПУСТО)
     ИНАЧЕ
       nov := NewType
     КОНЕЦ;
@@ -885,7 +885,7 @@
     nov.Number := Number;
     ЕСЛИ Fields ТОГДА
       nov.Fields := мСпис.Создать();
-      MemErr(nov.Fields = ПУСТО)
+      ПамОш_Проверить(nov.Fields = ПУСТО)
     КОНЕЦ
     ВЕРНУТЬ nov
   КОНЕЦ CreateType;
@@ -933,7 +933,7 @@
       Name := мСкан.id;
       Assert2(GetField(T, Name) = ПУСТО, 30);
       NEW(field);
-      MemErr(field = ПУСТО);
+      ПамОш_Проверить(field = ПУСТО);
       мСпис.Добавить(T.Fields, field);
       field.Name := Name;
       field.T := ПУСТО;
@@ -987,7 +987,7 @@
   ПЕРЕМ nov: PTRBASE;
   НАЧАЛО
     NEW(nov);
-    MemErr(nov = ПУСТО);
+    ПамОш_Проверить(nov = ПУСТО);
     nov.Name := Name;
     nov.line := line;
     nov.col := col;
@@ -1260,7 +1260,7 @@
         Check(lxEQ);
         Next;
         NEW(NewType);
-        MemErr(NewType = ПУСТО);
+        ПамОш_Проверить(NewType = ПУСТО);
         last.T := NewType;
         T := StructType(ЛОЖЬ, NewType);
         Check(lxSemi);
@@ -1419,7 +1419,7 @@
       КОНЕЦ;
       PushIdent(alias, line, col, IDMOD, sttypes[TVOID], u, ЛОЖЬ, 0);
       NEW(str);
-      MemErr(str = ПУСТО);
+      ПамОш_Проверить(str = ПУСТО);
       str.Str := name.имя;
       мСпис.Добавить(unit.Import, str);
       cond := newcond
@@ -1461,9 +1461,9 @@
 ПРОЦЕДУРА Header(Name: мТипы.туУзел);
   НАЧАЛО
     NEW(unit);
-    MemErr(unit = ПУСТО);
+    ПамОш_Проверить(unit = ПУСТО);
     unit.Idents := мСпис.Создать();
-    MemErr(unit.Idents = ПУСТО);
+    ПамОш_Проверить(unit.Idents = ПУСТО);
     unit.Level := 0;
     unit.Name := Name;
     Guard; Guard;
@@ -1506,16 +1506,16 @@
     мСтр.Сложить(b, Ext, Name);
     ЕСЛИ мСкан.Файл_Открыть(Name, FHandle) ТОГДА
       NEW(unit);
-      MemErr(unit = ПУСТО);
+      ПамОш_Проверить(unit = ПУСТО);
       unit.sys := ЛОЖЬ;
       unit.Std := Path = Std;
       мСпис.Добавить(prog, unit);
       unit.Idents := мСпис.Создать();
-      MemErr(unit.Idents = ПУСТО);
+      ПамОш_Проверить(unit.Idents = ПУСТО);
       unit.Import := мСпис.Создать();
-      MemErr(unit.Import = ПУСТО);
+      ПамОш_Проверить(unit.Import = ПУСТО);
       NEW(unit.scanner);
-      MemErr(unit.scanner = ПУСТО);
+      ПамОш_Проверить(unit.scanner = ПУСТО);
       unit.Closed := ЛОЖЬ;
       unit.Level := 0;
       unit.typedecl := ЛОЖЬ;
@@ -1574,14 +1574,14 @@
     Expr := ExprProc;
     AssComp := AssCompProc;
     prog := мСпис.Создать();
-    MemErr(prog = ПУСТО);
+    ПамОш_Проверить(prog = ПУСТО);
     PtrBases := мСпис.Создать();
-    MemErr(PtrBases = ПУСТО);
+    ПамОш_Проверить(PtrBases = ПУСТО);
     types := мСпис.Создать();
-    MemErr(types = ПУСТО);
+    ПамОш_Проверить(types = ПУСТО);
     StTypes;
     Strings := мСпис.Создать();
-    MemErr(Strings = ПУСТО);
+    ПамОш_Проверить(Strings = ПУСТО);
     Pseudo;
     stypes := sttypes
   КОНЕЦ Program;

@@ -64,7 +64,6 @@
     КОНЕЦ;
 
 ПЕРЕМ
-
   pExpr, pFactor: ПРОЦЕДУРА (ПЕР e: DECL.тВыражение);
   pOpSeq: ПРОЦЕДУРА;
   Lex: мСтр.тСтрока;
@@ -641,7 +640,7 @@
       X86.StFunc(X86.sysBIT);
       e.T := sttypes[TBOOLEAN]
     |sysSIZE, sysTYPEID:
-      DECL.SetSizeFunc;
+      DECL.ПроцедурРазм_Уст;
       Check(lxIDENT);
       T := DECL.IdType(line, col);
       Assert(T # ПУСТО, line, col, 42);
@@ -1427,7 +1426,7 @@
     Assert(a <= b, line, col, 54);
     Assert(CheckLabel(a, b, Labels), line, col, 100);
     NEW(label);
-    DECL.MemErr(label = ПУСТО);
+    DECL.ПамОш_Проверить(label = ПУСТО);
     label.a := a;
     label.b := b;
     мСпис.Добавить(Labels, label);
@@ -1472,7 +1471,7 @@
     Load(e);
     X86.Drop;
     Labels := мСпис.Создать();
-    DECL.MemErr(Labels = ПУСТО);
+    DECL.ПамОш_Проверить(Labels = ПУСТО);
     Next;
     EndCase := X86.NewLabel();
     Variant(int, Labels, EndCase);
@@ -1974,7 +1973,7 @@
       мСтр.Сложить(SelfPath, "Windows32", SelfPath)
     КОНЕЦ;
     мСтр.Сложить(SelfPath, мКонст.слэш, SelfPath);
-    X86.Init(DECL.MemErr, platform);
+    X86.Init(DECL.ПамОш_Проверить, platform);
     X86.Prolog(temp);
     DECL.Program(SelfPath, Path, Name, Ext, platform IN {1, 2, 3}, OpSeq, Expr, AssComp, sttypes);
     DECL.Compile(platform, stksize);
