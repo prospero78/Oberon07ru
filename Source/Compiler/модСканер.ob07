@@ -211,7 +211,7 @@
     ВЕРНУТЬ (ch <= 20X) & (ch > 0X)
     КОНЕЦ Space;
 
-ПРОЦЕДУРА Letter(ch: CHAR): BOOLEAN;
+ПРОЦЕДУРА Симв_Проверить(ch: CHAR): BOOLEAN;
     ПЕРЕМ
         ch_eng: BOOLEAN;
         ch_rus: BOOLEAN;
@@ -222,7 +222,7 @@
         ch_rus := (ch >= "А") & (ch <= "Я") ИЛИ (ch >= "а") & (ch <= "я");
         result := ch_eng ИЛИ ch_rus;
         ВЕРНУТЬ result
-    КОНЕЦ Letter;
+    КОНЕЦ Симв_Проверить;
 
 ПРОЦЕДУРА Цифра_Проверить*(ch: CHAR): BOOLEAN;
         ВЕРНУТЬ (ch >= "0") & (ch <= "9")
@@ -249,7 +249,7 @@
 ПРОЦЕДУРА Имя_Получ;
     НАЧАЛО
         tLex := lxIDENT;
-        ПОКА Letter(ch) ИЛИ Цифра_Проверить(ch) ДЕЛАТЬ
+        ПОКА Симв_Проверить(ch) ИЛИ Цифра_Проверить(ch) ДЕЛАТЬ
             PutNext(ch)
         КОНЕЦ;
         PutChar(0X);
