@@ -83,7 +83,7 @@
 
   ту»м€* = ” ј«ј“≈Ћ№ Ќј т»м€;
 
-  UNIT* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.тѕункт)
+  тћодуль* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.тѕункт)
       Name: м“ипы.ту”зел;
       File: м—тр.т—трока;
       Idents: м“ипы.ту—писок;
@@ -97,7 +97,7 @@
   т»м€* = «јѕ»—№ (м“ипы.тѕункт)
       Name: м“ипы.ту”зел;
       T*: ту“ип;
-      Unit*: UNIT;
+      Unit*: тћодуль;
       Parent*: ту»м€;
       Value*: LONGREAL;
       line*, col*, Number*, iType*, StProc*, VarSize, ParamSize*,
@@ -120,7 +120,7 @@
       T*: ту“ип;
       Offset*: INTEGER;
       ByRef*, Export*: BOOLEAN;
-      Unit*: UNIT
+      Unit*: тћодуль
      ќЌ≈÷;
 
   STRCONST* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.тѕункт)
@@ -145,7 +145,7 @@
 ѕ≈–≈ћ
 
   sttypes: stTYPES;
-  unit*, sys: UNIT;
+  unit*, sys: тћодуль;
   curBlock*: ту»м€;
   Path, Main, Std, ExtMain: м—тр.т—трока;
   NamePtrBase: м“ипы.ту”зел; ProgSize*, RecCount, UnitNumber*: INTEGER;
@@ -208,16 +208,17 @@
     col := м—кан.col
    ќЌ≈÷ Coord;
 
-ѕ–ќ÷≈ƒ”–ј GetModule(Name: м“ипы.ту”зел): UNIT;
-  ѕ≈–≈ћ cur, res: UNIT;
+ѕ–ќ÷≈ƒ”–ј GetModule(Name: м“ипы.ту”зел): тћодуль;
+  ѕ≈–≈ћ
+    cur, res: тћодуль;
   Ќј„јЋќ
     res := ѕ”—“ќ;
-    cur := prog.предыдущ(UNIT);
+    cur := prog.предыдущ(тћодуль);
     ѕќ ј (cur # ѕ”—“ќ) & м”тиль.streq(cur.Name.им€, Name.им€) ƒ≈Ћј“№
       res := cur;
       cur := ѕ”—“ќ
     ј≈—Ћ» cur # ѕ”—“ќ ƒ≈Ћј“№
-      cur := cur.следующ(UNIT)
+      cur := cur.следующ(тћодуль)
      ќЌ≈÷
     ¬≈–Ќ”“№ res
    ќЌ≈÷ GetModule;
@@ -300,7 +301,7 @@
     INC(unit.Level)
    ќЌ≈÷ Guard;
 
-ѕ–ќ÷≈ƒ”–ј PushIdent(Name: м“ипы.ту”зел; line, col, iType: INTEGER; T: ту“ип; u: UNIT; Export: BOOLEAN; StProc: INTEGER);
+ѕ–ќ÷≈ƒ”–ј PushIdent(Name: м“ипы.ту”зел; line, col, iType: INTEGER; T: ту“ип; u: тћодуль; Export: BOOLEAN; StProc: INTEGER);
   ѕ≈–≈ћ
     ident: ту»м€;
     i: INTEGER;
@@ -410,7 +411,7 @@
     Guard
    ќЌ≈÷ StIdent;
 
-ѕ–ќ÷≈ƒ”–ј GetQIdent*(Unit: UNIT; Name: м“ипы.ту”зел): ту»м€;
+ѕ–ќ÷≈ƒ”–ј GetQIdent*(Unit: тћодуль; Name: м“ипы.ту”зел): ту»м€;
   ѕ≈–≈ћ
     cur, res: ту»м€;
     line, col: INTEGER;
@@ -613,7 +614,7 @@
   ѕ≈–≈ћ
     id: ту»м€;
     Name: м“ипы.ту”зел;
-    Unit: UNIT;
+    Unit: тћодуль;
     Res: ту“ип;
   Ќј„јЋќ
     Res := ѕ”—“ќ;
@@ -1335,7 +1336,7 @@
      ќЌ≈÷
    ќЌ≈÷ DeclSeq;
 
-ѕ–ќ÷≈ƒ”–ј Rtl(u: UNIT);
+ѕ–ќ÷≈ƒ”–ј Rtl(u: тћодуль);
 
     ѕ–ќ÷≈ƒ”–ј AddProc(name: м—тр.т—трока; num: INTEGER);
       ѕ≈–≈ћ
@@ -1374,7 +1375,8 @@
 ѕ–ќ÷≈ƒ”–ј ImportList;
   ѕ≈–≈ћ
     cond, col, line, namecol, nameline: INTEGER;
-    name, alias: м“ипы.ту”зел; u, self: UNIT;
+    name, alias: м“ипы.ту”зел;
+    u, self: тћодуль;
     FName: м—тр.т—трока;
 
   ѕ–ќ÷≈ƒ”–ј AddUnit(newcond: INTEGER);
@@ -1458,7 +1460,8 @@
    ќЌ≈÷ Header;
 
 ѕ–ќ÷≈ƒ”–ј Pseudo;
-  ѕ≈–≈ћ temp: UNIT;
+  ѕ≈–≈ћ
+    temp: тћодуль;
   Ќј„јЋќ
     temp := unit;
     Header(м—кан.”зел_ƒобав("SYSTEM"));
