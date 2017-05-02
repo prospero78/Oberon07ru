@@ -856,7 +856,7 @@
     КОНЕЦ
   КОНЕЦ SetVars;
 
-ПРОЦЕДУРА CreateType(tType, Len, Size, Number: INTEGER; Base: туТип; Fields: BOOLEAN; NewType: туТип): туТип;
+ПРОЦЕДУРА Тип_Создать(tType, Len, Size, Number: INTEGER; Base: туТип; Fields: BOOLEAN; NewType: туТип): туТип;
   ПЕРЕМ
     nov: туТип;
   НАЧАЛО
@@ -878,7 +878,7 @@
       ПамОш_Проверить(nov.Fields = ПУСТО)
     КОНЕЦ
     ВЕРНУТЬ nov
-  КОНЕЦ CreateType;
+  КОНЕЦ Тип_Создать;
 
 ПРОЦЕДУРА FormalType(ПЕР line, col: INTEGER): туТип;
   ПЕРЕМ
@@ -888,7 +888,7 @@
       Next;
       Check(мКонст.ксИЗ);
       Next;
-      TA := CreateType(TARRAY, 0, 0, 0, FormalType(line, col), ЛОЖЬ, ПУСТО)
+      TA := Тип_Создать(TARRAY, 0, 0, 0, FormalType(line, col), ЛОЖЬ, ПУСТО)
     ИНАЧЕ
       Check(lxIDENT);
       TA := IdType(line, col);
@@ -1073,7 +1073,7 @@
       ConstExpr(v, T);
       мПров.Тест(T.tType = TINTEGER, line, col, 52);
       мПров.Тест(v > 0.0D0, line, col, 78);
-      nov := CreateType(TARRAY, FLOOR(v), 0, 0, ПУСТО, ЛОЖЬ, NewType);
+      nov := Тип_Создать(TARRAY, FLOOR(v), 0, 0, ПУСТО, ЛОЖЬ, NewType);
       ЕСЛИ мСкан.tLex = lxComma ТОГДА
         nov.Base := StructType(ИСТИНА, ПУСТО)
       АЕСЛИ мСкан.tLex = мКонст.ксИЗ ТОГДА
@@ -1092,7 +1092,7 @@
     |мКонст.ксЗАПИСЬ:
       Next;
       INC(RecCount);
-      nov := CreateType(TRECORD, 0, 0, RecCount, ПУСТО, ИСТИНА, NewType);
+      nov := Тип_Создать(TRECORD, 0, 0, RecCount, ПУСТО, ИСТИНА, NewType);
       nov.Align := 1;
       Коорд_Уст(line, col);
       ЕСЛИ RecFlag(nov.Rec) ТОГДА
@@ -1127,7 +1127,7 @@
       Next;
       Check(мКонст.ксДО);
       Next;
-      nov := CreateType(TPOINTER, 0, 4, 0, ПУСТО, ЛОЖЬ, NewType);
+      nov := Тип_Создать(TPOINTER, 0, 4, 0, ПУСТО, ЛОЖЬ, NewType);
       nov.Align := 4;
       Коорд_Уст(line, col);
       nov.Base := pParseType(line, col);
@@ -1139,7 +1139,7 @@
       КОНЕЦ
     |мКонст.ксПРОЦЕДУРА:
       Next;
-      nov := CreateType(TPROC, 0, 4, 0, sttypes[TVOID], ИСТИНА, NewType);
+      nov := Тип_Создать(TPROC, 0, 4, 0, sttypes[TVOID], ИСТИНА, NewType);
       Коорд_Уст(line, col);
       ЕСЛИ CallFlag(nov.Call) ТОГДА
         мПров.Тест(unit.sys, line, col, 111)
@@ -1290,7 +1290,7 @@
       КОНЕЦ;
       Check(lxIDENT);
       IdentDef;
-      PushIdent(Name, line, col, IDPROC, CreateType(TPROC, 0, 4, 0, sttypes[TVOID], ИСТИНА, ПУСТО), ПУСТО, Export, 0);
+      PushIdent(Name, line, col, IDPROC, Тип_Создать(TPROC, 0, 4, 0, sttypes[TVOID], ИСТИНА, ПУСТО), ПУСТО, Export, 0);
       id := unit.Idents.следующ(туИмя);
       ЕСЛИ id.Export & main ТОГДА
         ЕСЛИ Platform = 6 ТОГДА
@@ -1339,7 +1339,7 @@
     КОНЕЦ
   КОНЕЦ DeclSeq;
 
-ПРОЦЕДУРА Rtl(u: тМодуль);
+ПРОЦЕДУРА Rtl_Добав(u: тМодуль);
 
     ПРОЦЕДУРА AddProc(name: мСтр.тСтрока; num: INTEGER);
       ПЕРЕМ
@@ -1373,7 +1373,7 @@
     AddProc("_close", X86._close);
     AddProc("_halt", X86._halt);
     AddProc("_length", X86._length);
-  КОНЕЦ Rtl;
+  КОНЕЦ Rtl_Добав;
 
 ПРОЦЕДУРА ImportList;
   ПЕРЕМ
@@ -1382,7 +1382,7 @@
     u, self: тМодуль;
     FName: мСтр.тСтрока;
 
-  ПРОЦЕДУРА AddUnit(newcond: INTEGER);
+  ПРОЦЕДУРА Модуль_Добавить(newcond: INTEGER);
     ПЕРЕМ
       str: туПунктСтр;
     НАЧАЛО
@@ -1413,7 +1413,7 @@
       str.Str := name.имя;
       мСпис.Добавить(unit.Import, str);
       cond := newcond
-    КОНЕЦ AddUnit;
+    КОНЕЦ Модуль_Добавить;
 
   НАЧАЛО
     cond := 0;
@@ -1427,8 +1427,8 @@
           alias := name;
           cond := 1
       |1: ВЫБОР мСкан.tLex ИЗ
-          |lxComma:  AddUnit(0)
-          |lxSemi:   AddUnit(4); Next
+          |lxComma:  Модуль_Добавить(0)
+          |lxSemi:   Модуль_Добавить(4); Next
           |lxAssign: cond := 2
           ИНАЧЕ
             мПров.Тест2(ЛОЖЬ, 28)
@@ -1438,8 +1438,8 @@
           Коорд_Уст(nameline, namecol);
           cond := 3
       |3: ВЫБОР мСкан.tLex ИЗ
-          |lxComma: AddUnit(0)
-          |lxSemi:  AddUnit(4); Next
+          |lxComma: Модуль_Добавить(0)
+          |lxSemi:  Модуль_Добавить(4); Next
           ИНАЧЕ
             мПров.Тест2(ЛОЖЬ, 29)
           КОНЕЦ
@@ -1464,7 +1464,7 @@
     unit.Closed := ИСТИНА
   КОНЕЦ Header;
 
-ПРОЦЕДУРА Pseudo;
+ПРОЦЕДУРА Псевдо_Добав;
   ПЕРЕМ
     temp: тМодуль;
   НАЧАЛО
@@ -1481,7 +1481,7 @@
     PushSysType("CARD16",  TCARD16);
     sys := unit;
     unit := temp
-  КОНЕЦ Pseudo;
+  КОНЕЦ Псевдо_Добав;
 
 ПРОЦЕДУРА Модуль_Читать(Path, Name1, Ext: мСтр.тСтрока): BOOLEAN;
   ПЕРЕМ
@@ -1573,7 +1573,7 @@
     StTypes;
     Strings := мСпис.Создать();
     ПамОш_Проверить(Strings = ПУСТО);
-    Pseudo;
+    Псевдо_Добав;
     stypes := sttypes
   КОНЕЦ Код_Настроить;
 
@@ -1592,7 +1592,7 @@
     Platform := platform;
     main := ЛОЖЬ;
     ЕСЛИ Модуль_Читать(Std, "RTL", мКонст.расшир) ТОГДА
-      Rtl(unit)
+      Rtl_Добав(unit)
     ИНАЧЕ
       мОш.Сообщ(65);
       мПроц.Закончить(1)
