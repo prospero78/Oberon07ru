@@ -72,7 +72,7 @@
 
   тПроцедура = ПРОЦЕДУРА (err: BOOLEAN);
 
-  ASMLINE* = УКАЗАТЕЛЬ НА ЗАПИСЬ (мТипы.тПункт)
+  туПунктАсм* = УКАЗАТЕЛЬ НА ЗАПИСЬ (мТипы.тПункт)
       cmd, clen, varadr, adr, tcmd, codeadr: INTEGER; short: BOOLEAN
     КОНЕЦ;
 
@@ -134,11 +134,13 @@
 
 ПЕРЕМ
   asmlist: мТипы.туСписок;
-  start: ASMLINE;
+  start: туПунктАсм;
   MemErr: тПроцедура;
   dll, con, gui, kos, elf, obj: BOOLEAN;
-    Lcount, reccount, topstk: INTEGER; recarray: МАССИВ 2048 ИЗ INTEGER; current*: ASMLINE;
-    callstk: МАССИВ 1024, 2 ИЗ ASMLINE;
+    Lcount, reccount, topstk: INTEGER;
+    recarray: МАССИВ 2048 ИЗ INTEGER;
+    current*: туПунктАсм;
+    callstk: МАССИВ 1024, 2 ИЗ туПунктАсм;
     OutFile: мСтр.тСтрока;
     Code: МАССИВ 4000000 ИЗ CHAR; ccount: INTEGER; Data: МАССИВ 1000000 ИЗ CHAR; dcount: INTEGER;
     Labels: МАССИВ 200000 ИЗ INTEGER; rdata: МАССИВ 400H ИЗ INTEGER; Header: HEADER; etable: ETABLE;
@@ -147,7 +149,10 @@
     RtlProc: МАССИВ 20 ИЗ INTEGER; OutFilePos: INTEGER;
     RelocSection: SECTION;
     felf: мСтр.тСтрока;
-    fpu*: INTEGER; isfpu: BOOLEAN; maxfpu: INTEGER; fpucmd: ASMLINE;
+    fpu*: INTEGER;
+    isfpu: BOOLEAN;
+    maxfpu: INTEGER;
+    fpucmd: туПунктАсм;
     kosexp: МАССИВ 65536 ИЗ ЗАПИСЬ
       Name: мТипы.туУзел;
       Adr, NameLabel: INTEGER
@@ -341,7 +346,7 @@
 ПРОЦЕДУРА WritePE(FName: МАССИВ ИЗ CHAR; stksize, codesize, datasize, rdatasize, gsize: INTEGER);
   CONST textattr = 60000020H; rdataattr = 40000040H; dataattr = 0C0000040H; relocattr = 42000040H;
   ПЕРЕМ i, F, adr, acodesize, compver, version, stkalloc, heapsize, heapalloc, filesize, filebuf: INTEGER;
-      cur: ASMLINE;
+      cur: туПунктАсм;
   НАЧАЛО
 
     compver := 0;
@@ -443,10 +448,10 @@
       Fill(Align(mSys.SIZE(HEADER), 200H) - mSys.SIZE(HEADER), 0X)
     КОНЕЦ;
 
-    cur := asmlist.предыдущ(ASMLINE);
+    cur := asmlist.предыдущ(туПунктАсм);
     ПОКА cur # ПУСТО ДЕЛАТЬ
       Write(mSys.ADR(Code[cur.cmd]), cur.clen);
-      cur := cur.следующ(ASMLINE)
+      cur := cur.следующ(туПунктАсм)
     КОНЕЦ;
     Fill(Align(codesize, 200H) - codesize, 0X);
     Write(mSys.ADR(rdata), 0DAH);
@@ -470,13 +475,13 @@
   КОНЕЦ WritePE;
 
 ПРОЦЕДУРА New;
-  ПЕРЕМ nov: ASMLINE;
+  ПЕРЕМ nov: туПунктАсм;
   НАЧАЛО
     NEW(nov);
     MemErr(nov = ПУСТО);
     nov.cmd := ccount;
     мСпис.Вставить(asmlist, nov, current);
-    current := current.следующ(ASMLINE)
+    current := current.следующ(туПунктАсм)
   КОНЕЦ New;
 
 ПРОЦЕДУРА Empty(varadr: INTEGER);
@@ -550,7 +555,7 @@
     current.clen := a - b
   КОНЕЦ OutCode;
 
-ПРОЦЕДУРА Del*(last: ASMLINE);
+ПРОЦЕДУРА Del*(last: туПунктАсм);
   НАЧАЛО
     last.следующ := current.следующ;
     ЕСЛИ current = asmlist.следующ ТОГДА
@@ -565,7 +570,7 @@
     ВЕРНУТЬ Lcount
   КОНЕЦ NewLabel;
 
-ПРОЦЕДУРА PushCall*(asmline: ASMLINE);
+ПРОЦЕДУРА PushCall*(asmline: туПунктАсм);
   НАЧАЛО
     New;
     callstk[topstk][0] := asmline;
@@ -585,7 +590,7 @@
   КОНЕЦ EndCall;
 
 ПРОЦЕДУРА Init*(mem: тПроцедура; UI: INTEGER);
-  ПЕРЕМ nov: ASMLINE;
+  ПЕРЕМ nov: туПунктАсм;
   НАЧАЛО
     dcount := 4;
     dll := UI = 1;
@@ -789,7 +794,7 @@
     АЕСЛИ obj ТОГДА
       OutCode("558BEC")
     КОНЕЦ;
-    start := asmlist.следующ(ASMLINE)
+    start := asmlist.следующ(туПунктАсм)
   КОНЕЦ Prolog;
 
 ПРОЦЕДУРА AddRec*(base: INTEGER);
@@ -799,9 +804,9 @@
   КОНЕЦ AddRec;
 
 ПРОЦЕДУРА CmpOpt(inv: BOOLEAN): INTEGER;
-  ПЕРЕМ cur: ASMLINE; c: INTEGER;
+  ПЕРЕМ cur: туПунктАсм; c: INTEGER;
   НАЧАЛО
-    c := ORD(Code[current.предыдущ.предыдущ(ASMLINE).cmd]);
+    c := ORD(Code[current.предыдущ.предыдущ(туПунктАсм).cmd]);
     ЕСЛИ inv ТОГДА
       ЕСЛИ ODD(c) ТОГДА
         DEC(c)
@@ -813,7 +818,7 @@
     ПОВТОРЯТЬ
       cur.tcmd := 0;
       cur.clen := 0;
-      cur := cur.предыдущ(ASMLINE)
+      cur := cur.предыдущ(туПунктАсм)
     ПОКАНЕ cur.tcmd = ICMP1;
     cur.tcmd := 0;
     cur.clen := 0
@@ -823,7 +828,7 @@
 ПРОЦЕДУРА ifwh*(L: INTEGER);
   ПЕРЕМ c: INTEGER;
   НАЧАЛО
-    ЕСЛИ current.предыдущ(ASMLINE).tcmd = ICMP2 ТОГДА
+    ЕСЛИ current.предыдущ(туПунктАсм).tcmd = ICMP2 ТОГДА
       c := CmpOpt(ИСТИНА);
       OutCode("5A583BC2");
       jmp(CHR(c), L)
@@ -837,14 +842,14 @@
 ПРОЦЕДУРА PushConst*(Number: INTEGER);
   НАЧАЛО
     IntByte("6A", "68", Number);
-    current.предыдущ(ASMLINE).varadr := Number
+    current.предыдущ(туПунктАсм).varadr := Number
   КОНЕЦ PushConst;
 
 ПРОЦЕДУРА IfWhile*(L: INTEGER; orop: BOOLEAN);
   ПЕРЕМ c, L1: INTEGER;
   НАЧАЛО
     L1 := NewLabel();
-    ЕСЛИ current.предыдущ(ASMLINE).tcmd = ICMP2 ТОГДА
+    ЕСЛИ current.предыдущ(туПунктАсм).tcmd = ICMP2 ТОГДА
       c := CmpOpt(orop);
       OutCode("5A583BC2");
       jmp(CHR(c), L1);
@@ -886,7 +891,7 @@
   КОНЕЦ String;
 
 ПРОЦЕДУРА InsertFpuInit;
-  ПЕРЕМ t: ASMLINE;
+  ПЕРЕМ t: туПунктАсм;
   НАЧАЛО
     ЕСЛИ isfpu ТОГДА
       t := current;
@@ -1275,17 +1280,19 @@
   КОНЕЦ StFunc;
 
 ПРОЦЕДУРА Load*(T: INTEGER);
-  ПЕРЕМ lastcmd: ASMLINE; offset: INTEGER;
+  ПЕРЕМ
+    lastcmd: туПунктАсм;
+    offset: INTEGER;
 
-    ПРОЦЕДУРА del;
+  ПРОЦЕДУРА del;
     НАЧАЛО
       lastcmd.tcmd := 0;
       offset := lastcmd.varadr;
-      lastcmd := lastcmd.предыдущ(ASMLINE);
+      lastcmd := lastcmd.предыдущ(туПунктАсм);
       ПОКА lastcmd.tcmd # ECMD ДЕЛАТЬ
         lastcmd.clen := 0;
         lastcmd.tcmd := 0;
-        lastcmd := lastcmd.предыдущ(ASMLINE)
+        lastcmd := lastcmd.предыдущ(туПунктАсм)
       КОНЕЦ;
       lastcmd.tcmd := 0
     КОНЕЦ del;
@@ -1549,28 +1556,30 @@
   КОНЕЦ strcmp;
 
 ПРОЦЕДУРА Optimization;
-  ПЕРЕМ cur: ASMLINE; flag: BOOLEAN;
+  ПЕРЕМ
+    cur: туПунктАсм;
+    flag: BOOLEAN;
   НАЧАЛО
-    cur := asmlist.предыдущ(ASMLINE);
+    cur := asmlist.предыдущ(туПунктАсм);
     ПОКА cur # ПУСТО ДЕЛАТЬ
       flag := ЛОЖЬ;
       ВЫБОР cur.tcmd ИЗ
       |PUSHEAX:
-        flag := cur.следующ(ASMLINE).tcmd = POPEAX
+        flag := cur.следующ(туПунктАсм).tcmd = POPEAX
       |PUSHECX:
-        flag := cur.следующ(ASMLINE).tcmd = POPECX
+        flag := cur.следующ(туПунктАсм).tcmd = POPECX
       |PUSHEDX:
-        flag := cur.следующ(ASMLINE).tcmd = POPEDX
+        flag := cur.следующ(туПунктАсм).tcmd = POPEDX
       ИНАЧЕ
       КОНЕЦ;
       ЕСЛИ flag ТОГДА
         cur.clen := 0;
         cur.tcmd := 0;
-        cur := cur.следующ(ASMLINE);
+        cur := cur.следующ(туПунктАсм);
         cur.clen := 0;
         cur.tcmd := 0
       КОНЕЦ;
-      cur := cur.следующ(ASMLINE)
+      cur := cur.следующ(туПунктАсм)
     КОНЕЦ
   КОНЕЦ Optimization;
 
@@ -1579,7 +1588,7 @@
   ПЕРЕМ
     Header: KOSHEADER;
     F, i, filesize, filebuf, a, sec, adr, size2: INTEGER;
-    cur: ASMLINE;
+    cur: туПунктАсм;
     Coff: COFFHEADER;
     sym: МАССИВ 18 * 4 ИЗ CHAR;
     FileName: мСтр.тСтрока;
@@ -1604,10 +1613,10 @@
 
       Write(mSys.ADR(Header), mSys.SIZE(KOSHEADER));
 
-      cur := asmlist.предыдущ(ASMLINE);
+      cur := asmlist.предыдущ(туПунктАсм);
       ПОКА cur # ПУСТО ДЕЛАТЬ
         Write(mSys.ADR(Code[cur.cmd]), cur.clen);
-        cur := cur.следующ(ASMLINE)
+        cur := cur.следующ(туПунктАсм)
       КОНЕЦ;
       Fill(Align(size, 4) - size, 0X);
       Write(mSys.ADR(Data), datasize);
@@ -1654,7 +1663,7 @@
 
       size := Align(size2, 4);
       rcount := 0;
-      cur := asmlist.предыдущ(ASMLINE);
+      cur := asmlist.предыдущ(туПунктАсм);
       ПОКА cur # ПУСТО ДЕЛАТЬ
         ЕСЛИ cur.tcmd IN {OCMD, GCMD} ТОГДА
           mSys.GET(mSys.ADR(Code[cur.cmd]), a);
@@ -1677,7 +1686,7 @@
           mSys.PUT(mSys.ADR(Reloc[rcount]), 00X); INC(rcount);
         КОНЕЦ;
         Write(mSys.ADR(Code[cur.cmd]), cur.clen);
-        cur := cur.следующ(ASMLINE)
+        cur := cur.следующ(туПунктАсм)
       КОНЕЦ;
       size := size2;
       Fill(Align(size, 4) - size2, 0X);
@@ -1704,7 +1713,9 @@
 
 ПРОЦЕДУРА WriteELF(FName: МАССИВ ИЗ CHAR; code, data, glob: INTEGER);
   ПЕРЕМ
-    F, res, delta, filebuf: INTEGER; cur: ASMLINE; bytes: МАССИВ 817H + 55FH + 4900 ИЗ CHAR;
+    F, res, delta, filebuf: INTEGER;
+    cur: туПунктАсм;
+    bytes: МАССИВ 817H + 55FH + 4900 ИЗ CHAR;
     ПРОЦЕДУРА Add(offset: INTEGER);
     ПЕРЕМ m: INTEGER;
     НАЧАЛО
@@ -1769,10 +1780,10 @@
 
     Write(mSys.ADR(bytes), 817H);
     Fill(2DDH, 90X);
-    cur := asmlist.предыдущ(ASMLINE);
+    cur := asmlist.предыдущ(туПунктАсм);
     ПОКА cur # ПУСТО ДЕЛАТЬ
       Write(mSys.ADR(Code[cur.cmd]), cur.clen);
-      cur := cur.следующ(ASMLINE)
+      cur := cur.следующ(туПунктАсм)
     КОНЕЦ;
     Fill(Align(code, 1000H) - code, 90X);
     Write(mSys.ADR(bytes[817H]), 55FH);
@@ -1789,7 +1800,11 @@
   КОНЕЦ WriteELF;
 
 ПРОЦЕДУРА FixLabels(FName: МАССИВ ИЗ CHAR; stk, gsize, glob: INTEGER);
-  ПЕРЕМ size, asize, i, rdatasize, RCount, n, temp, temp2, temp3: INTEGER; cur: ASMLINE; R: RELOC; c: CHAR;
+  ПЕРЕМ
+    size, asize, i, rdatasize, RCount, n, temp, temp2, temp3: INTEGER;
+    cur: туПунктАсм;
+    R: RELOC;
+    c: CHAR;
   НАЧАЛО
     dcount := Align(dcount, 4);
     ЕСЛИ dll ТОГДА
@@ -1814,39 +1829,39 @@
 
     Optimization;
     temp2 := size;
-    cur := asmlist.предыдущ(ASMLINE);
+    cur := asmlist.предыдущ(туПунктАсм);
     ПОКА cur # ПУСТО ДЕЛАТЬ
       cur.adr := size;
       ЕСЛИ cur.tcmd = LCMD ТОГДА
         mSys.PUT(cur.varadr, size)
       КОНЕЦ;
       size := size + cur.clen;
-      cur := cur.следующ(ASMLINE)
+      cur := cur.следующ(туПунктАсм)
     КОНЕЦ;
 
     size := temp2;
-    cur := asmlist.предыдущ(ASMLINE);
+    cur := asmlist.предыдущ(туПунктАсм);
     ПОКА cur # ПУСТО ДЕЛАТЬ
       cur.adr := size;
       ЕСЛИ cur.tcmd = LCMD ТОГДА
         mSys.PUT(cur.varadr, size)
       АЕСЛИ (cur.tcmd = JCMD) & cur.short ТОГДА
         mSys.GET(cur.varadr, i);
-        temp3 := i - cur.следующ(ASMLINE).adr;
+        temp3 := i - cur.следующ(туПунктАсм).adr;
         ЕСЛИ (-131 <= temp3) & (temp3 <= 123) ТОГДА
-          mSys.GET(cur(ASMLINE).codeadr - 1, c);
+          mSys.GET(cur(туПунктАсм).codeadr - 1, c);
           ЕСЛИ c = JMP ТОГДА
-            mSys.PUT(cur(ASMLINE).codeadr - 1, 0EBX)
+            mSys.PUT(cur(туПунктАсм).codeadr - 1, 0EBX)
           ИНАЧЕ (*JE, JNE, JLE, JGE, JG, JL*)
-            mSys.PUT(cur(ASMLINE).codeadr - 2, ORD(c) - 16);
-            mSys.PUT(cur(ASMLINE).codeadr - 1, temp3);
-            DEC(cur(ASMLINE).codeadr)
+            mSys.PUT(cur(туПунктАсм).codeadr - 2, ORD(c) - 16);
+            mSys.PUT(cur(туПунктАсм).codeadr - 1, temp3);
+            DEC(cur(туПунктАсм).codeadr)
           КОНЕЦ;
           cur.clen := 2
         КОНЕЦ
       КОНЕЦ;
       size := size + cur.clen;
-      cur := cur.следующ(ASMLINE)
+      cur := cur.следующ(туПунктАсм)
     КОНЕЦ;
 
     ЕСЛИ dll ИЛИ con ИЛИ gui ТОГДА
@@ -1889,7 +1904,7 @@
       R.Size := 0;
       RCount := 0;
     КОНЕЦ;
-    cur := asmlist.предыдущ(ASMLINE);
+    cur := asmlist.предыдущ(туПунктАсм);
 
     ДЛЯ i := 0 ДО LEN(RtlProc) - 1 ДЕЛАТЬ
       RtlProc[i] := Labels[RtlProc[i]]
@@ -1900,7 +1915,7 @@
       ВЫБОР cur.tcmd ИЗ
       |JCMD:
         mSys.GET(cur.varadr, i);
-        mSys.PUT(cur.codeadr, i - cur.следующ(ASMLINE).adr)
+        mSys.PUT(cur.codeadr, i - cur.следующ(туПунктАсм).adr)
       |GCMD:
         mSys.GET(cur.codeadr, i);
         mSys.PUT(cur.codeadr, i + temp3)
@@ -1924,7 +1939,7 @@
           RCount := 1
         КОНЕЦ
       КОНЕЦ;
-      cur := cur.следующ(ASMLINE)
+      cur := cur.следующ(туПунктАсм)
     КОНЕЦ;
     ЕСЛИ R.Size # 0 ТОГДА
       PutReloc(R)
@@ -1979,7 +1994,7 @@
           PushInt(RTABLE);
           PushInt(SELFNAME);
           CallRTL(_init);
-          current := asmlist.следующ(ASMLINE);
+          current := asmlist.следующ(туПунктАсм);
           ЕСЛИ dll ТОГДА
                 OutCode("B801000000C9C20C00")
           КОНЕЦ;

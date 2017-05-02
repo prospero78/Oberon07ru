@@ -887,7 +887,7 @@
 ѕ–ќ÷≈ƒ”–ј Factor(ѕ≈– e: DECL.т¬ыражение);
   ѕ≈–≈ћ
     line, col, ccall, p: INTEGER;
-    begcall: X86.ASMLINE;
+    begcall: X86.туѕунктјсм;
     s, str2: DECL.ту онст—тр;
   Ќј„јЋќ
     e.eType := eCONST;
@@ -1204,7 +1204,7 @@
     a: DECL.т¬ыражение;
     Op, line, col, line2, col2, fpu: INTEGER;
     T: DECL.ту“ип;
-    beg: X86.ASMLINE;
+    beg: X86.туѕунктјсм;
     s: DECL.ту онст—тр;
   Ќј„јЋќ
     fpu := X86.fpu;
@@ -1509,7 +1509,7 @@
     Value: LONGREAL;
     T: DECL.ту“ип;
     str: DECL.ту онст—тр;
-    begcall: X86.ASMLINE;
+    begcall: X86.туѕунктјсм;
   Ќј„јЋќ
     Coord(line2, col2);
     Check(lxLRound);
@@ -1735,7 +1735,7 @@
   ѕ≈–≈ћ
     e1, e2: DECL.т¬ыражение;
     line, col, ccall: INTEGER;
-    begcall: X86.ASMLINE;
+    begcall: X86.туѕунктјсм;
     s: DECL.ту онст—тр;
   Ќј„јЋќ
     Coord(line, col);
