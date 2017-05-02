@@ -224,9 +224,9 @@
         ВЕРНУТЬ result
     КОНЕЦ Letter;
 
-ПРОЦЕДУРА Digit*(ch: CHAR): BOOLEAN;
+ПРОЦЕДУРА Цифра_Проверить*(ch: CHAR): BOOLEAN;
         ВЕРНУТЬ (ch >= "0") & (ch <= "9")
-    КОНЕЦ Digit;
+    КОНЕЦ Цифра_Проверить;
 
 ПРОЦЕДУРА Число16_Получ*(ch: CHAR): BOOLEAN;
         ВЕРНУТЬ (ch >= "A") & (ch <= "F") ИЛИ (ch >= "0") & (ch <= "9")
@@ -249,7 +249,7 @@
 ПРОЦЕДУРА Имя_Получ;
     НАЧАЛО
         tLex := lxIDENT;
-        ПОКА Letter(ch) ИЛИ Digit(ch) ДЕЛАТЬ
+        ПОКА Letter(ch) ИЛИ Цифра_Проверить(ch) ДЕЛАТЬ
             PutNext(ch)
         КОНЕЦ;
         PutChar(0X);
@@ -362,7 +362,7 @@
             d := 1.0D0;
             nez := ЛОЖЬ;
             cont := ИСТИНА;
-            ПОКА cont & Digit(str[i]) ДЕЛАТЬ
+            ПОКА cont & Цифра_Проверить(str[i]) ДЕЛАТЬ
             nez := nez ИЛИ (str[i] # "0");
             res := res * 10.0D0 + LONG(FLT(ORD(str[i]) - ORD("0")));
             Inf(cont, i)
@@ -375,7 +375,7 @@
         НАЧАЛО
             INC(i);
             cont := ИСТИНА;
-            ПОКА cont & Digit(str[i]) ДЕЛАТЬ
+            ПОКА cont & Цифра_Проверить(str[i]) ДЕЛАТЬ
             nez := nez ИЛИ (str[i] # "0");
             d := d / 10.0D0;
             res := res + LONG(FLT(ORD(str[i]) - ORD("0"))) * d;
@@ -416,7 +416,7 @@
             КОНЕЦ;
             scale := 0;
             cont := ИСТИНА;
-            ПОКА cont & Digit(str[i]) ДЕЛАТЬ
+            ПОКА cont & Цифра_Проверить(str[i]) ДЕЛАТЬ
               ЕСЛИ scale > мКонст.целое_макс DIV 10 ТОГДА
                 Error(lxERR8, cont)
               ИНАЧЕ
@@ -462,7 +462,7 @@
         nextchr: CHAR;
     НАЧАЛО
         tLex := lxINT;
-        ПОКА Digit(ch) ДЕЛАТЬ
+        ПОКА Цифра_Проверить(ch) ДЕЛАТЬ
             PutNext(ch)
         КОНЕЦ;
         ЕСЛИ ch = "H" ТОГДА
@@ -491,7 +491,7 @@
                 ЕСЛИ nextchr # "." ТОГДА
                     tLex := lxREAL;
                     PutNext(ch);
-                    ПОКА Digit(ch) ДЕЛАТЬ
+                    ПОКА Цифра_Проверить(ch) ДЕЛАТЬ
                         PutNext(ch)
                     КОНЕЦ;
                     ЕСЛИ (ch = "E") ИЛИ (ch = "D") ТОГДА
@@ -499,10 +499,10 @@
                         ЕСЛИ (ch = "+") ИЛИ (ch = "-") ТОГДА
                             PutNext(ch)
                         КОНЕЦ;
-                        ЕСЛИ ~Digit(ch) ТОГДА
+                        ЕСЛИ ~Цифра_Проверить(ch) ТОГДА
                             tLex := lxERR2
                         ИНАЧЕ
-                            ПОКА Digit(ch) ДЕЛАТЬ
+                            ПОКА Цифра_Проверить(ch) ДЕЛАТЬ
                                 PutNext(ch)
                             КОНЕЦ
                         КОНЕЦ
