@@ -221,7 +221,7 @@
 ПРОЦЕДУРА Assert*(cond: BOOLEAN; line, col, code: INTEGER);
   НАЧАЛО
     ЕСЛИ ~cond ТОГДА
-      мОш.ErrMsgPos(line, col, code);
+      мОш.ErrMsgPos(line, col, code, мФайл.файл.имя);
       мПроц.Закончить(1)
     КОНЕЦ
   КОНЕЦ Assert;
