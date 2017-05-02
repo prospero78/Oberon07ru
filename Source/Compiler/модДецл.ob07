@@ -128,7 +128,7 @@
       Len*, Number*: INTEGER
     йнмеж;
 
-  EXPRESSION* = гюохяэ
+  РбШПЮФЕМХЕ* = гюохяэ
       id*: РСхЛЪ;
       T*: РСрХО;
       eType*: INTEGER;
@@ -137,8 +137,8 @@
     йнмеж;
 
   opPROC = опнжедспю;
-  expPROC = опнжедспю (оеп e: EXPRESSION);
-  assPROC = опнжедспю (e: EXPRESSION; T: РСрХО; param: BOOLEAN): BOOLEAN;
+  expPROC = опнжедспю (оеп e: РбШПЮФЕМХЕ);
+  assPROC = опнжедспю (e: РбШПЮФЕМХЕ; T: РСрХО; param: BOOLEAN): BOOLEAN;
 
   stTYPES* = люяяхб 11 хг РСрХО;
 
@@ -603,7 +603,9 @@
   йнмеж Calc;
 
 опнжедспю ConstExpr*(оеп Value: LONGREAL; оеп T: РСрХО);
-  оепел e: EXPRESSION; line, col: INTEGER;
+  оепел
+    e: РбШПЮФЕМХЕ;
+    line, col: INTEGER;
   мювюкн
     Const := хярхмю;
     Coord(line, col);
@@ -1213,7 +1215,7 @@
     line, col, Call: INTEGER;
     Export, func: BOOLEAN;
     last, id: РСхЛЪ;
-    e: EXPRESSION;
+    e: РбШПЮФЕМХЕ;
 
     опнжедспю IdentDef;
     мювюкн

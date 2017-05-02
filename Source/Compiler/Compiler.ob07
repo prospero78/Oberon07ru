@@ -65,12 +65,12 @@
 
 оепел
 
-  pExpr, pFactor: опнжедспю (оеп e: DECL.EXPRESSION);
+  pExpr, pFactor: опнжедспю (оеп e: DECL.РбШПЮФЕМХЕ);
   pOpSeq: опнжедспю;
   Lex: ЛяРП.РяРПНЙЮ;
   sttypes: DECL.stTYPES;
 
-опнжедспю Load(e: DECL.EXPRESSION);
+опнжедспю Load(e: DECL.РбШПЮФЕМХЕ);
   мювюкн
     еякх e.eType = eVAR рнцдю
       X86.Load(e.T.tType)
@@ -129,11 +129,11 @@
     бепмсрэ T0 = T1
   йнмеж BaseOf;
 
-опнжедспю Designator(оеп e: DECL.EXPRESSION);
+опнжедспю Designator(оеп e: DECL.РбШПЮФЕМХЕ);
   оепел
     id: DECL.РСхЛЪ;
     name: ЛрХОШ.РСсГЕК;
-    e1: DECL.EXPRESSION;
+    e1: DECL.РбШПЮФЕМХЕ;
     line, col, i, n, bases, glob, loc, idx: INTEGER;
     imp, break, guard: BOOLEAN;
     f: DECL.РСоНКЕ;
@@ -356,8 +356,11 @@
     LoadVar
   йнмеж Designator;
 
-опнжедспю Set(оеп e: DECL.EXPRESSION);
-  оепел a, b: DECL.EXPRESSION; line, col: INTEGER; s: SET; flag: BOOLEAN;
+опнжедспю Set(оеп e: DECL.РбШПЮФЕМХЕ);
+  оепел
+    a, b: DECL.РбШПЮФЕМХЕ;
+    line, col: INTEGER;
+    s: SET; flag: BOOLEAN;
   мювюкн
     Next;
     e.eType := eEXP;
@@ -409,12 +412,13 @@
     Next
   йнмеж Set;
 
-опнжедспю IsString(a: DECL.EXPRESSION): BOOLEAN;
+опнжедспю IsString(a: DECL.РбШПЮФЕМХЕ): BOOLEAN;
     бепмсрэ (a.T.tType = TSTRING) хкх (a.T.tType = TARRAY) & (a.T.Base.tType = TCHAR)
   йнмеж IsString;
 
-опнжедспю Str(e: DECL.EXPRESSION);
-  оепел A: X86.TIDX;
+опнжедспю Str(e: DECL.РбШПЮФЕМХЕ);
+  оепел
+    A: X86.TIDX;
   мювюкн
     еякх (e.T.tType = TARRAY) & (e.T.Base.tType = TCHAR) & (e.T.Len # 0) рнцдю
       A[0] := e.T.Len;
@@ -427,10 +431,10 @@
     йнмеж
   йнмеж Str;
 
-опнжедспю StFunc(оеп e: DECL.EXPRESSION; func: INTEGER);
+опнжедспю StFunc(оеп e: DECL.РбШПЮФЕМХЕ; func: INTEGER);
   оепел
     line, col, line2, col2, a, b, p: INTEGER;
-    e1, e2: DECL.EXPRESSION;
+    e1, e2: DECL.РбШПЮФЕМХЕ;
     T: DECL.РСрХО;
     str, str2: DECL.РСйНМЯРяРП;
   мювюкн
@@ -738,8 +742,9 @@
     бепмсрэ Res
   йнмеж ArrComp;
 
-опнжедспю AssComp(e: DECL.EXPRESSION; T: DECL.РСрХО; param: BOOLEAN): BOOLEAN;
-  оепел Res: BOOLEAN;
+опнжедспю AssComp(e: DECL.РбШПЮФЕМХЕ; T: DECL.РСрХО; param: BOOLEAN): BOOLEAN;
+  оепел
+    Res: BOOLEAN;
   мювюкн
     бшанп T.tType хг
     |TINTEGER, TREAL, TLONGREAL, TSET, TBOOLEAN, TCARD16:
@@ -784,8 +789,9 @@
     бепмсрэ Res
   йнмеж AssComp;
 
-опнжедспю ParamComp(e: DECL.EXPRESSION; T: DECL.РСрХО; ByRef: BOOLEAN): BOOLEAN;
-  оепел Res: BOOLEAN;
+опнжедспю ParamComp(e: DECL.РбШПЮФЕМХЕ; T: DECL.РСрХО; ByRef: BOOLEAN): BOOLEAN;
+  оепел
+    Res: BOOLEAN;
   мювюкн
     еякх ByRef рнцдю
       еякх e.eType = eVAR рнцдю
@@ -817,7 +823,7 @@
 опнжедспю Call(param: DECL.РСоНКЕ);
   оепел
     line, col, i, n: INTEGER;
-    e1: DECL.EXPRESSION;
+    e1: DECL.РбШПЮФЕМХЕ;
     s: DECL.РСйНМЯРяРП;
     A: X86.TIDX;
     TA: DECL.РСрХО;
@@ -878,7 +884,7 @@
     Next
   йнмеж Call;
 
-опнжедспю Factor(оеп e: DECL.EXPRESSION);
+опнжедспю Factor(оеп e: DECL.РбШПЮФЕМХЕ);
   оепел
     line, col, ccall, p: INTEGER;
     begcall: X86.ASMLINE;
@@ -998,11 +1004,11 @@
     йнмеж
   йнмеж Factor;
 
-опнжедспю IsChr(a: DECL.EXPRESSION): BOOLEAN;
+опнжедспю IsChr(a: DECL.РбШПЮФЕМХЕ): BOOLEAN;
     бепмсрэ (a.T.tType = TSTRING) & (LenString(a.Value) = 1) хкх (a.T.tType = TCHAR)
   йнмеж IsChr;
 
-опнжедспю StrRel(a, b: DECL.EXPRESSION; Op: INTEGER);
+опнжедспю StrRel(a, b: DECL.РбШПЮФЕМХЕ; Op: INTEGER);
   мювюкн
     еякх ~(IsChr(a) хкх IsChr(b)) рнцдю
       X86.strcmp(Op, 0)
@@ -1030,7 +1036,7 @@
     бепмсрэ i
   йнмеж log2;
 
-опнжедспю Operation(оеп a, b: DECL.EXPRESSION; Op, line, col: INTEGER);
+опнжедспю Operation(оеп a, b: DECL.РбШПЮФЕМХЕ; Op, line, col: INTEGER);
   оепел n, m: INTEGER;
   мювюкн
     бшанп Op хг
@@ -1111,8 +1117,10 @@
     a.vparam := кнфэ
   йнмеж Operation;
 
-опнжедспю Term(оеп e: DECL.EXPRESSION);
-  оепел a: DECL.EXPRESSION; Op, line, col, L: INTEGER;
+опнжедспю Term(оеп e: DECL.РбШПЮФЕМХЕ);
+  оепел
+    a: DECL.РбШПЮФЕМХЕ;
+    Op, line, col, L: INTEGER;
   мювюкн
     Factor(e);
     онйю (ЛяЙЮМ.tLex = lxMult) хкх (ЛяЙЮМ.tLex = lxSlash) хкх
@@ -1135,8 +1143,10 @@
     йнмеж
   йнмеж Term;
 
-опнжедспю Simple(оеп e: DECL.EXPRESSION);
-  оепел a: DECL.EXPRESSION; Op, line, col, uOp, uline, ucol, L: INTEGER;
+опнжедспю Simple(оеп e: DECL.РбШПЮФЕМХЕ);
+  оепел
+    a: DECL.РбШПЮФЕМХЕ;
+    Op, line, col, uOp, uline, ucol, L: INTEGER;
   мювюкн
     uOp := 0;
     еякх (ЛяЙЮМ.tLex = lxPlus) хкх (ЛяЙЮМ.tLex = lxMinus) рнцдю
@@ -1189,9 +1199,9 @@
     йнмеж
   йнмеж Simple;
 
-опнжедспю Expr(оеп e: DECL.EXPRESSION);
+опнжедспю Expr(оеп e: DECL.РбШПЮФЕМХЕ);
   оепел
-    a: DECL.EXPRESSION;
+    a: DECL.РбШПЮФЕМХЕ;
     Op, line, col, line2, col2, fpu: INTEGER;
     T: DECL.РСрХО;
     beg: X86.ASMLINE;
@@ -1263,7 +1273,9 @@
   йнмеж Expr;
 
 опнжедспю IfWhileOper(wh: BOOLEAN);
-  оепел e: DECL.EXPRESSION; line, col, L, L3: INTEGER;
+  оепел
+    e: DECL.РбШПЮФЕМХЕ;
+    line, col, L, L3: INTEGER;
   мювюкн
     L := X86.NewLabel();
     еякх wh рнцдю
@@ -1299,7 +1311,9 @@
   йнмеж IfWhileOper;
 
 опнжедспю RepeatOper;
-  оепел e: DECL.EXPRESSION; line, col, L: INTEGER;
+  оепел
+    e: DECL.РбШПЮФЕМХЕ;
+    line, col, L: INTEGER;
   мювюкн
     Next;
     L := X86.NewLabel();
@@ -1316,7 +1330,7 @@
 
 опнжедспю ForOper;
   оепел
-    e: DECL.EXPRESSION;
+    e: DECL.РбШПЮФЕМХЕ;
     line, col, LBeg, LEnd, iValue: INTEGER;
     Value: LONGREAL;
     T: DECL.РСрХО;
@@ -1443,7 +1457,7 @@
 
 опнжедспю CaseOper;
   оепел
-    e: DECL.EXPRESSION;
+    e: DECL.РбШПЮФЕМХЕ;
     int: BOOLEAN;
     line, col, EndCase: INTEGER;
     Labels: ЛрХОШ.РСяОХЯНЙ;
@@ -1491,7 +1505,7 @@
 опнжедспю StProc(proc: INTEGER);
   оепел
     line, col, line2, col2, iValue: INTEGER;
-    e1, e2: DECL.EXPRESSION;
+    e1, e2: DECL.РбШПЮФЕМХЕ;
     Value: LONGREAL;
     T: DECL.РСрХО;
     str: DECL.РСйНМЯРяРП;
@@ -1719,7 +1733,7 @@
 
 опнжедспю IdentOper;
   оепел
-    e1, e2: DECL.EXPRESSION;
+    e1, e2: DECL.РбШПЮФЕМХЕ;
     line, col, ccall: INTEGER;
     begcall: X86.ASMLINE;
     s: DECL.РСйНМЯРяРП;
