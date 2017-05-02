@@ -30,7 +30,8 @@
     мПам := модПамять,
     мПроц := модПроцесс,
     мОш := модОшибки,
-    мСтр := модСтроки;
+    мСтр := модСтроки,
+    мСпис := модСписок;
 
 КОНСТ
 
@@ -1152,7 +1153,7 @@
       cur.Ptr.Base := id.T;
       cur := cur.следующ(PTRBASE)
     КОНЕЦ;
-    мУтиль.Clear(PtrBases)
+    мСпис.Clear(PtrBases)
   КОНЕЦ LinkPtr;
 
 ПРОЦЕДУРА DeclSeq;
@@ -1189,7 +1190,7 @@
       КОНЕЦ
     КОНЕЦ;
     ЕСЛИ мСкан.tLex = мКонст.ксТИПЫ ТОГДА
-      мУтиль.Clear(PtrBases);
+      мСпис.Clear(PtrBases);
       unit.typedecl := ИСТИНА;
       Next;
       ПОКА мСкан.tLex = lxIDENT ДЕЛАТЬ
@@ -1490,7 +1491,7 @@
       Next; Check(lxDot);
       X86.Leave;
       unit.Closed := ИСТИНА;
-      мУтиль.Clear(unit.Import);
+      мСпис.Clear(unit.Import);
       Res := ИСТИНА
     КОНЕЦ
     ВЕРНУТЬ Res
