@@ -31,7 +31,8 @@
     мПроц := модПроцесс,
     мОш := модОшибки,
     мСтр := модСтроки,
-    мСпис := модСписок;
+    мСпис := модСписок,
+    мПров := модПроверка;
 
 КОНСТ
 
@@ -178,7 +179,7 @@
     ВЕРНУТЬ str
   КОНЕЦ Стр_Получ;
 
-ПРОЦЕДУРА AddString*(str: мСтр.тСтрока): туКонстСтр;
+ПРОЦЕДУРА Стр_Создать*(str: мСтр.тСтрока): туКонстСтр;
   ПЕРЕМ
     nov: туКонстСтр;
   НАЧАЛО
@@ -190,7 +191,7 @@
     мСпис.Добавить(Strings, nov);
     X86.String(nov.Number, nov.Len, nov.Str)
     ВЕРНУТЬ nov
-  КОНЕЦ AddString;
+  КОНЕЦ Стр_Создать;
 
 ПРОЦЕДУРА AddMono*(c: CHAR): туКонстСтр;
   ПЕРЕМ
@@ -228,18 +229,10 @@
     ВЕРНУТЬ res
   КОНЕЦ GetModule;
 
-ПРОЦЕДУРА Assert*(cond: BOOLEAN; line, col, code: INTEGER);
-  НАЧАЛО
-    ЕСЛИ ~cond ТОГДА
-      мОш.ErrMsgPos(line, col, code, мФайл.файл.имя);
-      мПроц.Закончить(1)
-    КОНЕЦ
-  КОНЕЦ Assert;
-
 ПРОЦЕДУРА Assert2(cond: BOOLEAN; code: INTEGER);
   НАЧАЛО
     ЕСЛИ ~cond ТОГДА
-      Assert(ЛОЖЬ, мСкан.line, мСкан.col, code)
+      мПров.Тест(ЛОЖЬ, мСкан.line, мСкан.col, code)
     КОНЕЦ
   КОНЕЦ Assert2;
 
@@ -247,7 +240,7 @@
   НАЧАЛО
     мСкан.Лексема_Получ;
     ЕСЛИ (мСкан.tLex > lxERR0) & (мСкан.tLex < lxERR20) ТОГДА
-      Assert(ЛОЖЬ, мСкан.line, мСкан.col + мСкан.count, мСкан.tLex - lxERR0)
+      мПров.Тест(ЛОЖЬ, мСкан.line, мСкан.col + мСкан.count, мСкан.tLex - lxERR0)
     КОНЕЦ;
     Assert2(мСкан.tLex # lxEOF, 27)
   КОНЕЦ Next;
@@ -311,7 +304,7 @@
     ident: туИмя;
     i: INTEGER;
   НАЧАЛО
-    Assert(CheckIdent(Name), line, col, 30);
+    мПров.Тест(CheckIdent(Name), line, col, 30);
     NEW(ident);
     ПамОш_Проверить(ident = ПУСТО);
     ident.Name := Name;
@@ -478,28 +471,31 @@
     |lxMinus: res := a - b
     |lxMult: res := a * b
     |lxSlash:
-      Assert(b # 0.0D0, line, col, 46);
+      мПров.Тест(b # 0.0D0, line, col, 46);
       res := a / b
     |lxDIV:
-      Assert(~((a = LONG(FLT(мКонст.целое_мин))) & (b = -1.0D0)), line, col, IOVER);
+      мПров.Тест(~((a = LONG(FLT(мКонст.целое_мин))) & (b = -1.0D0)), line, col, IOVER);
       res := LONG(FLT(FLOOR(a) DIV FLOOR(b)))
     |lxMOD:
       res := LONG(FLT(FLOOR(a) MOD FLOOR(b)))
     ИНАЧЕ
     КОНЕЦ;
-    Assert(~мУтиль.Бесконеч(res), line, col, FOVER);
+    мПров.Тест(~мУтиль.Бесконеч(res), line, col, FOVER);
     ВЫБОР T.tType ИЗ
-    |TINTEGER:  Assert((res <= LONG(FLT(мКонст.целое_макс))) & (res >= LONG(FLT(мКонст.целое_мин))), line, col, IOVER)
-    |TREAL:     Assert((res <= LONG(мКонст.вещ_макс)) & (res >= -LONG(мКонст.вещ_макс)), line, col, FOVER)
-    |TLONGREAL: Assert((res <= max) & (res >= -max), line, col, FOVER)
+    |TINTEGER: 
+      мПров.Тест((res <= LONG(FLT(мКонст.целое_макс))) & (res >= LONG(FLT(мКонст.целое_мин))), line, col, IOVER)
+    |TREAL:     
+      мПров.Тест((res <= LONG(мКонст.вещ_макс)) & (res >= -LONG(мКонст.вещ_макс)), line, col, FOVER)
+    |TLONGREAL: 
+      мПров.Тест((res <= max) & (res >= -max), line, col, FOVER)
     ИНАЧЕ
     КОНЕЦ;
     ЕСЛИ (res = 0.0D0) & (T.tType IN {TREAL, TLONGREAL}) ИЛИ (ABS(res) < LONG(мКонст.вещ_мин)) & (T.tType = TREAL) ТОГДА
       ВЫБОР Op ИЗ
-      |lxPlus:  Assert(a = -b, line, col, UNDER)
-      |lxMinus: Assert(a = b, line, col, UNDER)
-      |lxMult:  Assert((a = 0.0D0) ИЛИ (b = 0.0D0), line, col, UNDER)
-      |lxSlash: Assert((a = 0.0D0), line, col, UNDER)
+      |lxPlus:  мПров.Тест(a = -b, line, col, UNDER)
+      |lxMinus: мПров.Тест(a = b, line, col, UNDER)
+      |lxMult:  мПров.Тест((a = 0.0D0) ИЛИ (b = 0.0D0), line, col, UNDER)
+      |lxSlash: мПров.Тест((a = 0.0D0), line, col, UNDER)
       ИНАЧЕ
       КОНЕЦ
     КОНЕЦ
@@ -528,11 +524,11 @@
     ai := FLOOR(a);
     bi := FLOOR(b);
     ЕСЛИ Op # мКонст.ксВ ТОГДА
-      Assert(Ta = Tb, line, col, 37)
+      мПров.Тест(Ta = Tb, line, col, 37)
     КОНЕЦ;
     ВЫБОР Op ИЗ
     |lxPlus, lxMinus, lxMult, lxSlash:
-      Assert(~((Op = lxSlash) & (Ta.tType = TINTEGER)), line, col, 37);
+      мПров.Тест(~((Op = lxSlash) & (Ta.tType = TINTEGER)), line, col, 37);
       ЕСЛИ Ta.tType IN {TINTEGER, TREAL, TLONGREAL} ТОГДА
         Res := Arith(a, b, Ta, Op, line, col)
       АЕСЛИ Ta.tType = TSET ТОГДА
@@ -544,19 +540,19 @@
         ИНАЧЕ
         КОНЕЦ
       ИНАЧЕ
-        Assert(ЛОЖЬ, line, col, 37)
+        мПров.Тест(ЛОЖЬ, line, col, 37)
       КОНЕЦ;
       TRes := Ta
     |lxDIV, lxMOD:
-      Assert(Ta.tType = TINTEGER, line, col, 37);
-      Assert(bi # 0, line, col, 48);
+      мПров.Тест(Ta.tType = TINTEGER, line, col, 37);
+      мПров.Тест(bi # 0, line, col, 48);
       TRes := Ta;
       Res := Arith(a, b, Ta, Op, line, col)
     |lxAnd:
-      Assert(Ta.tType = TBOOLEAN, line, col, 37);
+      мПров.Тест(Ta.tType = TBOOLEAN, line, col, 37);
       Res := LONG(FLT(ORD((ai # 0) & (bi # 0))))
     |мКонст.lxOR:
-      Assert(Ta.tType = TBOOLEAN, line, col, 37);
+      мПров.Тест(Ta.tType = TBOOLEAN, line, col, 37);
       Res := LONG(FLT(ORD((ai # 0) ИЛИ (bi # 0))))
     |lxEQ, lxNE:
       ЕСЛИ Ta.tType = TSTRING ТОГДА
@@ -573,7 +569,7 @@
         a := b;
         b := c
       КОНЕЦ;
-      Assert(Ta.tType IN {TSTRING, TINTEGER, TREAL, TLONGREAL}, line, col, 37);
+      мПров.Тест(Ta.tType IN {TSTRING, TINTEGER, TREAL, TLONGREAL}, line, col, 37);
       ЕСЛИ Ta.tType = TSTRING ТОГДА
         Res := strcmp(a, b, Op)
       ИНАЧЕ
@@ -585,7 +581,7 @@
         a := b;
         b := c
       КОНЕЦ;
-      Assert(Ta.tType IN {TSTRING, TINTEGER, TREAL, TLONGREAL, TSET}, line, col, 37);
+      мПров.Тест(Ta.tType IN {TSTRING, TINTEGER, TREAL, TLONGREAL, TSET}, line, col, 37);
       ЕСЛИ Ta.tType = TSTRING ТОГДА
         Res := strcmp(a, b, Op)
       АЕСЛИ Ta.tType = TSET ТОГДА
@@ -594,8 +590,8 @@
         Res := LONG(FLT(ORD(a <= b)))
       КОНЕЦ
     |мКонст.ксВ:
-      Assert((Ta.tType = TINTEGER) & (Tb.tType = TSET), line, col, 37);
-      Assert(ASR(ai, 5) = 0, line, col, 49);
+      мПров.Тест((Ta.tType = TINTEGER) & (Tb.tType = TSET), line, col, 37);
+      мПров.Тест(ASR(ai, 5) = 0, line, col, 49);
       Res := LONG(FLT(ORD(ai IN BITS(bi))))
     ИНАЧЕ
     КОНЕЦ;
@@ -613,7 +609,7 @@
     Coord(line, col);
     sizefunc := ЛОЖЬ;
     Expr(e);
-    Assert(~sizefunc & (e.eType = eCONST), line, col, 62);
+    мПров.Тест(~sizefunc & (e.eType = eCONST), line, col, 62);
     Value := e.Value;
     T := e.T;
     Const := ЛОЖЬ
@@ -797,8 +793,8 @@
         Coord(line, col);
         id_T := мСкан.tLex = lxIDENT;
         Tf:= pParseType(line, col);
-        Assert(Tf # ПУСТО, line, col, 42);
-        Assert(notrecurs(id_T, Tf), line, col, 96);
+        мПров.Тест(Tf # ПУСТО, line, col, 42);
+        мПров.Тест(notrecurs(id_T, Tf), line, col, 96);
         SetFields(T, Tf, ИСТИНА);
         ЕСЛИ мСкан.tLex = lxSemi ТОГДА
           Next;
@@ -833,7 +829,7 @@
     ПОКА cur # ПУСТО ДЕЛАТЬ
       cur.T := T;
       ЕСЛИ cur.Export ТОГДА
-        Assert(~(T.tType IN {TRECORD, TARRAY}), cur.line, cur.col, 90)
+        мПров.Тест(~(T.tType IN {TRECORD, TARRAY}), cur.line, cur.col, 90)
       КОНЕЦ;
       ЕСЛИ(cur.VarKind = paramvar) ИЛИ (cur.VarKind = param) & (T.tType IN {TRECORD, TARRAY}) ТОГДА
         n := 4 * (1 + Dim(T) + ORD((cur.VarKind = paramvar) & (T.tType = TRECORD)))
@@ -902,7 +898,7 @@
     ИНАЧЕ
       Check(lxIDENT);
       TA := IdType(line, col);
-      Assert(TA # ПУСТО, line, col, 42);
+      мПров.Тест(TA # ПУСТО, line, col, 42);
     КОНЕЦ
     ВЕРНУТЬ TA
   КОНЕЦ FormalType;
@@ -955,7 +951,7 @@
       АЕСЛИ мСкан.tLex = lxColon ТОГДА
         Next;
         Tf := FormalType(line, col);
-        Assert(Dim(Tf) <= X86.ADIM, line, col, 110);
+        мПров.Тест(Dim(Tf) <= X86.ADIM, line, col, 110);
         SetFields(T, Tf, ЛОЖЬ);
         ЕСЛИ proc ТОГДА
           SetVars(Tf)
@@ -1007,8 +1003,8 @@
         Next;
         Check(lxIDENT);
         Res := IdType(line, col);
-        Assert(Res # ПУСТО, line, col, 42);
-        Assert(~(Res.tType IN {TRECORD, TARRAY}), line, col, 82)
+        мПров.Тест(Res # ПУСТО, line, col, 42);
+        мПров.Тест(~(Res.tType IN {TRECORD, TARRAY}), line, col, 82)
       КОНЕЦ
     КОНЕЦ
   КОНЕЦ FormalList;
@@ -1081,8 +1077,8 @@
       Next;
       Coord(line, col);
       ConstExpr(v, T);
-      Assert(T.tType = TINTEGER, line, col, 52);
-      Assert(v > 0.0D0, line, col, 78);
+      мПров.Тест(T.tType = TINTEGER, line, col, 52);
+      мПров.Тест(v > 0.0D0, line, col, 78);
       nov := CreateType(TARRAY, FLOOR(v), 0, 0, ПУСТО, ЛОЖЬ, NewType);
       ЕСЛИ мСкан.tLex = lxComma ТОГДА
         nov.Base := StructType(ИСТИНА, ПУСТО)
@@ -1091,8 +1087,8 @@
         Coord(line, col);
         id_T := мСкан.tLex = lxIDENT;
         nov.Base := pParseType(line, col);
-        Assert(nov.Base # ПУСТО, line, col, 42);
-        Assert(notrecurs(id_T, nov.Base), line, col, 96)
+        мПров.Тест(nov.Base # ПУСТО, line, col, 42);
+        мПров.Тест(notrecurs(id_T, nov.Base), line, col, 96)
       ИНАЧЕ
         Assert2(ЛОЖЬ, 79)
       КОНЕЦ;
@@ -1106,7 +1102,7 @@
       nov.Align := 1;
       Coord(line, col);
       ЕСЛИ RecFlag(nov.Rec) ТОГДА
-        Assert(unit.sys, line, col, 111)
+        мПров.Тест(unit.sys, line, col, 111)
       КОНЕЦ;
       Coord(line, col);
       ЕСЛИ мСкан.tLex = lxLRound ТОГДА
@@ -1114,15 +1110,15 @@
         Coord(line2, col2);
         Check(lxIDENT);
         nov.Base := IdType(line, col);
-        Assert(nov.Base # ПУСТО, line, col, 42);
-        Assert(nov.Base.tType = TRECORD, line, col, 80);
-        Assert(notrecurs(ИСТИНА, nov.Base), line, col, 96);
+        мПров.Тест(nov.Base # ПУСТО, line, col, 42);
+        мПров.Тест(nov.Base.tType = TRECORD, line, col, 80);
+        мПров.Тест(notrecurs(ИСТИНА, nov.Base), line, col, 96);
         nov.Size := nov.Base.Size;
         nov.Align := nov.Base.Align;
         Check(lxRRound);
         Next;
-        Assert(nov.Rec = record, line, col, 112);
-        Assert(nov.Base.Rec = record, line2, col2, 113)
+        мПров.Тест(nov.Rec = record, line, col, 112);
+        мПров.Тест(nov.Base.Rec = record, line2, col2, 113)
       КОНЕЦ;
       ReadFields(nov);
       Check(мКонст.ксКОНЕЦ);
@@ -1142,17 +1138,17 @@
       Coord(line, col);
       nov.Base := pParseType(line, col);
       ЕСЛИ nov.Base = ПУСТО ТОГДА
-        Assert(unit.typedecl, line, col, 42);
+        мПров.Тест(unit.typedecl, line, col, 42);
         AddPtrBase(NamePtrBase, line, col, nov)
       ИНАЧЕ
-        Assert(nov.Base.tType = TRECORD, line, col, 81)
+        мПров.Тест(nov.Base.tType = TRECORD, line, col, 81)
       КОНЕЦ
     |мКонст.ксПРОЦЕДУРА:
       Next;
       nov := CreateType(TPROC, 0, 4, 0, sttypes[TVOID], ИСТИНА, NewType);
       Coord(line, col);
       ЕСЛИ CallFlag(nov.Call) ТОГДА
-        Assert(unit.sys, line, col, 111)
+        мПров.Тест(unit.sys, line, col, 111)
       КОНЕЦ;
       nov.Align := 4;
       FormalList(nov, nov.Base)
@@ -1201,8 +1197,8 @@
     cur := PtrBases.предыдущ(PTRBASE);
     ПОКА cur # ПУСТО ДЕЛАТЬ
       id := GetIdent(cur.Name);
-      Assert(id # ПУСТО, cur.line, cur.col, 42);
-      Assert(id.T.tType = TRECORD, cur.line, cur.col, 81);
+      мПров.Тест(id # ПУСТО, cur.line, cur.col, 42);
+      мПров.Тест(id.T.tType = TRECORD, cur.line, cur.col, 81);
       cur.Ptr.Base := id.T;
       cur := cur.следующ(PTRBASE)
     КОНЕЦ;
@@ -1282,7 +1278,7 @@
           Next;
           Coord(line, col);
           T := ParseType(line, col);
-          Assert(T # ПУСТО, line, col, 42);
+          мПров.Тест(T # ПУСТО, line, col, 42);
           SetVars(T);
           Check(lxSemi);
           Next
@@ -1295,8 +1291,8 @@
       Next;
       Coord(line, col);
       ЕСЛИ CallFlag(Call) ТОГДА
-        Assert(unit.Level = 3, line, col, 45);
-        Assert(unit.sys, line, col, 111)
+        мПров.Тест(unit.Level = 3, line, col, 45);
+        мПров.Тест(unit.sys, line, col, 111)
       КОНЕЦ;
       Check(lxIDENT);
       IdentDef;
@@ -1304,7 +1300,7 @@
       id := unit.Idents.следующ(туИмя);
       ЕСЛИ id.Export & main ТОГДА
         ЕСЛИ Platform = 6 ТОГДА
-          Assert((Name # мСкан._START) & (Name # мСкан._version), line, col, 133)
+          мПров.Тест((Name # мСкан._START) & (Name # мСкан._version), line, col, 133)
         КОНЕЦ;
         X86.ProcExport(id.Number, Name, X86.NewLabel())
       КОНЕЦ;
@@ -1329,7 +1325,7 @@
         Next;
         Coord(line, col);
         Expr(e);
-        Assert(AssComp(e, curBlock.T.Base, ЛОЖЬ), line, col, 125);
+        мПров.Тест(AssComp(e, curBlock.T.Base, ЛОЖЬ), line, col, 125);
         ЕСЛИ e.eType = eVAR ТОГДА
           X86.Load(e.T.tType)
         КОНЕЦ
@@ -1407,7 +1403,7 @@
             unit := sys;
             self.sys := ИСТИНА
           ИНАЧЕ
-            Assert(ЛОЖЬ, nameline, namecol, 32)
+            мПров.Тест(ЛОЖЬ, nameline, namecol, 32)
           КОНЕЦ
         КОНЕЦ;
         мСкан.Вернуть(self.scanner);
@@ -1415,7 +1411,7 @@
         unit := self;
         мФайл.Имя_Уст(unit.File)
       ИНАЧЕ
-        Assert(u.Closed, nameline, namecol, 31)
+        мПров.Тест(u.Closed, nameline, namecol, 31)
       КОНЕЦ;
       PushIdent(alias, line, col, IDMOD, sttypes[TVOID], u, ЛОЖЬ, 0);
       NEW(str);

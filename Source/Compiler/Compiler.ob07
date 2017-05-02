@@ -29,7 +29,8 @@
     мОш := модОшибки,
     мПроц := модПроцесс,
     мСтр := модСтроки,
-    мСпис := модСписок;
+    мСпис := модСписок,
+    мПров := модПроверка;
 
 КОНСТ
 
@@ -93,14 +94,14 @@
 ПРОЦЕДУРА Assert(cond: BOOLEAN; line, col, code: INTEGER);
   НАЧАЛО
     ЕСЛИ ~cond ТОГДА
-      DECL.Assert(ЛОЖЬ, line, col, code)
+      мПров.Тест(ЛОЖЬ, line, col, code)
     КОНЕЦ
   КОНЕЦ Assert;
 
 ПРОЦЕДУРА Assert2(cond: BOOLEAN; code: INTEGER);
   НАЧАЛО
     ЕСЛИ ~cond ТОГДА
-      DECL.Assert(ЛОЖЬ, мСкан.line, мСкан.col, code)
+      мПров.Тест(ЛОЖЬ, мСкан.line, мСкан.col, code)
     КОНЕЦ
   КОНЕЦ Assert2;
 
@@ -946,7 +947,7 @@
     |lxCHX, lxSTRING:
       ЕСЛИ мСкан.tLex = lxSTRING ТОГДА
         мСкан.GetLexStr(Lex);
-        str2 := DECL.AddString(Lex);
+        str2 := DECL.Стр_Создать(Lex);
         SYSTEM.GET(SYSTEM.ADR(str2), p);
         e.Value := LONG(FLT(p));
         s := DECL.Стр_Получ(e.Value);
