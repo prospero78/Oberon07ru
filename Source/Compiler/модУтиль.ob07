@@ -143,20 +143,6 @@
     бепмсрэ a[i] = b[i]
   йнмеж streq;
 
-опнжедспю Revers(оеп str: ЛрХОШ.РяРПНЙЮ);
-  оепел a, b: INTEGER; c: CHAR;
-  мювюкн
-    a := 0;
-    b := LENGTH(str) - 1;
-    онйю a < b декюрэ
-      c := str[a];
-      str[a] := str[b];
-      str[b] := c;
-      INC(a);
-      DEC(b)
-    йнмеж
-  йнмеж Revers;
-
 опнжедспю Split*(FName: ЛрХОШ.РяРПНЙЮ; оеп Path, Name, Ext: ЛрХОШ.РяРПНЙЮ);
    оепел
    i, j, k: INTEGER;
@@ -169,7 +155,7 @@
          INC(j)
       йнмеж;
       Name[j] := 0X;
-      Revers(Name);
+      ЛяРП.пЕБЕПЯ(Name);
       j := 0;
       k := LENGTH(Name) - 1;
       онйю (k >= 0) & (Name[k] # ".") декюрэ
@@ -185,7 +171,7 @@
          j := 0
       йнмеж;
       Ext[j] := 0X;
-      Revers(Ext);
+      ЛяРП.пЕБЕПЯ(Ext);
       j := i;
       дкъ i := 0 дн j декюрэ
          Path[i] := FName[i]
