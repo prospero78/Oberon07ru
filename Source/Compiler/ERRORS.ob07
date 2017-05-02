@@ -125,8 +125,8 @@ PROCEDURE ErrorMsg*(code: INTEGER; VAR msg: ARRAY OF CHAR);
 VAR str: STRING;
 BEGIN
   CASE code OF
-  |  1: str := "ожидалась 'H' или 'X'"
-  |  2: str := "ожидалась цифра"
+  |  1: str := "Пропущено 'H' или 'X'"
+  |  2: str := "Пропущена цифра"
   |  3: str := "строка не содержит закрывающей кавычки"
   |  4: str := "недопустимый символ"
   |  5: str := "целочисленное переполнение"
