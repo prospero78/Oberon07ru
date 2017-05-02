@@ -1418,7 +1418,7 @@
     Check(м онст.кс»«);
     Load(e);
     X86.Drop;
-    Labels := м”тиль.—писок_—оздать();
+    Labels := м—пис.—писок_—оздать();
     DECL.MemErr(Labels = ѕ”—“ќ);
     Next;
     EndCase := X86.NewLabel();
@@ -1437,7 +1437,7 @@
     Check(м онст.кс ќЌ≈÷);
     X86.Label(EndCase);
     Next;
-    м—пис.Clear(Labels)
+    м—пис.ќчистить(Labels)
    ќЌ≈÷ CaseOper;
 
 ѕ–ќ÷≈ƒ”–ј CheckCode(Code: м“ипы.т—трока; Len, line, col: INTEGER);

@@ -592,7 +592,7 @@
     obj := UI = 6;
     MemErr := mem;
     Lcount := HALT;
-    asmlist := мУтиль.Список_Создать();
+    asmlist := мСпис.Список_Создать();
     MemErr(asmlist = ПУСТО);
     NEW(nov);
     MemErr(nov = ПУСТО);

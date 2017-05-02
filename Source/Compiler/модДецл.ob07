@@ -847,7 +847,7 @@
     nov.Fields := ПУСТО;
     nov.Number := Number;
     ЕСЛИ Fields ТОГДА
-      nov.Fields := мУтиль.Список_Создать();
+      nov.Fields := мСпис.Список_Создать();
       MemErr(nov.Fields = ПУСТО)
     КОНЕЦ
     ВЕРНУТЬ nov
@@ -1153,7 +1153,7 @@
       cur.Ptr.Base := id.T;
       cur := cur.следующ(PTRBASE)
     КОНЕЦ;
-    мСпис.Clear(PtrBases)
+    мСпис.Очистить(PtrBases)
   КОНЕЦ LinkPtr;
 
 ПРОЦЕДУРА DeclSeq;
@@ -1190,7 +1190,7 @@
       КОНЕЦ
     КОНЕЦ;
     ЕСЛИ мСкан.tLex = мКонст.ксТИПЫ ТОГДА
-      мСпис.Clear(PtrBases);
+      мСпис.Очистить(PtrBases);
       unit.typedecl := ИСТИНА;
       Next;
       ПОКА мСкан.tLex = lxIDENT ДЕЛАТЬ
@@ -1401,7 +1401,7 @@
   НАЧАЛО
     NEW(unit);
     MemErr(unit = ПУСТО);
-    unit.Idents := мУтиль.Список_Создать();
+    unit.Idents := мСпис.Список_Создать();
     MemErr(unit.Idents = ПУСТО);
     unit.Level := 0;
     unit.Name := Name;
@@ -1445,9 +1445,9 @@
       unit.sys := ЛОЖЬ;
       unit.Std := Path = Std;
       мСпис.Push(prog, unit);
-      unit.Idents := мУтиль.Список_Создать();
+      unit.Idents := мСпис.Список_Создать();
       MemErr(unit.Idents = ПУСТО);
-      unit.Import := мУтиль.Список_Создать();
+      unit.Import := мСпис.Список_Создать();
       MemErr(unit.Import = ПУСТО);
       NEW(unit.scanner);
       MemErr(unit.scanner = ПУСТО);
@@ -1491,7 +1491,7 @@
       Next; Check(lxDot);
       X86.Leave;
       unit.Closed := ИСТИНА;
-      мСпис.Clear(unit.Import);
+      мСпис.Очистить(unit.Import);
       Res := ИСТИНА
     КОНЕЦ
     ВЕРНУТЬ Res
@@ -1508,14 +1508,14 @@
     OpSeq := OpSeqProc;
     Expr := ExprProc;
     AssComp := AssCompProc;
-    prog := мУтиль.Список_Создать();
+    prog := мСпис.Список_Создать();
     MemErr(prog = ПУСТО);
-    PtrBases := мУтиль.Список_Создать();
+    PtrBases := мСпис.Список_Создать();
     MemErr(PtrBases = ПУСТО);
-    types := мУтиль.Список_Создать();
+    types := мСпис.Список_Создать();
     MemErr(types = ПУСТО);
     StTypes;
-    Strings := мУтиль.Список_Создать();
+    Strings := мСпис.Список_Создать();
     MemErr(Strings = ПУСТО);
     Pseudo;
     stypes := sttypes
