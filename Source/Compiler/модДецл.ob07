@@ -123,7 +123,7 @@
       Unit*: РлНДСКЭ
     йнмеж;
 
-  STRCONST* = сйюгюрекэ мю гюохяэ (ЛрХОШ.РоСМЙР)
+  РСйНМЯРяРП* = сйюгюрекэ мю гюохяэ (ЛрХОШ.РоСМЙР)
       Str*: ЛяРП.РяРПНЙЮ;
       Len*, Number*: INTEGER
     йнмеж;
@@ -168,15 +168,17 @@
     йнмеж
   йнмеж MemErr;
 
-опнжедспю GetString*(adr: LONGREAL): STRCONST;
-  оепел str: STRCONST;
+опнжедспю GetString*(adr: LONGREAL): РСйНМЯРяРП;
+  оепел
+    str: РСйНМЯРяРП;
   мювюкн
     SYSTEM.PUT(SYSTEM.ADR(str), FLOOR(adr))
     бепмсрэ str
   йнмеж GetString;
 
-опнжедспю AddString*(str: ЛяРП.РяРПНЙЮ): STRCONST;
-  оепел nov: STRCONST;
+опнжедспю AddString*(str: ЛяРП.РяРПНЙЮ): РСйНМЯРяРП;
+  оепел
+    nov: РСйНМЯРяРП;
   мювюкн
     NEW(nov);
     MemErr(nov = осярн);
@@ -188,8 +190,9 @@
     бепмсрэ nov
   йнмеж AddString;
 
-опнжедспю AddMono*(c: CHAR): STRCONST;
-  оепел nov: STRCONST;
+опнжедспю AddMono*(c: CHAR): РСйНМЯРяРП;
+  оепел
+    nov: РСйНМЯРяРП;
   мювюкн
     NEW(nov);
     MemErr(nov = осярн);
@@ -502,7 +505,9 @@
   йнмеж Arith;
 
 опнжедспю strcmp(a, b: LONGREAL; Op: INTEGER): LONGREAL;
-  оепел sa, sb: STRCONST; Res: LONGREAL;
+  оепел
+    sa, sb: РСйНМЯРяРП;
+    Res: LONGREAL;
   мювюкн
     sa := GetString(a);
     sb := GetString(b);

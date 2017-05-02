@@ -78,7 +78,8 @@
   КОНЕЦ Load;
 
 ПРОЦЕДУРА LenString(adr: LONGREAL): INTEGER;
-  ПЕРЕМ s: DECL.STRCONST;
+  ПЕРЕМ
+    s: DECL.туКонстСтр;
   НАЧАЛО
     s := DECL.GetString(adr)
     ВЕРНУТЬ s.Len
@@ -137,7 +138,7 @@
     imp, break, guard: BOOLEAN;
     f: DECL.туПоле;
     T, BaseT: DECL.туТип;
-    s: DECL.STRCONST;
+    s: DECL.туКонстСтр;
 
     ПРОЦЕДУРА LoadVar;
     НАЧАЛО
@@ -431,7 +432,7 @@
     line, col, line2, col2, a, b, p: INTEGER;
     e1, e2: DECL.EXPRESSION;
     T: DECL.туТип;
-    str, str2: DECL.STRCONST;
+    str, str2: DECL.туКонстСтр;
   НАЧАЛО
     e.vparam := ЛОЖЬ;
     e.eType := eEXP;
@@ -817,7 +818,7 @@
   ПЕРЕМ
     line, col, i, n: INTEGER;
     e1: DECL.EXPRESSION;
-    s: DECL.STRCONST;
+    s: DECL.туКонстСтр;
     A: X86.TIDX;
     TA: DECL.туТип;
   НАЧАЛО
@@ -878,7 +879,10 @@
   КОНЕЦ Call;
 
 ПРОЦЕДУРА Factor(ПЕР e: DECL.EXPRESSION);
-  ПЕРЕМ line, col, ccall, p: INTEGER; begcall: X86.ASMLINE; s, str2: DECL.STRCONST;
+  ПЕРЕМ
+    line, col, ccall, p: INTEGER;
+    begcall: X86.ASMLINE;
+    s, str2: DECL.туКонстСтр;
   НАЧАЛО
     e.eType := eCONST;
     e.vparam := ЛОЖЬ;
@@ -1191,7 +1195,7 @@
     Op, line, col, line2, col2, fpu: INTEGER;
     T: DECL.туТип;
     beg: X86.ASMLINE;
-    s: DECL.STRCONST;
+    s: DECL.туКонстСтр;
   НАЧАЛО
     fpu := X86.fpu;
     beg := X86.current;
@@ -1380,7 +1384,7 @@
   ПЕРЕМ
     Value: LONGREAL;
     T: DECL.туТип;
-    s: DECL.STRCONST;
+    s: DECL.туКонстСтр;
     line, col: INTEGER;
   НАЧАЛО
     Coord(line, col);
@@ -1490,7 +1494,7 @@
     e1, e2: DECL.EXPRESSION;
     Value: LONGREAL;
     T: DECL.туТип;
-    str: DECL.STRCONST;
+    str: DECL.туКонстСтр;
     begcall: X86.ASMLINE;
   НАЧАЛО
     Coord(line2, col2);
@@ -1714,7 +1718,11 @@
   КОНЕЦ StProc;
 
 ПРОЦЕДУРА IdentOper;
-  ПЕРЕМ e1, e2: DECL.EXPRESSION; line, col, ccall: INTEGER; begcall: X86.ASMLINE; s: DECL.STRCONST;
+  ПЕРЕМ
+    e1, e2: DECL.EXPRESSION;
+    line, col, ccall: INTEGER;
+    begcall: X86.ASMLINE;
+    s: DECL.туКонстСтр;
   НАЧАЛО
     Coord(line, col);
     begcall := X86.current;
