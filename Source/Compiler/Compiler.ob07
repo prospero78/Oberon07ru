@@ -1863,12 +1863,12 @@
     pExpr := Expr;
     pFactor := Factor;
     pOpSeq := OpSeq;
-    мУтиль.Split(FName, Path, Name, Ext);
+    мСтр.Разделить(FName, Path, Name, Ext);
     ЕСЛИ Ext # мКонст.расшир ТОГДА
       мОш.Сообщ(121);
       мПроц.Закончить(1)
     КОНЕЦ;
-    мУтиль.Split(SelfName, SelfPath, CName, CExt);
+    мСтр.Разделить(SelfName, SelfPath, CName, CExt);
     temp := Name;
     ЕСЛИ мУтиль.streq(system, "obj") ТОГДА
       platform := 6;

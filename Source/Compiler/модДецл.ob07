@@ -1545,7 +1545,7 @@
     ЕСЛИ ~ReadModule(Path, Main, ExtMain) ТОГДА
       path2 := Path;
       мУтиль.СтрПарам(full, 0);
-      мУтиль.Split(full, path, name, ext);
+      мСтр.Разделить(full, path, name, ext);
       ЕСЛИ path[0] # 0X ТОГДА
         path[LENGTH(path) - 1] := 0X
       КОНЕЦ;

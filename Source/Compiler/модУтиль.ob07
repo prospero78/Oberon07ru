@@ -143,41 +143,7 @@
     бепмсрэ a[i] = b[i]
   йнмеж streq;
 
-опнжедспю Split*(FName: ЛрХОШ.РяРПНЙЮ; оеп Path, Name, Ext: ЛрХОШ.РяРПНЙЮ);
-   оепел
-   i, j, k: INTEGER;
-   мювюкн
-      i := LENGTH(FName) - 1;
-      j := 0;
-      онйю (i >= 0) & (FName[i] # API.Slash) декюрэ
-         Name[j] := FName[i];
-         DEC(i);
-         INC(j)
-      йнмеж;
-      Name[j] := 0X;
-      ЛяРП.пЕБЕПЯ(Name);
-      j := 0;
-      k := LENGTH(Name) - 1;
-      онйю (k >= 0) & (Name[k] # ".") декюрэ
-         Ext[j] := Name[k];
-         DEC(k);
-         INC(j)
-      йнмеж;
-      еякх k >= 0 рнцдю
-         Name[k] := 0X;
-         Ext[j] := ".";
-         INC(j)
-      хмюве
-         j := 0
-      йнмеж;
-      Ext[j] := 0X;
-      ЛяРП.пЕБЕПЯ(Ext);
-      j := i;
-      дкъ i := 0 дн j декюрэ
-         Path[i] := FName[i]
-      йнмеж;
-      Path[j + 1] := 0X
-   йнмеж Split;
+
 
 опнжедспю PChar*(s: люяяхб хг CHAR): INTEGER;
     бепмсрэ mSys.ADR(s)
