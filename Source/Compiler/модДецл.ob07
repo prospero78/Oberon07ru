@@ -160,7 +160,7 @@
 опнжедспю MemErr*(err: BOOLEAN);
   мювюкн
     еякх err рнцдю
-      ЛоЮЛ.MemErr(err)
+      ЛоЮЛ.нЬХАЙЮ(err)
     йнмеж
   йнмеж MemErr;
 

@@ -1,7 +1,7 @@
 (*
     Copyright 2013 Krotov Anton
 
-This file is part of Compiler.
+  This file is part of Compiler.
 
     Compiler is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -64,7 +64,7 @@ This file is part of Compiler.
         ПРОЦЕДУРА Узел_Новый(Right: BOOLEAN);
             НАЧАЛО
             NEW(res);
-            мПам.MemErr(res = ПУСТО);
+            мПам.Ошибка(res = ПУСТО);
             res.имя := Name;
             res.tLex := lxIDENT;
             res.левый := ПУСТО;
@@ -185,7 +185,7 @@ This file is part of Compiler.
             size := мФайл.Размер_Получ(File);
             buf := мПам.Получ(size + 1024);
             mSys.PUT(buf + size, 0X);
-            мПам.MemErr(buf = 0);
+            мПам.Ошибка(buf = 0);
             n := мФайл.Читать(File, buf, size);
             мФайл.Закрыть(File);
             bufpos := buf;
@@ -665,7 +665,7 @@ This file is part of Compiler.
     НАЧАЛО
         ДЛЯ i := 0 ДО LEN(Nodes) - 1 ДЕЛАТЬ
             NEW(node);
-            мПам.MemErr(node = ПУСТО);
+            мПам.Ошибка(node = ПУСТО);
             mSys.PUT(mSys.ADR(node.имя), i);
             node.левый := ПУСТО;
             node.правый := ПУСТО;

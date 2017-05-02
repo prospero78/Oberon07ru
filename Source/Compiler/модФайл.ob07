@@ -38,7 +38,7 @@
       КОНЕЦ
     АЕСЛИ мКонст.kol ТОГДА
       res := мАпи.kos_OCFile(FName, 5, memerr);
-      мПам.MemErr(memerr)
+      мПам.Ошибка(memerr)
     АЕСЛИ мКонст.lin ТОГДА
       res := мАпи.lnx_OpenFile(FName)
     КОНЕЦ
@@ -56,7 +56,7 @@
       КОНЕЦ
     АЕСЛИ мКонст.kol ТОГДА
       res := мАпи.kos_OCFile(FName, 2, memerr);
-      мПам.MemErr(memerr)
+      мПам.Ошибка(memerr)
     АЕСЛИ мКонст.lin ТОГДА
       res := мАпи.lnx_CreateFile(FName)
     КОНЕЦ
