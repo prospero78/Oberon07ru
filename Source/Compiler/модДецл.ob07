@@ -136,22 +136,24 @@
       Read*, vparam*, deref*: BOOLEAN
     КОНЕЦ;
 
-  opPROC = ПРОЦЕДУРА;
-  expPROC = ПРОЦЕДУРА (ПЕР e: тВыражение);
-  assPROC = ПРОЦЕДУРА (e: тВыражение; T: туТип; param: BOOLEAN): BOOLEAN;
+  тПроцедура = ПРОЦЕДУРА;
+  тПроцедураПер = ПРОЦЕДУРА (ПЕР e: тВыражение);
+  тПроцедураСвязь = ПРОЦЕДУРА (e: тВыражение; T: туТип; param: BOOLEAN): BOOLEAN;
 
-  stTYPES* = МАССИВ 11 ИЗ туТип;
+  туТипНабор* = МАССИВ 11 ИЗ туТип;
 
 ПЕРЕМ
 
-  sttypes: stTYPES;
+  sttypes: туТипНабор;
   unit*, sys: тМодуль;
   curBlock*: туИмя;
   Path, Main, Std, ExtMain: мСтр.тСтрока;
   NamePtrBase: мТипы.туУзел; ProgSize*, RecCount, UnitNumber*: INTEGER;
   PtrBases, Strings, types, prog: мТипы.туСписок;
-  OpSeq: opPROC; Expr: expPROC;
-  AssComp: assPROC; main, sizefunc, winplatf, Const*: BOOLEAN;
+  OpSeq: тПроцедура;
+  Expr: тПроцедураПер;
+  AssComp: тПроцедураСвязь;
+  main, sizefunc, winplatf, Const*: BOOLEAN;
   pParseType: ПРОЦЕДУРА (ПЕР line, col: INTEGER): туТип;
   pReadModule: ПРОЦЕДУРА (Path, Name, Ext: мСтр.тСтрока): BOOLEAN;
   Platform: INTEGER;
@@ -1561,7 +1563,7 @@
   КОНЕЦ ReadModule;
 
 ПРОЦЕДУРА Program*(StdPath, FilePath, NameFile, ExtFile: мСтр.тСтрока; windows: BOOLEAN;
-    OpSeqProc: opPROC; ExprProc: expPROC; AssCompProc: assPROC; ПЕР stypes: stTYPES);
+    OpSeqProc: тПроцедура; ExprProc: тПроцедураПер; AssCompProc: тПроцедураСвязь; ПЕР stypes: туТипНабор);
   НАЧАЛО
     winplatf := windows;
     Path := FilePath;

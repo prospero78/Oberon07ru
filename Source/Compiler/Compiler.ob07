@@ -68,7 +68,7 @@
   pExpr, pFactor: ПРОЦЕДУРА (ПЕР e: DECL.тВыражение);
   pOpSeq: ПРОЦЕДУРА;
   Lex: мСтр.тСтрока;
-  sttypes: DECL.stTYPES;
+  sttypes: DECL.туТипНабор;
 
 ПРОЦЕДУРА Load(e: DECL.тВыражение);
   НАЧАЛО
