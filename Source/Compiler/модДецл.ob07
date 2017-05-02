@@ -181,7 +181,7 @@
     COPY(str, nov.Str);
     nov.Len := мСкан.count - 1;
     nov.Number := X86.NewLabel();
-    мСпис.Push(Strings, nov);
+    мСпис.Добавить(Strings, nov);
     X86.String(nov.Number, nov.Len, nov.Str)
     ВЕРНУТЬ nov
   КОНЕЦ AddString;
@@ -195,7 +195,7 @@
     nov.Str[1] := 0X;
     nov.Len := 1;
     nov.Number := X86.NewLabel();
-    мСпис.Push(Strings, nov);
+    мСпис.Добавить(Strings, nov);
     X86.String(nov.Number, nov.Len, nov.Str)
     ВЕРНУТЬ nov
   КОНЕЦ AddMono;
@@ -292,7 +292,7 @@
     ident.Name := ПУСТО;
     ident.iType := IDGUARD;
     ident.T := sttypes[TVOID];
-    мСпис.Push(unit.Idents, ident);
+    мСпис.Добавить(unit.Idents, ident);
     INC(unit.Level)
   КОНЕЦ Guard;
 
@@ -317,7 +317,7 @@
     ident.Export := Export;
     ident.StProc := StProc;
     ident.Level := unit.Level;
-    мСпис.Push(unit.Idents, ident)
+    мСпис.Добавить(unit.Idents, ident)
   КОНЕЦ PushIdent;
 
 ПРОЦЕДУРА StTypes;
@@ -328,7 +328,7 @@
       NEW(type);
       MemErr(type = ПУСТО);
       type.tType := i;
-      мСпис.Push(types, type);
+      мСпис.Добавить(types, type);
       sttypes[i] := type
     КОНЕЦ;
     sttypes[TINTEGER].Size := 4;
@@ -742,7 +742,7 @@
       Assert2(Unique(T, Name), 30);
       NEW(field);
       MemErr(field = ПУСТО);
-      мСпис.Push(T.Fields, field);
+      мСпис.Добавить(T.Fields, field);
       field.Name := Name;
       field.T := ПУСТО;
       field.Export := ЛОЖЬ;
@@ -839,7 +839,7 @@
     ИНАЧЕ
       nov := NewType
     КОНЕЦ;
-    мСпис.Push(types, nov);
+    мСпис.Добавить(types, nov);
     nov.tType := tType;
     nov.Len := Len;
     nov.Size := Size;
@@ -847,7 +847,7 @@
     nov.Fields := ПУСТО;
     nov.Number := Number;
     ЕСЛИ Fields ТОГДА
-      nov.Fields := мСпис.Список_Создать();
+      nov.Fields := мСпис.Создать();
       MemErr(nov.Fields = ПУСТО)
     КОНЕЦ
     ВЕРНУТЬ nov
@@ -890,7 +890,7 @@
       Assert2(GetField(T, Name) = ПУСТО, 30);
       NEW(field);
       MemErr(field = ПУСТО);
-      мСпис.Push(T.Fields, field);
+      мСпис.Добавить(T.Fields, field);
       field.Name := Name;
       field.T := ПУСТО;
       field.ByRef := ByRef;
@@ -948,7 +948,7 @@
     nov.line := line;
     nov.col := col;
     nov.Ptr := T;
-    мСпис.Push(PtrBases, nov)
+    мСпис.Добавить(PtrBases, nov)
   КОНЕЦ AddPtrBase;
 
 ПРОЦЕДУРА FormalList(T: pTYPE; ПЕР Res: pTYPE);
@@ -1360,7 +1360,7 @@
       NEW(str);
       MemErr(str = ПУСТО);
       str.Str := name.имя;
-      мСпис.Push(unit.Import, str);
+      мСпис.Добавить(unit.Import, str);
       cond := newcond
     КОНЕЦ AddUnit;
 
@@ -1401,7 +1401,7 @@
   НАЧАЛО
     NEW(unit);
     MemErr(unit = ПУСТО);
-    unit.Idents := мСпис.Список_Создать();
+    unit.Idents := мСпис.Создать();
     MemErr(unit.Idents = ПУСТО);
     unit.Level := 0;
     unit.Name := Name;
@@ -1444,10 +1444,10 @@
       MemErr(unit = ПУСТО);
       unit.sys := ЛОЖЬ;
       unit.Std := Path = Std;
-      мСпис.Push(prog, unit);
-      unit.Idents := мСпис.Список_Создать();
+      мСпис.Добавить(prog, unit);
+      unit.Idents := мСпис.Создать();
       MemErr(unit.Idents = ПУСТО);
-      unit.Import := мСпис.Список_Создать();
+      unit.Import := мСпис.Создать();
       MemErr(unit.Import = ПУСТО);
       NEW(unit.scanner);
       MemErr(unit.scanner = ПУСТО);
@@ -1508,14 +1508,14 @@
     OpSeq := OpSeqProc;
     Expr := ExprProc;
     AssComp := AssCompProc;
-    prog := мСпис.Список_Создать();
+    prog := мСпис.Создать();
     MemErr(prog = ПУСТО);
-    PtrBases := мСпис.Список_Создать();
+    PtrBases := мСпис.Создать();
     MemErr(PtrBases = ПУСТО);
-    types := мСпис.Список_Создать();
+    types := мСпис.Создать();
     MemErr(types = ПУСТО);
     StTypes;
-    Strings := мСпис.Список_Создать();
+    Strings := мСпис.Создать();
     MemErr(Strings = ПУСТО);
     Pseudo;
     stypes := sttypes

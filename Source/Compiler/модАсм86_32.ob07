@@ -471,7 +471,7 @@
     NEW(nov);
     MemErr(nov = ПУСТО);
     nov.cmd := ccount;
-    мСпис.Insert(asmlist, nov, current);
+    мСпис.Вставить(asmlist, nov, current);
     current := current.следующ(ASMLINE)
   КОНЕЦ New;
 
@@ -592,11 +592,11 @@
     obj := UI = 6;
     MemErr := mem;
     Lcount := HALT;
-    asmlist := мСпис.Список_Создать();
+    asmlist := мСпис.Создать();
     MemErr(asmlist = ПУСТО);
     NEW(nov);
     MemErr(nov = ПУСТО);
-    мСпис.Push(asmlist, nov);
+    мСпис.Добавить(asmlist, nov);
     current := nov;
   КОНЕЦ Init;
 

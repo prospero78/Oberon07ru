@@ -1377,7 +1377,7 @@
     DECL.MemErr(label = ПУСТО);
     label.a := a;
     label.b := b;
-    мСпис.Push(Labels, label);
+    мСпис.Добавить(Labels, label);
     X86.CaseLabel(a, b, LBeg)
   КОНЕЦ Label;
 
@@ -1418,7 +1418,7 @@
     Check(мКонст.ксИЗ);
     Load(e);
     X86.Drop;
-    Labels := мСпис.Список_Создать();
+    Labels := мСпис.Создать();
     DECL.MemErr(Labels = ПУСТО);
     Next;
     EndCase := X86.NewLabel();
