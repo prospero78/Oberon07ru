@@ -101,10 +101,6 @@
   КОНЕЦ MemErr;
 
 
-ПРОЦЕДУРА ФайлРазмер_Получ*(F: INTEGER): INTEGER;
-      ВЕРНУТЬ API.FileSize(F)
-   КОНЕЦ ФайлРазмер_Получ;
-
 ПРОЦЕДУРА Файл_Открыть*(FName: МАССИВ ИЗ CHAR; Mode: INTEGER): INTEGER;
   ПЕРЕМ ofstr: API.OFSTRUCT; res: INTEGER; memerr: BOOLEAN;
   НАЧАЛО

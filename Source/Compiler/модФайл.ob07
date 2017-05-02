@@ -21,6 +21,10 @@
       файл.имя := имя_
    КОНЕЦ Имя_Уст;
 
+ПРОЦЕДУРА Размер_Получ*(F: INTEGER): INTEGER;
+      ВЕРНУТЬ API.FileSize(F)
+   КОНЕЦ Размер_Получ;
+
 ПРОЦЕДУРА Читать*(F, Buffer, Count: INTEGER): INTEGER;
   ПЕРЕМ res: INTEGER;
   НАЧАЛО

@@ -181,7 +181,7 @@ This file is part of Compiler.
             ccol := 0;
             cline := 1;
             ch := 0X;
-            size := мУтиль.ФайлРазмер_Получ(File);
+            size := мФайл.Размер_Получ(File);
             buf := мУтиль.Память_Получ(size + 1024);
             mSys.PUT(buf + size, 0X);
             мУтиль.MemErr(buf = 0);
