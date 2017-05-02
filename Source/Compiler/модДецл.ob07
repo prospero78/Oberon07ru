@@ -193,7 +193,7 @@
     ВЕРНУТЬ nov
   КОНЕЦ Стр_Создать;
 
-ПРОЦЕДУРА AddMono*(c: CHAR): туКонстСтр;
+ПРОЦЕДУРА СтрМоно_Создать*(c: CHAR): туКонстСтр;
   ПЕРЕМ
     nov: туКонстСтр;
   НАЧАЛО
@@ -206,13 +206,13 @@
     мСпис.Добавить(Strings, nov);
     X86.String(nov.Number, nov.Len, nov.Str)
     ВЕРНУТЬ nov
-  КОНЕЦ AddMono;
+  КОНЕЦ СтрМоно_Создать;
 
-ПРОЦЕДУРА Coord(ПЕР line, col: INTEGER);
+ПРОЦЕДУРА Коорд_Уст(ПЕР line, col: INTEGER);
   НАЧАЛО
     line := мСкан.line;
     col := мСкан.col
-  КОНЕЦ Coord;
+  КОНЕЦ Коорд_Уст;
 
 ПРОЦЕДУРА GetModule(Name: мТипы.туУзел): тМодуль;
   ПЕРЕМ
@@ -408,7 +408,7 @@
     line, col: INTEGER;
   НАЧАЛО
     res := ПУСТО;
-    Coord(line, col);
+    Коорд_Уст(line, col);
     cur := Unit.IdentBegin.следующ(туИмя);
     ПОКА (cur # ПУСТО) & (cur.iType # IDGUARD) ДЕЛАТЬ
       ЕСЛИ cur.Name = Name ТОГДА
@@ -431,7 +431,7 @@
     line, col: INTEGER;
   НАЧАЛО
     res := ПУСТО;
-    Coord(line, col);
+    Коорд_Уст(line, col);
     cur := unit.Idents.следующ(туИмя);
     ПОКА (cur # ПУСТО) & (cur.Name = Name) ДЕЛАТЬ
       res := cur;
@@ -599,7 +599,7 @@
     line, col: INTEGER;
   НАЧАЛО
     Const := ИСТИНА;
-    Coord(line, col);
+    Коорд_Уст(line, col);
     sizefunc := ЛОЖЬ;
     Expr(e);
     мПров.Тест(~sizefunc & (e.eType = eCONST), line, col, 62);
@@ -619,12 +619,12 @@
     Name := мСкан.id;
     id := GetIdent(Name);
     ЕСЛИ id = ПУСТО ТОГДА
-      Coord(line, col);
+      Коорд_Уст(line, col);
       NamePtrBase := Name;
       Next
     ИНАЧЕ
       ЕСЛИ id.iType = IDTYPE ТОГДА
-        Coord(line, col);
+        Коорд_Уст(line, col);
         Next;
         Res := id.T
       АЕСЛИ id.iType = IDMOD ТОГДА
@@ -639,18 +639,18 @@
         ЕСЛИ Unit # unit ТОГДА
           мПров.Тест2(id # ПУСТО, 42);
           мПров.Тест2(id.iType = IDTYPE, 77);
-          Coord(line, col);
+          Коорд_Уст(line, col);
           Next;
           Res := id.T
         ИНАЧЕ
           ЕСЛИ id = ПУСТО ТОГДА
             мПров.Тест2((unit.Level = 3) & unit.typedecl, 42);
-            Coord(line, col);
+            Коорд_Уст(line, col);
             Next;
             Res := ПУСТО
           ИНАЧЕ
             мПров.Тест2(id.iType = IDTYPE, 77);
-            Coord(line, col);
+            Коорд_Уст(line, col);
             Next;
             Res := id.T
           КОНЕЦ
@@ -783,7 +783,7 @@
         Check(lxIDENT)
       АЕСЛИ мСкан.tLex = lxColon ТОГДА
         Next;
-        Coord(line, col);
+        Коорд_Уст(line, col);
         id_T := мСкан.tLex = lxIDENT;
         Tf:= pParseType(line, col);
         мПров.Тест(Tf # ПУСТО, line, col, 42);
@@ -1068,7 +1068,7 @@
         мПров.Тест2(Comma, 39)
       КОНЕЦ;
       Next;
-      Coord(line, col);
+      Коорд_Уст(line, col);
       ConstExpr(v, T);
       мПров.Тест(T.tType = TINTEGER, line, col, 52);
       мПров.Тест(v > 0.0D0, line, col, 78);
@@ -1077,7 +1077,7 @@
         nov.Base := StructType(ИСТИНА, ПУСТО)
       АЕСЛИ мСкан.tLex = мКонст.ксИЗ ТОГДА
         Next;
-        Coord(line, col);
+        Коорд_Уст(line, col);
         id_T := мСкан.tLex = lxIDENT;
         nov.Base := pParseType(line, col);
         мПров.Тест(nov.Base # ПУСТО, line, col, 42);
@@ -1093,14 +1093,14 @@
       INC(RecCount);
       nov := CreateType(TRECORD, 0, 0, RecCount, ПУСТО, ИСТИНА, NewType);
       nov.Align := 1;
-      Coord(line, col);
+      Коорд_Уст(line, col);
       ЕСЛИ RecFlag(nov.Rec) ТОГДА
         мПров.Тест(unit.sys, line, col, 111)
       КОНЕЦ;
-      Coord(line, col);
+      Коорд_Уст(line, col);
       ЕСЛИ мСкан.tLex = lxLRound ТОГДА
         Next;
-        Coord(line2, col2);
+        Коорд_Уст(line2, col2);
         Check(lxIDENT);
         nov.Base := IdType(line, col);
         мПров.Тест(nov.Base # ПУСТО, line, col, 42);
@@ -1128,7 +1128,7 @@
       Next;
       nov := CreateType(TPOINTER, 0, 4, 0, ПУСТО, ЛОЖЬ, NewType);
       nov.Align := 4;
-      Coord(line, col);
+      Коорд_Уст(line, col);
       nov.Base := pParseType(line, col);
       ЕСЛИ nov.Base = ПУСТО ТОГДА
         мПров.Тест(unit.typedecl, line, col, 42);
@@ -1139,7 +1139,7 @@
     |мКонст.ксПРОЦЕДУРА:
       Next;
       nov := CreateType(TPROC, 0, 4, 0, sttypes[TVOID], ИСТИНА, NewType);
-      Coord(line, col);
+      Коорд_Уст(line, col);
       ЕСЛИ CallFlag(nov.Call) ТОГДА
         мПров.Тест(unit.sys, line, col, 111)
       КОНЕЦ;
@@ -1211,7 +1211,7 @@
     ПРОЦЕДУРА IdentDef;
     НАЧАЛО
       Name := мСкан.id;
-      Coord(line, col);
+      Коорд_Уст(line, col);
       Next;
       Export := ЛОЖЬ;
       ЕСЛИ мСкан.tLex = lxMult ТОГДА
@@ -1269,7 +1269,7 @@
           Check(lxIDENT)
         АЕСЛИ мСкан.tLex = lxColon ТОГДА
           Next;
-          Coord(line, col);
+          Коорд_Уст(line, col);
           T := ParseType(line, col);
           мПров.Тест(T # ПУСТО, line, col, 42);
           SetVars(T);
@@ -1282,7 +1282,7 @@
     КОНЕЦ;
     ПОКА мСкан.tLex = мКонст.ксПРОЦЕДУРА ДЕЛАТЬ
       Next;
-      Coord(line, col);
+      Коорд_Уст(line, col);
       ЕСЛИ CallFlag(Call) ТОГДА
         мПров.Тест(unit.Level = 3, line, col, 45);
         мПров.Тест(unit.sys, line, col, 111)
@@ -1316,7 +1316,7 @@
         Check(мКонст.ксВЕРНУТЬ);
         мУтиль.КодСтрока_Уст(UnitNumber, мСкан.line);
         Next;
-        Coord(line, col);
+        Коорд_Уст(line, col);
         Expr(e);
         мПров.Тест(AssComp(e, curBlock.T.Base, ЛОЖЬ), line, col, 125);
         ЕСЛИ e.eType = eVAR ТОГДА
@@ -1421,8 +1421,8 @@
       ВЫБОР cond ИЗ
       |0: Check(lxIDENT);
           name := мСкан.id;
-          Coord(line, col);
-          Coord(nameline, namecol);
+          Коорд_Уст(line, col);
+          Коорд_Уст(nameline, namecol);
           alias := name;
           cond := 1
       |1: ВЫБОР мСкан.tLex ИЗ
@@ -1434,7 +1434,7 @@
           КОНЕЦ
       |2: Check(lxIDENT);
           name := мСкан.id;
-          Coord(nameline, namecol);
+          Коорд_Уст(nameline, namecol);
           cond := 3
       |3: ВЫБОР мСкан.tLex ИЗ
           |lxComma: AddUnit(0)

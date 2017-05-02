@@ -567,7 +567,7 @@
       e.T := sttypes[TCHAR];
       ЕСЛИ e1.eType = eCONST ТОГДА
         Assert(ASR(FLOOR(e1.Value), 8) = 0, line, col, 76);
-        str2 := DECL.AddMono(CHR(FLOOR(e1.Value)));
+        str2 := DECL.СтрМоно_Создать(CHR(FLOOR(e1.Value)));
         SYSTEM.GET(SYSTEM.ADR(str2), p);
         e.Value := LONG(FLT(p));
         e.T := sttypes[TSTRING];
@@ -957,7 +957,7 @@
           X86.PushInt(s.Number)
         КОНЕЦ
       ИНАЧЕ
-        str2 := DECL.AddMono(мСкан.vCHX);
+        str2 := DECL.СтрМоно_Создать(мСкан.vCHX);
         SYSTEM.GET(SYSTEM.ADR(str2), p);
         e.Value := LONG(FLT(p));
         X86.PushConst(ORD(мСкан.vCHX))
