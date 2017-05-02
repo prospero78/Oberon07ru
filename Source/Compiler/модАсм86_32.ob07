@@ -127,7 +127,7 @@
       textlen, size: INTEGER
     КОНЕЦ;
 
-  RELOC = ЗАПИСЬ
+  тРелок = ЗАПИСЬ
       Page, Size: INTEGER;
       reloc: МАССИВ 1024 ИЗ mSys.CARD16
     КОНЕЦ;
@@ -289,7 +289,7 @@
     ВЕРНУТЬ n + (m - n MOD m) MOD m
   КОНЕЦ Align;
 
-ПРОЦЕДУРА PutReloc(R: RELOC);
+ПРОЦЕДУРА PutReloc(R: тРелок);
   ПЕРЕМ i: INTEGER;
   НАЧАЛО
     mSys.PUT(mSys.ADR(Reloc[rcount]), R.Page);
@@ -586,14 +586,15 @@
     current := callstk[topstk - 1][0]
   КОНЕЦ Param;
 
-ПРОЦЕДУРА EndCall*;
+ПРОЦЕДУРА Вызов_Закончить*;
   НАЧАЛО
     current := callstk[topstk - 1][1];
     DEC(topstk)
-  КОНЕЦ EndCall;
+  КОНЕЦ Вызов_Закончить;
 
-ПРОЦЕДУРА Init*(mem: тПроцедура; UI: INTEGER);
-  ПЕРЕМ nov: туПунктАсм;
+ПРОЦЕДУРА Настроить*(mem: тПроцедура; UI: INTEGER);
+  ПЕРЕМ
+    nov: туПунктАсм;
   НАЧАЛО
     dcount := 4;
     dll := UI = 1;
@@ -610,7 +611,7 @@
     MemErr(nov = ПУСТО);
     мСпис.Добавить(asmlist, nov);
     current := nov;
-  КОНЕЦ Init;
+  КОНЕЦ Настроить;
 
 ПРОЦЕДУРА datastr(str: мСтр.тСтрока);
   ПЕРЕМ i, n: INTEGER;
@@ -1806,7 +1807,7 @@
   ПЕРЕМ
     size, asize, i, rdatasize, RCount, n, temp, temp2, temp3: INTEGER;
     cur: туПунктАсм;
-    R: RELOC;
+    R: тРелок;
     c: CHAR;
   НАЧАЛО
     dcount := Align(dcount, 4);

@@ -902,7 +902,7 @@
           Next;
           X86.PushCall(begcall);
           Call(e.id.T.Fields.предыдущ(DECL.туПоле));
-          X86.EndCall;
+          X86.Вызов_Закончить;
           e.eType := eEXP;
           e.T := e.id.T.Base;
           ЕСЛИ e.id.Level = 3 ТОГДА
@@ -922,7 +922,7 @@
         Next;
         X86.PushCall(begcall);
         Call(e.T.Fields.предыдущ(DECL.туПоле));
-        X86.EndCall;
+        X86.Вызов_Закончить;
         e.eType := eEXP;
         X86.CallVar(ИСТИНА, e.T.Base.tType IN {TREAL, TLONGREAL}, e.T.Call, e.T.Len, DECL.curBlock.LocalSize);
         e.T := e.T.Base;
@@ -1675,7 +1675,7 @@
         Assert(e2.eType = eVAR, line, col, 63);
         Assert(e2.T.tType IN {TINTEGER, TREAL, TLONGREAL, TCHAR, TSET, TBOOLEAN, TCARD16}, line, col, 154);
         Assert(~e2.Read, line, col, 115);
-        X86.EndCall;
+        X86.Вызов_Закончить;
         X86.Load(e2.T.tType);
         X86.Save(e2.T.tType)
       ИНАЧЕ
@@ -1707,7 +1707,7 @@
       Assert(e1.T.tType = TINTEGER, line, col, 52);
       Load(e1);
       Check(lxComma);
-      X86.EndCall;
+      X86.Вызов_Закончить;
       Next;
       Coord(line, col);
       Expr(e1);
@@ -1778,7 +1778,7 @@
         Next;
         X86.PushCall(begcall);
         Call(e1.id.T.Fields.предыдущ(DECL.туПоле));
-        X86.EndCall
+        X86.Вызов_Закончить
       АЕСЛИ мСкан.tLex = lxLRound ТОГДА
         Next;
         Check(lxRRound);
@@ -1800,7 +1800,7 @@
         Assert((e1.T.Base.tType = TVOID) ИЛИ (e1.T.Call = DECL.winapi), line, col, 132);
         X86.PushCall(begcall);
         Call(e1.T.Fields.предыдущ(DECL.туПоле));
-        X86.EndCall;
+        X86.Вызов_Закончить;
         X86.CallVar(ЛОЖЬ, ЛОЖЬ, e1.T.Call, e1.T.Len, DECL.curBlock.LocalSize)
       АЕСЛИ мСкан.tLex = lxAssign ТОГДА
         Assert(~e1.Read, line, col, 115);
@@ -1974,7 +1974,7 @@
       мСтр.Сложить(SelfPath, "Windows32", SelfPath)
     КОНЕЦ;
     мСтр.Сложить(SelfPath, мКонст.слэш, SelfPath);
-    X86.Init(DECL.ПамОш_Проверить, platform);
+    X86.Настроить(DECL.ПамОш_Проверить, platform);
     X86.Prolog(temp);
     DECL.Код_Настроить(SelfPath, Path, Name, Ext, platform IN {1, 2, 3}, OpSeq, Expr, AssComp, sttypes);
     DECL.Компилировать(platform, stksize);
