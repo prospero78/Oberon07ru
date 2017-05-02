@@ -4,7 +4,7 @@
 
 МОДУЛЬ модФайл;
 
-ИМПОРТ API,
+ИМПОРТ мАпи := API,
    mSys := SYSTEM,
    мТипы := модТипы,
    мКонст := модКонстанты,
@@ -24,31 +24,49 @@
    КОНЕЦ Имя_Уст;
 
 ПРОЦЕДУРА Размер_Получ*(F: INTEGER): INTEGER;
-      ВЕРНУТЬ API.FileSize(F)
+      ВЕРНУТЬ мАпи.FileSize(F)
    КОНЕЦ Размер_Получ;
 
 ПРОЦЕДУРА Открыть*(FName: МАССИВ ИЗ CHAR; Mode: INTEGER): INTEGER;
   ПЕРЕМ
-    ofstr: API.OFSTRUCT; res: INTEGER; memerr: BOOLEAN;
+    ofstr: мАпи.OFSTRUCT; res: INTEGER; memerr: BOOLEAN;
   НАЧАЛО
     ЕСЛИ мКонст.win ТОГДА
-      res := API.OpenFile(mSys.ADR(FName), ofstr, Mode);
+      res := мАпи.OpenFile(mSys.ADR(FName), ofstr, Mode);
       ЕСЛИ res = -1 ТОГДА
         res := 0
       КОНЕЦ
     АЕСЛИ мКонст.kol ТОГДА
-      res := API.kos_OCFile(FName, 5, memerr);
+      res := мАпи.kos_OCFile(FName, 5, memerr);
       мПам.MemErr(memerr)
     АЕСЛИ мКонст.lin ТОГДА
-      res := API.lnx_OpenFile(FName)
+      res := мАпи.lnx_OpenFile(FName)
     КОНЕЦ
     ВЕРНУТЬ res
   КОНЕЦ Открыть;
 
+ПРОЦЕДУРА Создать*(FName: МАССИВ ИЗ CHAR): INTEGER;
+  ПЕРЕМ
+     res: INTEGER; memerr: BOOLEAN;
+  НАЧАЛО
+    ЕСЛИ мКонст.win ТОГДА
+      res := мАпи.CreateFile(mSys.ADR(FName), 0C0000000H, 0, 0, 2, 80H, 0);
+      ЕСЛИ res = -1 ТОГДА
+        res := 0
+      КОНЕЦ
+    АЕСЛИ мКонст.kol ТОГДА
+      res := мАпи.kos_OCFile(FName, 2, memerr);
+      мПам.MemErr(memerr)
+    АЕСЛИ мКонст.lin ТОГДА
+      res := мАпи.lnx_CreateFile(FName)
+    КОНЕЦ
+    ВЕРНУТЬ res
+  КОНЕЦ Создать;
+
 ПРОЦЕДУРА Читать*(F, Buffer, Count: INTEGER): INTEGER;
   ПЕРЕМ res: INTEGER;
   НАЧАЛО
-    API.ReadFile(F, Buffer, Count, mSys.ADR(res), 0)
+    мАпи.ReadFile(F, Buffer, Count, mSys.ADR(res), 0)
     ВЕРНУТЬ res
   КОНЕЦ Читать;
 
@@ -56,13 +74,13 @@
    ПЕРЕМ
       res: INTEGER;
    НАЧАЛО
-      API.WriteFile(файл_ном_, Buffer, Count, mSys.ADR(res), 0)
+      мАпи.WriteFile(файл_ном_, Buffer, Count, mSys.ADR(res), 0)
       ВЕРНУТЬ res
    КОНЕЦ Записать;
 
 ПРОЦЕДУРА Закрыть*(файл_ном_: INTEGER);
   НАЧАЛО
-     API.CloseHandle(файл_ном_)
+     мАпи.CloseHandle(файл_ном_)
   КОНЕЦ Закрыть;
 
 НАЧАЛО

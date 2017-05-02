@@ -289,24 +289,6 @@
     DEC(ParamCount)
   йнмеж LinuxParam;
 
-опнжедспю тЮИК_яНГДЮРЭ*(FName: люяяхб хг CHAR): INTEGER;
-  оепел
-     res: INTEGER; memerr: BOOLEAN;
-  мювюкн
-    еякх ЛйНМЯР.win рнцдю
-      res := API.CreateFile(mSys.ADR(FName), 0C0000000H, 0, 0, 2, 80H, 0);
-      еякх res = -1 рнцдю
-        res := 0
-      йнмеж
-    юеякх ЛйНМЯР.kol рнцдю
-      res := API.kos_OCFile(FName, 2, memerr);
-      ЛоЮЛ.MemErr(memerr)
-    юеякх ЛйНМЯР.lin рнцдю
-      res := API.lnx_CreateFile(FName)
-    йнмеж
-    бепмсрэ res
-  йнмеж тЮИК_яНГДЮРЭ;
-
 опнжедспю мЮЯРПНХРЭ;
    оепел
       p, count: INTEGER;
