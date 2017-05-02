@@ -81,7 +81,7 @@
       Fields*: м“ипы.ту—писок
      ќЌ≈÷;
 
-  IDENT* = ” ј«ј“≈Ћ№ Ќј rIDENT;
+  IDENT* = ” ј«ј“≈Ћ№ Ќј т»м€;
 
   UNIT* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.тѕункт)
       Name: м“ипы.ту”зел;
@@ -94,7 +94,7 @@
       Closed, typedecl, ExportType, Std, sys: BOOLEAN
      ќЌ≈÷;
 
-  rIDENT* = «јѕ»—№ (м“ипы.тѕункт)
+  т»м€* = «јѕ»—№ (м“ипы.тѕункт)
       Name: м“ипы.ту”зел;
       T*: ту“ип;
       Unit*: UNIT;
@@ -1362,13 +1362,13 @@
     name, alias: м“ипы.ту”зел; u, self: UNIT;
     FName: м—тр.т—трока;
 
-    ѕ–ќ÷≈ƒ”–ј AddUnit(newcond: INTEGER);
+  ѕ–ќ÷≈ƒ”–ј AddUnit(newcond: INTEGER);
     ѕ≈–≈ћ str: STRITEM;
     Ќј„јЋќ
       u := GetModule(name);
       ≈—Ћ» u = ѕ”—“ќ “ќ√ƒј
         self := unit;
-        м—кан.Backup(unit.scanner);
+        м—кан.—охранить(unit.scanner);
         COPY(name.им€, FName);
         ≈—Ћ» ~((~self.Std & pReadModule(Path, FName, м онст.расшир)) »Ћ»
                                 pReadModule(Std, FName, м онст.расшир)) “ќ√ƒј

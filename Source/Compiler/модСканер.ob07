@@ -103,7 +103,7 @@
         L := Lex
      ќЌ≈÷ GetLexStr;
 
-ѕ–ќ÷≈ƒ”–ј Backup*(scanner: м“ипы.ту—канер);
+ѕ–ќ÷≈ƒ”–ј —охранить*(scanner: м“ипы.ту—канер);
     Ќј„јЋќ
         scanner.файл_ном := File;
         scanner.ccol := ccol;
@@ -121,7 +121,7 @@
         scanner.bufpos := bufpos;
         scanner.CR := CR;
         scanner.UTF8 := UTF8
-     ќЌ≈÷ Backup;
+     ќЌ≈÷ —охранить;
 
 ѕ–ќ÷≈ƒ”–ј ¬ернуть*(scanner: м“ипы.ту—канер);
     Ќј„јЋќ
