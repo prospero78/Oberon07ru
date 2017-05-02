@@ -170,13 +170,13 @@
     КОНЕЦ
   КОНЕЦ ПамОш_Проверить;
 
-ПРОЦЕДУРА GetString*(adr: LONGREAL): туКонстСтр;
+ПРОЦЕДУРА Стр_Получ*(adr: LONGREAL): туКонстСтр;
   ПЕРЕМ
     str: туКонстСтр;
   НАЧАЛО
     SYSTEM.PUT(SYSTEM.ADR(str), FLOOR(adr))
     ВЕРНУТЬ str
-  КОНЕЦ GetString;
+  КОНЕЦ Стр_Получ;
 
 ПРОЦЕДУРА AddString*(str: мСтр.тСтрока): туКонстСтр;
   ПЕРЕМ
@@ -511,8 +511,8 @@
     sa, sb: туКонстСтр;
     Res: LONGREAL;
   НАЧАЛО
-    sa := GetString(a);
-    sb := GetString(b);
+    sa := Стр_Получ(a);
+    sb := Стр_Получ(b);
     ВЫБОР Op ИЗ
     |lxEQ, lxNE: Res := LONG(FLT(ORD(sa.Str = sb.Str)))
     |lxLT, lxGT: Res := LONG(FLT(ORD(sa.Str < sb.Str)))

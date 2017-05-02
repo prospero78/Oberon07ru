@@ -80,7 +80,7 @@
   оепел
     s: DECL.РСйНМЯРяРП;
   мювюкн
-    s := DECL.GetString(adr)
+    s := DECL.яРП_оНКСВ(adr)
     бепмсрэ s.Len
   йнмеж LenString;
 
@@ -208,7 +208,7 @@
       юеякх id.T.tType IN {TREAL, TLONGREAL} рнцдю
         X86.PushFlt(e.Value)
       юеякх id.T.tType = TSTRING рнцдю
-        s := DECL.GetString(e.Value);
+        s := DECL.яРП_оНКСВ(e.Value);
         еякх s.Len = 1 рнцдю
           X86.PushConst(ORD(s.Str[0]))
         хмюве
@@ -539,7 +539,7 @@
       Load(e1);
       еякх e1.eType = eCONST рнцдю
         еякх e1.T.tType = TSTRING рнцдю
-          str := DECL.GetString(e1.Value);
+          str := DECL.яРП_оНКСВ(e1.Value);
           e.Value := LONG(FLT(ORD(str.Str[0])))
         хмюве
           e.Value := e1.Value
@@ -596,7 +596,7 @@
       pExpr(e1);
       Assert(IsString(e1), line, col, 141);
       еякх e1.T.tType = TSTRING рнцдю
-        str := DECL.GetString(e1.Value);
+        str := DECL.яРП_оНКСВ(e1.Value);
         еякх str.Len = 1 рнцдю
           X86.Mono(str.Number);
           X86.StrMono
@@ -619,7 +619,7 @@
         pFactor(e1)
       йнмеж;
       еякх e1.T = sttypes[TSTRING] рнцдю
-        str := DECL.GetString(e1.Value);
+        str := DECL.яРП_оНКСВ(e1.Value);
         еякх str.Len = 1 рнцдю
           X86.Drop;
           X86.PushInt(str.Number)
@@ -851,7 +851,7 @@
         X86.DropFpu(param.T.tType = TLONGREAL)
       йнмеж;
       еякх (e1.T.tType = TSTRING) & (param.T.tType = TARRAY) рнцдю
-        s := DECL.GetString(e1.Value);
+        s := DECL.яРП_оНКСВ(e1.Value);
         еякх s.Len = 1 рнцдю
           X86.Mono(s.Number)
         йнмеж;
@@ -949,7 +949,7 @@
         str2 := DECL.AddString(Lex);
         SYSTEM.GET(SYSTEM.ADR(str2), p);
         e.Value := LONG(FLT(p));
-        s := DECL.GetString(e.Value);
+        s := DECL.яРП_оНКСВ(e.Value);
         еякх s.Len = 1 рнцдю
           X86.PushConst(ORD(s.Str[0]))
         хмюве
@@ -1259,7 +1259,7 @@
         |TINTEGER, TSET, TBOOLEAN, TNIL:
           X86.PushConst(FLOOR(e.Value))
         |TSTRING:
-          s := DECL.GetString(e.Value);
+          s := DECL.яРП_оНКСВ(e.Value);
           еякх s.Len = 1 рнцдю
             X86.PushConst(ORD(s.Str[0]))
           хмюве
@@ -1407,7 +1407,7 @@
       a := FLOOR(Value)
     хмюве
       Assert(T.tType = TSTRING, line, col, 55);
-      s := DECL.GetString(Value);
+      s := DECL.яРП_оНКСВ(Value);
       Assert(s.Len = 1, line, col, 94);
       a := ORD(s.Str[0])
     йнмеж
@@ -1580,7 +1580,7 @@
       Assert(IsString(e1), line, col, 141);
       Check(lxComma);
       еякх e1.T.tType = TSTRING рнцдю
-        str := DECL.GetString(e1.Value);
+        str := DECL.яРП_оНКСВ(e1.Value);
         еякх str.Len = 1 рнцдю
           X86.Mono(str.Number);
           X86.StrMono
@@ -1763,7 +1763,7 @@
       юеякх e2.T.tType = TARRAY рнцдю
         X86.PushConst(e2.T.Size)
       юеякх (e2.T.tType = TSTRING) & (e1.T.tType = TARRAY) рнцдю
-        s := DECL.GetString(e2.Value);
+        s := DECL.яРП_оНКСВ(e2.Value);
         еякх s.Len = 1 рнцдю
           X86.Mono(s.Number)
         йнмеж;
