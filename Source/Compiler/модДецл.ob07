@@ -802,15 +802,15 @@
         n := 4 * (1 + Dim(T) + ORD((cur.VarKind = paramvar) & (T.tType = TRECORD)))
       »Ќј„≈
         n := T.Size;
-        Assert2(n <= м онст.целое_макс - м”тиль.Align(n), 93);
-        n := n + м”тиль.Align(n)
+        Assert2(n <= м онст.целое_макс - мѕам.¬ыровн€ть(n), 93);
+        n := n + мѕам.¬ыровн€ть(n)
        ќЌ≈÷;
       ≈—Ћ» cur.Level = 3 “ќ√ƒј
         cur.Offset := ProgSize;
         Assert2(ProgSize <= м онст.целое_макс - n, 93);
         ProgSize := ProgSize + n;
-        Assert2(ProgSize <= м онст.целое_макс - м”тиль.Align(ProgSize), 93);
-        ProgSize := ProgSize + м”тиль.Align(ProgSize)
+        Assert2(ProgSize <= м онст.целое_макс - мѕам.¬ыровн€ть(ProgSize), 93);
+        ProgSize := ProgSize + мѕам.¬ыровн€ть(ProgSize)
       »Ќј„≈
         ≈—Ћ» cur.VarKind = 0 “ќ√ƒј
           cur.Offset := curBlock.ParamSize - curBlock.VarSize - n
@@ -820,8 +820,8 @@
        ќЌ≈÷;
       Assert2(curBlock.VarSize <= м онст.целое_макс - n, 93);
       curBlock.VarSize := curBlock.VarSize + n;
-      Assert2(curBlock.VarSize <= м онст.целое_макс - м”тиль.Align(curBlock.VarSize), 93);
-      curBlock.VarSize := curBlock.VarSize + м”тиль.Align(curBlock.VarSize);
+      Assert2(curBlock.VarSize <= м онст.целое_макс - мѕам.¬ыровн€ть(curBlock.VarSize), 93);
+      curBlock.VarSize := curBlock.VarSize + мѕам.¬ыровн€ть(curBlock.VarSize);
       ≈—Ћ» cur.VarKind # 0 “ќ√ƒј
         curBlock.ParamSize := curBlock.VarSize
        ќЌ≈÷;
