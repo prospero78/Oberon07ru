@@ -60,7 +60,7 @@
 
 ТИПЫ
 
-  LABEL = УКАЗАТЕЛЬ НА ЗАПИСЬ (мТипы.тПункт)
+  тМетка = УКАЗАТЕЛЬ НА ЗАПИСЬ (мТипы.тПункт)
       a, b: INTEGER
     КОНЕЦ;
 
@@ -1385,11 +1385,12 @@
   КОНЕЦ ForOper;
 
 ПРОЦЕДУРА CheckLabel(a, b: INTEGER; Labels: мТипы.туСписок): BOOLEAN;
-  ПЕРЕМ cur: LABEL;
+  ПЕРЕМ 
+    cur: тМетка;
   НАЧАЛО
-    cur := Labels.предыдущ(LABEL);
+    cur := Labels.предыдущ(тМетка);
     ПОКА (cur # ПУСТО) & ((b < cur.a) ИЛИ (a > cur.b)) ДЕЛАТЬ
-      cur := cur.следующ(LABEL)
+      cur := cur.следующ(тМетка)
     КОНЕЦ
     ВЕРНУТЬ cur = ПУСТО
   КОНЕЦ CheckLabel;
@@ -1415,7 +1416,10 @@
   КОНЕЦ LabelVal;
 
 ПРОЦЕДУРА Label(int: BOOLEAN; Labels: мТипы.туСписок; LBeg: INTEGER);
-  ПЕРЕМ a, b: INTEGER; label: LABEL; line, col: INTEGER;
+  ПЕРЕМ
+    a, b: INTEGER;
+    label: тМетка;
+    line, col: INTEGER;
   НАЧАЛО
     Coord(line, col);
     LabelVal(a, int);
