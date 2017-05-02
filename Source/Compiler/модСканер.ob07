@@ -183,7 +183,7 @@ This file is part of Compiler.
             cline := 1;
             ch := 0X;
             size := м‘айл.–азмер_ѕолуч(File);
-            buf := м”тиль.ѕам€ть_ѕолуч(size + 1024);
+            buf := мѕам.ѕолуч(size + 1024);
             mSys.PUT(buf + size, 0X);
             мѕам.MemErr(buf = 0);
             n := м‘айл.„итать(File, buf, size);

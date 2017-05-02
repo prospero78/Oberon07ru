@@ -115,10 +115,6 @@
     str[j] := 0X
   йнмеж ParamStr;
 
-опнжедспю оЮЛЪРЭ_оНКСВ*(n: INTEGER): INTEGER;
-      бепмсрэ API.Alloc(64, n)
-  йнмеж оЮЛЪРЭ_оНКСВ;
-
 опнжедспю UnitLine*(newUnit, newLine: INTEGER);
   мювюкн
     Unit := newUnit;

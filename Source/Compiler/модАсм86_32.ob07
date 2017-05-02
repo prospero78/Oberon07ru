@@ -426,7 +426,7 @@
     ЕСЛИ F = 0 ТОГДА
       Err(1)
     КОНЕЦ;
-    OutFilePos := мУтиль.Память_Получ(filesize);
+    OutFilePos := мПам.Получ(filesize);
     filebuf := OutFilePos;
     мПам.MemErr(OutFilePos = 0);
 
@@ -1583,7 +1583,7 @@
     ЕСЛИ F <= 0 ТОГДА
       Err(1)
     КОНЕЦ;
-    OutFilePos := мУтиль.Память_Получ(Align(size, 4) + datasize + 1000H);
+    OutFilePos := мПам.Получ(Align(size, 4) + datasize + 1000H);
     filebuf := OutFilePos;
     мПам.MemErr(OutFilePos = 0);
 
@@ -1758,7 +1758,7 @@
     Add(1C05H); Add(1C15H); Add(1C55H); Add(1C75H); Add(1CA5H); Add(1CB5H); Add(1CE5H); Add(1D05H);
     Add(1D15H); Add(1D25H); Add(1D35H); Add(1D55H); Add(1D75H); Add(1D89H);
 
-    OutFilePos := мУтиль.Память_Получ(code + data + 8000H);
+    OutFilePos := мПам.Получ(code + data + 8000H);
     filebuf := OutFilePos;
     мПам.MemErr(OutFilePos = 0);
 
