@@ -75,9 +75,9 @@
 
 рхош
 
-  pTYPE* = сйюгюрекэ мю гюохяэ (ЛрХОШ.РоСМЙР)
+  РСрХО* = сйюгюрекэ мю гюохяэ (ЛрХОШ.РоСМЙР)
       tType*, Size*, Len*, Number*, Align, Call*, Rec: INTEGER;
-      Base*: pTYPE;
+      Base*: РСрХО;
       Fields*: ЛрХОШ.РСяОХЯНЙ
     йнмеж;
 
@@ -96,7 +96,7 @@
 
   rIDENT* = гюохяэ (ЛрХОШ.РоСМЙР)
       Name: ЛрХОШ.РСсГЕК;
-      T*: pTYPE;
+      T*: РСрХО;
       Unit*: UNIT;
       Parent*: IDENT;
       Value*: LONGREAL;
@@ -108,7 +108,7 @@
   PTRBASE = сйюгюрекэ мю гюохяэ (ЛрХОШ.РоСМЙР)
       Name: ЛрХОШ.РСсГЕК;
       line, col: INTEGER;
-      Ptr: pTYPE
+      Ptr: РСрХО
     йнмеж;
 
   STRITEM = сйюгюрекэ мю гюохяэ (ЛрХОШ.РоСМЙР)
@@ -117,7 +117,7 @@
 
   FIELD* = сйюгюрекэ мю гюохяэ (ЛрХОШ.РоСМЙР)
       Name: ЛрХОШ.РСсГЕК;
-      T*: pTYPE;
+      T*: РСрХО;
       Offset*: INTEGER;
       ByRef*, Export*: BOOLEAN;
       Unit*: UNIT
@@ -130,7 +130,7 @@
 
   EXPRESSION* = гюохяэ
       id*: IDENT;
-      T*: pTYPE;
+      T*: РСрХО;
       eType*: INTEGER;
       Value*: LONGREAL;
       Read*, vparam*, deref*: BOOLEAN
@@ -138,9 +138,9 @@
 
   opPROC = опнжедспю;
   expPROC = опнжедспю (оеп e: EXPRESSION);
-  assPROC = опнжедспю (e: EXPRESSION; T: pTYPE; param: BOOLEAN): BOOLEAN;
+  assPROC = опнжедспю (e: EXPRESSION; T: РСрХО; param: BOOLEAN): BOOLEAN;
 
-  stTYPES* = люяяхб 11 хг pTYPE;
+  stTYPES* = люяяхб 11 хг РСрХО;
 
 оепел
 
@@ -150,7 +150,7 @@
   PtrBases, Strings, types, prog: ЛрХОШ.РСяОХЯНЙ;
   OpSeq: opPROC; Expr: expPROC;
   AssComp: assPROC; main, sizefunc, winplatf, Const*: BOOLEAN;
-  pParseType: опнжедспю (оеп line, col: INTEGER): pTYPE;
+  pParseType: опнжедспю (оеп line, col: INTEGER): РСрХО;
   pReadModule: опнжедспю (Path, Name, Ext: ЛяРП.РяРПНЙЮ): BOOLEAN;
   Platform: INTEGER;
 
@@ -296,7 +296,7 @@
     INC(unit.Level)
   йнмеж Guard;
 
-опнжедспю PushIdent(Name: ЛрХОШ.РСсГЕК; line, col, iType: INTEGER; T: pTYPE; u: UNIT; Export: BOOLEAN; StProc: INTEGER);
+опнжедспю PushIdent(Name: ЛрХОШ.РСсГЕК; line, col, iType: INTEGER; T: РСрХО; u: UNIT; Export: BOOLEAN; StProc: INTEGER);
   оепел ident: IDENT; i: INTEGER;
   мювюкн
     Assert(CheckIdent(Name), line, col, 30);
@@ -321,7 +321,8 @@
   йнмеж PushIdent;
 
 опнжедспю StTypes;
-  оепел type: pTYPE; i: INTEGER;
+  оепел
+    type: РСрХО; i: INTEGER;
   мювюкн
     sttypes[0] := осярн;
     дкъ i := TINTEGER дн TSTRING декюрэ
@@ -452,7 +453,7 @@
     бепмсрэ Res
   йнмеж Relation;
 
-опнжедспю Arith(a, b: LONGREAL; T: pTYPE; Op, line, col: INTEGER): LONGREAL;
+опнжедспю Arith(a, b: LONGREAL; T: РСрХО; Op, line, col: INTEGER): LONGREAL;
   CONST max = ЛяЙЮМ.maxDBL;
   оепел res: LONGREAL;
   мювюкн
@@ -503,7 +504,7 @@
     бепмсрэ Res
   йнмеж strcmp;
 
-опнжедспю Calc*(a, b: LONGREAL; Ta, Tb: pTYPE; Op, line, col: INTEGER; оеп Res: LONGREAL; оеп TRes: pTYPE);
+опнжедспю Calc*(a, b: LONGREAL; Ta, Tb: РСрХО; Op, line, col: INTEGER; оеп Res: LONGREAL; оеп TRes: РСрХО);
   оепел c: LONGREAL; ai, bi: INTEGER;
   мювюкн
     ai := FLOOR(a);
@@ -585,7 +586,7 @@
     йнмеж
   йнмеж Calc;
 
-опнжедспю ConstExpr*(оеп Value: LONGREAL; оеп T: pTYPE);
+опнжедспю ConstExpr*(оеп Value: LONGREAL; оеп T: РСрХО);
   оепел e: EXPRESSION; line, col: INTEGER;
   мювюкн
     Const := хярхмю;
@@ -598,8 +599,12 @@
     Const := кнфэ
   йнмеж ConstExpr;
 
-опнжедспю IdType*(оеп line, col: INTEGER): pTYPE;
-  оепел id: IDENT; Name: ЛрХОШ.РСсГЕК; Unit: UNIT; Res: pTYPE;
+опнжедспю IdType*(оеп line, col: INTEGER): РСрХО;
+  оепел
+    id: IDENT;
+    Name: ЛрХОШ.РСсГЕК;
+    Unit: UNIT;
+    Res: РСрХО;
   мювюкн
     Res := осярн;
     Name := ЛяЙЮМ.id;
@@ -654,7 +659,7 @@
     бепмсрэ RecSize + (Align - RecSize MOD Align) MOD Align
   йнмеж FieldOffset;
 
-опнжедспю Dim*(T: pTYPE): INTEGER;
+опнжедспю Dim*(T: РСрХО): INTEGER;
   оепел n: INTEGER;
   мювюкн
     n := 0;
@@ -665,7 +670,7 @@
     бепмсрэ n
   йнмеж Dim;
 
-опнжедспю SetFields(Tr, Tf: pTYPE; Rec: BOOLEAN);
+опнжедспю SetFields(Tr, Tf: РСрХО; Rec: BOOLEAN);
   оепел cur: FIELD;
   мювюкн
     cur := Tr.Fields.ОПЕДШДСЫ(FIELD);
@@ -699,7 +704,7 @@
     йнмеж
   йнмеж SetFields;
 
-опнжедспю GetField*(T: pTYPE; Name: ЛрХОШ.РСсГЕК): FIELD;
+опнжедспю GetField*(T: РСрХО; Name: ЛрХОШ.РСсГЕК): FIELD;
   оепел cur, Res: FIELD;
   мювюкн
     Res := осярн;
@@ -713,7 +718,7 @@
     бепмсрэ Res
   йнмеж GetField;
 
-опнжедспю Unique(T: pTYPE; Name: ЛрХОШ.РСсГЕК): BOOLEAN;
+опнжедспю Unique(T: РСрХО; Name: ЛрХОШ.РСсГЕК): BOOLEAN;
   оепел field: FIELD; res: BOOLEAN;
   мювюкн
     res := хярхмю;
@@ -729,13 +734,18 @@
     бепмсрэ res
   йнмеж Unique;
 
-опнжедспю notrecurs(id: BOOLEAN; T: pTYPE): BOOLEAN;
+опнжедспю notrecurs(id: BOOLEAN; T: РСрХО): BOOLEAN;
     бепмсрэ ~(id & (unit.Idents.ЯКЕДСЧЫ(IDENT).iType = IDTYPE) & (unit.Idents.ЯКЕДСЧЫ(IDENT).T = T) &
             (T.tType IN {TRECORD, TARRAY}))
   йнмеж notrecurs;
 
-опнжедспю ReadFields(T: pTYPE);
-  оепел Name: ЛрХОШ.РСсГЕК; field: FIELD; Tf: pTYPE; line, col: INTEGER; id_T: BOOLEAN;
+опнжедспю ReadFields(T: РСрХО);
+  оепел
+    Name: ЛрХОШ.РСсГЕК;
+    field: FIELD;
+    Tf: РСрХО;
+    line, col: INTEGER;
+    id_T: BOOLEAN;
   мювюкн
     онйю ЛяЙЮМ.tLex = lxIDENT декюрэ
       Name := ЛяЙЮМ.id;
@@ -778,7 +788,7 @@
     йнмеж
   йнмеж ReadFields;
 
-опнжедспю OpenBase*(T: pTYPE): pTYPE;
+опнжедспю OpenBase*(T: РСрХО): РСрХО;
   мювюкн
     онйю (T.tType = TARRAY) & (T.Len = 0) декюрэ
       T := T.Base
@@ -786,8 +796,9 @@
     бепмсрэ T
   йнмеж OpenBase;
 
-опнжедспю SetVars(T: pTYPE);
-  оепел cur: IDENT; n: INTEGER;
+опнжедспю SetVars(T: РСрХО);
+  оепел
+    cur: IDENT; n: INTEGER;
   мювюкн
     cur := unit.Idents.ЯКЕДСЧЫ(IDENT);
     онйю cur.T = осярн декюрэ
@@ -830,8 +841,9 @@
     йнмеж
   йнмеж SetVars;
 
-опнжедспю CreateType(tType, Len, Size, Number: INTEGER; Base: pTYPE; Fields: BOOLEAN; NewType: pTYPE): pTYPE;
-  оепел nov: pTYPE;
+опнжедспю CreateType(tType, Len, Size, Number: INTEGER; Base: РСрХО; Fields: BOOLEAN; NewType: РСрХО): РСрХО;
+  оепел
+    nov: РСрХО;
   мювюкн
     еякх NewType = осярн рнцдю
       NEW(nov);
@@ -853,8 +865,9 @@
     бепмсрэ nov
   йнмеж CreateType;
 
-опнжедспю FormalType(оеп line, col: INTEGER): pTYPE;
-  оепел TA: pTYPE;
+опнжедспю FormalType(оеп line, col: INTEGER): РСрХО;
+  оепел
+    TA: РСрХО;
   мювюкн
     еякх ЛяЙЮМ.tLex = ЛйНМЯР.ЙЯлюяяхб рнцдю
       Next;
@@ -869,9 +882,15 @@
     бепмсрэ TA
   йнмеж FormalType;
 
-опнжедспю Section(T: pTYPE);
-  оепел Name: ЛрХОШ.РСсГЕК; ByRef, cont: BOOLEAN; field: FIELD;
-      Tf: pTYPE; fp: IDENT; line, col: INTEGER; proc: BOOLEAN;
+опнжедспю Section(T: РСрХО);
+  оепел
+      Name: ЛрХОШ.РСсГЕК;
+      ByRef, cont: BOOLEAN;
+      field: FIELD;
+      Tf: РСрХО;
+      fp: IDENT;
+      line, col: INTEGER;
+      proc: BOOLEAN;
   мювюкн
     proc := T = осярн;
     еякх proc рнцдю
@@ -923,7 +942,7 @@
     йнмеж
   йнмеж Section;
 
-опнжедспю ParamType(T: pTYPE);
+опнжедспю ParamType(T: РСрХО);
   оепел break: BOOLEAN;
   мювюкн
     еякх (ЛяЙЮМ.tLex = lxIDENT) хкх (ЛяЙЮМ.tLex = ЛйНМЯР.ЙЯоепел) рнцдю
@@ -939,7 +958,7 @@
     йнмеж
   йнмеж ParamType;
 
-опнжедспю AddPtrBase(Name: ЛрХОШ.РСсГЕК; line, col: INTEGER; T: pTYPE);
+опнжедспю AddPtrBase(Name: ЛрХОШ.РСсГЕК; line, col: INTEGER; T: РСрХО);
   оепел nov: PTRBASE;
   мювюкн
     NEW(nov);
@@ -951,7 +970,7 @@
     ЛяОХЯ.дНАЮБХРЭ(PtrBases, nov)
   йнмеж AddPtrBase;
 
-опнжедспю FormalList(T: pTYPE; оеп Res: pTYPE);
+опнжедспю FormalList(T: РСрХО; оеп Res: РСрХО);
   оепел line, col: INTEGER;
   мювюкн
     еякх ЛяЙЮМ.tLex = lxLRound рнцдю
@@ -1022,8 +1041,12 @@
     бепмсрэ res
   йнмеж RecFlag;
 
-опнжедспю StructType(Comma: BOOLEAN; NewType: pTYPE): pTYPE;
-  оепел v: LONGREAL; T, nov: pTYPE; line, col, line2, col2: INTEGER; id_T: BOOLEAN;
+опнжедспю StructType(Comma: BOOLEAN; NewType: РСрХО): РСрХО;
+  оепел
+    v: LONGREAL;
+    T, nov: РСрХО;
+    line, col, line2, col2: INTEGER;
+    id_T: BOOLEAN;
   мювюкн
     бшанп ЛяЙЮМ.tLex хг
     |ЛйНМЯР.ЙЯлюяяхб, lxComma:
@@ -1114,8 +1137,9 @@
     бепмсрэ nov
   йнмеж StructType;
 
-опнжедспю ParseType(оеп line, col: INTEGER): pTYPE;
-  оепел Res: pTYPE;
+опнжедспю ParseType(оеп line, col: INTEGER): РСрХО;
+  оепел
+    Res: РСрХО;
   мювюкн
     еякх ЛяЙЮМ.tLex = lxIDENT рнцдю
       Res := IdType(line, col)
@@ -1157,8 +1181,14 @@
   йнмеж LinkPtr;
 
 опнжедспю DeclSeq;
-  оепел Value: LONGREAL; T, NewType: pTYPE; Name: ЛрХОШ.РСсГЕК; line, col, Call: INTEGER;
-      Export, func: BOOLEAN; last, id: IDENT; e: EXPRESSION;
+  оепел
+    Value: LONGREAL;
+    T, NewType: РСрХО;
+    Name: ЛрХОШ.РСсГЕК;
+    line, col, Call: INTEGER;
+    Export, func: BOOLEAN;
+    last, id: IDENT;
+    e: EXPRESSION;
 
     опнжедспю IdentDef;
     мювюкн

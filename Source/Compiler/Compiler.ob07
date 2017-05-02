@@ -114,7 +114,7 @@
     DECL.Check(key)
   йнмеж Check;
 
-опнжедспю BaseOf(T0, T1: DECL.pTYPE): BOOLEAN;
+опнжедспю BaseOf(T0, T1: DECL.РСрХО): BOOLEAN;
   мювюкн
     еякх (T0.tType = T1.tType) & (T0.tType IN {TRECORD, TPOINTER}) рнцдю
       еякх T0.tType = TPOINTER рнцдю
@@ -129,10 +129,15 @@
   йнмеж BaseOf;
 
 опнжедспю Designator(оеп e: DECL.EXPRESSION);
-  оепел id: DECL.IDENT; name: ЛрХОШ.РСсГЕК; e1: DECL.EXPRESSION;
-      line, col, i, n, bases, glob, loc, idx: INTEGER;
-      imp, break, guard: BOOLEAN; f: DECL.FIELD;
-      T, BaseT: DECL.pTYPE; s: DECL.STRCONST;
+  оепел
+    id: DECL.IDENT;
+    name: ЛрХОШ.РСсГЕК;
+    e1: DECL.EXPRESSION;
+    line, col, i, n, bases, glob, loc, idx: INTEGER;
+    imp, break, guard: BOOLEAN;
+    f: DECL.FIELD;
+    T, BaseT: DECL.РСрХО;
+    s: DECL.STRCONST;
 
     опнжедспю LoadVar;
     мювюкн
@@ -422,8 +427,11 @@
   йнмеж Str;
 
 опнжедспю StFunc(оеп e: DECL.EXPRESSION; func: INTEGER);
-  оепел line, col, line2, col2, a, b, p: INTEGER; e1, e2: DECL.EXPRESSION;
-      T: DECL.pTYPE; str, str2: DECL.STRCONST;
+  оепел
+    line, col, line2, col2, a, b, p: INTEGER;
+    e1, e2: DECL.EXPRESSION;
+    T: DECL.РСрХО;
+    str, str2: DECL.STRCONST;
   мювюкн
     e.vparam := кнфэ;
     e.eType := eEXP;
@@ -652,66 +660,74 @@
     Next
   йнмеж StFunc;
 
-опнжедспю ProcTypeComp(T1, T2: DECL.pTYPE): BOOLEAN;
-  оепел sp: INTEGER; stk: люяяхб 100, 2 хг DECL.pTYPE;
+опнжедспю ProcTypeComp(T1, T2: DECL.РСрХО): BOOLEAN;
+  оепел
+    sp: INTEGER;
+    stk: люяяхб 100, 2 хг DECL.РСрХО;
 
-    опнжедспю ProcTypeComp1(T1, T2: DECL.pTYPE): BOOLEAN;
-    оепел fp, ft: DECL.FIELD; Res: BOOLEAN;
+    опнжедспю ProcTypeComp1(T1, T2: DECL.РСрХО): BOOLEAN;
+      оепел
+        fp, ft: DECL.FIELD;
+        Res: BOOLEAN;
 
-      опнжедспю TypeComp(T1, T2: DECL.pTYPE): BOOLEAN;
-      оепел Res: BOOLEAN;
-      мювюкн
-        еякх (T1.tType = TARRAY) & (T2.tType = TARRAY) & (T1.Len = 0) & (T2.Len = 0) рнцдю
-          Res := TypeComp(T1.Base, T2.Base)
-        хмюве
-          Res := ProcTypeComp1(T1, T2)
-        йнмеж
-        бепмсрэ Res
-      йнмеж TypeComp;
+      опнжедспю TypeComp(T1, T2: DECL.РСрХО): BOOLEAN;
+        оепел
+          Res: BOOLEAN;
+        мювюкн
+          еякх (T1.tType = TARRAY) & (T2.tType = TARRAY) & (T1.Len = 0) & (T2.Len = 0) рнцдю
+            Res := TypeComp(T1.Base, T2.Base)
+          хмюве
+            Res := ProcTypeComp1(T1, T2)
+          йнмеж
+          бепмсрэ Res
+        йнмеж TypeComp;
 
       опнжедспю Check(): BOOLEAN;
-      оепел i: INTEGER; res: BOOLEAN;
-      мювюкн
-        i := 0;
-        res := кнфэ;
-        онйю (i < sp) & ~res декюрэ
-          res := ((stk[i][0] = T1) & (stk[i][1] = T2)) хкх ((stk[i][0] = T2) & (stk[i][1] = T1));
-          INC(i)
-        йнмеж
-        бепмсрэ res
-      йнмеж Check;
-
-    мювюкн
-      INC(sp);
-      stk[sp][0] := T1;
-      stk[sp][1] := T2;
-      еякх Check() рнцдю
-        Res := хярхмю
-      хмюве
-        еякх (T1.tType = TPROC) & (T2.tType = TPROC) & (T1 # T2) рнцдю
-          Res := (T1.Call = T2.Call) & (T1.Fields.ЯВЕРВХЙ = T2.Fields.ЯВЕРВХЙ) & ProcTypeComp1(T1.Base, T2.Base);
-          fp := T1.Fields.ОПЕДШДСЫ(DECL.FIELD);
-          ft := T2.Fields.ОПЕДШДСЫ(DECL.FIELD);
-          онйю Res & (fp # осярн) декюрэ
-            Res := (fp.ByRef = ft.ByRef) & TypeComp(fp.T, ft.T);
-            fp := fp.ЯКЕДСЧЫ(DECL.FIELD);
-            ft := ft.ЯКЕДСЧЫ(DECL.FIELD)
+        оепел
+          i: INTEGER;
+          res: BOOLEAN;
+        мювюкн
+          i := 0;
+          res := кнфэ;
+          онйю (i < sp) & ~res декюрэ
+            res := ((stk[i][0] = T1) & (stk[i][1] = T2)) хкх ((stk[i][0] = T2) & (stk[i][1] = T1));
+            INC(i)
           йнмеж
+          бепмсрэ res
+        йнмеж Check;
+
+      мювюкн
+        INC(sp);
+        stk[sp][0] := T1;
+        stk[sp][1] := T2;
+        еякх Check() рнцдю
+          Res := хярхмю
         хмюве
-          Res := T1 = T2
-        йнмеж
-      йнмеж;
-      DEC(sp)
-      бепмсрэ Res
-    йнмеж ProcTypeComp1;
+          еякх (T1.tType = TPROC) & (T2.tType = TPROC) & (T1 # T2) рнцдю
+            Res := (T1.Call = T2.Call) & (T1.Fields.ЯВЕРВХЙ = T2.Fields.ЯВЕРВХЙ) & ProcTypeComp1(T1.Base, T2.Base);
+            fp := T1.Fields.ОПЕДШДСЫ(DECL.FIELD);
+            ft := T2.Fields.ОПЕДШДСЫ(DECL.FIELD);
+            онйю Res & (fp # осярн) декюрэ
+              Res := (fp.ByRef = ft.ByRef) & TypeComp(fp.T, ft.T);
+              fp := fp.ЯКЕДСЧЫ(DECL.FIELD);
+              ft := ft.ЯКЕДСЧЫ(DECL.FIELD)
+            йнмеж
+          хмюве
+            Res := T1 = T2
+          йнмеж
+        йнмеж;
+        DEC(sp)
+        бепмсрэ Res
+      йнмеж ProcTypeComp1;
 
   мювюкн
     sp := -1
     бепмсрэ ProcTypeComp1(T1, T2)
   йнмеж ProcTypeComp;
 
-опнжедспю ArrComp(Ta, Tf: DECL.pTYPE): BOOLEAN;
-  оепел Res: BOOLEAN;
+опнжедспю ArrComp(Ta, Tf: DECL.РСрХО): BOOLEAN;
+  оепел
+    Res: BOOLEAN;
   мювюкн
     еякх (Tf.tType = TARRAY) & (Tf.Len = 0) & (Ta.tType = TARRAY) рнцдю
       Res := ArrComp(Ta.Base, Tf.Base)
@@ -721,7 +737,7 @@
     бепмсрэ Res
   йнмеж ArrComp;
 
-опнжедспю AssComp(e: DECL.EXPRESSION; T: DECL.pTYPE; param: BOOLEAN): BOOLEAN;
+опнжедспю AssComp(e: DECL.EXPRESSION; T: DECL.РСрХО; param: BOOLEAN): BOOLEAN;
   оепел Res: BOOLEAN;
   мювюкн
     бшанп T.tType хг
@@ -767,7 +783,7 @@
     бепмсрэ Res
   йнмеж AssComp;
 
-опнжедспю ParamComp(e: DECL.EXPRESSION; T: DECL.pTYPE; ByRef: BOOLEAN): BOOLEAN;
+опнжедспю ParamComp(e: DECL.EXPRESSION; T: DECL.РСрХО; ByRef: BOOLEAN): BOOLEAN;
   оепел Res: BOOLEAN;
   мювюкн
     еякх ByRef рнцдю
@@ -798,7 +814,12 @@
   йнмеж ParamComp;
 
 опнжедспю Call(param: DECL.FIELD);
-  оепел line, col, i, n: INTEGER; e1: DECL.EXPRESSION; s: DECL.STRCONST; A: X86.TIDX; TA: DECL.pTYPE;
+  оепел
+    line, col, i, n: INTEGER;
+    e1: DECL.EXPRESSION;
+    s: DECL.STRCONST;
+    A: X86.TIDX;
+    TA: DECL.РСрХО;
   мювюкн
     онйю param # осярн декюрэ
       Coord(line, col);
@@ -1165,7 +1186,12 @@
   йнмеж Simple;
 
 опнжедспю Expr(оеп e: DECL.EXPRESSION);
-  оепел a: DECL.EXPRESSION; Op, line, col, line2, col2, fpu: INTEGER; T: DECL.pTYPE; beg: X86.ASMLINE; s: DECL.STRCONST;
+  оепел
+    a: DECL.EXPRESSION;
+    Op, line, col, line2, col2, fpu: INTEGER;
+    T: DECL.РСрХО;
+    beg: X86.ASMLINE;
+    s: DECL.STRCONST;
   мювюкн
     fpu := X86.fpu;
     beg := X86.current;
@@ -1285,8 +1311,13 @@
   йнмеж RepeatOper;
 
 опнжедспю ForOper;
-  оепел e: DECL.EXPRESSION; line, col, LBeg, LEnd, iValue: INTEGER; Value: LONGREAL;
-      T: DECL.pTYPE; name: ЛрХОШ.РСсГЕК; id: DECL.IDENT;
+  оепел
+    e: DECL.EXPRESSION;
+    line, col, LBeg, LEnd, iValue: INTEGER;
+    Value: LONGREAL;
+    T: DECL.РСрХО;
+    name: ЛрХОШ.РСсГЕК;
+    id: DECL.IDENT;
   мювюкн
     Next;
     Check(lxIDENT);
@@ -1346,7 +1377,11 @@
   йнмеж CheckLabel;
 
 опнжедспю LabelVal(оеп a: INTEGER; int: BOOLEAN);
-  оепел Value: LONGREAL; T: DECL.pTYPE; s: DECL.STRCONST; line, col: INTEGER;
+  оепел
+    Value: LONGREAL;
+    T: DECL.РСрХО;
+    s: DECL.STRCONST;
+    line, col: INTEGER;
   мювюкн
     Coord(line, col);
     DECL.ConstExpr(Value, T);
@@ -1450,8 +1485,13 @@
   йнмеж CheckCode;
 
 опнжедспю StProc(proc: INTEGER);
-  оепел line, col, line2, col2, iValue: INTEGER; e1, e2: DECL.EXPRESSION; Value: LONGREAL;
-      T: DECL.pTYPE; str: DECL.STRCONST; begcall: X86.ASMLINE;
+  оепел
+    line, col, line2, col2, iValue: INTEGER;
+    e1, e2: DECL.EXPRESSION;
+    Value: LONGREAL;
+    T: DECL.РСрХО;
+    str: DECL.STRCONST;
+    begcall: X86.ASMLINE;
   мювюкн
     Coord(line2, col2);
     Check(lxLRound);
