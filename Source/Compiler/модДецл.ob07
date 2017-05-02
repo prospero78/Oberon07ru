@@ -156,7 +156,7 @@
   AssComp: тПроцедураСвязь;
   main, sizefunc, winplatf, Const*: BOOLEAN;
   pParseType: ПРОЦЕДУРА (ПЕР line, col: INTEGER): туТип;
-  pReadModule: ПРОЦЕДУРА (Path, Name, Ext: мСтр.тСтрока): BOOLEAN;
+  пМодуль_Читать: ПРОЦЕДУРА (Path, Name, Ext: мСтр.тСтрока): BOOLEAN;
   Platform: INTEGER;
 
 ПРОЦЕДУРА ПроцедурРазм_Уст*;
@@ -214,7 +214,7 @@
     col := мСкан.col
   КОНЕЦ Коорд_Уст;
 
-ПРОЦЕДУРА GetModule(Name: мТипы.туУзел): тМодуль;
+ПРОЦЕДУРА Модуль_Получ(Name: мТипы.туУзел): тМодуль;
   ПЕРЕМ
     cur, res: тМодуль;
   НАЧАЛО
@@ -227,7 +227,7 @@
       cur := cur.следующ(тМодуль)
     КОНЕЦ
     ВЕРНУТЬ res
-  КОНЕЦ GetModule;
+  КОНЕЦ Модуль_Получ;
 
 ПРОЦЕДУРА Next*;
   НАЧАЛО
@@ -239,29 +239,30 @@
   КОНЕЦ Next;
 
 ПРОЦЕДУРА Check*(key: INTEGER);
-  ПЕРЕМ code: INTEGER;
+  ПЕРЕМ
+    code: INTEGER;
   НАЧАЛО
     ЕСЛИ мСкан.tLex # key ТОГДА
       ВЫБОР key ИЗ
-      |мКонст.ксМОДУЛЬ:  code := 21
-      |lxIDENT:   code := 22
-      |lxSemi:    code := 23
-      |мКонст.ксКОНЕЦ:     code := 24
-      |lxDot:     code := 25
-      |lxEQ:      code := 35
-      |lxRRound:  code := 38
-      |мКонст.ксДО:      code := 40
-      |мКонст.ксИЗ:      code := 41
-      |lxRCurly:  code := 51
-      |lxLRound:  code := 56
-      |lxComma:   code := 61
-      |мКонст.ксТОГДА:    code := 98
-      |lxRSquare: code := 109
-      |мКонст.ксДЕЛАТЬ:      code := 118
-      |мКонст.ксПОКАНЕ:   code := 119
-      |lxAssign:  code := 120
-      |мКонст.ксВЕРНУТЬ:  code := 124
-      |lxColon:   code := 157
+        |мКонст.ксМОДУЛЬ:  code := 21
+        |lxIDENT:   code := 22
+        |lxSemi:    code := 23
+        |мКонст.ксКОНЕЦ:     code := 24
+        |lxDot:     code := 25
+        |lxEQ:      code := 35
+        |lxRRound:  code := 38
+        |мКонст.ксДО:      code := 40
+        |мКонст.ксИЗ:      code := 41
+        |lxRCurly:  code := 51
+        |lxLRound:  code := 56
+        |lxComma:   code := 61
+        |мКонст.ксТОГДА:    code := 98
+        |lxRSquare: code := 109
+        |мКонст.ксДЕЛАТЬ:      code := 118
+        |мКонст.ксПОКАНЕ:   code := 119
+        |lxAssign:  code := 120
+        |мКонст.ксВЕРНУТЬ:  code := 124
+        |lxColon:   code := 157
       ИНАЧЕ
       КОНЕЦ;
       мПров.Тест2(ЛОЖЬ, code)
@@ -279,7 +280,7 @@
     ВЕРНУТЬ cur.iType = IDGUARD
   КОНЕЦ CheckIdent;
 
-ПРОЦЕДУРА Guard;
+ПРОЦЕДУРА Охрана_Создать;
   ПЕРЕМ
     ident: туИмя;
   НАЧАЛО
@@ -290,7 +291,7 @@
     ident.T := sttypes[TVOID];
     мСпис.Добавить(unit.Idents, ident);
     INC(unit.Level)
-  КОНЕЦ Guard;
+  КОНЕЦ Охрана_Создать;
 
 ПРОЦЕДУРА PushIdent(Name: мТипы.туУзел; line, col, iType: INTEGER; T: туТип; u: тМодуль; Export: BOOLEAN; StProc: INTEGER);
   ПЕРЕМ
@@ -367,7 +368,7 @@
 
 ПРОЦЕДУРА StIdent;
   НАЧАЛО
-    Guard;
+    Охрана_Создать;
     PushStProc("ABS",      stABS);
     PushStProc("ASR",      stASR);
     PushStProc("ASSERT",   stASSERT);
@@ -399,7 +400,7 @@
     PushStProc("BITS",     stBITS);
     PushStProc("LSR",      stLSR);
     PushStProc("LENGTH",   stLENGTH);
-    Guard
+    Охрана_Создать
   КОНЕЦ StIdent;
 
 ПРОЦЕДУРА GetQIdent*(Unit: тМодуль; Name: мТипы.туУзел): туИмя;
@@ -1299,7 +1300,7 @@
       КОНЕЦ;
       id.Parent := curBlock;
       curBlock := id;
-      Guard;
+      Охрана_Создать;
       FormalList(ПУСТО, curBlock.T.Base);
       id.T.Call := Call;
       Check(lxSemi);
@@ -1385,13 +1386,13 @@
     ПЕРЕМ
       str: туПунктСтр;
     НАЧАЛО
-      u := GetModule(name);
+      u := Модуль_Получ(name);
       ЕСЛИ u = ПУСТО ТОГДА
         self := unit;
         мСкан.Сохранить(unit.scanner);
         COPY(name.имя, FName);
-        ЕСЛИ ~((~self.Std & pReadModule(Path, FName, мКонст.расшир)) ИЛИ
-                                pReadModule(Std, FName, мКонст.расшир)) ТОГДА
+        ЕСЛИ ~((~self.Std & пМодуль_Читать(Path, FName, мКонст.расшир)) ИЛИ
+                            пМодуль_Читать(Std, FName, мКонст.расшир)) ТОГДА
           ЕСЛИ FName = "SYSTEM" ТОГДА
             unit := sys;
             self.sys := ИСТИНА
@@ -1455,9 +1456,10 @@
     ПамОш_Проверить(unit.Idents = ПУСТО);
     unit.Level := 0;
     unit.Name := Name;
-    Guard; Guard;
+    Охрана_Создать;
+    Охрана_Создать;
     PushIdent(unit.Name, 0, 0, IDMOD, sttypes[TVOID], unit, ЛОЖЬ, 0);
-    Guard;
+    Охрана_Создать;
     unit.IdentBegin := unit.Idents.следующ(туИмя);
     unit.Closed := ИСТИНА
   КОНЕЦ Header;
@@ -1481,7 +1483,7 @@
     unit := temp
   КОНЕЦ Pseudo;
 
-ПРОЦЕДУРА ReadModule(Path, Name1, Ext: мСтр.тСтрока): BOOLEAN;
+ПРОЦЕДУРА Модуль_Читать(Path, Name1, Ext: мСтр.тСтрока): BOOLEAN;
   ПЕРЕМ
     FHandle: INTEGER;
     name, Name, b: мСтр.тСтрока;
@@ -1519,7 +1521,7 @@
       unit.Name := мСкан.id;
       PushIdent(unit.Name, мСкан.line, мСкан.col, IDMOD, sttypes[TVOID], unit, ЛОЖЬ, 0);
       idmod := unit.Idents.следующ(туИмя);
-      Guard;
+      Охрана_Создать;
       Next; Check(lxSemi);
       Next;
       ЕСЛИ мСкан.tLex = мКонст.ксИМПОРТ ТОГДА
@@ -1549,9 +1551,9 @@
       Res := ИСТИНА
     КОНЕЦ
     ВЕРНУТЬ Res
-  КОНЕЦ ReadModule;
+  КОНЕЦ Модуль_Читать;
 
-ПРОЦЕДУРА Program*(StdPath, FilePath, NameFile, ExtFile: мСтр.тСтрока; windows: BOOLEAN;
+ПРОЦЕДУРА Код_Настроить*(StdPath, FilePath, NameFile, ExtFile: мСтр.тСтрока; windows: BOOLEAN;
     OpSeqProc: тПроцедура; ExprProc: тПроцедураПер; AssCompProc: тПроцедураСвязь; ПЕР stypes: туТипНабор);
   НАЧАЛО
     winplatf := windows;
@@ -1573,7 +1575,7 @@
     ПамОш_Проверить(Strings = ПУСТО);
     Pseudo;
     stypes := sttypes
-  КОНЕЦ Program;
+  КОНЕЦ Код_Настроить;
 
 ПРОЦЕДУРА delfirstchar(ПЕР s: мСтр.тСтрока);
   ПЕРЕМ i: INTEGER;
@@ -1583,20 +1585,20 @@
     КОНЕЦ
   КОНЕЦ delfirstchar;
 
-ПРОЦЕДУРА Compile*(platform, stksize: INTEGER);
+ПРОЦЕДУРА Компилировать*(platform, stksize: INTEGER);
   ПЕРЕМ
     full, path, name, ext, temp, path2: мСтр.тСтрока;
   НАЧАЛО
     Platform := platform;
     main := ЛОЖЬ;
-    ЕСЛИ ReadModule(Std, "RTL", мКонст.расшир) ТОГДА
+    ЕСЛИ Модуль_Читать(Std, "RTL", мКонст.расшир) ТОГДА
       Rtl(unit)
     ИНАЧЕ
       мОш.Сообщ(65);
       мПроц.Закончить(1)
     КОНЕЦ;
     main := ИСТИНА;
-    ЕСЛИ ~ReadModule(Path, Main, ExtMain) ТОГДА
+    ЕСЛИ ~Модуль_Читать(Path, Main, ExtMain) ТОГДА
       path2 := Path;
       мУтиль.СтрПарам(full, 0);
       мСтр.Разделить(full, path, name, ext);
@@ -1612,7 +1614,7 @@
       ЕСЛИ (мКонст.ОС = "WIN") & (Path[0] = мКонст.слэш) ТОГДА
         delfirstchar(Path)
       КОНЕЦ;
-      ЕСЛИ ~ReadModule(Path, Main, ExtMain) ТОГДА
+      ЕСЛИ ~Модуль_Читать(Path, Main, ExtMain) ТОГДА
         мОш.Сообщ(64);
         мКонс.Строка_Печать(path2);
         мКонс.Строка_Печать(Main);
@@ -1636,9 +1638,9 @@
       stksize := stksize * 100000H
     КОНЕЦ;
     X86.Epilog(ProgSize, temp, stksize)
-  КОНЕЦ Compile;
+  КОНЕЦ Компилировать;
 
 НАЧАЛО
   pParseType := ParseType;
-  pReadModule := ReadModule
+  пМодуль_Читать := Модуль_Читать
 КОНЕЦ модДецл.

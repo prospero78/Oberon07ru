@@ -1976,8 +1976,8 @@
     мСтр.Сложить(SelfPath, мКонст.слэш, SelfPath);
     X86.Init(DECL.ПамОш_Проверить, platform);
     X86.Prolog(temp);
-    DECL.Program(SelfPath, Path, Name, Ext, platform IN {1, 2, 3}, OpSeq, Expr, AssComp, sttypes);
-    DECL.Compile(platform, stksize);
+    DECL.Код_Настроить(SelfPath, Path, Name, Ext, platform IN {1, 2, 3}, OpSeq, Expr, AssComp, sttypes);
+    DECL.Компилировать(platform, stksize);
     мКонс.Строка_Печать("   +Компиляция успешна!"); мКонс.НовСтр;
     мКонс.Время_Затрачено
   КОНЕЦ Старт;
