@@ -111,11 +111,11 @@
       Ptr: ту“ип
      ќЌ≈÷;
 
-  STRITEM = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.тѕункт)
+  туѕункт—тр = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.тѕункт)
       Str: м—тр.т—трока
      ќЌ≈÷;
 
-  FIELD* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.тѕункт)
+  туѕоле* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.тѕункт)
       Name: м“ипы.ту”зел;
       T*: ту“ип;
       Offset*: INTEGER;
@@ -682,11 +682,12 @@
    ќЌ≈÷ Dim;
 
 ѕ–ќ÷≈ƒ”–ј SetFields(Tr, Tf: ту“ип; Rec: BOOLEAN);
-  ѕ≈–≈ћ cur: FIELD;
+  ѕ≈–≈ћ
+    cur: туѕоле;
   Ќј„јЋќ
-    cur := Tr.Fields.предыдущ(FIELD);
+    cur := Tr.Fields.предыдущ(туѕоле);
     ѕќ ј cur.T # ѕ”—“ќ ƒ≈Ћј“№
-      cur := cur.следующ(FIELD)
+      cur := cur.следующ(туѕоле)
      ќЌ≈÷;
     ѕќ ј cur # ѕ”—“ќ ƒ≈Ћј“№
       cur.T := Tf;
@@ -711,26 +712,29 @@
       »Ќј„≈
         Tr.Len := Tr.Len + 4 * (ORD((Tf.tType = TRECORD) & cur.ByRef) + Dim(Tf) + ORD((Tf.tType = TLONGREAL) & ~cur.ByRef) + 1)
        ќЌ≈÷;
-      cur := cur.следующ(FIELD)
+      cur := cur.следующ(туѕоле)
      ќЌ≈÷
    ќЌ≈÷ SetFields;
 
-ѕ–ќ÷≈ƒ”–ј GetField*(T: ту“ип; Name: м“ипы.ту”зел): FIELD;
-  ѕ≈–≈ћ cur, Res: FIELD;
+ѕ–ќ÷≈ƒ”–ј GetField*(T: ту“ип; Name: м“ипы.ту”зел): туѕоле;
+  ѕ≈–≈ћ
+    cur, Res: туѕоле;
   Ќј„јЋќ
     Res := ѕ”—“ќ;
-    cur := T.Fields.предыдущ(FIELD);
+    cur := T.Fields.предыдущ(туѕоле);
     ѕќ ј (cur # ѕ”—“ќ) & (cur.Name = Name) ƒ≈Ћј“№
       Res := cur;
       cur := ѕ”—“ќ
     ј≈—Ћ» cur # ѕ”—“ќ ƒ≈Ћј“№
-      cur := cur.следующ(FIELD)
+      cur := cur.следующ(туѕоле)
      ќЌ≈÷
     ¬≈–Ќ”“№ Res
    ќЌ≈÷ GetField;
 
 ѕ–ќ÷≈ƒ”–ј Unique(T: ту“ип; Name: м“ипы.ту”зел): BOOLEAN;
-  ѕ≈–≈ћ field: FIELD; res: BOOLEAN;
+  ѕ≈–≈ћ
+    field: туѕоле;
+    res: BOOLEAN;
   Ќј„јЋќ
     res := »—“»Ќј;
     ѕќ ј (T # ѕ”—“ќ) & res ƒ≈Ћј“№
@@ -753,7 +757,7 @@
 ѕ–ќ÷≈ƒ”–ј ReadFields(T: ту“ип);
   ѕ≈–≈ћ
     Name: м“ипы.ту”зел;
-    field: FIELD;
+    field: туѕоле;
     Tf: ту“ип;
     line, col: INTEGER;
     id_T: BOOLEAN;
@@ -898,7 +902,7 @@
   ѕ≈–≈ћ
       Name: м“ипы.ту”зел;
       ByRef, cont: BOOLEAN;
-      field: FIELD;
+      field: туѕоле;
       Tf: ту“ип;
       fp: ту»м€;
       line, col: INTEGER;
@@ -1380,7 +1384,8 @@
     FName: м—тр.т—трока;
 
   ѕ–ќ÷≈ƒ”–ј AddUnit(newcond: INTEGER);
-    ѕ≈–≈ћ str: STRITEM;
+    ѕ≈–≈ћ
+      str: туѕункт—тр;
     Ќј„јЋќ
       u := GetModule(name);
       ≈—Ћ» u = ѕ”—“ќ “ќ√ƒј

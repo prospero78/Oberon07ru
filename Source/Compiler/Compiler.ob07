@@ -135,7 +135,7 @@
     e1: DECL.EXPRESSION;
     line, col, i, n, bases, glob, loc, idx: INTEGER;
     imp, break, guard: BOOLEAN;
-    f: DECL.FIELD;
+    f: DECL.туПоле;
     T, BaseT: DECL.туТип;
     s: DECL.STRCONST;
 
@@ -667,7 +667,7 @@
 
     ПРОЦЕДУРА ProcTypeComp1(T1, T2: DECL.туТип): BOOLEAN;
       ПЕРЕМ
-        fp, ft: DECL.FIELD;
+        fp, ft: DECL.туПоле;
         Res: BOOLEAN;
 
       ПРОЦЕДУРА TypeComp(T1, T2: DECL.туТип): BOOLEAN;
@@ -705,12 +705,12 @@
         ИНАЧЕ
           ЕСЛИ (T1.tType = TPROC) & (T2.tType = TPROC) & (T1 # T2) ТОГДА
             Res := (T1.Call = T2.Call) & (T1.Fields.счетчик = T2.Fields.счетчик) & ProcTypeComp1(T1.Base, T2.Base);
-            fp := T1.Fields.предыдущ(DECL.FIELD);
-            ft := T2.Fields.предыдущ(DECL.FIELD);
+            fp := T1.Fields.предыдущ(DECL.туПоле);
+            ft := T2.Fields.предыдущ(DECL.туПоле);
             ПОКА Res & (fp # ПУСТО) ДЕЛАТЬ
               Res := (fp.ByRef = ft.ByRef) & TypeComp(fp.T, ft.T);
-              fp := fp.следующ(DECL.FIELD);
-              ft := ft.следующ(DECL.FIELD)
+              fp := fp.следующ(DECL.туПоле);
+              ft := ft.следующ(DECL.туПоле)
             КОНЕЦ
           ИНАЧЕ
             Res := T1 = T2
@@ -813,7 +813,7 @@
     ВЕРНУТЬ Res
   КОНЕЦ ParamComp;
 
-ПРОЦЕДУРА Call(param: DECL.FIELD);
+ПРОЦЕДУРА Call(param: DECL.туПоле);
   ПЕРЕМ
     line, col, i, n: INTEGER;
     e1: DECL.EXPRESSION;
@@ -867,7 +867,7 @@
           X86.ExtArray(A, n, DECL.Dim(e1.T))
         КОНЕЦ
       КОНЕЦ;
-      param := param.следующ(DECL.FIELD);
+      param := param.следующ(DECL.туПоле);
       ЕСЛИ param # ПУСТО ТОГДА
         Check(lxComma);
         Next
@@ -891,7 +891,7 @@
           Assert2(e.id.T.Base.tType # TVOID, 73);
           Next;
           X86.PushCall(begcall);
-          Call(e.id.T.Fields.предыдущ(DECL.FIELD));
+          Call(e.id.T.Fields.предыдущ(DECL.туПоле));
           X86.EndCall;
           e.eType := eEXP;
           e.T := e.id.T.Base;
@@ -911,7 +911,7 @@
         Assert2(e.T.Base.tType # TVOID, 73);
         Next;
         X86.PushCall(begcall);
-        Call(e.T.Fields.предыдущ(DECL.FIELD));
+        Call(e.T.Fields.предыдущ(DECL.туПоле));
         X86.EndCall;
         e.eType := eEXP;
         X86.CallVar(ИСТИНА, e.T.Base.tType IN {TREAL, TLONGREAL}, e.T.Call, e.T.Len, DECL.curBlock.LocalSize);
@@ -1755,7 +1755,7 @@
         Check(lxLRound);
         Next;
         X86.PushCall(begcall);
-        Call(e1.id.T.Fields.предыдущ(DECL.FIELD));
+        Call(e1.id.T.Fields.предыдущ(DECL.туПоле));
         X86.EndCall
       АЕСЛИ мСкан.tLex = lxLRound ТОГДА
         Next;
@@ -1777,7 +1777,7 @@
         Next;
         Assert((e1.T.Base.tType = TVOID) ИЛИ (e1.T.Call = DECL.winapi), line, col, 132);
         X86.PushCall(begcall);
-        Call(e1.T.Fields.предыдущ(DECL.FIELD));
+        Call(e1.T.Fields.предыдущ(DECL.туПоле));
         X86.EndCall;
         X86.CallVar(ЛОЖЬ, ЛОЖЬ, e1.T.Call, e1.T.Len, DECL.curBlock.LocalSize)
       АЕСЛИ мСкан.tLex = lxAssign ТОГДА
