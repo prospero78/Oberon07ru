@@ -29,7 +29,8 @@
     м онс := мод онсоль,
     мѕам := модѕам€ть,
     мѕроц := модѕроцесс,
-    мќш := модќшибки;
+    мќш := модќшибки,
+    м—тр := мод—троки;
 
  ќЌ—“
 
@@ -1435,8 +1436,8 @@
     Res := Ћќ∆№;
     name := Name1;
     Name := Name1;
-    м”тиль.concat(Path, Name, b);
-    м”тиль.concat(b, Ext, Name);
+    м—тр.—ложить(Path, Name, b);
+    м—тр.—ложить(b, Ext, Name);
     ≈—Ћ» м—кан.‘айл_ќткрыть(Name, FHandle) “ќ√ƒј
       NEW(unit);
       MemErr(unit = ѕ”—“ќ);
@@ -1550,8 +1551,8 @@
       ≈—Ћ» Path[0] = м онст.слэш “ќ√ƒј
         delfirstchar(Path)
        ќЌ≈÷;
-      м”тиль.concat(path, м онст.слэш, path);
-      м”тиль.concat(path, Path, full);
+      м—тр.—ложить(path, м онст.слэш, path);
+      м—тр.—ложить(path, Path, full);
       Path := full;
       ≈—Ћ» (м онст.ќ— = "WIN") & (Path[0] = м онст.слэш) “ќ√ƒј
         delfirstchar(Path)
@@ -1566,15 +1567,15 @@
        ќЌ≈÷
      ќЌ≈÷;
     temp := Path;
-    м”тиль.concat(temp, Main, temp);
+    м—тр.—ложить(temp, Main, temp);
     ≈—Ћ» platform IN {2, 3} “ќ√ƒј
-      м”тиль.concat(temp, ".exe", temp)
+      м—тр.—ложить(temp, ".exe", temp)
     ј≈—Ћ» platform = 1 “ќ√ƒј
-      м”тиль.concat(temp, ".dll", temp)
+      м—тр.—ложить(temp, ".dll", temp)
     ј≈—Ћ» platform = 4 “ќ√ƒј
-      м”тиль.concat(temp, ".kex", temp)
+      м—тр.—ложить(temp, ".kex", temp)
     ј≈—Ћ» platform = 6 “ќ√ƒј
-      м”тиль.concat(temp, ".obj", temp)
+      м—тр.—ложить(temp, ".obj", temp)
      ќЌ≈÷;
     ≈—Ћ» platform IN {1, 2, 3, 4} “ќ√ƒј
       stksize := stksize * 100000H

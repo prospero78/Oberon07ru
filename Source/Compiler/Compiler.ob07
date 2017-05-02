@@ -27,7 +27,8 @@
     м онст := мод онстанты,
     м онс := мод онсоль,
     мќш := модќшибки,
-    мѕроц := модѕроцесс;
+    мѕроц := модѕроцесс,
+    м—тр := мод—троки;
 
  ќЌ—“
 
@@ -1870,24 +1871,24 @@
     temp := Name;
     ≈—Ћ» м”тиль.streq(system, "obj") “ќ√ƒј
       platform := 6;
-    м”тиль.concat(temp, ".obj", temp)
+    м—тр.—ложить(temp, ".obj", temp)
     ј≈—Ћ» м”тиль.streq(system, "elf") “ќ√ƒј
       platform := 5;
       felf := SelfPath;
-      м”тиль.concat(felf, "Elf", felf);
+      м—тр.—ложить(felf, "Elf", felf);
       X86.setfelf(felf)
     ј≈—Ћ» м”тиль.streq(system, "kos") “ќ√ƒј
       platform := 4;
-      м”тиль.concat(temp, ".kex", temp)
+      м—тр.—ложить(temp, ".kex", temp)
     ј≈—Ћ» м”тиль.streq(system, "con") “ќ√ƒј
       platform := 3;
-      м”тиль.concat(temp, ".exe", temp)
+      м—тр.—ложить(temp, ".exe", temp)
     ј≈—Ћ» м”тиль.streq(system, "gui") “ќ√ƒј
       platform := 2;
-      м”тиль.concat(temp, ".exe", temp)
+      м—тр.—ложить(temp, ".exe", temp)
     ј≈—Ћ» м”тиль.streq(system, "dll") “ќ√ƒј
       platform := 1;
-      м”тиль.concat(temp, ".dll", temp)
+      м—тр.—ложить(temp, ".dll", temp)
     »Ќј„≈
       мќш.—ообщ(60);
       мѕроц.«акончить(1)
@@ -1900,16 +1901,16 @@
     ≈—Ћ» platform = 6 “ќ√ƒј
       stksize := getver()
      ќЌ≈÷;
-    м”тиль.concat(SelfPath, "Lib", SelfPath);
-    м”тиль.concat(SelfPath, м онст.слэш, SelfPath);
+    м—тр.—ложить(SelfPath, "Lib", SelfPath);
+    м—тр.—ложить(SelfPath, м онст.слэш, SelfPath);
     ≈—Ћ» platform = 5 “ќ√ƒј
-      м”тиль.concat(SelfPath, "Linux32", SelfPath)
+      м—тр.—ложить(SelfPath, "Linux32", SelfPath)
     ј≈—Ћ» platform IN {4, 6} “ќ√ƒј
-      м”тиль.concat(SelfPath, "KolibriOS", SelfPath)
+      м—тр.—ложить(SelfPath, "KolibriOS", SelfPath)
     ј≈—Ћ» platform IN {1, 2, 3} “ќ√ƒј
-      м”тиль.concat(SelfPath, "Windows32", SelfPath)
+      м—тр.—ложить(SelfPath, "Windows32", SelfPath)
      ќЌ≈÷;
-    м”тиль.concat(SelfPath, м онст.слэш, SelfPath);
+    м—тр.—ложить(SelfPath, м онст.слэш, SelfPath);
     X86.Init(DECL.MemErr, platform);
     X86.Prolog(temp);
     DECL.Program(SelfPath, Path, Name, Ext, platform IN {1, 2, 3}, OpSeq, Expr, AssComp, sttypes);
