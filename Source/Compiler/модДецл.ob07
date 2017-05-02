@@ -469,7 +469,7 @@
       res := LONG(FLT(FLOOR(a) MOD FLOOR(b)))
     ИНАЧЕ
     КОНЕЦ;
-    Assert(~мУтиль.IsInf(res), line, col, FOVER);
+    Assert(~мУтиль.Бесконеч(res), line, col, FOVER);
     ВЫБОР T.tType ИЗ
     |TINTEGER:  Assert((res <= LONG(FLT(мКонст.целое_макс))) & (res >= LONG(FLT(мКонст.целое_мин))), line, col, IOVER)
     |TREAL:     Assert((res <= LONG(мКонст.вещ_макс)) & (res >= -LONG(мКонст.вещ_макс)), line, col, FOVER)

@@ -33,14 +33,14 @@
   ParamCount*, Line*, Unit*: INTEGER;
   (* win, kos, lnx: BOOLEAN; *)
 
-опнжедспю IsInf*(x_: LONGREAL): BOOLEAN;
+опнжедспю аЕЯЙНМЕВ*(x_: LONGREAL): BOOLEAN;
   оепел
     h, l: SET;
   мювюкн
     mSys.GET(mSys.ADR(x_), l);
     mSys.GET(mSys.ADR(x_) + 4, h);
     бепмсрэ (h * {20..30} = {20..30}) & (h * {0..19} = {}) & (l * {0..31} = {})
-  йнмеж IsInf;
+  йнмеж аЕЯЙНМЕВ;
 
 опнжедспю яХБНК_оНКСВ(adr_: INTEGER): CHAR;
   оепел

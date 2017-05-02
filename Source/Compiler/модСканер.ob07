@@ -334,24 +334,24 @@
     оепел
         i, scale: INTEGER; res, m, d: LONGREAL; minus, nez: BOOLEAN;
 
-        опнжедспю Error(e: INTEGER; оеп cont: BOOLEAN);
-          мювюкн
+    опнжедспю Error(e: INTEGER; оеп cont: BOOLEAN);
+        мювюкн
             tLex := e;
             res := 0.0D0;
             cont := кнфэ
-          йнмеж Error;
+        йнмеж Error;
 
-        опнжедспю Inf(оеп cont: BOOLEAN; оеп i: INTEGER);
-          мювюкн
-            еякх ЛсРХКЭ.IsInf(res) рнцдю
+    опнжедспю Inf(оеп cont: BOOLEAN; оеп i: INTEGER);
+        мювюкн
+            еякх ЛсРХКЭ.аЕЯЙНМЕВ(res) рнцдю
               Error(lxERR7, cont)
             йнмеж;
             INC(i)
-          йнмеж Inf;
+        йнмеж Inf;
 
-        опнжедспю part1(): BOOLEAN;
-          оепел cont: BOOLEAN;
-          мювюкн
+    опнжедспю part1(): BOOLEAN;
+        оепел cont: BOOLEAN;
+        мювюкн
             res := 0.0D0;
             i := 0;
             d := 1.0D0;
@@ -363,11 +363,11 @@
             Inf(cont, i)
             йнмеж
             бепмсрэ cont
-          йнмеж part1;
+        йнмеж part1;
 
-        опнжедспю part2(): BOOLEAN;
-          оепел cont: BOOLEAN;
-          мювюкн
+    опнжедспю part2(): BOOLEAN;
+        оепел cont: BOOLEAN;
+        мювюкн
             INC(i);
             cont := хярхмю;
             онйю cont & Digit(str[i]) декюрэ
@@ -377,11 +377,11 @@
             Inf(cont, i)
             йнмеж
             бепмсрэ cont
-          йнмеж part2;
+        йнмеж part2;
 
-        опнжедспю part3(): BOOLEAN;
-          оепел cont: BOOLEAN;
-          мювюкн
+    опнжедспю part3(): BOOLEAN;
+        оепел cont: BOOLEAN;
+        мювюкн
             cont := хярхмю;
             еякх str[i] = 0X рнцдю
               еякх res > LONG(ЛйНМЯР.БЕЫ_ЛЮЙЯ) рнцдю
@@ -391,9 +391,9 @@
               йнмеж
             йнмеж
             бепмсрэ cont
-          йнмеж part3;
+        йнмеж part3;
 
-        опнжедспю part4(): BOOLEAN;
+    опнжедспю part4(): BOOLEAN;
           оепел cont: BOOLEAN;
           мювюкн
             еякх str[i] = "D" рнцдю
@@ -427,7 +427,7 @@
             бепмсрэ cont
         йнмеж part4;
 
-        опнжедспю part5(): BOOLEAN;
+    опнжедспю part5(): BOOLEAN;
           оепел cont: BOOLEAN; i: INTEGER;
           мювюкн
             cont := хярхмю;
