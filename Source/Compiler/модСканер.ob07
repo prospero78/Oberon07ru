@@ -270,7 +270,7 @@
         бепмсрэ Res
     йнмеж hex;
 
-опнжедспю StrToInt16(str: ЛяРП.РяРПНЙЮ): INTEGER;
+опнжедспю яРП_Б_жЕК16*(str: ЛяРП.РяРПНЙЮ): INTEGER;
     оепел i, res, n: INTEGER; flag: BOOLEAN;
     мювюкн
         res := 0;
@@ -291,12 +291,12 @@
             йнмеж
         йнмеж
         бепмсрэ res
-    йнмеж StrToInt16;
+    йнмеж яРП_Б_жЕК16;
 
 опнжедспю StrToChx(str: ЛяРП.РяРПНЙЮ): CHAR;
     оепел res: INTEGER;
     мювюкн
-        res := StrToInt16(str);
+        res := яРП_Б_жЕК16(str);
         еякх (res < 0) хкх (res > 0FFH) рнцдю
             tLex := lxERR6;
             res := 0
@@ -304,7 +304,7 @@
         бепмсрэ CHR(res)
     йнмеж StrToChx;
 
-опнжедспю StrToInt*(str: ЛяРП.РяРПНЙЮ): INTEGER;
+опнжедспю яРП_Б_жЕК*(str: ЛяРП.РяРПНЙЮ): INTEGER;
     оепел
         i, res: INTEGER;
         flag: BOOLEAN;
@@ -330,11 +330,13 @@
             йнмеж
         йнмеж
         бепмсрэ res
-    йнмеж StrToInt;
+    йнмеж яРП_Б_жЕК;
 
-опнжедспю StrToFloat(str: ЛяРП.РяРПНЙЮ): LONGREAL;
+опнжедспю яРП_Б_бЕЫ(str: ЛяРП.РяРПНЙЮ): LONGREAL;
     оепел
-        i, scale: INTEGER; res, m, d: LONGREAL; minus, nez: BOOLEAN;
+        i, scale: INTEGER;
+        res, m, d: LONGREAL;
+        minus, nez: BOOLEAN;
 
     опнжедспю Error(e: INTEGER; оеп cont: BOOLEAN);
         мювюкн
@@ -452,10 +454,11 @@
     мювюкн
         еякх part1() & part2() & part3() & part4() & part5() рнцдю йнмеж
         бепмсрэ res
-    йнмеж StrToFloat;
+    йнмеж яРП_Б_бЕЫ;
 
-опнжедспю Number;
-    оепел nextchr: CHAR;
+опнжедспю вХЯКН_оНКСВ;
+    оепел
+        nextchr: CHAR;
     мювюкн
         tLex := lxINT;
         онйю Digit(ch) декюрэ
@@ -507,10 +510,11 @@
             йнмеж
         йнмеж;
         PutChar(0X)
-    йнмеж Number;
+    йнмеж вХЯКН_оНКСВ;
 
-опнжедспю Delim(ch: CHAR): INTEGER;
-    оепел Res: INTEGER;
+опнжедспю пЮГДЕКХРЕКЭ_оНКСВ(ch: CHAR): INTEGER;
+    оепел
+        Res: INTEGER;
     мювюкн
         бшанп ch хг
         |"+": Res := lxPlus
@@ -536,7 +540,7 @@
         хмюве
         йнмеж
         бепмсрэ Res
-    йнмеж Delim;
+    йнмеж пЮГДЕКХРЕКЭ_оНКСВ;
 
 опнжедспю йНЛЛЕМРЮПХИ_оПНОСЯРХРЭ;
     оепел
@@ -588,12 +592,12 @@
             id := сГЕК_дНАЮБ(Lex);
             tLex := id.tLex;
         |"0".."9":
-            Number;
+            вХЯКН_оНКСВ;
             бшанп tLex хг
-                |lxINT:  vINT := StrToInt(Lex)
-                |lxHEX:  vINT := StrToInt16(Lex)
+                |lxINT:  vINT := яРП_Б_жЕК(Lex)
+                |lxHEX:  vINT := яРП_Б_жЕК16(Lex)
                 |lxCHX:  vCHX := StrToChx(Lex)
-                |lxREAL: vFLT := StrToFloat(Lex)
+                |lxREAL: vFLT := яРП_Б_бЕЫ(Lex)
             хмюве
             йнмеж
         |22X:
@@ -613,7 +617,7 @@
                 tLex := lxERR11
             йнмеж
         |"/":
-            tLex := Delim(ch);
+            tLex := пЮГДЕКХРЕКЭ_оНКСВ(ch);
             PutNext(ch);
             еякх ch = "/" рнцдю
                 онйю (ch >= 20X) хкх (ch = 9X) декюрэ
@@ -623,7 +627,7 @@
             йнмеж;
             PutChar(0X)
         |">", "<", ":":
-            tLex := Delim(ch);
+            tLex := пЮГДЕКХРЕКЭ_оНКСВ(ch);
             PutNext(ch);
             еякх ch = "=" рнцдю
                 бшанп tLex хг
@@ -652,7 +656,7 @@
             йнмеж;
             PutChar(0X)
         |"+", "-", "*", "~", "&", ",", ";", "|", "[", "{", "^", "=", "#", ")", "]", "}":
-            tLex := Delim(ch);
+            tLex := пЮГДЕКХРЕКЭ_оНКСВ(ch);
             PutChar(ch);
             PutNext(0X)
         |0X:
