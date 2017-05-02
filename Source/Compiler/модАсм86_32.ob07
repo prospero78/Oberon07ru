@@ -80,14 +80,14 @@
 
   TIDX* = МАССИВ ADIM ИЗ INTEGER;
 
-  SECTIONNAME = МАССИВ 8 ИЗ CHAR;
+  тСекцияИмя = МАССИВ 8 ИЗ CHAR;
 
-  SECTION = ЗАПИСЬ
-      name: SECTIONNAME;
+  тСекция = ЗАПИСЬ
+      name: тСекцияИмя;
       size, adr, sizealign, OAPfile, reserved6, reserved7, reserved8, attrflags: INTEGER
     КОНЕЦ;
 
-  HEADER = ЗАПИСЬ
+  тЗаголовок = ЗАПИСЬ
       msdos: МАССИВ 180 ИЗ CHAR;
       typecomp, seccount: mSys.CARD16;
       time, reserved1, reserved2: INTEGER;
@@ -99,10 +99,10 @@
       UI, reserved4: mSys.CARD16;
       stksize, stkalloc, heapsize, heapalloc, reserved5, structcount: INTEGER;
       structs: МАССИВ 16 ИЗ ЗАПИСЬ adr, size: INTEGER КОНЕЦ;
-      sections: МАССИВ 3 ИЗ SECTION
+      sections: МАССИВ 3 ИЗ тСекция
     КОНЕЦ;
 
-  COFFHEADER = ЗАПИСЬ
+  тЗаголовокCoff = ЗАПИСЬ
       Machine: mSys.CARD16;
       NumberOfSections: mSys.CARD16;
       TimeDateStamp,
@@ -110,10 +110,10 @@
       NumberOfSymbols: INTEGER;
       SizeOfOptionalHeader,
       Characteristics: mSys.CARD16;
-      text, data, bss: SECTION
+      text, data, bss: тСекция
     КОНЕЦ;
 
-  KOSHEADER = ЗАПИСЬ
+  тЗаголовокKol = ЗАПИСЬ
       menuet01: МАССИВ 8 ИЗ CHAR;
       ver, start, size, mem, sp, param, path: INTEGER
     КОНЕЦ;
@@ -137,27 +137,30 @@
   start: туПунктАсм;
   MemErr: тПроцедура;
   dll, con, gui, kos, elf, obj: BOOLEAN;
-    Lcount, reccount, topstk: INTEGER;
-    recarray: МАССИВ 2048 ИЗ INTEGER;
-    current*: туПунктАсм;
-    callstk: МАССИВ 1024, 2 ИЗ туПунктАсм;
-    OutFile: мСтр.тСтрока;
-    Code: МАССИВ 4000000 ИЗ CHAR; ccount: INTEGER; Data: МАССИВ 1000000 ИЗ CHAR; dcount: INTEGER;
-    Labels: МАССИВ 200000 ИЗ INTEGER; rdata: МАССИВ 400H ИЗ INTEGER; Header: HEADER; etable: ETABLE;
-    ExecName: мСтр.тСтрока;
-    LoadAdr: INTEGER; Reloc: МАССИВ 200000 ИЗ CHAR; rcount: INTEGER;
-    RtlProc: МАССИВ 20 ИЗ INTEGER; OutFilePos: INTEGER;
-    RelocSection: SECTION;
-    felf: мСтр.тСтрока;
-    fpu*: INTEGER;
-    isfpu: BOOLEAN;
-    maxfpu: INTEGER;
-    fpucmd: туПунктАсм;
-    kosexp: МАССИВ 65536 ИЗ ЗАПИСЬ
-      Name: мТипы.туУзел;
-      Adr, NameLabel: INTEGER
-      КОНЕЦ;
-    kosexpcount: INTEGER;
+  Lcount, reccount, topstk: INTEGER;
+  recarray: МАССИВ 2048 ИЗ INTEGER;
+  current*: туПунктАсм;
+  callstk: МАССИВ 1024, 2 ИЗ туПунктАсм;
+  OutFile: мСтр.тСтрока;
+  Code: МАССИВ 4000000 ИЗ CHAR; ccount: INTEGER; Data: МАССИВ 1000000 ИЗ CHAR; dcount: INTEGER;
+  Labels: МАССИВ 200000 ИЗ INTEGER;
+  rdata: МАССИВ 400H ИЗ INTEGER;
+  Header: тЗаголовок;
+  etable: ETABLE;
+  ExecName: мСтр.тСтрока;
+  LoadAdr: INTEGER; Reloc: МАССИВ 200000 ИЗ CHAR; rcount: INTEGER;
+  RtlProc: МАССИВ 20 ИЗ INTEGER; OutFilePos: INTEGER;
+  RelocSection: тСекция;
+  felf: мСтр.тСтрока;
+  fpu*: INTEGER;
+  isfpu: BOOLEAN;
+  maxfpu: INTEGER;
+  fpucmd: туПунктАсм;
+  kosexp: МАССИВ 65536 ИЗ ЗАПИСЬ
+    Name: мТипы.туУзел;
+    Adr, NameLabel: INTEGER
+  КОНЕЦ;
+  kosexpcount: INTEGER;
 
 ПРОЦЕДУРА setfelf*(name: мСтр.тСтрока);
   НАЧАЛО
@@ -333,7 +336,7 @@
     КОНЕЦ
   КОНЕЦ Fill;
 
-ПРОЦЕДУРА SetSection(ПЕР Section: SECTION; name: SECTIONNAME; size, adr, sizealign, OAPfile, attrflags: INTEGER);
+ПРОЦЕДУРА SetSection(ПЕР Section: тСекция; name: тСекцияИмя; size, adr, sizealign, OAPfile, attrflags: INTEGER);
   НАЧАЛО
     Section.name := name;
     Section.size := size;
@@ -440,12 +443,12 @@
     filebuf := OutFilePos;
     мПам.Ошибка(OutFilePos = 0);
 
-    Write(mSys.ADR(Header), mSys.SIZE(HEADER));
+    Write(mSys.ADR(Header), mSys.SIZE(тЗаголовок));
     ЕСЛИ dll ТОГДА
-      Write(mSys.ADR(RelocSection), mSys.SIZE(SECTION));
-      Fill(Align(mSys.SIZE(HEADER) + mSys.SIZE(SECTION), 200H) - (mSys.SIZE(HEADER) + mSys.SIZE(SECTION)), 0X)
+      Write(mSys.ADR(RelocSection), mSys.SIZE(тСекция));
+      Fill(Align(mSys.SIZE(тЗаголовок) + mSys.SIZE(тСекция), 200H) - (mSys.SIZE(тЗаголовок) + mSys.SIZE(тСекция)), 0X)
     ИНАЧЕ
-      Fill(Align(mSys.SIZE(HEADER), 200H) - mSys.SIZE(HEADER), 0X)
+      Fill(Align(mSys.SIZE(тЗаголовок), 200H) - mSys.SIZE(тЗаголовок), 0X)
     КОНЕЦ;
 
     cur := asmlist.предыдущ(туПунктАсм);
@@ -1586,10 +1589,10 @@
 ПРОЦЕДУРА WriteKOS(FName: МАССИВ ИЗ CHAR; stk, size, datasize, gsize: INTEGER; obj: BOOLEAN);
   CONST strsize = 2048;
   ПЕРЕМ
-    Header: KOSHEADER;
+    Header: тЗаголовокKol;
     F, i, filesize, filebuf, a, sec, adr, size2: INTEGER;
     cur: туПунктАсм;
-    Coff: COFFHEADER;
+    Coff: тЗаголовокCoff;
     sym: МАССИВ 18 * 4 ИЗ CHAR;
     FileName: мСтр.тСтрока;
   НАЧАЛО
@@ -1604,14 +1607,14 @@
     ЕСЛИ ~obj ТОГДА
       Header.menuet01 := "MENUET01";
       Header.ver := 1;
-      Header.start := mSys.SIZE(KOSHEADER);
+      Header.start := mSys.SIZE(тЗаголовокKol);
       Header.size := Align(size, 4) + datasize;
       Header.mem := Header.size + stk + gsize + strsize * 2 + 1000H;
       Header.sp := Header.size + gsize + stk;
       Header.param := Header.sp;
       Header.path := Header.param + strsize;
 
-      Write(mSys.ADR(Header), mSys.SIZE(KOSHEADER));
+      Write(mSys.ADR(Header), mSys.SIZE(тЗаголовокKol));
 
       cur := asmlist.предыдущ(туПунктАсм);
       ПОКА cur # ПУСТО ДЕЛАТЬ
@@ -1625,7 +1628,7 @@
     ИНАЧЕ
 
       size2 := size;
-      size := Align(size, 4) - mSys.SIZE(KOSHEADER);
+      size := Align(size, 4) - mSys.SIZE(тЗаголовокKol);
       Coff.Machine := IntToCard16(014CH);
       Coff.NumberOfSections := IntToCard16(3);
       Coff.TimeDateStamp := мКонст.дата;
@@ -1668,7 +1671,7 @@
         ЕСЛИ cur.tcmd IN {OCMD, GCMD} ТОГДА
           mSys.GET(mSys.ADR(Code[cur.cmd]), a);
           ЕСЛИ a < size ТОГДА
-            a := a - mSys.SIZE(KOSHEADER);
+            a := a - mSys.SIZE(тЗаголовокKol);
             sec := 1
           АЕСЛИ a < size + datasize ТОГДА
             a := a - size;
@@ -1678,7 +1681,7 @@
             sec := 3
           КОНЕЦ;
           mSys.PUT(mSys.ADR(Code[cur.cmd]), a);
-          mSys.PUT(mSys.ADR(Reloc[rcount]), cur.adr - mSys.SIZE(KOSHEADER));
+          mSys.PUT(mSys.ADR(Reloc[rcount]), cur.adr - mSys.SIZE(тЗаголовокKol));
           INC(rcount, 4);
           mSys.PUT(mSys.ADR(Reloc[rcount]), sec);
           INC(rcount, 4);
@@ -1695,14 +1698,14 @@
       Coff.PointerToSymbolTable := Coff.text.reserved6 + rcount;
       Coff.NumberOfSymbols := 4;
 
-      WriteF(F, mSys.ADR(Coff), mSys.SIZE(COFFHEADER));
+      WriteF(F, mSys.ADR(Coff), mSys.SIZE(тЗаголовокCoff));
       WriteF(F, filebuf, OutFilePos - filebuf);
       WriteF(F, mSys.ADR(Reloc), rcount);
 
       adr := mSys.ADR(sym);
       InitArray(adr, "4558504F52545300000000000100000002002E666C617400000000000000010000000300");
       InitArray(adr, "2E64617461000000000000000200000003002E6273730000000000000000030000000300");
-      mSys.PUT(mSys.ADR(sym) + 8, Labels[Exports] - mSys.SIZE(KOSHEADER));
+      mSys.PUT(mSys.ADR(sym) + 8, Labels[Exports] - mSys.SIZE(тЗаголовокKol));
 
       WriteF(F, mSys.ADR(sym), LEN(sym));
       i := 4;
@@ -1813,7 +1816,7 @@
     АЕСЛИ con ИЛИ gui ТОГДА
       LoadAdr := 400000H
     АЕСЛИ kos ИЛИ obj ТОГДА
-      LoadAdr := mSys.SIZE(KOSHEADER)
+      LoadAdr := mSys.SIZE(тЗаголовокKol)
     АЕСЛИ elf ТОГДА
       LoadAdr := 134514420 + 1024;
       INC(gsize, 1024)
