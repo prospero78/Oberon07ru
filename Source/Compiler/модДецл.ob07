@@ -1543,7 +1543,7 @@
     main := »—“»Ќј;
     ≈—Ћ» ~ReadModule(Path, Main, ExtMain) “ќ√ƒј
       path2 := Path;
-      м”тиль.ParamStr(full, 0);
+      м”тиль.—трѕарам(full, 0);
       м”тиль.Split(full, path, name, ext);
       ≈—Ћ» path[0] # 0X “ќ√ƒј
         path[LENGTH(path) - 1] := 0X

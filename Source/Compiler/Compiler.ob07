@@ -1855,10 +1855,10 @@
       мќш.—ообщ(59);
       мѕроц.«акончить(1)
      ќЌ≈÷;
-    м”тиль.ParamStr(SelfName, 0);
-    м”тиль.ParamStr(FName, 1);
-    м”тиль.ParamStr(system, 2);
-    м”тиль.ParamStr(stk, 3);
+    м”тиль.—трѕарам(SelfName, 0);
+    м”тиль.—трѕарам(FName, 1);
+    м”тиль.—трѕарам(system, 2);
+    м”тиль.—трѕарам(stk, 3);
     pExpr := Expr;
     pFactor := Factor;
     pOpSeq := OpSeq;

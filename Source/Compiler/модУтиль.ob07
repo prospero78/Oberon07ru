@@ -53,7 +53,7 @@
 ПРОЦЕДУРА Параметры_Проверить(count: INTEGER);
    ПЕРЕМ c: CHAR; cond, p: INTEGER;
 
-   ПРОЦЕДУРА ChangeCond(A, B, C: INTEGER);
+   ПРОЦЕДУРА Условия_Изменить(A, B, C: INTEGER);
       НАЧАЛО
          cond := C;
          ВЫБОР c ИЗ
@@ -62,7 +62,7 @@
             |22X: cond := B
          ИНАЧЕ
          КОНЕЦ
-      КОНЕЦ ChangeCond;
+      КОНЕЦ Условия_Изменить;
 
    НАЧАЛО
       p := API.GetCommandLine();
@@ -70,20 +70,20 @@
       ПОКА (count < мКонст.макс_парам) & (cond # 6) ДЕЛАТЬ
          c := Сивол_Получ(p);
          ВЫБОР cond ИЗ
-            |0: ChangeCond(0, 4, 1);
+            |0: Условия_Изменить(0, 4, 1);
                ЕСЛИ cond = 1 ТОГДА
                   масПараметры[count, 0] := p
                КОНЕЦ
-            |4: ChangeCond(5, 0, 5);
+            |4: Условия_Изменить(5, 0, 5);
                 ЕСЛИ cond = 5 ТОГДА
                   масПараметры[count, 0] := p
                 КОНЕЦ
-            |1: ChangeCond(0, 3, 1);
+            |1: Условия_Изменить(0, 3, 1);
                 ЕСЛИ cond IN {0, 6} ТОГДА
                   масПараметры[count, 1] := p - 1;
                   INC(count)
                 КОНЕЦ
-            |3, 5: ChangeCond(cond, 1, cond);
+            |3, 5: Условия_Изменить(cond, 1, cond);
                    ЕСЛИ cond = 6 ТОГДА
                      масПараметры[count, 1] := p - 1;
                      INC(count)
@@ -95,7 +95,7 @@
       ParamCount := count - 1
    КОНЕЦ Параметры_Проверить;
 
-ПРОЦЕДУРА ParamStr*(ПЕР str: МАССИВ ИЗ CHAR; n: INTEGER);
+ПРОЦЕДУРА СтрПарам*(ПЕР str: МАССИВ ИЗ CHAR; n: INTEGER);
   ПЕРЕМ
    i, j, len: INTEGER; c: CHAR;
   НАЧАЛО
@@ -113,7 +113,7 @@
       КОНЕЦ
     КОНЕЦ;
     str[j] := 0X
-  КОНЕЦ ParamStr;
+  КОНЕЦ СтрПарам;
 
 ПРОЦЕДУРА UnitLine*(newUnit, newLine: INTEGER);
   НАЧАЛО
