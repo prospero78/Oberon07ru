@@ -130,7 +130,7 @@
 
 ѕ–ќ÷≈ƒ”–ј Designator(ѕ≈– e: DECL.EXPRESSION);
   ѕ≈–≈ћ
-    id: DECL.IDENT;
+    id: DECL.ту»м€;
     name: м“ипы.ту”зел;
     e1: DECL.EXPRESSION;
     line, col, i, n, bases, glob, loc, idx: INTEGER;
@@ -1317,7 +1317,7 @@
     Value: LONGREAL;
     T: DECL.ту“ип;
     name: м“ипы.ту”зел;
-    id: DECL.IDENT;
+    id: DECL.ту»м€;
   Ќј„јЋќ
     Next;
     Check(lxIDENT);

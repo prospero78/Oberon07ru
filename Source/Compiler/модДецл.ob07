@@ -81,14 +81,14 @@
       Fields*: м“ипы.ту—писок
      ќЌ≈÷;
 
-  IDENT* = ” ј«ј“≈Ћ№ Ќј т»м€;
+  ту»м€* = ” ј«ј“≈Ћ№ Ќј т»м€;
 
   UNIT* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.тѕункт)
       Name: м“ипы.ту”зел;
       File: м—тр.т—трока;
       Idents: м“ипы.ту—писок;
       Import: м“ипы.ту—писок;
-      IdentBegin: IDENT;
+      IdentBegin: ту»м€;
       scanner: м“ипы.ту—канер;
       Level*: INTEGER;
       Closed, typedecl, ExportType, Std, sys: BOOLEAN
@@ -98,7 +98,7 @@
       Name: м“ипы.ту”зел;
       T*: ту“ип;
       Unit*: UNIT;
-      Parent*: IDENT;
+      Parent*: ту»м€;
       Value*: LONGREAL;
       line*, col*, Number*, iType*, StProc*, VarSize, ParamSize*,
       LocalSize*, Offset*, VarKind*, Level*, ParamCount*: INTEGER;
@@ -129,7 +129,7 @@
      ќЌ≈÷;
 
   EXPRESSION* = «јѕ»—№
-      id*: IDENT;
+      id*: ту»м€;
       T*: ту“ип;
       eType*: INTEGER;
       Value*: LONGREAL;
@@ -144,7 +144,9 @@
 
 ѕ≈–≈ћ
 
-  sttypes: stTYPES; unit*, sys: UNIT; curBlock*: IDENT;
+  sttypes: stTYPES;
+  unit*, sys: UNIT;
+  curBlock*: ту»м€;
   Path, Main, Std, ExtMain: м—тр.т—трока;
   NamePtrBase: м“ипы.ту”зел; ProgSize*, RecCount, UnitNumber*: INTEGER;
   PtrBases, Strings, types, prog: м“ипы.ту—писок;
@@ -275,17 +277,19 @@
    ќЌ≈÷ Check;
 
 ѕ–ќ÷≈ƒ”–ј CheckIdent(Name: м“ипы.ту”зел): BOOLEAN;
-  ѕ≈–≈ћ cur: IDENT;
+  ѕ≈–≈ћ
+    cur: ту»м€;
   Ќј„јЋќ
-    cur := unit.Idents.следующ(IDENT);
+    cur := unit.Idents.следующ(ту»м€);
     ѕќ ј (cur.iType # IDGUARD) & (cur.Name # Name) ƒ≈Ћј“№
-      cur := cur.предыдущ(IDENT)
+      cur := cur.предыдущ(ту»м€)
      ќЌ≈÷
     ¬≈–Ќ”“№ cur.iType = IDGUARD
    ќЌ≈÷ CheckIdent;
 
 ѕ–ќ÷≈ƒ”–ј Guard;
-  ѕ≈–≈ћ ident: IDENT;
+  ѕ≈–≈ћ
+    ident: ту»м€;
   Ќј„јЋќ
     NEW(ident);
     MemErr(ident = ѕ”—“ќ);
@@ -297,7 +301,9 @@
    ќЌ≈÷ Guard;
 
 ѕ–ќ÷≈ƒ”–ј PushIdent(Name: м“ипы.ту”зел; line, col, iType: INTEGER; T: ту“ип; u: UNIT; Export: BOOLEAN; StProc: INTEGER);
-  ѕ≈–≈ћ ident: IDENT; i: INTEGER;
+  ѕ≈–≈ћ
+    ident: ту»м€;
+    i: INTEGER;
   Ќј„јЋќ
     Assert(CheckIdent(Name), line, col, 30);
     NEW(ident);
@@ -404,12 +410,14 @@
     Guard
    ќЌ≈÷ StIdent;
 
-ѕ–ќ÷≈ƒ”–ј GetQIdent*(Unit: UNIT; Name: м“ипы.ту”зел): IDENT;
-  ѕ≈–≈ћ cur, res: IDENT; line, col: INTEGER;
+ѕ–ќ÷≈ƒ”–ј GetQIdent*(Unit: UNIT; Name: м“ипы.ту”зел): ту»м€;
+  ѕ≈–≈ћ
+    cur, res: ту»м€;
+    line, col: INTEGER;
   Ќј„јЋќ
     res := ѕ”—“ќ;
     Coord(line, col);
-    cur := Unit.IdentBegin.следующ(IDENT);
+    cur := Unit.IdentBegin.следующ(ту»м€);
     ѕќ ј (cur # ѕ”—“ќ) & (cur.iType # IDGUARD) ƒ≈Ћј“№
       ≈—Ћ» cur.Name = Name “ќ√ƒј
         ≈—Ћ» (Unit # unit) & ~cur.Export “ќ√ƒј
@@ -419,23 +427,25 @@
          ќЌ≈÷;
         cur := ѕ”—“ќ
       »Ќј„≈
-        cur := cur.следующ(IDENT)
+        cur := cur.следующ(ту»м€)
        ќЌ≈÷
      ќЌ≈÷
     ¬≈–Ќ”“№ res
    ќЌ≈÷ GetQIdent;
 
-ѕ–ќ÷≈ƒ”–ј GetIdent*(Name: м“ипы.ту”зел): IDENT;
-  ѕ≈–≈ћ cur, res: IDENT; line, col: INTEGER;
+ѕ–ќ÷≈ƒ”–ј GetIdent*(Name: м“ипы.ту”зел): ту»м€;
+  ѕ≈–≈ћ
+    cur, res: ту»м€;
+    line, col: INTEGER;
   Ќј„јЋќ
     res := ѕ”—“ќ;
     Coord(line, col);
-    cur := unit.Idents.следующ(IDENT);
+    cur := unit.Idents.следующ(ту»м€);
     ѕќ ј (cur # ѕ”—“ќ) & (cur.Name = Name) ƒ≈Ћј“№
       res := cur;
       cur := ѕ”—“ќ
     ј≈—Ћ» cur # ѕ”—“ќ ƒ≈Ћј“№
-      cur := cur.предыдущ(IDENT)
+      cur := cur.предыдущ(ту»м€)
      ќЌ≈÷
     ¬≈–Ќ”“№ res
    ќЌ≈÷ GetIdent;
@@ -601,7 +611,7 @@
 
 ѕ–ќ÷≈ƒ”–ј IdType*(ѕ≈– line, col: INTEGER): ту“ип;
   ѕ≈–≈ћ
-    id: IDENT;
+    id: ту»м€;
     Name: м“ипы.ту”зел;
     Unit: UNIT;
     Res: ту“ип;
@@ -735,7 +745,7 @@
    ќЌ≈÷ Unique;
 
 ѕ–ќ÷≈ƒ”–ј notrecurs(id: BOOLEAN; T: ту“ип): BOOLEAN;
-    ¬≈–Ќ”“№ ~(id & (unit.Idents.следующ(IDENT).iType = IDTYPE) & (unit.Idents.следующ(IDENT).T = T) &
+    ¬≈–Ќ”“№ ~(id & (unit.Idents.следующ(ту»м€).iType = IDTYPE) & (unit.Idents.следующ(ту»м€).T = T) &
             (T.tType IN {TRECORD, TARRAY}))
    ќЌ≈÷ notrecurs;
 
@@ -798,13 +808,14 @@
 
 ѕ–ќ÷≈ƒ”–ј SetVars(T: ту“ип);
   ѕ≈–≈ћ
-    cur: IDENT; n: INTEGER;
+    cur: ту»м€;
+    n: INTEGER;
   Ќј„јЋќ
-    cur := unit.Idents.следующ(IDENT);
+    cur := unit.Idents.следующ(ту»м€);
     ѕќ ј cur.T = ѕ”—“ќ ƒ≈Ћј“№
-      cur := cur.предыдущ(IDENT)
+      cur := cur.предыдущ(ту»м€)
      ќЌ≈÷;
-    cur := cur.следующ(IDENT);
+    cur := cur.следующ(ту»м€);
     ѕќ ј cur # ѕ”—“ќ ƒ≈Ћј“№
       cur.T := T;
       ≈—Ћ» cur.Export “ќ√ƒј
@@ -837,7 +848,7 @@
       ≈—Ћ» cur.VarKind # 0 “ќ√ƒј
         curBlock.ParamSize := curBlock.VarSize
        ќЌ≈÷;
-      cur := cur.следующ(IDENT)
+      cur := cur.следующ(ту»м€)
      ќЌ≈÷
    ќЌ≈÷ SetVars;
 
@@ -888,7 +899,7 @@
       ByRef, cont: BOOLEAN;
       field: FIELD;
       Tf: ту“ип;
-      fp: IDENT;
+      fp: ту»м€;
       line, col: INTEGER;
       proc: BOOLEAN;
   Ќј„јЋќ
@@ -916,7 +927,7 @@
       ≈—Ћ» proc “ќ√ƒј
         PushIdent(Name, line, col, IDVAR, ѕ”—“ќ, ѕ”—“ќ, Ћќ∆№, 0);
         INC(curBlock.ParamCount);
-        fp := unit.Idents.следующ(IDENT);
+        fp := unit.Idents.следующ(ту»м€);
         ≈—Ћ» ByRef “ќ√ƒј
           fp.VarKind := paramvar
         »Ќј„≈
@@ -1150,15 +1161,17 @@
    ќЌ≈÷ ParseType;
 
 ѕ–ќ÷≈ƒ”–ј PopBlock;
-  ѕ≈–≈ћ cur: IDENT; n: INTEGER;
+  ѕ≈–≈ћ
+    cur: ту»м€;
+    n: INTEGER;
   Ќј„јЋќ
-    cur := unit.Idents.следующ(IDENT);
+    cur := unit.Idents.следующ(ту»м€);
     n := 0;
     ѕќ ј cur.iType # IDGUARD ƒ≈Ћј“№
-      cur := cur.предыдущ(IDENT);
+      cur := cur.предыдущ(ту»м€);
       INC(n)
      ќЌ≈÷;
-    cur := cur.предыдущ(IDENT);
+    cur := cur.предыдущ(ту»м€);
     INC(n);
     unit.Idents.счетчик := unit.Idents.счетчик - n;
     unit.Idents.следующ := cur;
@@ -1167,7 +1180,9 @@
    ќЌ≈÷ PopBlock;
 
 ѕ–ќ÷≈ƒ”–ј LinkPtr;
-  ѕ≈–≈ћ cur: PTRBASE; id: IDENT;
+  ѕ≈–≈ћ
+    cur: PTRBASE;
+    id: ту»м€;
   Ќј„јЋќ
     cur := PtrBases.предыдущ(PTRBASE);
     ѕќ ј cur # ѕ”—“ќ ƒ≈Ћј“№
@@ -1187,7 +1202,7 @@
     Name: м“ипы.ту”зел;
     line, col, Call: INTEGER;
     Export, func: BOOLEAN;
-    last, id: IDENT;
+    last, id: ту»м€;
     e: EXPRESSION;
 
     ѕ–ќ÷≈ƒ”–ј IdentDef;
@@ -1209,7 +1224,7 @@
       ѕќ ј м—кан.tLex = lxIDENT ƒ≈Ћј“№
         IdentDef;
         PushIdent(Name, line, col, IDCONST, ѕ”—“ќ, ѕ”—“ќ, Export, 0);
-        last := unit.Idents.следующ(IDENT);
+        last := unit.Idents.следующ(ту»м€);
         Check(lxEQ);
         Next;
         ConstExpr(Value, T);
@@ -1226,7 +1241,7 @@
       ѕќ ј м—кан.tLex = lxIDENT ƒ≈Ћј“№
         IdentDef;
         PushIdent(Name, line, col, IDTYPE, ѕ”—“ќ, ѕ”—“ќ, Export, 0);
-        last := unit.Idents.следующ(IDENT);
+        last := unit.Idents.следующ(ту»м€);
         unit.ExportType := Export;
         Check(lxEQ);
         Next;
@@ -1272,7 +1287,7 @@
       Check(lxIDENT);
       IdentDef;
       PushIdent(Name, line, col, IDPROC, CreateType(TPROC, 0, 4, 0, sttypes[TVOID], »—“»Ќј, ѕ”—“ќ), ѕ”—“ќ, Export, 0);
-      id := unit.Idents.следующ(IDENT);
+      id := unit.Idents.следующ(ту»м€);
       ≈—Ћ» id.Export & main “ќ√ƒј
         ≈—Ћ» Platform = 6 “ќ√ƒј
           Assert((Name # м—кан._START) & (Name # м—кан._version), line, col, 133)
@@ -1324,7 +1339,7 @@
 
     ѕ–ќ÷≈ƒ”–ј AddProc(name: м—тр.т—трока; num: INTEGER);
       ѕ≈–≈ћ
-        id: IDENT;
+        id: ту»м€;
       Ќј„јЋќ
         id := GetQIdent(u, м—кан.”зел_ƒобав(name));
         ≈—Ћ» id = ѕ”—“ќ “ќ√ƒј
@@ -1438,7 +1453,7 @@
     Guard; Guard;
     PushIdent(unit.Name, 0, 0, IDMOD, sttypes[TVOID], unit, Ћќ∆№, 0);
     Guard;
-    unit.IdentBegin := unit.Idents.следующ(IDENT);
+    unit.IdentBegin := unit.Idents.следующ(ту»м€);
     unit.Closed := »—“»Ќј
    ќЌ≈÷ Header;
 
@@ -1464,7 +1479,8 @@
   ѕ≈–≈ћ
     FHandle: INTEGER;
     name, Name, b: м—тр.т—трока;
-    idmod: IDENT; Res, temp: BOOLEAN;
+    idmod: ту»м€;
+    Res, temp: BOOLEAN;
   Ќј„јЋќ
     Res := Ћќ∆№;
     name := Name1;
@@ -1496,7 +1512,7 @@
       Assert2(м”тиль.streq(м—кан.id.им€, name), 33);
       unit.Name := м—кан.id;
       PushIdent(unit.Name, м—кан.line, м—кан.col, IDMOD, sttypes[TVOID], unit, Ћќ∆№, 0);
-      idmod := unit.Idents.следующ(IDENT);
+      idmod := unit.Idents.следующ(ту»м€);
       Guard;
       Next; Check(lxSemi);
       Next;
@@ -1509,7 +1525,7 @@
       м онс.—трока_ѕечать(" омпилирую: "); м онс.—трока_ѕечать(unit.Name.им€); м онс.—трока_ѕечать("."); м онс.Ќов—тр;
       X86.Module(idmod.Name.им€, idmod.Number);
       UnitNumber := idmod.Number;
-      unit.IdentBegin := unit.Idents.следующ(IDENT);
+      unit.IdentBegin := unit.Idents.следующ(ту»м€);
       curBlock := idmod;
       DeclSeq;
       X86.ProcBeg(idmod.Number, 0, »—“»Ќј);
