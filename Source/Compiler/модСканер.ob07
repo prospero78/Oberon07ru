@@ -24,7 +24,8 @@ This file is part of Compiler.
     mSys := SYSTEM,
     м онст := мод онстанты,
     м‘айл := мод‘айл,
-    м“ипы := мод“ипы;
+    м“ипы := мод“ипы,
+    мѕам := модѕам€ть;
 
  ќЌ—“
 
@@ -63,7 +64,7 @@ This file is part of Compiler.
         ѕ–ќ÷≈ƒ”–ј ”зел_Ќовый(Right: BOOLEAN);
             Ќј„јЋќ
             NEW(res);
-            м”тиль.MemErr(res = ѕ”—“ќ);
+            мѕам.MemErr(res = ѕ”—“ќ);
             res.им€ := Name;
             res.tLex := lxIDENT;
             res.левый := ѕ”—“ќ;
@@ -173,7 +174,7 @@ This file is part of Compiler.
     ѕ≈–≈ћ
       n, size: INTEGER; c: CHAR;
     Ќј„јЋќ
-        File := м”тиль.‘айл_ќткрыть(FName, 0);
+        File := м‘айл.‘айл_ќткрыть(FName, 0);
         FHandle := File;
         ≈—Ћ» File # 0 “ќ√ƒј
             CR := Ћќ∆№;
@@ -184,7 +185,7 @@ This file is part of Compiler.
             size := м‘айл.–азмер_ѕолуч(File);
             buf := м”тиль.ѕам€ть_ѕолуч(size + 1024);
             mSys.PUT(buf + size, 0X);
-            м”тиль.MemErr(buf = 0);
+            мѕам.MemErr(buf = 0);
             n := м‘айл.„итать(File, buf, size);
             м‘айл.«акрыть(File);
             bufpos := buf;
@@ -664,7 +665,7 @@ This file is part of Compiler.
     Ќј„јЋќ
         ƒЋя i := 0 ƒќ LEN(Nodes) - 1 ƒ≈Ћј“№
             NEW(node);
-            м”тиль.MemErr(node = ѕ”—“ќ);
+            мѕам.MemErr(node = ѕ”—“ќ);
             mSys.PUT(mSys.ADR(node.им€), i);
             node.левый := ѕ”—“ќ;
             node.правый := ѕ”—“ќ;

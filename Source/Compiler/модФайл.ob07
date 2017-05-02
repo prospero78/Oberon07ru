@@ -6,7 +6,9 @@
 
 ИМПОРТ API,
    mSys := SYSTEM,
-   мТипы := модТипы;
+   мТипы := модТипы,
+   мКонст := модКонстанты,
+   мПам := модПамять;
 
 ТИПЫ
    тФайл* = УКАЗАТЕЛЬ НА ЗАПИСЬ
@@ -24,6 +26,24 @@
 ПРОЦЕДУРА Размер_Получ*(F: INTEGER): INTEGER;
       ВЕРНУТЬ API.FileSize(F)
    КОНЕЦ Размер_Получ;
+
+ПРОЦЕДУРА Файл_Открыть*(FName: МАССИВ ИЗ CHAR; Mode: INTEGER): INTEGER;
+  ПЕРЕМ
+    ofstr: API.OFSTRUCT; res: INTEGER; memerr: BOOLEAN;
+  НАЧАЛО
+    ЕСЛИ мКонст.win ТОГДА
+      res := API.OpenFile(mSys.ADR(FName), ofstr, Mode);
+      ЕСЛИ res = -1 ТОГДА
+        res := 0
+      КОНЕЦ
+    АЕСЛИ мКонст.kol ТОГДА
+      res := API.kos_OCFile(FName, 5, memerr);
+      мПам.MemErr(memerr)
+    АЕСЛИ мКонст.lin ТОГДА
+      res := API.lnx_OpenFile(FName)
+    КОНЕЦ
+    ВЕРНУТЬ res
+  КОНЕЦ Файл_Открыть;
 
 ПРОЦЕДУРА Читать*(F, Buffer, Count: INTEGER): INTEGER;
   ПЕРЕМ res: INTEGER;

@@ -25,7 +25,10 @@
     м“ипы := мод“ипы,
     м‘айл := мод‘айл,
     м онст := мод онстанты,
-    м онс := мод онсоль;
+    м онс := мод онсоль,
+    мќш := модќшибки,
+    мѕроц := модѕроцесс,
+    мѕам := модѕам€ть;
 
  ќЌ—“
 
@@ -259,14 +262,14 @@
 ѕ–ќ÷≈ƒ”–ј Err(code: INTEGER);
   Ќј„јЋќ
     ¬џЅќ– code »«
-    |1: м”тиль.ErrMsg(67); м”тиль.—трока_ѕечать(OutFile)
-    |2: м”тиль.ErrMsg(69); м”тиль.—трока_ѕечать(OutFile)
-    |3: м”тиль.ErrMsg(58)
-    |4: м”тиль.ErrMsg(88)
+    |1: мќш.—ообщ(67); м онс.—трока_ѕечать(OutFile)
+    |2: мќш.—ообщ(69); м онс.—трока_ѕечать(OutFile)
+    |3: мќш.—ообщ(58)
+    |4: мќш.—ообщ(88)
     »Ќј„≈
      ќЌ≈÷;
     м онс.Ќов—тр;
-    м”тиль.«акончить(1)
+    мѕроц.«акончить(1)
    ќЌ≈÷ Err;
 
 ѕ–ќ÷≈ƒ”–ј Align*(n, m: INTEGER): INTEGER;
@@ -425,7 +428,7 @@
      ќЌ≈÷;
     OutFilePos := м”тиль.ѕам€ть_ѕолуч(filesize);
     filebuf := OutFilePos;
-    м”тиль.MemErr(OutFilePos = 0);
+    мѕам.MemErr(OutFilePos = 0);
 
     Write(mSys.ADR(Header), mSys.SIZE(HEADER));
     ≈—Ћ» dll “ќ√ƒј
@@ -713,7 +716,7 @@
   Ќј„јЋќ
     ≈—Ћ» fpu >= FREGS “ќ√ƒј
       м”тиль.ErrMsgPos(м—кан.line, м—кан.col, 97);
-      м”тиль.«акончить(1)
+      мѕроц.«акончить(1)
      ќЌ≈÷;
     INC(fpu);
     isfpu := »—“»Ќј
@@ -1582,7 +1585,7 @@
      ќЌ≈÷;
     OutFilePos := м”тиль.ѕам€ть_ѕолуч(Align(size, 4) + datasize + 1000H);
     filebuf := OutFilePos;
-    м”тиль.MemErr(OutFilePos = 0);
+    мѕам.MemErr(OutFilePos = 0);
 
     ≈—Ћ» ~obj “ќ√ƒј
       Header.menuet01 := "MENUET01";
@@ -1712,7 +1715,7 @@
      ќЌ≈÷ Sub;
 
   Ќј„јЋќ
-    F := м”тиль.‘айл_ќткрыть(felf, 0);
+    F := м‘айл.‘айл_ќткрыть(felf, 0);
     ≈—Ћ» F = 0 “ќ√ƒј
       Err(3)
      ќЌ≈÷;
@@ -1757,7 +1760,7 @@
 
     OutFilePos := м”тиль.ѕам€ть_ѕолуч(code + data + 8000H);
     filebuf := OutFilePos;
-    м”тиль.MemErr(OutFilePos = 0);
+    мѕам.MemErr(OutFilePos = 0);
 
     Write(mSys.ADR(bytes), 817H);
     Fill(2DDH, 90X);
