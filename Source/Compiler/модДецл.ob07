@@ -181,7 +181,7 @@
     COPY(str, nov.Str);
     nov.Len := м—кан.count - 1;
     nov.Number := X86.NewLabel();
-    м”тиль.Push(Strings, nov);
+    м—пис.Push(Strings, nov);
     X86.String(nov.Number, nov.Len, nov.Str)
     ¬≈–Ќ”“№ nov
    ќЌ≈÷ AddString;
@@ -195,7 +195,7 @@
     nov.Str[1] := 0X;
     nov.Len := 1;
     nov.Number := X86.NewLabel();
-    м”тиль.Push(Strings, nov);
+    м—пис.Push(Strings, nov);
     X86.String(nov.Number, nov.Len, nov.Str)
     ¬≈–Ќ”“№ nov
    ќЌ≈÷ AddMono;
@@ -292,7 +292,7 @@
     ident.Name := ѕ”—“ќ;
     ident.iType := IDGUARD;
     ident.T := sttypes[TVOID];
-    м”тиль.Push(unit.Idents, ident);
+    м—пис.Push(unit.Idents, ident);
     INC(unit.Level)
    ќЌ≈÷ Guard;
 
@@ -317,7 +317,7 @@
     ident.Export := Export;
     ident.StProc := StProc;
     ident.Level := unit.Level;
-    м”тиль.Push(unit.Idents, ident)
+    м—пис.Push(unit.Idents, ident)
    ќЌ≈÷ PushIdent;
 
 ѕ–ќ÷≈ƒ”–ј StTypes;
@@ -328,7 +328,7 @@
       NEW(type);
       MemErr(type = ѕ”—“ќ);
       type.tType := i;
-      м”тиль.Push(types, type);
+      м—пис.Push(types, type);
       sttypes[i] := type
      ќЌ≈÷;
     sttypes[TINTEGER].Size := 4;
@@ -742,7 +742,7 @@
       Assert2(Unique(T, Name), 30);
       NEW(field);
       MemErr(field = ѕ”—“ќ);
-      м”тиль.Push(T.Fields, field);
+      м—пис.Push(T.Fields, field);
       field.Name := Name;
       field.T := ѕ”—“ќ;
       field.Export := Ћќ∆№;
@@ -839,7 +839,7 @@
     »Ќј„≈
       nov := NewType
      ќЌ≈÷;
-    м”тиль.Push(types, nov);
+    м—пис.Push(types, nov);
     nov.tType := tType;
     nov.Len := Len;
     nov.Size := Size;
@@ -890,7 +890,7 @@
       Assert2(GetField(T, Name) = ѕ”—“ќ, 30);
       NEW(field);
       MemErr(field = ѕ”—“ќ);
-      м”тиль.Push(T.Fields, field);
+      м—пис.Push(T.Fields, field);
       field.Name := Name;
       field.T := ѕ”—“ќ;
       field.ByRef := ByRef;
@@ -948,7 +948,7 @@
     nov.line := line;
     nov.col := col;
     nov.Ptr := T;
-    м”тиль.Push(PtrBases, nov)
+    м—пис.Push(PtrBases, nov)
    ќЌ≈÷ AddPtrBase;
 
 ѕ–ќ÷≈ƒ”–ј FormalList(T: pTYPE; ѕ≈– Res: pTYPE);
@@ -1360,7 +1360,7 @@
       NEW(str);
       MemErr(str = ѕ”—“ќ);
       str.Str := name.им€;
-      м”тиль.Push(unit.Import, str);
+      м—пис.Push(unit.Import, str);
       cond := newcond
      ќЌ≈÷ AddUnit;
 
@@ -1444,7 +1444,7 @@
       MemErr(unit = ѕ”—“ќ);
       unit.sys := Ћќ∆№;
       unit.Std := Path = Std;
-      м”тиль.Push(prog, unit);
+      м—пис.Push(prog, unit);
       unit.Idents := м”тиль.—писок_—оздать();
       MemErr(unit.Idents = ѕ”—“ќ);
       unit.Import := м”тиль.—писок_—оздать();

@@ -28,7 +28,8 @@
     м онс := мод онсоль,
     мќш := модќшибки,
     мѕроц := модѕроцесс,
-    мѕам := модѕам€ть;
+    мѕам := модѕам€ть,
+    м—пис := мод—писок;
 
  ќЌ—“
 
@@ -470,7 +471,7 @@
     NEW(nov);
     MemErr(nov = ѕ”—“ќ);
     nov.cmd := ccount;
-    м”тиль.Insert(asmlist, nov, current);
+    м—пис.Insert(asmlist, nov, current);
     current := current.следующ(ASMLINE)
    ќЌ≈÷ New;
 
@@ -595,7 +596,7 @@
     MemErr(asmlist = ѕ”—“ќ);
     NEW(nov);
     MemErr(nov = ѕ”—“ќ);
-    м”тиль.Push(asmlist, nov);
+    м—пис.Push(asmlist, nov);
     current := nov;
    ќЌ≈÷ Init;
 

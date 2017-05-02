@@ -1377,7 +1377,7 @@
     DECL.MemErr(label = ѕ”—“ќ);
     label.a := a;
     label.b := b;
-    м”тиль.Push(Labels, label);
+    м—пис.Push(Labels, label);
     X86.CaseLabel(a, b, LBeg)
    ќЌ≈÷ Label;
 
