@@ -29,7 +29,8 @@
     мОш := модОшибки,
     мПроц := модПроцесс,
     мПам := модПамять,
-    мСпис := модСписок;
+    мСпис := модСписок,
+    мСтр := модСтроки;
 
 КОНСТ
 
@@ -135,14 +136,15 @@
   asmlist: мТипы.туСписок;
   start: ASMLINE; MemErr: PROC; dll, con, gui, kos, elf, obj: BOOLEAN;
     Lcount, reccount, topstk: INTEGER; recarray: МАССИВ 2048 ИЗ INTEGER; current*: ASMLINE;
-    callstk: МАССИВ 1024, 2 ИЗ ASMLINE; OutFile: мТипы.тСтрока;
+    callstk: МАССИВ 1024, 2 ИЗ ASMLINE;
+    OutFile: мСтр.тСтрока;
     Code: МАССИВ 4000000 ИЗ CHAR; ccount: INTEGER; Data: МАССИВ 1000000 ИЗ CHAR; dcount: INTEGER;
     Labels: МАССИВ 200000 ИЗ INTEGER; rdata: МАССИВ 400H ИЗ INTEGER; Header: HEADER; etable: ETABLE;
-    ExecName: мТипы.тСтрока;
+    ExecName: мСтр.тСтрока;
     LoadAdr: INTEGER; Reloc: МАССИВ 200000 ИЗ CHAR; rcount: INTEGER;
     RtlProc: МАССИВ 20 ИЗ INTEGER; OutFilePos: INTEGER;
     RelocSection: SECTION;
-    felf: мТипы.тСтрока;
+    felf: мСтр.тСтрока;
     fpu*: INTEGER; isfpu: BOOLEAN; maxfpu: INTEGER; fpucmd: ASMLINE;
     kosexp: МАССИВ 65536 ИЗ ЗАПИСЬ
       Name: мТипы.туУзел;
@@ -150,7 +152,7 @@
       КОНЕЦ;
     kosexpcount: INTEGER;
 
-ПРОЦЕДУРА setfelf*(name: мТипы.тСтрока);
+ПРОЦЕДУРА setfelf*(name: мСтр.тСтрока);
   НАЧАЛО
     felf := name
   КОНЕЦ setfelf;
@@ -290,7 +292,7 @@
     КОНЕЦ
   КОНЕЦ PutReloc;
 
-ПРОЦЕДУРА InitArray(ПЕР adr: INTEGER; chars: мТипы.тСтрока);
+ПРОЦЕДУРА InitArray(ПЕР adr: INTEGER; chars: мСтр.тСтрока);
   ПЕРЕМ i, x, n: INTEGER;
   НАЧАЛО
     n := LEN(chars) - 1;
@@ -535,7 +537,7 @@
     current.tcmd := POPEDX
   КОНЕЦ PopEDX;
 
-ПРОЦЕДУРА OutCode(cmd: мТипы.тСтрока);
+ПРОЦЕДУРА OutCode(cmd: мСтр.тСтрока);
   ПЕРЕМ a, b: INTEGER;
   НАЧАЛО
     New;
@@ -600,7 +602,7 @@
     current := nov;
   КОНЕЦ Init;
 
-ПРОЦЕДУРА datastr(str: мТипы.тСтрока);
+ПРОЦЕДУРА datastr(str: мСтр.тСтрока);
   ПЕРЕМ i, n: INTEGER;
   НАЧАЛО
     i := 0;
@@ -666,7 +668,7 @@
     INC(ccount, 4)
   КОНЕЦ CmdN;
 
-ПРОЦЕДУРА IntByte(bytecode, intcode: мТипы.тСтрока; n: INTEGER);
+ПРОЦЕДУРА IntByte(bytecode, intcode: мСтр.тСтрока; n: INTEGER);
   НАЧАЛО
     ЕСЛИ (n <= 127) & (n >= -128) ТОГДА
       OutCode(bytecode);
@@ -770,7 +772,7 @@
     CmdN(n)
   КОНЕЦ PushInt;
 
-ПРОЦЕДУРА Prolog*(exename: мТипы.тСтрока);
+ПРОЦЕДУРА Prolog*(exename: мСтр.тСтрока);
   НАЧАЛО
     ExecName := exename;
     Labels[hInstance] := -dcount;
@@ -869,7 +871,7 @@
     CallRTL(_disprec)
   КОНЕЦ disprec;
 
-ПРОЦЕДУРА String*(Number, Len: INTEGER; str: мТипы.тСтрока);
+ПРОЦЕДУРА String*(Number, Len: INTEGER; str: мСтр.тСтрока);
   НАЧАЛО
     Labels[Number] := -dcount;
     ЕСЛИ Len > 1 ТОГДА
@@ -947,13 +949,13 @@
     InsertFpuInit
   КОНЕЦ ProcEnd;
 
-ПРОЦЕДУРА Module*(Name: мТипы.тСтрока; Number: INTEGER);
+ПРОЦЕДУРА Module*(Name: мСтр.тСтрока; Number: INTEGER);
   НАЧАЛО
     String(Number + 2, LENGTH(Name), Name);
     jmplong(JMP, Number + 1)
   КОНЕЦ Module;
 
-ПРОЦЕДУРА Asm*(s: мТипы.тСтрока);
+ПРОЦЕДУРА Asm*(s: мСтр.тСтрока);
   НАЧАЛО
     OutCode(s)
   КОНЕЦ Asm;
@@ -1578,7 +1580,7 @@
     cur: ASMLINE;
     Coff: COFFHEADER;
     sym: МАССИВ 18 * 4 ИЗ CHAR;
-    FileName: мТипы.тСтрока;
+    FileName: мСтр.тСтрока;
   НАЧАЛО
     F := мФайл.Создать(FName);
     ЕСЛИ F <= 0 ТОГДА

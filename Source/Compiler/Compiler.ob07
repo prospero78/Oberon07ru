@@ -67,7 +67,7 @@
 
   pExpr, pFactor: ПРОЦЕДУРА (ПЕР e: DECL.EXPRESSION);
   pOpSeq: ПРОЦЕДУРА;
-  Lex: мТипы.тСтрока;
+  Lex: мСтр.тСтрока;
   sttypes: DECL.stTYPES;
 
 ПРОЦЕДУРА Load(e: DECL.EXPRESSION);
@@ -1440,7 +1440,7 @@
     мСпис.Очистить(Labels)
   КОНЕЦ CaseOper;
 
-ПРОЦЕДУРА CheckCode(Code: мТипы.тСтрока; Len, line, col: INTEGER);
+ПРОЦЕДУРА CheckCode(Code: мСтр.тСтрока; Len, line, col: INTEGER);
   ПЕРЕМ i: INTEGER;
   НАЧАЛО
     Assert(~ODD(Len), line, col, 34);
@@ -1783,7 +1783,7 @@
 
 ПРОЦЕДУРА Старт;
   ПЕРЕМ SelfName, SelfPath, CName, CExt, FName, Path, StdPath,
-      Name, Ext, temp, system, stk, felf: мТипы.тСтрока;
+      Name, Ext, temp, system, stk, felf: мСтр.тСтрока;
       platform, stksize: INTEGER;
 
     ПРОЦЕДУРА getstksize(): INTEGER;

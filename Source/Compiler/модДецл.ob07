@@ -85,7 +85,7 @@
 
   UNIT* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.тѕункт)
       Name: м“ипы.ту”зел;
-      File: м“ипы.т—трока;
+      File: м—тр.т—трока;
       Idents: м“ипы.ту—писок;
       Import: м“ипы.ту—писок;
       IdentBegin: IDENT;
@@ -112,7 +112,7 @@
      ќЌ≈÷;
 
   STRITEM = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.тѕункт)
-      Str: м“ипы.т—трока
+      Str: м—тр.т—трока
      ќЌ≈÷;
 
   FIELD* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.тѕункт)
@@ -124,7 +124,7 @@
      ќЌ≈÷;
 
   STRCONST* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м“ипы.тѕункт)
-      Str*: м“ипы.т—трока;
+      Str*: м—тр.т—трока;
       Len*, Number*: INTEGER
      ќЌ≈÷;
 
@@ -145,13 +145,13 @@
 ѕ≈–≈ћ
 
   sttypes: stTYPES; unit*, sys: UNIT; curBlock*: IDENT;
-  Path, Main, Std, ExtMain: м“ипы.т—трока;
+  Path, Main, Std, ExtMain: м—тр.т—трока;
   NamePtrBase: м“ипы.ту”зел; ProgSize*, RecCount, UnitNumber*: INTEGER;
   PtrBases, Strings, types, prog: м“ипы.ту—писок;
   OpSeq: opPROC; Expr: expPROC;
   AssComp: assPROC; main, sizefunc, winplatf, Const*: BOOLEAN;
   pParseType: ѕ–ќ÷≈ƒ”–ј (ѕ≈– line, col: INTEGER): pTYPE;
-  pReadModule: ѕ–ќ÷≈ƒ”–ј (Path, Name, Ext: м“ипы.т—трока): BOOLEAN;
+  pReadModule: ѕ–ќ÷≈ƒ”–ј (Path, Name, Ext: м—тр.т—трока): BOOLEAN;
   Platform: INTEGER;
 
 ѕ–ќ÷≈ƒ”–ј SetSizeFunc*;
@@ -173,7 +173,7 @@
     ¬≈–Ќ”“№ str
    ќЌ≈÷ GetString;
 
-ѕ–ќ÷≈ƒ”–ј AddString*(str: м“ипы.т—трока): STRCONST;
+ѕ–ќ÷≈ƒ”–ј AddString*(str: м—тр.т—трока): STRCONST;
   ѕ≈–≈ћ nov: STRCONST;
   Ќј„јЋќ
     NEW(nov);
@@ -346,22 +346,22 @@
      ќЌ≈÷
    ќЌ≈÷ StTypes;
 
-ѕ–ќ÷≈ƒ”–ј PushStProc(Name: м“ипы.т—трока; StProc: INTEGER);
+ѕ–ќ÷≈ƒ”–ј PushStProc(Name: м—тр.т—трока; StProc: INTEGER);
   Ќј„јЋќ
     PushIdent(м—кан.”зел_ƒобав(Name), 0, 0, IDSTPROC, sttypes[TVOID], ѕ”—“ќ, Ћќ∆№, StProc)
    ќЌ≈÷ PushStProc;
 
-ѕ–ќ÷≈ƒ”–ј PushStType(Name: м“ипы.т—трока; T: INTEGER);
+ѕ–ќ÷≈ƒ”–ј PushStType(Name: м—тр.т—трока; T: INTEGER);
   Ќј„јЋќ
     PushIdent(м—кан.”зел_ƒобав(Name), 0, 0, IDTYPE, sttypes[T], ѕ”—“ќ, Ћќ∆№, 0)
    ќЌ≈÷ PushStType;
 
-ѕ–ќ÷≈ƒ”–ј PushSysProc(Name: м“ипы.т—трока; StProc: INTEGER);
+ѕ–ќ÷≈ƒ”–ј PushSysProc(Name: м—тр.т—трока; StProc: INTEGER);
   Ќј„јЋќ
     PushIdent(м—кан.”зел_ƒобав(Name), 0, 0, IDSYSPROC, sttypes[TVOID], ѕ”—“ќ, »—“»Ќј, StProc)
    ќЌ≈÷ PushSysProc;
 
-ѕ–ќ÷≈ƒ”–ј PushSysType(Name: м“ипы.т—трока; T: INTEGER);
+ѕ–ќ÷≈ƒ”–ј PushSysType(Name: м—тр.т—трока; T: INTEGER);
   Ќј„јЋќ
     PushIdent(м—кан.”зел_ƒобав(Name), 0, 0, IDTYPE, sttypes[T], ѕ”—“ќ, »—“»Ќј, 0)
    ќЌ≈÷ PushSysType;
@@ -971,7 +971,7 @@
 
 ѕ–ќ÷≈ƒ”–ј CallFlag(ѕ≈– Call: INTEGER): BOOLEAN;
   ѕ≈–≈ћ
-    flag: м“ипы.т—трока;
+    flag: м—тр.т—трока;
     res: BOOLEAN;
   Ќј„јЋќ
     res := м—кан.tLex = lxLSquare;
@@ -999,7 +999,7 @@
 
 ѕ–ќ÷≈ƒ”–ј RecFlag(ѕ≈– rec: INTEGER): BOOLEAN;
   ѕ≈–≈ћ
-    flag: м“ипы.т—трока;
+    flag: м—тр.т—трока;
     res: BOOLEAN;
   Ќј„јЋќ
     res := м—кан.tLex = lxLSquare;
@@ -1292,7 +1292,7 @@
 
 ѕ–ќ÷≈ƒ”–ј Rtl(u: UNIT);
 
-    ѕ–ќ÷≈ƒ”–ј AddProc(name: м“ипы.т—трока; num: INTEGER);
+    ѕ–ќ÷≈ƒ”–ј AddProc(name: м—тр.т—трока; num: INTEGER);
       ѕ≈–≈ћ
         id: IDENT;
       Ќј„јЋќ
@@ -1330,7 +1330,7 @@
   ѕ≈–≈ћ
     cond, col, line, namecol, nameline: INTEGER;
     name, alias: м“ипы.ту”зел; u, self: UNIT;
-    FName: м“ипы.т—трока;
+    FName: м—тр.т—трока;
 
     ѕ–ќ÷≈ƒ”–ј AddUnit(newcond: INTEGER);
     ѕ≈–≈ћ str: STRITEM;
@@ -1430,9 +1430,11 @@
     unit := temp
    ќЌ≈÷ Pseudo;
 
-ѕ–ќ÷≈ƒ”–ј ReadModule(Path, Name1, Ext: м“ипы.т—трока): BOOLEAN;
+ѕ–ќ÷≈ƒ”–ј ReadModule(Path, Name1, Ext: м—тр.т—трока): BOOLEAN;
   ѕ≈–≈ћ
-    FHandle: INTEGER; name, Name, b: м“ипы.т—трока; idmod: IDENT; Res, temp: BOOLEAN;
+    FHandle: INTEGER;
+    name, Name, b: м—тр.т—трока;
+    idmod: IDENT; Res, temp: BOOLEAN;
   Ќј„јЋќ
     Res := Ћќ∆№;
     name := Name1;
@@ -1497,7 +1499,7 @@
     ¬≈–Ќ”“№ Res
    ќЌ≈÷ ReadModule;
 
-ѕ–ќ÷≈ƒ”–ј Program*(StdPath, FilePath, NameFile, ExtFile: м“ипы.т—трока; windows: BOOLEAN;
+ѕ–ќ÷≈ƒ”–ј Program*(StdPath, FilePath, NameFile, ExtFile: м—тр.т—трока; windows: BOOLEAN;
     OpSeqProc: opPROC; ExprProc: expPROC; AssCompProc: assPROC; ѕ≈– stypes: stTYPES);
   Ќј„јЋќ
     winplatf := windows;
@@ -1521,7 +1523,7 @@
     stypes := sttypes
    ќЌ≈÷ Program;
 
-ѕ–ќ÷≈ƒ”–ј delfirstchar(ѕ≈– s: м“ипы.т—трока);
+ѕ–ќ÷≈ƒ”–ј delfirstchar(ѕ≈– s: м—тр.т—трока);
   ѕ≈–≈ћ i: INTEGER;
   Ќј„јЋќ
     ƒЋя i := 0 ƒќ LENGTH(s) - 1 ƒ≈Ћј“№
@@ -1531,7 +1533,7 @@
 
 ѕ–ќ÷≈ƒ”–ј Compile*(platform, stksize: INTEGER);
   ѕ≈–≈ћ
-    full, path, name, ext, temp, path2: м“ипы.т—трока;
+    full, path, name, ext, temp, path2: м—тр.т—трока;
   Ќј„јЋќ
     Platform := platform;
     main := Ћќ∆№;

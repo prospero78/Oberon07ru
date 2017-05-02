@@ -25,7 +25,8 @@
     м онст := мод онстанты,
     м‘айл := мод‘айл,
     м“ипы := мод“ипы,
-    мѕам := модѕам€ть;
+    мѕам := модѕам€ть,
+    м—тр := мод—троки;
 
  ќЌ—“
 
@@ -50,7 +51,7 @@
 
 ѕ≈–≈ћ
 
-    Lex: м“ипы.т—трока;
+    Lex: м—тр.т—трока;
     File, ccol, cline, count*, col*, line*, tLex*, vINT*: INTEGER;
     vFLT*: LONGREAL; id*: м“ипы.ту”зел; ch, vCHX*: CHAR;
     buf, bufpos: INTEGER; CR, UTF8: BOOLEAN;
@@ -58,7 +59,7 @@
     _START*, _version*: м“ипы.ту”зел;
     
 
-ѕ–ќ÷≈ƒ”–ј ”зел_ƒобав*(Name: м“ипы.т—трока): м“ипы.ту”зел;
+ѕ–ќ÷≈ƒ”–ј ”зел_ƒобав*(Name: м—тр.т—трока): м“ипы.ту”зел;
     ѕ≈–≈ћ
       cur, res: м“ипы.ту”зел;
 
@@ -100,7 +101,7 @@
         ¬≈–Ќ”“№ res
      ќЌ≈÷ ”зел_ƒобав;
 
-ѕ–ќ÷≈ƒ”–ј GetLexStr*(ѕ≈– L: м“ипы.т—трока);
+ѕ–ќ÷≈ƒ”–ј GetLexStr*(ѕ≈– L: м—тр.т—трока);
     Ќј„јЋќ
         L := Lex
      ќЌ≈÷ GetLexStr;
@@ -269,7 +270,7 @@
         ¬≈–Ќ”“№ Res
      ќЌ≈÷ hex;
 
-ѕ–ќ÷≈ƒ”–ј StrToInt16(str: м“ипы.т—трока): INTEGER;
+ѕ–ќ÷≈ƒ”–ј StrToInt16(str: м—тр.т—трока): INTEGER;
     ѕ≈–≈ћ i, res, n: INTEGER; flag: BOOLEAN;
     Ќј„јЋќ
         res := 0;
@@ -292,7 +293,7 @@
         ¬≈–Ќ”“№ res
      ќЌ≈÷ StrToInt16;
 
-ѕ–ќ÷≈ƒ”–ј StrToChx(str: м“ипы.т—трока): CHAR;
+ѕ–ќ÷≈ƒ”–ј StrToChx(str: м—тр.т—трока): CHAR;
     ѕ≈–≈ћ res: INTEGER;
     Ќј„јЋќ
         res := StrToInt16(str);
@@ -303,7 +304,7 @@
         ¬≈–Ќ”“№ CHR(res)
      ќЌ≈÷ StrToChx;
 
-ѕ–ќ÷≈ƒ”–ј StrToInt*(str: м“ипы.т—трока): INTEGER;
+ѕ–ќ÷≈ƒ”–ј StrToInt*(str: м—тр.т—трока): INTEGER;
     ѕ≈–≈ћ
         i, res: INTEGER;
         flag: BOOLEAN;
@@ -331,7 +332,7 @@
         ¬≈–Ќ”“№ res
      ќЌ≈÷ StrToInt;
 
-ѕ–ќ÷≈ƒ”–ј StrToFloat(str: м“ипы.т—трока): LONGREAL;
+ѕ–ќ÷≈ƒ”–ј StrToFloat(str: м—тр.т—трока): LONGREAL;
     ѕ≈–≈ћ
         i, scale: INTEGER; res, m, d: LONGREAL; minus, nez: BOOLEAN;
 
@@ -652,7 +653,7 @@
          ќЌ≈÷
      ќЌ≈÷ GetLex;
 
-ѕ–ќ÷≈ƒ”–ј AddNodeKey(Name: м“ипы.т—трока; key: INTEGER);
+ѕ–ќ÷≈ƒ”–ј AddNodeKey(Name: м—тр.т—трока; key: INTEGER);
     ѕ≈–≈ћ node: м“ипы.ту”зел;
     Ќј„јЋќ
         node := ”зел_ƒобав(Name);
