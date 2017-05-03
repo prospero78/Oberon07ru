@@ -400,7 +400,7 @@
       КОНЕЦ
     КОНЕЦ;
     ЕСЛИ flag ТОГДА
-      e.Value := LONG(FLT(ORD(s)));
+      e.Value := ДЛИН(FLT(ORD(s)));
       e.eType := eCONST
     КОНЕЦ;
     Next
@@ -446,7 +446,7 @@
       ЕСЛИ e1.eType = eCONST ТОГДА
         e.Value := ABS(e1.Value);
         e.eType := eCONST;
-        Assert(~((e1.T.tType = TINTEGER) & (e1.Value = LONG(FLT(мКонст.целое_мин)))), line, col, мДецл.IOVER)
+        Assert(~((e1.T.tType = TINTEGER) & (e1.Value = ДЛИН(FLT(мКонст.целое_мин)))), line, col, мДецл.IOVER)
       КОНЕЦ;
       ЕСЛИ e1.T.tType = TINTEGER ТОГДА
         X86.StFunc(X86.stABS)
@@ -459,7 +459,7 @@
       Assert(e1.T.tType = TINTEGER, line, col, 52);
       Выраж_Загрузить(e1);
       ЕСЛИ e1.eType = eCONST ТОГДА
-        e.Value := LONG(FLT(ORD(ODD(FLOOR(e1.Value)))));
+        e.Value := ДЛИН(FLT(ORD(ODD(FLOOR(e1.Value)))));
         e.eType := eCONST
       КОНЕЦ;
       X86.StFunc(X86.stODD);
@@ -493,7 +493,7 @@
         |stLSR: a := LSR(a, b)
         ИНАЧЕ
         КОНЕЦ;
-        e.Value := LONG(FLT(a));
+        e.Value := ДЛИН(FLT(a));
         e.eType := eCONST
       КОНЕЦ;
       ВЫБОР func ИЗ
@@ -509,8 +509,8 @@
       Assert(e1.T.tType IN {TREAL, TLONGREAL}, line, col, 66);
       Выраж_Загрузить(e1);
       ЕСЛИ e1.eType = eCONST ТОГДА
-        Assert((e1.Value - 1.0D0 < LONG(FLT(мКонст.целое_макс))) & (e1.Value >= LONG(FLT(мКонст.целое_мин))), line, col, 74);
-        e.Value := LONG(FLT(FLOOR(e1.Value)));
+        Assert((e1.Value - 1.0D0 < ДЛИН(FLT(мКонст.целое_макс))) & (e1.Value >= ДЛИН(FLT(мКонст.целое_мин))), line, col, 74);
+        e.Value := ДЛИН(FLT(FLOOR(e1.Value)));
         e.eType := eCONST
       КОНЕЦ;
       X86.StFunc(X86.stFLOOR);
@@ -535,7 +535,7 @@
       ЕСЛИ e1.eType = eCONST ТОГДА
         ЕСЛИ e1.T.tType = TSTRING ТОГДА
           str := мДецл.Стр_Получ(e1.Value);
-          e.Value := LONG(FLT(ORD(str.Str[0])))
+          e.Value := ДЛИН(FLT(ORD(str.Str[0])))
         ИНАЧЕ
           e.Value := e1.Value
         КОНЕЦ;
@@ -563,7 +563,7 @@
         Assert(ASR(FLOOR(e1.Value), 8) = 0, line, col, 76);
         str2 := мДецл.СтрМоно_Создать(CHR(FLOOR(e1.Value)));
         SYSTEM.GET(SYSTEM.ADR(str2), p);
-        e.Value := LONG(FLT(p));
+        e.Value := ДЛИН(FLT(p));
         e.T := sttypes[TSTRING];
         e.eType := eCONST
       КОНЕЦ
@@ -580,8 +580,8 @@
       pExpr(e1);
       Assert(e1.T.tType = TLONGREAL, line, col, 70);
       ЕСЛИ e1.eType = eCONST ТОГДА
-        Assert(ABS(e1.Value) <= LONG(мКонст.вещ_макс), line, col, мДецл.FOVER);
-        Assert(ABS(e1.Value) >= LONG(мКонст.вещ_мин), line, col, мДецл.UNDER);
+        Assert(ABS(e1.Value) <= ДЛИН(мКонст.вещ_макс), line, col, мДецл.FOVER);
+        Assert(ABS(e1.Value) >= ДЛИН(мКонст.вещ_мин), line, col, мДецл.UNDER);
         e.Value := e1.Value;
         e.eType := eCONST
       КОНЕЦ;
@@ -596,7 +596,7 @@
           X86.Mono(str.Number);
           X86.StrMono
         КОНЕЦ;
-        e.Value := LONG(FLT(LENGTH(str.Str)));
+        e.Value := ДЛИН(FLT(LENGTH(str.Str)));
         e.eType := eCONST
       КОНЕЦ;
       Str(e1);
@@ -646,10 +646,10 @@
         ЕСЛИ T.tType = TPOINTER ТОГДА
           T := T.Base
         КОНЕЦ;
-        e.Value := LONG(FLT(T.Number));
+        e.Value := ДЛИН(FLT(T.Number));
         X86.PushConst(T.Number)
       ИНАЧЕ
-        e.Value := LONG(FLT(T.Size));
+        e.Value := ДЛИН(FLT(T.Size));
         X86.PushConst(T.Size)
       КОНЕЦ
     ИНАЧЕ
@@ -943,7 +943,7 @@
         мСкан.GetLexStr(Lex);
         str2 := мДецл.Стр_Создать(Lex);
         SYSTEM.GET(SYSTEM.ADR(str2), p);
-        e.Value := LONG(FLT(p));
+        e.Value := ДЛИН(FLT(p));
         s := мДецл.Стр_Получ(e.Value);
         ЕСЛИ s.Len = 1 ТОГДА
           X86.PushConst(ORD(s.Str[0]))
@@ -953,7 +953,7 @@
       ИНАЧЕ
         str2 := мДецл.СтрМоно_Создать(мСкан.vCHX);
         SYSTEM.GET(SYSTEM.ADR(str2), p);
-        e.Value := LONG(FLT(p));
+        e.Value := ДЛИН(FLT(p));
         X86.PushConst(ORD(мСкан.vCHX))
       КОНЕЦ;
       e.T := sttypes[TSTRING];
@@ -970,7 +970,7 @@
       Next
     |lxINT, lxHEX:
       e.T := sttypes[TINTEGER];
-      e.Value := LONG(FLT(мСкан.vINT));
+      e.Value := ДЛИН(FLT(мСкан.vINT));
       X86.PushConst(мСкан.vINT);
       Next
     |lxLRound:
@@ -985,7 +985,7 @@
       Assert(e.T.tType = TBOOLEAN, line, col, 37);
       Выраж_Загрузить(e);
       ЕСЛИ e.eType = eCONST ТОГДА
-        e.Value := LONG(FLT(ORD(e.Value = 0.0D0)))
+        e.Value := ДЛИН(FLT(ORD(e.Value = 0.0D0)))
       ИНАЧЕ
         e.eType := eEXP
       КОНЕЦ;
@@ -1163,9 +1163,9 @@
       ЕСЛИ (uOp = lxMinus) & (e.eType = eCONST) ТОГДА
         ВЫБОР e.T.tType ИЗ
         |TINTEGER:
-          Assert(e.Value # LONG(FLT(мКонст.целое_мин)), uline, ucol, мДецл.IOVER)
+          Assert(e.Value # ДЛИН(FLT(мКонст.целое_мин)), uline, ucol, мДецл.IOVER)
         |TSET:
-          e.Value := -LONG(FLT(ORD(-BITS(FLOOR(e.Value)))))
+          e.Value := -ДЛИН(FLT(ORD(-BITS(FLOOR(e.Value)))))
         ИНАЧЕ
         КОНЕЦ;
         e.Value := -e.Value
@@ -1868,13 +1868,13 @@
     ПРОЦЕДУРА getver(): ЦЕЛОЕ;
       ПЕРЕМ res, i: ЦЕЛОЕ; err: BOOLEAN;
 
-      ПРОЦЕДУРА hexdgt(c: CHAR): BOOLEAN;
+      ПРОЦЕДУРА hexdgt(c: СИМВ): BOOLEAN;
           ВЕРНУТЬ ("0" <= c) & (c <= "9") ИЛИ
                    ("A" <= c) & (c <= "F") ИЛИ
                    ("a" <= c) & (c <= "f")
         КОНЕЦ hexdgt;
 
-      ПРОЦЕДУРА hex(c: CHAR): ЦЕЛОЕ;
+      ПРОЦЕДУРА hex(c: СИМВ): ЦЕЛОЕ;
         ПЕРЕМ res: ЦЕЛОЕ;
         НАЧАЛО
             ЕСЛИ    ("0" <= c) & (c <= "9") ТОГДА
