@@ -92,7 +92,7 @@
       IdentBegin: РСхЛЪ;
       scanner: ЛрХОШ.РСяЙЮМЕП;
       Level*: жекне;
-      Closed, typedecl, ExportType, Std, sys: BOOLEAN
+      Closed, typedecl, ExportType, Std, sys: аскебн
     йнмеж;
 
   РхЛЪ* = гюохяэ (ЛрХОШ.РоСМЙР)
@@ -103,7 +103,7 @@
       Value*: дкхмбеы;
       line*, col*, Number*, iType*, StProc*, VarSize, ParamSize*,
       LocalSize*, Offset*, VarKind*, Level*, ParamCount*: жекне;
-      Export: BOOLEAN
+      Export: аскебн
     йнмеж;
 
   PTRBASE = сйюгюрекэ мю гюохяэ (ЛрХОШ.РоСМЙР)
@@ -120,7 +120,7 @@
       Name: ЛрХОШ.РСсГЕК;
       T*: РСрХО;
       Offset*: жекне;
-      ByRef*, Export*: BOOLEAN;
+      ByRef*, Export*: аскебн;
       Unit*: РлНДСКЭ
     йнмеж;
 
@@ -134,12 +134,12 @@
       T*: РСрХО;
       eType*: жекне;
       Value*: дкхмбеы;
-      Read*, vparam*, deref*: BOOLEAN
+      Read*, vparam*, deref*: аскебн
     йнмеж;
 
   РоПНЖЕДСПЮ = опнжедспю;
   РоПНЖЕДСПЮоЕП = опнжедспю (оеп e: РбШПЮФЕМХЕ);
-  РоПНЖЕДСПЮяБЪГЭ = опнжедспю (e: РбШПЮФЕМХЕ; T: РСрХО; param: BOOLEAN): BOOLEAN;
+  РоПНЖЕДСПЮяБЪГЭ = опнжедспю (e: РбШПЮФЕМХЕ; T: РСрХО; param: аскебн): аскебн;
 
   РСрХОмЮАНП* = люяяхб 11 хг РСрХО;
 
@@ -154,9 +154,9 @@
   OpSeq: РоПНЖЕДСПЮ;
   Expr: РоПНЖЕДСПЮоЕП;
   AssComp: РоПНЖЕДСПЮяБЪГЭ;
-  main, sizefunc, winplatf, Const*: BOOLEAN;
+  main, sizefunc, winplatf, Const*: аскебн;
   pParseType: опнжедспю (оеп line, col: жекне): РСрХО;
-  ОлНДСКЭ_вХРЮРЭ: опнжедспю (Path, Name, Ext: ЛяРП.РяРПНЙЮ): BOOLEAN;
+  ОлНДСКЭ_вХРЮРЭ: опнжедспю (Path, Name, Ext: ЛяРП.РяРПНЙЮ): аскебн;
   Platform: жекне;
 
 опнжедспю оПНЖЕДСПпЮГЛ_сЯР*;
@@ -164,7 +164,7 @@
     sizefunc := хярхмю
   йнмеж оПНЖЕДСПпЮГЛ_сЯР;
 
-опнжедспю оЮЛнЬ_оПНБЕПХРЭ*(err: BOOLEAN);
+опнжедспю оЮЛнЬ_оПНБЕПХРЭ*(err: аскебн);
   мювюкн
     еякх err рнцдю
       ЛоЮЛ.нЬХАЙЮ(err)
@@ -269,7 +269,7 @@
     йнмеж
   йнмеж Check;
 
-опнжедспю CheckIdent(Name: ЛрХОШ.РСсГЕК): BOOLEAN;
+опнжедспю CheckIdent(Name: ЛрХОШ.РСсГЕК): аскебн;
   оепел
     cur: РСхЛЪ;
   мювюкн
@@ -293,7 +293,7 @@
     INC(unit.Level)
   йнмеж нУПЮМЮ_яНГДЮРЭ;
 
-опнжедспю PushIdent(Name: ЛрХОШ.РСсГЕК; line, col, iType: жекне; T: РСрХО; u: РлНДСКЭ; Export: BOOLEAN; StProc: жекне);
+опнжедспю PushIdent(Name: ЛрХОШ.РСсГЕК; line, col, iType: жекне; T: РСрХО; u: РлНДСКЭ; Export: аскебн; StProc: жекне);
   оепел
     ident: РСхЛЪ;
     i: жекне;
@@ -372,12 +372,19 @@
     PushStProc("ABS",      stABS);
     PushStProc("ASR",      stASR);
     PushStProc("ASSERT",   stASSERT);
+    PushStProc("гюыхрю",   stASSERT);
+    
     PushStType("BOOLEAN",  TBOOLEAN);
+    PushStType("аскебн",  TBOOLEAN);
+    
     PushStType("CHAR",     TCHAR);
     PushStType("яхлб",     TCHAR);
     PushStProc("CHR",      stCHR);
     PushStProc("COPY",     stCOPY);
+    
     PushStProc("DEC",      stDEC);
+    PushStProc("бшв",      stDEC);
+    
     PushStProc("DISPOSE",  stDISPOSE);
     PushStProc("EXCL",     stEXCL);
     PushStProc("FLOOR",    stFLOOR);
@@ -407,10 +414,13 @@
     PushStProc("ROR",      stROR);
     PushStType("SET",      TSET);
     PushStProc("SHORT",    stSHORT);
+    PushStProc("йнпнр",    stSHORT);
+    
     PushStProc("UNPK",     stUNPK);
     PushStProc("BITS",     stBITS);
     PushStProc("LSR",      stLSR);
     PushStProc("LENGTH",   stLENGTH);
+    PushStProc("дкхмю",   stLENGTH);
     нУПЮМЮ_яНГДЮРЭ
   йнмеж StIdent;
 
@@ -454,8 +464,8 @@
     бепмсрэ res
   йнмеж GetIdent;
 
-опнжедспю Relation*(Op: жекне): BOOLEAN;
-  оепел Res: BOOLEAN;
+опнжедспю Relation*(Op: жекне): аскебн;
+  оепел Res: аскебн;
   мювюкн
     бшанп Op хг
     |lxEQ, lxNE, lxLT, lxGT,
@@ -691,7 +701,7 @@
     бепмсрэ n
   йнмеж Dim;
 
-опнжедспю SetFields(Tr, Tf: РСрХО; Rec: BOOLEAN);
+опнжедспю SetFields(Tr, Tf: РСрХО; Rec: аскебн);
   оепел
     cur: РСоНКЕ;
   мювюкн
@@ -741,10 +751,10 @@
     бепмсрэ Res
   йнмеж GetField;
 
-опнжедспю Unique(T: РСрХО; Name: ЛрХОШ.РСсГЕК): BOOLEAN;
+опнжедспю Unique(T: РСрХО; Name: ЛрХОШ.РСсГЕК): аскебн;
   оепел
     field: РСоНКЕ;
-    res: BOOLEAN;
+    res: аскебн;
   мювюкн
     res := хярхмю;
     онйю (T # осярн) & res декюрэ
@@ -759,7 +769,7 @@
     бепмсрэ res
   йнмеж Unique;
 
-опнжедспю notrecurs(id: BOOLEAN; T: РСрХО): BOOLEAN;
+опнжедспю notrecurs(id: аскебн; T: РСрХО): аскебн;
     бепмсрэ ~(id & (unit.Idents.ЯКЕДСЧЫ(РСхЛЪ).iType = IDTYPE) & (unit.Idents.ЯКЕДСЧЫ(РСхЛЪ).T = T) &
             (T.tType IN {TRECORD, TARRAY}))
   йнмеж notrecurs;
@@ -770,7 +780,7 @@
     field: РСоНКЕ;
     Tf: РСрХО;
     line, col: жекне;
-    id_T: BOOLEAN;
+    id_T: аскебн;
   мювюкн
     онйю ЛяЙЮМ.tLex = lxIDENT декюрэ
       Name := ЛяЙЮМ.id;
@@ -867,7 +877,7 @@
     йнмеж
   йнмеж SetVars;
 
-опнжедспю рХО_яНГДЮРЭ(tType, Len, Size, Number: жекне; Base: РСрХО; Fields: BOOLEAN; NewType: РСрХО): РСрХО;
+опнжедспю рХО_яНГДЮРЭ(tType, Len, Size, Number: жекне; Base: РСрХО; Fields: аскебн; NewType: РСрХО): РСрХО;
   оепел
     nov: РСрХО;
   мювюкн
@@ -911,12 +921,12 @@
 опнжедспю Section(T: РСрХО);
   оепел
       Name: ЛрХОШ.РСсГЕК;
-      ByRef, cont: BOOLEAN;
+      ByRef, cont: аскебн;
       field: РСоНКЕ;
       Tf: РСрХО;
       fp: РСхЛЪ;
       line, col: жекне;
-      proc: BOOLEAN;
+      proc: аскебн;
   мювюкн
     proc := T = осярн;
     еякх proc рнцдю
@@ -969,7 +979,7 @@
   йнмеж Section;
 
 опнжедспю ParamType(T: РСрХО);
-  оепел break: BOOLEAN;
+  оепел break: аскебн;
   мювюкн
     еякх (ЛяЙЮМ.tLex = lxIDENT) хкх (ЛяЙЮМ.tLex = ЛйНМЯР.ЙЯоепел) рнцдю
       break := кнфэ;
@@ -1014,10 +1024,10 @@
     йнмеж
   йнмеж FormalList;
 
-опнжедспю CallFlag(оеп Call: жекне): BOOLEAN;
+опнжедспю CallFlag(оеп Call: жекне): аскебн;
   оепел
     flag: ЛяРП.РяРПНЙЮ;
-    res: BOOLEAN;
+    res: аскебн;
   мювюкн
     res := ЛяЙЮМ.tLex = lxLSquare;
     еякх res рнцдю
@@ -1042,10 +1052,10 @@
     бепмсрэ res
   йнмеж CallFlag;
 
-опнжедспю RecFlag(оеп rec: жекне): BOOLEAN;
+опнжедспю RecFlag(оеп rec: жекне): аскебн;
   оепел
     flag: ЛяРП.РяРПНЙЮ;
-    res: BOOLEAN;
+    res: аскебн;
   мювюкн
     res := ЛяЙЮМ.tLex = lxLSquare;
     еякх res рнцдю
@@ -1067,12 +1077,12 @@
     бепмсрэ res
   йнмеж RecFlag;
 
-опнжедспю StructType(Comma: BOOLEAN; NewType: РСрХО): РСрХО;
+опнжедспю StructType(Comma: аскебн; NewType: РСрХО): РСрХО;
   оепел
     v: дкхмбеы;
     T, nov: РСрХО;
     line, col, line2, col2: жекне;
-    id_T: BOOLEAN;
+    id_T: аскебн;
   мювюкн
     бшанп ЛяЙЮМ.tLex хг
     |ЛйНМЯР.ЙЯлюяяхб, lxComma:
@@ -1191,7 +1201,7 @@
     unit.Idents.ЯВЕРВХЙ := unit.Idents.ЯВЕРВХЙ - n;
     unit.Idents.ЯКЕДСЧЫ := cur;
     cur.ЯКЕДСЧЫ := осярн;
-    DEC(unit.Level)
+    бшв(unit.Level)
   йнмеж PopBlock;
 
 опнжедспю LinkPtr;
@@ -1216,7 +1226,7 @@
     T, NewType: РСрХО;
     Name: ЛрХОШ.РСсГЕК;
     line, col, Call: жекне;
-    Export, func: BOOLEAN;
+    Export, func: аскебн;
     last, id: РСхЛЪ;
     e: РбШПЮФЕМХЕ;
 
@@ -1494,12 +1504,12 @@
     unit := ЛНДСКЭ
   йнмеж оЯЕБДН_дНАЮБ;
 
-опнжедспю лНДСКЭ_вХРЮРЭ(Path, Name1, Ext: ЛяРП.РяРПНЙЮ): BOOLEAN;
+опнжедспю лНДСКЭ_вХРЮРЭ(Path, Name1, Ext: ЛяРП.РяРПНЙЮ): аскебн;
   оепел
     FHandle: жекне;
     name, Name, b: ЛяРП.РяРПНЙЮ;
     idmod: РСхЛЪ;
-    Res, temp: BOOLEAN;
+    Res, temp: аскебн;
   мювюкн
     Res := кнфэ;
     name := Name1;
@@ -1564,7 +1574,7 @@
     бепмсрэ Res
   йнмеж лНДСКЭ_вХРЮРЭ;
 
-опнжедспю йНД_мЮЯРПНХРЭ*(StdPath, FilePath, NameFile, ExtFile: ЛяРП.РяРПНЙЮ; windows: BOOLEAN;
+опнжедспю йНД_мЮЯРПНХРЭ*(StdPath, FilePath, NameFile, ExtFile: ЛяРП.РяРПНЙЮ; windows: аскебн;
     OpSeqProc: РоПНЖЕДСПЮ; ExprProc: РоПНЖЕДСПЮоЕП; AssCompProc: РоПНЖЕДСПЮяБЪГЭ; оеп stypes: РСрХОмЮАНП);
   мювюкн
     winplatf := windows;
@@ -1591,7 +1601,7 @@
 опнжедспю delfirstchar(оеп s: ЛяРП.РяРПНЙЮ);
   оепел i: жекне;
   мювюкн
-    дкъ i := 0 дн LENGTH(s) - 1 декюрэ
+    дкъ i := 0 дн дкхмю(s) - 1 декюрэ
       s[i] := s[i + 1]
     йнмеж
   йнмеж delfirstchar;
@@ -1614,7 +1624,7 @@
       ЛсРХКЭ.яРПоЮПЮЛ(full, 0);
       ЛяРП.пЮГДЕКХРЭ(full, path, name, ext);
       еякх path[0] # 0X рнцдю
-        path[LENGTH(path) - 1] := 0X
+        path[дкхмю(path) - 1] := 0X
       йнмеж;
       еякх Path[0] = ЛйНМЯР.ЯКЩЬ рнцдю
         delfirstchar(Path)

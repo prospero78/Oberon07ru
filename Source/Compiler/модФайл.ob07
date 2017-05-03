@@ -30,7 +30,7 @@
 
 опнжедспю нРЙПШРЭ*(FName: люяяхб хг яхлб; Mode: жекне): жекне;
   оепел
-    ofstr: ЛюОХ.OFSTRUCT; res: жекне; memerr: BOOLEAN;
+    ofstr: ЛюОХ.OFSTRUCT; res: жекне; memerr: аскебн;
   мювюкн
     еякх ЛйНМЯР.win рнцдю
       res := ЛюОХ.OpenFile(mSys.ADR(FName), ofstr, Mode);
@@ -48,7 +48,7 @@
 
 опнжедспю яНГДЮРЭ*(FName: люяяхб хг яхлб): жекне;
   оепел
-     res: жекне; memerr: BOOLEAN;
+     res: жекне; memerr: аскебн;
   мювюкн
     еякх ЛйНМЯР.win рнцдю
       res := ЛюОХ.CreateFile(mSys.ADR(FName), 0C0000000H, 0, 0, 2, 80H, 0);

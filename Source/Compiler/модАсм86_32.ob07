@@ -70,10 +70,10 @@
 
 рхош
 
-  РоПНЖЕДСПЮ = опнжедспю (err: BOOLEAN);
+  РоПНЖЕДСПЮ = опнжедспю (err: аскебн);
 
   РСоСМЙРюЯЛ* = сйюгюрекэ мю гюохяэ (ЛрХОШ.РоСМЙР)
-      cmd, clen, varadr, adr, tcmd, codeadr: жекне; short: BOOLEAN
+      cmd, clen, varadr, adr, tcmd, codeadr: жекне; short: аскебн
     йнмеж;
 
   TFLT = люяяхб 2 хг жекне;
@@ -136,7 +136,7 @@
   asmlist: ЛрХОШ.РСяОХЯНЙ;
   start: РСоСМЙРюЯЛ;
   MemErr: РоПНЖЕДСПЮ;
-  dll, con, gui, kos, elf, obj: BOOLEAN;
+  dll, con, gui, kos, elf, obj: аскебн;
   Lcount, reccount, topstk: жекне;
   recarray: люяяхб 2048 хг жекне;
   current*: РСоСМЙРюЯЛ;
@@ -153,7 +153,7 @@
   RelocSection: РяЕЙЖХЪ;
   felf: ЛяРП.РяРПНЙЮ;
   fpu*: жекне;
-  isfpu: BOOLEAN;
+  isfpu: аскебн;
   maxfpu: жекне;
   fpucmd: РСоСМЙРюЯЛ;
   kosexp: люяяхб 65536 хг гюохяэ
@@ -181,7 +181,7 @@
 
 опнжедспю CopyStr(оеп Dest: люяяхб хг яхлб; Source: люяяхб хг яхлб; оеп di: жекне; si: жекне);
   мювюкн
-    DEC(di);
+    бшв(di);
     онбрнпърэ
       INC(di);
       Dest[di] := Source[si];
@@ -200,7 +200,7 @@
 опнжедспю Sort(оеп NamePtr, Adr: люяяхб хг жекне; Text: люяяхб хг яхлб; LB, RB: жекне);
   оепел L, R: жекне;
 
-      опнжедспю strle(s1, s2: жекне): BOOLEAN;
+      опнжедспю strle(s1, s2: жекне): аскебн;
       оепел S1, S2: люяяхб 256 хг яхлб; i: жекне;
       мювюкн
         i := 0;
@@ -219,7 +219,7 @@
           INC(L)
         йнмеж;
         онйю (R > LB) & strle(NamePtr[LB], NamePtr[R]) декюрэ
-          DEC(R)
+          бшв(R)
         йнмеж;
         еякх L < R рнцдю
           exch(NamePtr[L], NamePtr[R]);
@@ -589,7 +589,7 @@
 опнжедспю бШГНБ_гЮЙНМВХРЭ*;
   мювюкн
     current := callstk[topstk - 1][1];
-    DEC(topstk)
+    бшв(topstk)
   йнмеж бШГНБ_гЮЙНМВХРЭ;
 
 опнжедспю мЮЯРПНХРЭ*(mem: РоПНЖЕДСПЮ; UI: жекне);
@@ -690,17 +690,17 @@
     йнмеж
   йнмеж IntByte;
 
-опнжедспю DropFpu*(long: BOOLEAN);
+опнжедспю DropFpu*(long: аскебн);
   мювюкн
     еякх long рнцдю
       OutCode("83EC08DD1C24")
     хмюве
       OutCode("83EC04D91C24")
     йнмеж;
-    DEC(fpu)
+    бшв(fpu)
   йнмеж DropFpu;
 
-опнжедспю AfterRet(func, float: BOOLEAN; callconv, parsize: жекне);
+опнжедспю AfterRet(func, float: аскебн; callconv, parsize: жекне);
   мювюкн
     еякх callconv = cdecl рнцдю
       OutCode("81C4");
@@ -736,7 +736,7 @@
     isfpu := хярхмю
   йнмеж Incfpu;
 
-опнжедспю FpuLoad(local: жекне; float: BOOLEAN);
+опнжедспю FpuLoad(local: жекне; float: аскебн);
   оепел i: жекне;
   мювюкн
     дкъ i := fpu дн 1 BY -1 декюрэ
@@ -748,7 +748,7 @@
     йнмеж
   йнмеж FpuLoad;
 
-опнжедспю Call*(proc: жекне; func, float: BOOLEAN; callconv, ccall, bases, level, parsize, local: жекне);
+опнжедспю Call*(proc: жекне; func, float: аскебн; callconv, ccall, bases, level, parsize, local: жекне);
   оепел i: жекне;
   мювюкн
     еякх ccall # 0 рнцдю
@@ -807,13 +807,13 @@
     recarray[reccount] := base
   йнмеж AddRec;
 
-опнжедспю CmpOpt(inv: BOOLEAN): жекне;
+опнжедспю CmpOpt(inv: аскебн): жекне;
   оепел cur: РСоСМЙРюЯЛ; c: жекне;
   мювюкн
     c := ORD(Code[current.ОПЕДШДСЫ.ОПЕДШДСЫ(РСоСМЙРюЯЛ).cmd]);
     еякх inv рнцдю
       еякх ODD(c) рнцдю
-        DEC(c)
+        бшв(c)
       хмюве
         INC(c)
       йнмеж
@@ -849,7 +849,7 @@
     current.ОПЕДШДСЫ(РСоСМЙРюЯЛ).varadr := Number
   йнмеж PushConst;
 
-опнжедспю IfWhile*(L: жекне; orop: BOOLEAN);
+опнжедспю IfWhile*(L: жекне; orop: аскебн);
   оепел c, L1: жекне;
   мювюкн
     L1 := NewLabel();
@@ -909,7 +909,7 @@
     йнмеж
   йнмеж InsertFpuInit;
 
-опнжедспю ProcBeg*(Number, Local: жекне; Module: BOOLEAN);
+опнжедспю ProcBeg*(Number, Local: жекне; Module: аскебн);
   оепел i: жекне;
   мювюкн
     еякх Module рнцдю
@@ -944,7 +944,7 @@
     InsertFpuInit
   йнмеж Leave;
 
-опнжедспю ProcEnd*(Number, Param: жекне; func, float: BOOLEAN);
+опнжедспю ProcEnd*(Number, Param: жекне; func, float: аскебн);
   мювюкн
     еякх func & ~float рнцдю
       PopEAX
@@ -1068,7 +1068,7 @@
     хмюве
     йнмеж;
     OutByte(n);
-    DEC(fpu)
+    бшв(fpu)
   йнмеж farith;
 
 опнжедспю fcmp*(Op: жекне);
@@ -1084,7 +1084,7 @@
     |lxGE: n := 96H
     хмюве
     йнмеж;
-    DEC(fpu, 2);
+    бшв(fpu, 2);
     OutByte(n);
     OutByte(0C1H);
     PushECX
@@ -1102,7 +1102,7 @@
     jmplong(JMP, ЛсРХКЭ.Unit + 3)
   йнмеж OnError;
 
-опнжедспю idivmod*(opmod: BOOLEAN);
+опнжедспю idivmod*(opmod: аскебн);
   мювюкн
     PopECX;
     еякх opmod рнцдю
@@ -1167,7 +1167,7 @@
     PushECX;
   йнмеж CmpInt;
 
-опнжедспю CallVar*(func, float: BOOLEAN; callconv, parsize, local: жекне);
+опнжедспю CallVar*(func, float: аскебн; callconv, parsize, local: жекне);
   мювюкн
     PopEDX;
     OutCode("8B1285D2750A");
@@ -1206,7 +1206,7 @@
     OutCode("FF72FC")
   йнмеж DerefType;
 
-опнжедспю Guard*(T: жекне; Check: BOOLEAN);
+опнжедспю Guard*(T: жекне; Check: аскебн);
   мювюкн
     еякх Check рнцдю
       PopEAX;
@@ -1270,7 +1270,7 @@
     |stABS:    PopEDX; OutCode("85D27D02F7DA"); PushEDX
     |stFABS:   OutCode("D9E1")
     |stFLT:    OutCode("DB0424"); PopEAX; Incfpu;
-    |stFLOOR:  OutCode("83EC06D93C2466812424FFF366810C24FFF7D92C2483C402D9FCDB1C24"); DEC(fpu)
+    |stFLOOR:  OutCode("83EC06D93C2466812424FFF366810C24FFF7D92C2483C402D9FCDB1C24"); бшв(fpu)
     |stODD:    OutCode("83242401")
     |stROR:    PopECX; OutCode("58D3C8"); PushEAX
     |stASR:    PopECX; OutCode("58D3F8"); PushEAX
@@ -1372,11 +1372,11 @@
     |TLONGREAL:
       PopEDX;
       OutCode("DD1A");
-      DEC(fpu)
+      бшв(fpu)
     |TREAL:
       PopEDX;
       OutCode("D91A");
-      DEC(fpu)
+      бшв(fpu)
     |TRECORD:
       CallRTL(_saverec);
       OutCode("83F800750A");
@@ -1490,7 +1490,7 @@
     йнмеж
   йнмеж Len;
 
-опнжедспю For*(inc: BOOLEAN; оеп LBeg, LEnd: жекне);
+опнжедспю For*(inc: аскебн; оеп LBeg, LEnd: жекне);
   мювюкн
     LEnd := NewLabel();
     LBeg := NewLabel();
@@ -1562,7 +1562,7 @@
 опнжедспю Optimization;
   оепел
     cur: РСоСМЙРюЯЛ;
-    flag: BOOLEAN;
+    flag: аскебн;
   мювюкн
     cur := asmlist.ОПЕДШДСЫ(РСоСМЙРюЯЛ);
     онйю cur # осярн декюрэ
@@ -1587,7 +1587,7 @@
     йнмеж
   йнмеж Optimization;
 
-опнжедспю WriteKOS(FName: люяяхб хг яхлб; stk, size, datasize, gsize: жекне; obj: BOOLEAN);
+опнжедспю WriteKOS(FName: люяяхб хг яхлб; stk, size, datasize, gsize: жекне; obj: аскебн);
   CONST strsize = 2048;
   оепел
     Header: РгЮЦНКНБНЙKol;
@@ -1745,7 +1745,7 @@
     ЛтЮИК.гЮЙПШРЭ(F);
     bytes[0] := 7FX;
 
-    DEC(code, 13);
+    бшв(code, 13);
 
     delta := Align(data, 1000H) - 100000H;
     Add(0020H); Add(00A4H); Add(00A8H); Add(0258H); Add(02B8H); Add(0308H); Add(0494H); Add(049CH);
@@ -1859,7 +1859,7 @@
           хмюве (*JE, JNE, JLE, JGE, JG, JL*)
             mSys.PUT(cur(РСоСМЙРюЯЛ).codeadr - 2, ORD(c) - 16);
             mSys.PUT(cur(РСоСМЙРюЯЛ).codeadr - 1, temp3);
-            DEC(cur(РСоСМЙРюЯЛ).codeadr)
+            бшв(cur(РСоСМЙРюЯЛ).codeadr)
           йнмеж;
           cur.clen := 2
         йнмеж

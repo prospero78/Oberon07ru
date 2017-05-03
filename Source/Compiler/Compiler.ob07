@@ -85,14 +85,14 @@
     бепмсрэ s.Len
   йнмеж яРП_дКХМЮ;
 
-опнжедспю Assert(cond: BOOLEAN; line, col, code: жекне);
+опнжедспю Assert(cond: аскебн; line, col, code: жекне);
   мювюкн
     еякх ~cond рнцдю
       ЛоПНБ.рЕЯР(кнфэ, line, col, code)
     йнмеж
   йнмеж Assert;
 
-опнжедспю Assert2(cond: BOOLEAN; code: жекне);
+опнжедспю Assert2(cond: аскебн; code: жекне);
   мювюкн
     еякх ~cond рнцдю
       ЛоПНБ.рЕЯР(кнфэ, ЛяЙЮМ.line, ЛяЙЮМ.col, code)
@@ -109,7 +109,7 @@
     ЛдЕЖК.Check(key)
   йнмеж Check;
 
-опнжедспю BaseOf(T0, T1: ЛдЕЖК.РСрХО): BOOLEAN;
+опнжедспю BaseOf(T0, T1: ЛдЕЖК.РСрХО): аскебн;
   мювюкн
     еякх (T0.tType = T1.tType) & (T0.tType IN {TRECORD, TPOINTER}) рнцдю
       еякх T0.tType = TPOINTER рнцдю
@@ -129,7 +129,7 @@
     name: ЛрХОШ.РСсГЕК;
     e1: ЛдЕЖК.РбШПЮФЕМХЕ;
     line, col, i, n, bases, glob, loc, idx: жекне;
-    imp, break, guard: BOOLEAN;
+    imp, break, guard: аскебн;
     f: ЛдЕЖК.РСоНКЕ;
     T, BaseT: ЛдЕЖК.РСрХО;
     s: ЛдЕЖК.РСйНМЯРяРП;
@@ -354,7 +354,7 @@
   оепел
     a, b: ЛдЕЖК.РбШПЮФЕМХЕ;
     line, col: жекне;
-    s: SET; flag: BOOLEAN;
+    s: SET; flag: аскебн;
   мювюкн
     Next;
     e.eType := eEXP;
@@ -406,7 +406,7 @@
     Next
   йнмеж Set;
 
-опнжедспю еЯКХяРПНЙЮ(a: ЛдЕЖК.РбШПЮФЕМХЕ): BOOLEAN;
+опнжедспю еЯКХяРПНЙЮ(a: ЛдЕЖК.РбШПЮФЕМХЕ): аскебн;
     бепмсрэ (a.T.tType = TSTRING) хкх (a.T.tType = TARRAY) & (a.T.Base.tType = TCHAR)
   йнмеж еЯКХяРПНЙЮ;
 
@@ -596,7 +596,7 @@
           X86.Mono(str.Number);
           X86.StrMono
         йнмеж;
-        e.Value := дкхм(FLT(LENGTH(str.Str)));
+        e.Value := дкхм(FLT(дкхмю(str.Str)));
         e.eType := eCONST
       йнмеж;
       Str(e1);
@@ -659,19 +659,19 @@
     Next
   йнмеж StFunc;
 
-опнжедспю ProcTypeComp(T1, T2: ЛдЕЖК.РСрХО): BOOLEAN;
+опнжедспю ProcTypeComp(T1, T2: ЛдЕЖК.РСрХО): аскебн;
   оепел
     sp: жекне;
     stk: люяяхб 100, 2 хг ЛдЕЖК.РСрХО;
 
-    опнжедспю ProcTypeComp1(T1, T2: ЛдЕЖК.РСрХО): BOOLEAN;
+    опнжедспю ProcTypeComp1(T1, T2: ЛдЕЖК.РСрХО): аскебн;
       оепел
         fp, ft: ЛдЕЖК.РСоНКЕ;
-        Res: BOOLEAN;
+        Res: аскебн;
 
-      опнжедспю TypeComp(T1, T2: ЛдЕЖК.РСрХО): BOOLEAN;
+      опнжедспю TypeComp(T1, T2: ЛдЕЖК.РСрХО): аскебн;
         оепел
-          Res: BOOLEAN;
+          Res: аскебн;
         мювюкн
           еякх (T1.tType = TARRAY) & (T2.tType = TARRAY) & (T1.Len = 0) & (T2.Len = 0) рнцдю
             Res := TypeComp(T1.Base, T2.Base)
@@ -681,10 +681,10 @@
           бепмсрэ Res
         йнмеж TypeComp;
 
-      опнжедспю Check(): BOOLEAN;
+      опнжедспю Check(): аскебн;
         оепел
           i: жекне;
-          res: BOOLEAN;
+          res: аскебн;
         мювюкн
           i := 0;
           res := кнфэ;
@@ -715,7 +715,7 @@
             Res := T1 = T2
           йнмеж
         йнмеж;
-        DEC(sp)
+        бшв(sp)
         бепмсрэ Res
       йнмеж ProcTypeComp1;
 
@@ -724,9 +724,9 @@
     бепмсрэ ProcTypeComp1(T1, T2)
   йнмеж ProcTypeComp;
 
-опнжедспю ArrComp(Ta, Tf: ЛдЕЖК.РСрХО): BOOLEAN;
+опнжедспю ArrComp(Ta, Tf: ЛдЕЖК.РСрХО): аскебн;
   оепел
-    Res: BOOLEAN;
+    Res: аскебн;
   мювюкн
     еякх (Tf.tType = TARRAY) & (Tf.Len = 0) & (Ta.tType = TARRAY) рнцдю
       Res := ArrComp(Ta.Base, Tf.Base)
@@ -736,9 +736,9 @@
     бепмсрэ Res
   йнмеж ArrComp;
 
-опнжедспю AssComp(e: ЛдЕЖК.РбШПЮФЕМХЕ; T: ЛдЕЖК.РСрХО; param: BOOLEAN): BOOLEAN;
+опнжедспю AssComp(e: ЛдЕЖК.РбШПЮФЕМХЕ; T: ЛдЕЖК.РСрХО; param: аскебн): аскебн;
   оепел
-    Res: BOOLEAN;
+    Res: аскебн;
   мювюкн
     бшанп T.tType хг
     |TINTEGER, TREAL, TLONGREAL, TSET, TBOOLEAN, TCARD16:
@@ -783,9 +783,9 @@
     бепмсрэ Res
   йнмеж AssComp;
 
-опнжедспю ParamComp(e: ЛдЕЖК.РбШПЮФЕМХЕ; T: ЛдЕЖК.РСрХО; ByRef: BOOLEAN): BOOLEAN;
+опнжедспю ParamComp(e: ЛдЕЖК.РбШПЮФЕМХЕ; T: ЛдЕЖК.РСрХО; ByRef: аскебн): аскебн;
   оепел
-    Res: BOOLEAN;
+    Res: аскебн;
   мювюкн
     еякх ByRef рнцдю
       еякх e.eType = eVAR рнцдю
@@ -998,7 +998,7 @@
     йнмеж
   йнмеж Factor;
 
-опнжедспю IsChr(a: ЛдЕЖК.РбШПЮФЕМХЕ): BOOLEAN;
+опнжедспю IsChr(a: ЛдЕЖК.РбШПЮФЕМХЕ): аскебн;
     бепмсрэ (a.T.tType = TSTRING) & (яРП_дКХМЮ(a.Value) = 1) хкх (a.T.tType = TCHAR)
   йнмеж IsChr;
 
@@ -1266,7 +1266,7 @@
     йнмеж
   йнмеж Expr;
 
-опнжедспю IfWhileOper(wh: BOOLEAN);
+опнжедспю IfWhileOper(wh: аскебн);
   оепел
     e: ЛдЕЖК.РбШПЮФЕМХЕ;
     line, col, L, L3: жекне;
@@ -1378,7 +1378,7 @@
     Next
   йнмеж йКяКНБН_дкъ;
 
-опнжедспю лЕРЙЮ_оПНБЕПХРЭ(a, b: жекне; Labels: ЛрХОШ.РСяОХЯНЙ): BOOLEAN;
+опнжедспю лЕРЙЮ_оПНБЕПХРЭ(a, b: жекне; Labels: ЛрХОШ.РСяОХЯНЙ): аскебн;
   оепел 
     cur: РлЕРЙЮ;
   мювюкн
@@ -1389,7 +1389,7 @@
     бепмсрэ cur = осярн
   йнмеж лЕРЙЮ_оПНБЕПХРЭ;
 
-опнжедспю LabelVal(оеп a: жекне; int: BOOLEAN);
+опнжедспю LabelVal(оеп a: жекне; int: аскебн);
   оепел
     Value: дкхмбеы;
     T: ЛдЕЖК.РСрХО;
@@ -1409,7 +1409,7 @@
     йнмеж
   йнмеж LabelVal;
 
-опнжедспю Label(int: BOOLEAN; Labels: ЛрХОШ.РСяОХЯНЙ; LBeg: жекне);
+опнжедспю Label(int: аскебн; Labels: ЛрХОШ.РСяОХЯНЙ; LBeg: жекне);
   оепел
     a, b: жекне;
     label: РлЕРЙЮ;
@@ -1432,7 +1432,7 @@
     X86.CaseLabel(a, b, LBeg)
   йнмеж Label;
 
-опнжедспю Variant(int: BOOLEAN; Labels: ЛрХОШ.РСяОХЯНЙ; EndCase: жекне);
+опнжедспю Variant(int: аскебн; Labels: ЛрХОШ.РСяОХЯНЙ; EndCase: жекне);
   оепел LBeg, LEnd: жекне;
   мювюкн
     LBeg := X86.NewLabel();
@@ -1456,7 +1456,7 @@
 опнжедспю CaseOper;
   оепел
     e: ЛдЕЖК.РбШПЮФЕМХЕ;
-    int: BOOLEAN;
+    int: аскебн;
     line, col, EndCase: жекне;
     Labels: ЛрХОШ.РСяОХЯНЙ;
   мювюкн
@@ -1866,9 +1866,9 @@
       йнмеж яРЩЙпЮГЛ_оНКСВ;
 
     опнжедспю getver(): жекне;
-      оепел res, i: жекне; err: BOOLEAN;
+      оепел res, i: жекне; err: аскебн;
 
-      опнжедспю hexdgt(c: яхлб): BOOLEAN;
+      опнжедспю hexdgt(c: яхлб): аскебн;
           бепмсрэ ("0" <= c) & (c <= "9") хкх
                    ("A" <= c) & (c <= "F") хкх
                    ("a" <= c) & (c <= "f")
