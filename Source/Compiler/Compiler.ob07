@@ -1819,25 +1819,25 @@
     йнмеж
   йнмеж IdentOper;
 
-опнжедспю Operator;
+опнжедспю нОЕПЮРНП;
   мювюкн
     ЛсРХКЭ.йНДяРПНЙЮ_сЯР(DECL.UnitNumber, ЛяЙЮМ.line);
     бшанп ЛяЙЮМ.tLex хг
-    |lxIDENT: IdentOper
-    |ЛйНМЯР.ЙЯеякх, ЛйНМЯР.ЙЯонйю: IfWhileOper(ЛяЙЮМ.tLex = ЛйНМЯР.ЙЯонйю)
-    |ЛйНМЯР.ЙЯонбрнп: RepeatOper
-    |ЛйНМЯР.ЙЯдкъ: ForOper
-    |ЛйНМЯР.ЙЯбшанп: CaseOper
+      |lxIDENT: IdentOper
+      |ЛйНМЯР.ЙЯеякх, ЛйНМЯР.ЙЯонйю: IfWhileOper(ЛяЙЮМ.tLex = ЛйНМЯР.ЙЯонйю)
+      |ЛйНМЯР.ЙЯонбрнп: RepeatOper
+      |ЛйНМЯР.ЙЯдкъ: ForOper
+      |ЛйНМЯР.ЙЯбшанп: CaseOper
     хмюве
     йнмеж
-  йнмеж Operator;
+  йнмеж нОЕПЮРНП;
 
 опнжедспю OpSeq;
   мювюкн
-    Operator;
+    нОЕПЮРНП;
     онйю ЛяЙЮМ.tLex = lxSemi декюрэ
       Next;
-      Operator
+      нОЕПЮРНП
     йнмеж
   йнмеж OpSeq;
 
@@ -1846,70 +1846,71 @@
       Name, Ext, temp, system, stk, felf: ЛяРП.РяРПНЙЮ;
       platform, stksize: INTEGER;
 
-    опнжедспю getstksize(): INTEGER;
-    оепел res, i: INTEGER;
-    мювюкн
-      res := 0;
-      i := 0;
-      онйю ЛяЙЮМ.жХТПЮ_оПНБЕПХРЭ(stk[i]) декюрэ
-        INC(i)
-      йнмеж;
-      еякх stk[i] <= 20X рнцдю
-        stk[i] := 0X;
-        res := ЛяЙЮМ.яРП_Б_жЕК(stk)
-      йнмеж;
-      еякх res = 0 рнцдю
-        res := 1
-      йнмеж
-      бепмсрэ res
-    йнмеж getstksize;
-
-    опнжедспю getver(): INTEGER;
-    оепел res, i: INTEGER; err: BOOLEAN;
-
-      опнжедспю hexdgt(c: CHAR): BOOLEAN;
-        бепмсрэ ("0" <= c) & (c <= "9") хкх
-               ("A" <= c) & (c <= "F") хкх
-               ("a" <= c) & (c <= "f")
-      йнмеж hexdgt;
-
-      опнжедспю hex(c: CHAR): INTEGER;
-      оепел res: INTEGER;
+    опнжедспю яРЩЙпЮГЛ_оНКСВ(): INTEGER;
+      оепел
+        res, i: INTEGER;
       мювюкн
-        еякх    ("0" <= c) & (c <= "9") рнцдю
-          res := ORD(c) - ORD("0")
-        юеякх ("A" <= c) & (c <= "F") рнцдю
-          res := ORD(c) - ORD("A") + 10
-        юеякх ("a" <= c) & (c <= "f") рнцдю
-          res := ORD(c) - ORD("a") + 10
+        res := 0;
+        i := 0;
+        онйю ЛяЙЮМ.жХТПЮ_оПНБЕПХРЭ(stk[i]) декюрэ
+          INC(i)
+        йнмеж;
+        еякх stk[i] <= 20X рнцдю
+          stk[i] := 0X;
+          res := ЛяЙЮМ.яРП_Б_жЕК(stk)
+        йнмеж;
+        еякх res = 0 рнцдю
+          res := 1
         йнмеж
         бепмсрэ res
-      йнмеж hex;
+      йнмеж яРЩЙпЮГЛ_оНКСВ;
 
-    мювюкн
-      res := 0;
-      i := 0;
-      err := stk[i] # "0"; INC(i);
-      err := err хкх (stk[i] # "x"); INC(i);
-      онйю ~err & hexdgt(stk[i]) декюрэ
-        INC(i)
-      йнмеж;
-      err := err хкх (i = 2);
-      еякх stk[i] <= 20X рнцдю
-        stk[i] := 0X
-      хмюве
-        err := хярхмю
-      йнмеж;
-      i := 2;
-      онйю ~err & (stk[i] # 0X) декюрэ
-        res := LSL(res, 4) + hex(stk[i]);
-        INC(i)
-      йнмеж;
-      еякх res = 0 рнцдю
-        res := 1
-      йнмеж
-      бепмсрэ res
-    йнмеж getver;
+    опнжедспю getver(): INTEGER;
+      оепел res, i: INTEGER; err: BOOLEAN;
+
+      опнжедспю hexdgt(c: CHAR): BOOLEAN;
+          бепмсрэ ("0" <= c) & (c <= "9") хкх
+                   ("A" <= c) & (c <= "F") хкх
+                   ("a" <= c) & (c <= "f")
+        йнмеж hexdgt;
+
+      опнжедспю hex(c: CHAR): INTEGER;
+        оепел res: INTEGER;
+        мювюкн
+            еякх    ("0" <= c) & (c <= "9") рнцдю
+              res := ORD(c) - ORD("0")
+            юеякх ("A" <= c) & (c <= "F") рнцдю
+              res := ORD(c) - ORD("A") + 10
+            юеякх ("a" <= c) & (c <= "f") рнцдю
+              res := ORD(c) - ORD("a") + 10
+            йнмеж
+            бепмсрэ res
+        йнмеж hex;
+
+      мювюкн
+        res := 0;
+        i := 0;
+        err := stk[i] # "0"; INC(i);
+        err := err хкх (stk[i] # "x"); INC(i);
+        онйю ~err & hexdgt(stk[i]) декюрэ
+          INC(i)
+        йнмеж;
+        err := err хкх (i = 2);
+        еякх stk[i] <= 20X рнцдю
+          stk[i] := 0X
+        хмюве
+          err := хярхмю
+        йнмеж;
+        i := 2;
+        онйю ~err & (stk[i] # 0X) декюрэ
+          res := LSL(res, 4) + hex(stk[i]);
+          INC(i)
+        йнмеж;
+        еякх res = 0 рнцдю
+          res := 1
+        йнмеж
+        бепмсрэ res
+      йнмеж getver;
 
   мювюкн
     еякх ЛсРХКЭ.ParamCount < 2 рнцдю
@@ -1955,7 +1956,7 @@
       ЛоПНЖ.гЮЙНМВХРЭ(1)
     йнмеж;
     еякх platform IN {1,2,3,4} рнцдю
-      stksize := getstksize()
+      stksize := яРЩЙпЮГЛ_оНКСВ()
     хмюве
       stksize := 1
     йнмеж;
