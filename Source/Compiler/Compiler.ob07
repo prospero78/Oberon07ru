@@ -1424,7 +1424,7 @@
     КОНЕЦ;
     Assert(a <= b, line, col, 54);
     Assert(Метка_Проверить(a, b, Labels), line, col, 100);
-    NEW(label);
+    НОВ(label);
     мДецл.ПамОш_Проверить(label = ПУСТО);
     label.a := a;
     label.b := b;

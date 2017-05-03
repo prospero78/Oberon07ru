@@ -480,7 +480,7 @@
 ПРОЦЕДУРА New;
   ПЕРЕМ nov: туПунктАсм;
   НАЧАЛО
-    NEW(nov);
+    НОВ(nov);
     MemErr(nov = ПУСТО);
     nov.cmd := ccount;
     мСпис.Вставить(asmlist, nov, current);
@@ -607,7 +607,7 @@
     Lcount := HALT;
     asmlist := мСпис.Создать();
     MemErr(asmlist = ПУСТО);
-    NEW(nov);
+    НОВ(nov);
     MemErr(nov = ПУСТО);
     мСпис.Добавить(asmlist, nov);
     current := nov;

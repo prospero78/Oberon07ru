@@ -62,7 +62,7 @@
 
         ПРОЦЕДУРА Узел_Новый(Right: BOOLEAN);
             НАЧАЛО
-            NEW(res);
+            НОВ(res);
             мПам.Ошибка(res = ПУСТО);
             res.имя := Name;
             res.tLex := lxIDENT;
@@ -678,7 +678,7 @@
       node: мТипы.туУзел;
     НАЧАЛО
         ДЛЯ i := 0 ДО LEN(Nodes) - 1 ДЕЛАТЬ
-            NEW(node);
+            НОВ(node);
             мПам.Ошибка(node = ПУСТО);
             mSys.PUT(mSys.ADR(node.имя), i);
             node.левый := ПУСТО;
