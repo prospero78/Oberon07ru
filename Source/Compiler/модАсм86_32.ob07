@@ -1036,7 +1036,7 @@
     fpu := newfpu
   йнмеж Setfpu;
 
-опнжедспю PushFlt*(x: LONGREAL);
+опнжедспю PushFlt*(x: дкхмбеы);
   оепел f: TFLT; L: жекне;
   мювюкн
     mSys.PUT(mSys.ADR(f), x);

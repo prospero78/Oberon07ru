@@ -100,7 +100,7 @@
       T*: РСрХО;
       Unit*: РлНДСКЭ;
       Parent*: РСхЛЪ;
-      Value*: LONGREAL;
+      Value*: дкхмбеы;
       line*, col*, Number*, iType*, StProc*, VarSize, ParamSize*,
       LocalSize*, Offset*, VarKind*, Level*, ParamCount*: жекне;
       Export: BOOLEAN
@@ -133,7 +133,7 @@
       id*: РСхЛЪ;
       T*: РСрХО;
       eType*: жекне;
-      Value*: LONGREAL;
+      Value*: дкхмбеы;
       Read*, vparam*, deref*: BOOLEAN
     йнмеж;
 
@@ -171,7 +171,7 @@
     йнмеж
   йнмеж оЮЛнЬ_оПНБЕПХРЭ;
 
-опнжедспю яРП_оНКСВ*(adr: LONGREAL): РСйНМЯРяРП;
+опнжедспю яРП_оНКСВ*(adr: дкхмбеы): РСйНМЯРяРП;
   оепел
     str: РСйНМЯРяРП;
   мювюкн
@@ -392,11 +392,16 @@
     PushStProc("дкхм",     stLONG);
     
     PushStType("LONGREAL", TLONGREAL);
+    PushStType("дкхмбеы", TLONGREAL);
+    
     PushStProc("NEW",      stNEW);
     PushStProc("ODD",      stODD);
     PushStProc("ORD",      stORD);
     PushStProc("PACK",     stPACK);
+    
     PushStType("REAL",     TREAL);
+    PushStType("беы",     TREAL);
+    
     PushStProc("ROR",      stROR);
     PushStType("SET",      TSET);
     PushStProc("SHORT",    stSHORT);
@@ -460,9 +465,9 @@
     бепмсрэ Res
   йнмеж Relation;
 
-опнжедспю Arith(a, b: LONGREAL; T: РСрХО; Op, line, col: жекне): LONGREAL;
+опнжедспю Arith(a, b: дкхмбеы; T: РСрХО; Op, line, col: жекне): дкхмбеы;
   CONST max = ЛяЙЮМ.maxDBL;
-  оепел res: LONGREAL;
+  оепел res: дкхмбеы;
   мювюкн
     бшанп Op хг
     |lxPlus: res := a + b
@@ -500,10 +505,10 @@
     бепмсрэ res
   йнмеж Arith;
 
-опнжедспю strcmp(a, b: LONGREAL; Op: жекне): LONGREAL;
+опнжедспю strcmp(a, b: дкхмбеы; Op: жекне): дкхмбеы;
   оепел
     sa, sb: РСйНМЯРяРП;
-    Res: LONGREAL;
+    Res: дкхмбеы;
   мювюкн
     sa := яРП_оНКСВ(a);
     sb := яРП_оНКСВ(b);
@@ -516,8 +521,8 @@
     бепмсрэ Res
   йнмеж strcmp;
 
-опнжедспю Calc*(a, b: LONGREAL; Ta, Tb: РСрХО; Op, line, col: жекне; оеп Res: LONGREAL; оеп TRes: РСрХО);
-  оепел c: LONGREAL; ai, bi: жекне;
+опнжедспю Calc*(a, b: дкхмбеы; Ta, Tb: РСрХО; Op, line, col: жекне; оеп Res: дкхмбеы; оеп TRes: РСрХО);
+  оепел c: дкхмбеы; ai, bi: жекне;
   мювюкн
     ai := FLOOR(a);
     bi := FLOOR(b);
@@ -598,7 +603,7 @@
     йнмеж
   йнмеж Calc;
 
-опнжедспю ConstExpr*(оеп Value: LONGREAL; оеп T: РСрХО);
+опнжедспю ConstExpr*(оеп Value: дкхмбеы; оеп T: РСрХО);
   оепел
     e: РбШПЮФЕМХЕ;
     line, col: жекне;
@@ -1062,7 +1067,7 @@
 
 опнжедспю StructType(Comma: BOOLEAN; NewType: РСрХО): РСрХО;
   оепел
-    v: LONGREAL;
+    v: дкхмбеы;
     T, nov: РСрХО;
     line, col, line2, col2: жекне;
     id_T: BOOLEAN;
@@ -1205,7 +1210,7 @@
 
 опнжедспю DeclSeq;
   оепел
-    Value: LONGREAL;
+    Value: дкхмбеы;
     T, NewType: РСрХО;
     Name: ЛрХОШ.РСсГЕК;
     line, col, Call: жекне;

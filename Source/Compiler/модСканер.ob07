@@ -51,7 +51,7 @@
 
     Lex: м—тр.т—трока;
     File, ccol, cline, count*, col*, line*, tLex*, vINT*: ÷≈Ћќ≈;
-    vFLT*: LONGREAL; id*: м“ипы.ту”зел; ch, vCHX*: —»ћ¬;
+    vFLT*: ƒЋ»Ќ¬≈ў; id*: м“ипы.ту”зел; ch, vCHX*: —»ћ¬;
     buf, bufpos: ÷≈Ћќ≈; CR, UTF8: BOOLEAN;
     Nodes: ћј——»¬ 256 »« м“ипы.ту”зел;
     _START*, _version*: м“ипы.ту”зел;
@@ -330,10 +330,10 @@
         ¬≈–Ќ”“№ res
      ќЌ≈÷ —тр_в_÷ел;
 
-ѕ–ќ÷≈ƒ”–ј —тр_в_¬ещ(str: м—тр.т—трока): LONGREAL;
+ѕ–ќ÷≈ƒ”–ј —тр_в_¬ещ(str: м—тр.т—трока): ƒЋ»Ќ¬≈ў;
     ѕ≈–≈ћ
         i, scale: ÷≈Ћќ≈;
-        res, m, d: LONGREAL;
+        res, m, d: ƒЋ»Ќ¬≈ў;
         minus, nez: BOOLEAN;
 
     ѕ–ќ÷≈ƒ”–ј Error(e: ÷≈Ћќ≈; ѕ≈– cont: BOOLEAN);

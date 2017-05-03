@@ -29,7 +29,7 @@ BSD-2 *)
             файл_ном*, ccol*, cline*, счетчик*, col*, строка_ном*, tLex*, vINT*: ЦЕЛОЕ;
             ch*, vCHX*: СИМВ;
             Lex*: мСтр.тСтрока;
-            vFLT*: LONGREAL;
+            vFLT*: ДЛИНВЕЩ;
             id*: туУзел;
             buf*, bufpos*: ЦЕЛОЕ;
             CR*, UTF8*: BOOLEAN
