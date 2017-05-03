@@ -406,9 +406,9 @@
     Next
   КОНЕЦ Set;
 
-ПРОЦЕДУРА IsString(a: DECL.тВыражение): BOOLEAN;
+ПРОЦЕДУРА ЕслиСтрока(a: DECL.тВыражение): BOOLEAN;
     ВЕРНУТЬ (a.T.tType = TSTRING) ИЛИ (a.T.tType = TARRAY) & (a.T.Base.tType = TCHAR)
-  КОНЕЦ IsString;
+  КОНЕЦ ЕслиСтрока;
 
 ПРОЦЕДУРА Str(e: DECL.тВыражение);
   ПЕРЕМ
@@ -589,7 +589,7 @@
       e.T := sttypes[TREAL]
     |stLENGTH:
       pExpr(e1);
-      Assert(IsString(e1), line, col, 141);
+      Assert(ЕслиСтрока(e1), line, col, 141);
       ЕСЛИ e1.T.tType = TSTRING ТОГДА
         str := DECL.Стр_Получ(e1.Value);
         ЕСЛИ str.Len = 1 ТОГДА
@@ -1072,20 +1072,20 @@
       X86.inset
     |lxLT, lxLE, lxGT, lxGE:
       Assert(((a.T.tType IN {TINTEGER, TREAL, TLONGREAL}) & (a.T.tType = b.T.tType)) ИЛИ
-        (IsChr(a) ИЛИ IsString(a)) & (IsChr(b) ИЛИ IsString(b)) ИЛИ
+        (IsChr(a) ИЛИ ЕслиСтрока(a)) & (IsChr(b) ИЛИ ЕслиСтрока(b)) ИЛИ
         (a.T.tType = TSET) & (b.T.tType = TSET) & ((Op = lxLE) ИЛИ (Op = lxGE)), line, col, 37);
       ЕСЛИ a.T.tType IN {TREAL, TLONGREAL} ТОГДА
         X86.fcmp(Op)
       АЕСЛИ a.T.tType = TSET ТОГДА
         X86.Inclusion(Op)
-      АЕСЛИ IsString(a) ИЛИ IsString(b) ТОГДА
+      АЕСЛИ ЕслиСтрока(a) ИЛИ ЕслиСтрока(b) ТОГДА
         StrRel(a, b, Op)
       ИНАЧЕ
         X86.CmpInt(Op)
       КОНЕЦ
     |lxEQ, lxNE:
       Assert(((a.T.tType IN {TINTEGER, TREAL, TLONGREAL, TSET, TBOOLEAN}) & (a.T.tType = b.T.tType)) ИЛИ
-        (IsChr(a) ИЛИ IsString(a)) & (IsChr(b) ИЛИ IsString(b)) ИЛИ
+        (IsChr(a) ИЛИ ЕслиСтрока(a)) & (IsChr(b) ИЛИ ЕслиСтрока(b)) ИЛИ
         (a.T.tType IN {TPOINTER, TPROC, TNIL}) & (b.T.tType = TNIL) ИЛИ
         (b.T.tType IN {TPOINTER, TPROC, TNIL}) & (a.T.tType = TNIL) ИЛИ
         (a.T.tType = TPOINTER) & (b.T.tType = TPOINTER) & (BaseOf(a.T, b.T) ИЛИ BaseOf(b.T, a.T)) ИЛИ
@@ -1093,7 +1093,7 @@
         (b.eType = ePROC) & ProcTypeComp(a.T, b.id.T), line, col, 37);
       ЕСЛИ a.T.tType IN {TREAL, TLONGREAL} ТОГДА
         X86.fcmp(Op)
-      АЕСЛИ IsString(a) ИЛИ IsString(b) ТОГДА
+      АЕСЛИ ЕслиСтрока(a) ИЛИ ЕслиСтрока(b) ТОГДА
         StrRel(a, b, Op)
       ИНАЧЕ
         X86.CmpInt(Op)
@@ -1304,7 +1304,7 @@
     Next
   КОНЕЦ IfWhileOper;
 
-ПРОЦЕДУРА RepeatOper;
+ПРОЦЕДУРА КлСлово_ПОВТОР;
   ПЕРЕМ
     e: DECL.тВыражение;
     line, col, L: INTEGER;
@@ -1320,9 +1320,9 @@
     Assert(e.T.tType = TBOOLEAN, line, col, 117);
     Выраж_Загрузить(e);
     X86.ifwh(L)
-  КОНЕЦ RepeatOper;
+  КОНЕЦ КлСлово_ПОВТОР;
 
-ПРОЦЕДУРА ForOper;
+ПРОЦЕДУРА КлСлово_ДЛЯ;
   ПЕРЕМ
     e: DECL.тВыражение;
     line, col, LBeg, LEnd, iValue: INTEGER;
@@ -1376,9 +1376,9 @@
     X86.NextFor(iValue, LBeg, LEnd);
     Check(мКонст.ксКОНЕЦ);
     Next
-  КОНЕЦ ForOper;
+  КОНЕЦ КлСлово_ДЛЯ;
 
-ПРОЦЕДУРА CheckLabel(a, b: INTEGER; Labels: мТипы.туСписок): BOOLEAN;
+ПРОЦЕДУРА Метка_Проверить(a, b: INTEGER; Labels: мТипы.туСписок): BOOLEAN;
   ПЕРЕМ 
     cur: тМетка;
   НАЧАЛО
@@ -1387,7 +1387,7 @@
       cur := cur.следующ(тМетка)
     КОНЕЦ
     ВЕРНУТЬ cur = ПУСТО
-  КОНЕЦ CheckLabel;
+  КОНЕЦ Метка_Проверить;
 
 ПРОЦЕДУРА LabelVal(ПЕР a: INTEGER; int: BOOLEAN);
   ПЕРЕМ
@@ -1423,7 +1423,7 @@
       LabelVal(b, int)
     КОНЕЦ;
     Assert(a <= b, line, col, 54);
-    Assert(CheckLabel(a, b, Labels), line, col, 100);
+    Assert(Метка_Проверить(a, b, Labels), line, col, 100);
     NEW(label);
     DECL.ПамОш_Проверить(label = ПУСТО);
     label.a := a;
@@ -1576,7 +1576,7 @@
       КОНЕЦ
     |stCOPY:
       Expr(e1);
-      Assert(IsString(e1), line, col, 141);
+      Assert(ЕслиСтрока(e1), line, col, 141);
       Check(lxComma);
       ЕСЛИ e1.T.tType = TSTRING ТОГДА
         str := DECL.Стр_Получ(e1.Value);
@@ -1590,7 +1590,7 @@
       DECL.Коорд_Уст(line, col);
       Designator(e2);
       Assert(e2.eType = eVAR, line, col, 63);
-      Assert(IsString(e2), line, col, 143);
+      Assert(ЕслиСтрока(e2), line, col, 143);
       Assert(~e2.Read, line, col, 115);
       Str(e2);
       X86.StProc(X86.stCOPY)
@@ -1819,25 +1819,25 @@
     КОНЕЦ
   КОНЕЦ IdentOper;
 
-ПРОЦЕДУРА Оператор;
+ПРОЦЕДУРА КлСлово_Выбрать;
   НАЧАЛО
     мУтиль.КодСтрока_Уст(DECL.UnitNumber, мСкан.line);
     ВЫБОР мСкан.tLex ИЗ
       |lxIDENT: IdentOper
       |мКонст.ксЕСЛИ, мКонст.ксПОКА: IfWhileOper(мСкан.tLex = мКонст.ксПОКА)
-      |мКонст.ксПОВТОР: RepeatOper
-      |мКонст.ксДЛЯ: ForOper
+      |мКонст.ксПОВТОР: КлСлово_ПОВТОР
+      |мКонст.ксДЛЯ: КлСлово_ДЛЯ
       |мКонст.ксВЫБОР: CaseOper
     ИНАЧЕ
     КОНЕЦ
-  КОНЕЦ Оператор;
+  КОНЕЦ КлСлово_Выбрать;
 
 ПРОЦЕДУРА OpSeq;
   НАЧАЛО
-    Оператор;
+    КлСлово_Выбрать;
     ПОКА мСкан.tLex = lxSemi ДЕЛАТЬ
       Next;
-      Оператор
+      КлСлово_Выбрать
     КОНЕЦ
   КОНЕЦ OpSeq;
 
