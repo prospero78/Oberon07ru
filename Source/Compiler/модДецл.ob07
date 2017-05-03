@@ -290,7 +290,7 @@
     ident.iType := IDGUARD;
     ident.T := sttypes[TVOID];
     мСпис.Добавить(unit.Idents, ident);
-    INC(unit.Level)
+    ДОБ(unit.Level)
   КОНЕЦ Охрана_Создать;
 
 ПРОЦЕДУРА PushIdent(Name: мТипы.туУзел; line, col, iType: ЦЕЛОЕ; T: туТип; u: тМодуль; Export: БУЛЕВО; StProc: ЦЕЛОЕ);
@@ -389,10 +389,15 @@
     PushStProc("EXCL",     stEXCL);
     PushStProc("FLOOR",    stFLOOR);
     PushStProc("FLT",      stFLT);
+    
     PushStProc("INC",      stINC);
+    PushStProc("ДОБ",      stINC);
+    
     PushStProc("INCL",     stINCL);
+    
     PushStType("INTEGER",  TINTEGER);
     PushStType("ЦЕЛОЕ",  TINTEGER);
+    
     PushStProc("LEN",      stLEN);
     PushStProc("LSL",      stLSL);
     PushStProc("LONG",     stLONG);
@@ -695,7 +700,7 @@
   НАЧАЛО
     n := 0;
     ПОКА (T.tType = TARRAY) & (T.Len = 0) ДЕЛАТЬ
-      INC(n);
+      ДОБ(n);
       T := T.Base
     КОНЕЦ
     ВЕРНУТЬ n
@@ -951,7 +956,7 @@
       field.ByRef := ByRef;
       ЕСЛИ proc ТОГДА
         PushIdent(Name, line, col, IDVAR, ПУСТО, ПУСТО, ЛОЖЬ, 0);
-        INC(curBlock.ParamCount);
+        ДОБ(curBlock.ParamCount);
         fp := unit.Idents.следующ(туИмя);
         ЕСЛИ ByRef ТОГДА
           fp.VarKind := paramvar
@@ -1112,7 +1117,7 @@
       nov.Align := nov.Base.Align
     |мКонст.ксЗАПИСЬ:
       Next;
-      INC(RecCount);
+      ДОБ(RecCount);
       nov := Тип_Создать(TRECORD, 0, 0, RecCount, ПУСТО, ИСТИНА, NewType);
       nov.Align := 1;
       Коорд_Уст(line, col);
@@ -1194,10 +1199,10 @@
     n := 0;
     ПОКА cur.iType # IDGUARD ДЕЛАТЬ
       cur := cur.предыдущ(туИмя);
-      INC(n)
+      ДОБ(n)
     КОНЕЦ;
     cur := cur.предыдущ(туИмя);
-    INC(n);
+    ДОБ(n);
     unit.Idents.счетчик := unit.Idents.счетчик - n;
     unit.Idents.следующ := cur;
     cur.следующ := ПУСТО;

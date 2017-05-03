@@ -183,9 +183,9 @@
   мювюкн
     бшв(di);
     онбрнпърэ
-      INC(di);
+      дна(di);
       Dest[di] := Source[si];
-      INC(si)
+      дна(si)
     онйюме Dest[di] = 0X
   йнмеж CopyStr;
 
@@ -216,7 +216,7 @@
       R := RB;
       онбрнпърэ
         онйю (L < RB) & strle(NamePtr[L], NamePtr[LB]) декюрэ
-          INC(L)
+          дна(L)
         йнмеж;
         онйю (R > LB) & strle(NamePtr[LB], NamePtr[R]) декюрэ
           бшв(R)
@@ -248,7 +248,7 @@
     etable.arrnumoffset := etable.arrnameptroffset + etable.namecount * 4;
     etable.dllnameoffset := etable.size + etable.textlen;
     CopyStr(etable.text, Name, etable.textlen, 0);
-    INC(etable.textlen);
+    дна(etable.textlen);
     дкъ i := 0 дн etable.namecount - 1 декюрэ
       etable.arrnameptr[i] := etable.arrnameptr[i] + etable.size
     йнмеж;
@@ -259,16 +259,16 @@
   мювюкн
     еякх dll рнцдю
       etable.arradr[etable.adrcount] := Number;
-      INC(etable.adrcount);
+      дна(etable.adrcount);
       etable.arrnameptr[etable.namecount] := etable.textlen;
-      INC(etable.namecount);
+      дна(etable.namecount);
       CopyStr(etable.text, Name.ХЛЪ, etable.textlen, 0);
-      INC(etable.textlen)
+      дна(etable.textlen)
     юеякх obj рнцдю
       kosexp[kosexpcount].Name := Name;
       kosexp[kosexpcount].Adr := Number;
       kosexp[kosexpcount].NameLabel := NameLabel;
-      INC(kosexpcount)
+      дна(kosexpcount)
     йнмеж
   йнмеж ProcExport;
 
@@ -293,12 +293,12 @@
   оепел i: жекне;
   мювюкн
     mSys.PUT(mSys.ADR(Reloc[rcount]), R.Page);
-    INC(rcount, 4);
+    дна(rcount, 4);
     mSys.PUT(mSys.ADR(Reloc[rcount]), R.Size);
-    INC(rcount, 4);
+    дна(rcount, 4);
     дкъ i := 0 дн ASR(R.Size - 8, 1) - 1 декюрэ
       mSys.PUT(mSys.ADR(Reloc[rcount]), R.reloc[i]);
-      INC(rcount, 2)
+      дна(rcount, 2)
     йнмеж
   йнмеж PutReloc;
 
@@ -310,8 +310,8 @@
     онйю (i < n) & (chars[i] # 0X) декюрэ
       x := ЛяЙЮМ.вХЯКН16_Б_жЕКНЕ(chars[i]) * 16 + ЛяЙЮМ.вХЯКН16_Б_жЕКНЕ(chars[i + 1]);
       mSys.PUT(adr, CHR(x));
-      INC(adr);
-      INC(i, 2)
+      дна(adr);
+      дна(i, 2)
     йнмеж
   йнмеж InitArray;
 
@@ -500,7 +500,7 @@
     New;
     current.clen := 1;
     Code[ccount] := CHR(byte);
-    INC(ccount)
+    дна(ccount)
   йнмеж OutByte;
 
 опнжедспю OutInt(int: жекне);
@@ -508,7 +508,7 @@
     New;
     current.clen := 4;
     mSys.PUT(mSys.ADR(Code[ccount]), int);
-    INC(ccount, 4)
+    дна(ccount, 4)
   йнмеж OutInt;
 
 опнжедспю PushEAX;
@@ -569,7 +569,7 @@
 
 опнжедспю NewLabel*(): жекне;
   мювюкн
-    INC(Lcount)
+    дна(Lcount)
     бепмсрэ Lcount
   йнмеж NewLabel;
 
@@ -578,7 +578,7 @@
     New;
     callstk[topstk][0] := asmline;
     callstk[topstk][1] := current;
-    INC(topstk)
+    дна(topstk)
   йнмеж PushCall;
 
 опнжедспю Param*;
@@ -620,17 +620,17 @@
     n := LEN(str);
     онйю (i < n) & (str[i] # 0X) декюрэ
       Data[dcount] := str[i];
-      INC(dcount);
-      INC(i)
+      дна(dcount);
+      дна(i)
     йнмеж;
     Data[dcount] := 0X;
-    INC(dcount)
+    дна(dcount)
   йнмеж datastr;
 
 опнжедспю dataint(n: жекне);
   мювюкн
     mSys.PUT(mSys.ADR(Data[dcount]), n);
-    INC(dcount, 4)
+    дна(dcount, 4)
   йнмеж dataint;
 
 опнжедспю jmp*(jamp: яхлб; label: жекне);
@@ -642,18 +642,18 @@
       n := 5
     |JE, JLE, JGE, JG, JL, JNE:
       Code[ccount] := 0FX;
-      INC(ccount);
+      дна(ccount);
       n := 6
     хмюве
     йнмеж;
     current.clen := n;
     Code[ccount] := jamp;
-    INC(ccount);
+    дна(ccount);
     current.codeadr := mSys.ADR(Code[ccount]);
     current.varadr := mSys.ADR(Labels[label]);
     current.tcmd := JCMD;
     current.short := хярхмю;
-    INC(ccount, 4)
+    дна(ccount, 4)
   йнмеж jmp;
 
 опнжедспю jmplong(jamp: яхлб; label: жекне);
@@ -676,7 +676,7 @@
     current.codeadr := mSys.ADR(Code[ccount]);
     current.varadr := mSys.ADR(Labels[Number]);
     current.tcmd := OCMD;
-    INC(ccount, 4)
+    дна(ccount, 4)
   йнмеж CmdN;
 
 опнжедспю IntByte(bytecode, intcode: ЛяРП.РяРПНЙЮ; n: жекне);
@@ -732,7 +732,7 @@
       ЛнЬ.ErrMsgPos(ЛяЙЮМ.line, ЛяЙЮМ.col, 97, ЛтЮИК.ТЮИК.ХЛЪ);
       ЛоПНЖ.гЮЙНМВХРЭ(1)
     йнмеж;
-    INC(fpu);
+    дна(fpu);
     isfpu := хярхмю
   йнмеж Incfpu;
 
@@ -770,11 +770,11 @@
     New;
     current.clen := 5;
     Code[ccount] := CALL;
-    INC(ccount);
+    дна(ccount);
     current.codeadr := mSys.ADR(Code[ccount]);
     current.varadr := mSys.ADR(RtlProc[Proc]);
     current.tcmd := JCMD;
-    INC(ccount, 4)
+    дна(ccount, 4)
   йнмеж CallRTL;
 
 опнжедспю PushInt*(n: жекне);
@@ -803,7 +803,7 @@
 
 опнжедспю AddRec*(base: жекне);
   мювюкн
-    INC(reccount);
+    дна(reccount);
     recarray[reccount] := base
   йнмеж AddRec;
 
@@ -815,7 +815,7 @@
       еякх ODD(c) рнцдю
         бшв(c)
       хмюве
-        INC(c)
+        дна(c)
       йнмеж
     йнмеж;
     cur := current;
@@ -1683,11 +1683,11 @@
           йнмеж;
           mSys.PUT(mSys.ADR(Code[cur.cmd]), a);
           mSys.PUT(mSys.ADR(Reloc[rcount]), cur.adr - mSys.SIZE(РгЮЦНКНБНЙKol));
-          INC(rcount, 4);
+          дна(rcount, 4);
           mSys.PUT(mSys.ADR(Reloc[rcount]), sec);
-          INC(rcount, 4);
-          mSys.PUT(mSys.ADR(Reloc[rcount]), 06X); INC(rcount);
-          mSys.PUT(mSys.ADR(Reloc[rcount]), 00X); INC(rcount);
+          дна(rcount, 4);
+          mSys.PUT(mSys.ADR(Reloc[rcount]), 06X); дна(rcount);
+          mSys.PUT(mSys.ADR(Reloc[rcount]), 00X); дна(rcount);
         йнмеж;
         Write(mSys.ADR(Code[cur.cmd]), cur.clen);
         cur := cur.ЯКЕДСЧЫ(РСоСМЙРюЯЛ)
@@ -1820,7 +1820,7 @@
       LoadAdr := mSys.SIZE(РгЮЦНКНБНЙKol)
     юеякх elf рнцдю
       LoadAdr := 134514420 + 1024;
-      INC(gsize, 1024)
+      дна(gsize, 1024)
     йнмеж;
 
     еякх dll хкх con хкх gui рнцдю
@@ -1931,8 +1931,8 @@
         n := cur.adr - LoadAdr;
         еякх ASR(n, 12) = ASR(R.Page, 12) рнцдю
           R.reloc[RCount] := IntToCard16(n MOD 1000H + 3000H);
-          INC(RCount);
-          INC(R.Size, 2)
+          дна(RCount);
+          дна(R.Size, 2)
         хмюве
           еякх R.Size # 0 рнцдю
             PutReloc(R)
@@ -1964,11 +1964,11 @@
           current.clen := LENGTH(str);
           дкъ i := 0 дн current.clen - 1 декюрэ
                 Code[ccount] := str[i];
-                INC(ccount)
+                дна(ccount)
           йнмеж;
           Code[ccount] := 0X;
-          INC(ccount);
-          INC(current.clen)
+          дна(ccount);
+          дна(current.clen)
         йнмеж OutStringZ;
 
 опнжедспю Epilog*(gsize: жекне; FName: люяяхб хг яхлб; stk: жекне);
