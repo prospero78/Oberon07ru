@@ -24,13 +24,13 @@
       ТЮИК.ХЛЪ := ХЛЪ_
    йнмеж хЛЪ_сЯР;
 
-опнжедспю пЮГЛЕП_оНКСВ*(F: INTEGER): INTEGER;
+опнжедспю пЮГЛЕП_оНКСВ*(F: жекне): жекне;
       бепмсрэ ЛюОХ.FileSize(F)
    йнмеж пЮГЛЕП_оНКСВ;
 
-опнжедспю нРЙПШРЭ*(FName: люяяхб хг CHAR; Mode: INTEGER): INTEGER;
+опнжедспю нРЙПШРЭ*(FName: люяяхб хг CHAR; Mode: жекне): жекне;
   оепел
-    ofstr: ЛюОХ.OFSTRUCT; res: INTEGER; memerr: BOOLEAN;
+    ofstr: ЛюОХ.OFSTRUCT; res: жекне; memerr: BOOLEAN;
   мювюкн
     еякх ЛйНМЯР.win рнцдю
       res := ЛюОХ.OpenFile(mSys.ADR(FName), ofstr, Mode);
@@ -46,9 +46,9 @@
     бепмсрэ res
   йнмеж нРЙПШРЭ;
 
-опнжедспю яНГДЮРЭ*(FName: люяяхб хг CHAR): INTEGER;
+опнжедспю яНГДЮРЭ*(FName: люяяхб хг CHAR): жекне;
   оепел
-     res: INTEGER; memerr: BOOLEAN;
+     res: жекне; memerr: BOOLEAN;
   мювюкн
     еякх ЛйНМЯР.win рнцдю
       res := ЛюОХ.CreateFile(mSys.ADR(FName), 0C0000000H, 0, 0, 2, 80H, 0);
@@ -64,22 +64,22 @@
     бепмсрэ res
   йнмеж яНГДЮРЭ;
 
-опнжедспю вХРЮРЭ*(F, Buffer, Count: INTEGER): INTEGER;
-  оепел res: INTEGER;
+опнжедспю вХРЮРЭ*(F, Buffer, Count: жекне): жекне;
+  оепел res: жекне;
   мювюкн
     ЛюОХ.ReadFile(F, Buffer, Count, mSys.ADR(res), 0)
     бепмсрэ res
   йнмеж вХРЮРЭ;
 
-опнжедспю гЮОХЯЮРЭ*(ТЮИК_МНЛ_, Buffer, Count: INTEGER): INTEGER;
+опнжедспю гЮОХЯЮРЭ*(ТЮИК_МНЛ_, Buffer, Count: жекне): жекне;
    оепел
-      res: INTEGER;
+      res: жекне;
    мювюкн
       ЛюОХ.WriteFile(ТЮИК_МНЛ_, Buffer, Count, mSys.ADR(res), 0)
       бепмсрэ res
    йнмеж гЮОХЯЮРЭ;
 
-опнжедспю гЮЙПШРЭ*(ТЮИК_МНЛ_: INTEGER);
+опнжедспю гЮЙПШРЭ*(ТЮИК_МНЛ_: жекне);
   мювюкн
      ЛюОХ.CloseHandle(ТЮИК_МНЛ_)
   йнмеж гЮЙПШРЭ;

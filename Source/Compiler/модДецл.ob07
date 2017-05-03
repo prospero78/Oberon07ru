@@ -77,7 +77,7 @@
 рхош
 
   РСрХО* = сйюгюрекэ мю гюохяэ (ЛрХОШ.РоСМЙР)
-      tType*, Size*, Len*, Number*, Align, Call*, Rec: INTEGER;
+      tType*, Size*, Len*, Number*, Align, Call*, Rec: жекне;
       Base*: РСрХО;
       Fields*: ЛрХОШ.РСяОХЯНЙ
     йнмеж;
@@ -91,7 +91,7 @@
       Import: ЛрХОШ.РСяОХЯНЙ;
       IdentBegin: РСхЛЪ;
       scanner: ЛрХОШ.РСяЙЮМЕП;
-      Level*: INTEGER;
+      Level*: жекне;
       Closed, typedecl, ExportType, Std, sys: BOOLEAN
     йнмеж;
 
@@ -102,13 +102,13 @@
       Parent*: РСхЛЪ;
       Value*: LONGREAL;
       line*, col*, Number*, iType*, StProc*, VarSize, ParamSize*,
-      LocalSize*, Offset*, VarKind*, Level*, ParamCount*: INTEGER;
+      LocalSize*, Offset*, VarKind*, Level*, ParamCount*: жекне;
       Export: BOOLEAN
     йнмеж;
 
   PTRBASE = сйюгюрекэ мю гюохяэ (ЛрХОШ.РоСМЙР)
       Name: ЛрХОШ.РСсГЕК;
-      line, col: INTEGER;
+      line, col: жекне;
       Ptr: РСрХО
     йнмеж;
 
@@ -119,20 +119,20 @@
   РСоНКЕ* = сйюгюрекэ мю гюохяэ (ЛрХОШ.РоСМЙР)
       Name: ЛрХОШ.РСсГЕК;
       T*: РСрХО;
-      Offset*: INTEGER;
+      Offset*: жекне;
       ByRef*, Export*: BOOLEAN;
       Unit*: РлНДСКЭ
     йнмеж;
 
   РСйНМЯРяРП* = сйюгюрекэ мю гюохяэ (ЛрХОШ.РоСМЙР)
       Str*: ЛяРП.РяРПНЙЮ;
-      Len*, Number*: INTEGER
+      Len*, Number*: жекне
     йнмеж;
 
   РбШПЮФЕМХЕ* = гюохяэ
       id*: РСхЛЪ;
       T*: РСрХО;
-      eType*: INTEGER;
+      eType*: жекне;
       Value*: LONGREAL;
       Read*, vparam*, deref*: BOOLEAN
     йнмеж;
@@ -149,15 +149,15 @@
   unit*, sys: РлНДСКЭ;
   curBlock*: РСхЛЪ;
   Path, Main, Std, ExtMain: ЛяРП.РяРПНЙЮ;
-  NamePtrBase: ЛрХОШ.РСсГЕК; ProgSize*, RecCount, UnitNumber*: INTEGER;
+  NamePtrBase: ЛрХОШ.РСсГЕК; ProgSize*, RecCount, UnitNumber*: жекне;
   PtrBases, Strings, types, prog: ЛрХОШ.РСяОХЯНЙ;
   OpSeq: РоПНЖЕДСПЮ;
   Expr: РоПНЖЕДСПЮоЕП;
   AssComp: РоПНЖЕДСПЮяБЪГЭ;
   main, sizefunc, winplatf, Const*: BOOLEAN;
-  pParseType: опнжедспю (оеп line, col: INTEGER): РСрХО;
+  pParseType: опнжедспю (оеп line, col: жекне): РСрХО;
   ОлНДСКЭ_вХРЮРЭ: опнжедспю (Path, Name, Ext: ЛяРП.РяРПНЙЮ): BOOLEAN;
-  Platform: INTEGER;
+  Platform: жекне;
 
 опнжедспю оПНЖЕДСПпЮГЛ_сЯР*;
   мювюкн
@@ -208,7 +208,7 @@
     бепмсрэ nov
   йнмеж яРПлНМН_яНГДЮРЭ;
 
-опнжедспю йННПД_сЯР*(оеп line, col: INTEGER);
+опнжедспю йННПД_сЯР*(оеп line, col: жекне);
   мювюкн
     line := ЛяЙЮМ.line;
     col := ЛяЙЮМ.col
@@ -238,9 +238,9 @@
     ЛоПНБ.рЕЯР2(ЛяЙЮМ.tLex # lxEOF, 27)
   йнмеж Next;
 
-опнжедспю Check*(key: INTEGER);
+опнжедспю Check*(key: жекне);
   оепел
-    code: INTEGER;
+    code: жекне;
   мювюкн
     еякх ЛяЙЮМ.tLex # key рнцдю
       бшанп key хг
@@ -293,10 +293,10 @@
     INC(unit.Level)
   йнмеж нУПЮМЮ_яНГДЮРЭ;
 
-опнжедспю PushIdent(Name: ЛрХОШ.РСсГЕК; line, col, iType: INTEGER; T: РСрХО; u: РлНДСКЭ; Export: BOOLEAN; StProc: INTEGER);
+опнжедспю PushIdent(Name: ЛрХОШ.РСсГЕК; line, col, iType: жекне; T: РСрХО; u: РлНДСКЭ; Export: BOOLEAN; StProc: жекне);
   оепел
     ident: РСхЛЪ;
-    i: INTEGER;
+    i: жекне;
   мювюкн
     ЛоПНБ.рЕЯР(CheckIdent(Name), line, col, 30);
     NEW(ident);
@@ -321,7 +321,7 @@
 
 опнжедспю StTypes;
   оепел
-    type: РСрХО; i: INTEGER;
+    type: РСрХО; i: жекне;
   мювюкн
     sttypes[0] := осярн;
     дкъ i := TINTEGER дн TSTRING декюрэ
@@ -346,22 +346,22 @@
     йнмеж
   йнмеж StTypes;
 
-опнжедспю PushStProc(Name: ЛяРП.РяРПНЙЮ; StProc: INTEGER);
+опнжедспю PushStProc(Name: ЛяРП.РяРПНЙЮ; StProc: жекне);
   мювюкн
     PushIdent(ЛяЙЮМ.сГЕК_дНАЮБ(Name), 0, 0, IDSTPROC, sttypes[TVOID], осярн, кнфэ, StProc)
   йнмеж PushStProc;
 
-опнжедспю PushStType(Name: ЛяРП.РяРПНЙЮ; T: INTEGER);
+опнжедспю PushStType(Name: ЛяРП.РяРПНЙЮ; T: жекне);
   мювюкн
     PushIdent(ЛяЙЮМ.сГЕК_дНАЮБ(Name), 0, 0, IDTYPE, sttypes[T], осярн, кнфэ, 0)
   йнмеж PushStType;
 
-опнжедспю PushSysProc(Name: ЛяРП.РяРПНЙЮ; StProc: INTEGER);
+опнжедспю PushSysProc(Name: ЛяРП.РяРПНЙЮ; StProc: жекне);
   мювюкн
     PushIdent(ЛяЙЮМ.сГЕК_дНАЮБ(Name), 0, 0, IDSYSPROC, sttypes[TVOID], осярн, хярхмю, StProc)
   йнмеж PushSysProc;
 
-опнжедспю PushSysType(Name: ЛяРП.РяРПНЙЮ; T: INTEGER);
+опнжедспю PushSysType(Name: ЛяРП.РяРПНЙЮ; T: жекне);
   мювюкн
     PushIdent(ЛяЙЮМ.сГЕК_дНАЮБ(Name), 0, 0, IDTYPE, sttypes[T], осярн, хярхмю, 0)
   йнмеж PushSysType;
@@ -384,9 +384,11 @@
     PushStProc("INC",      stINC);
     PushStProc("INCL",     stINCL);
     PushStType("INTEGER",  TINTEGER);
+    PushStType("жекне",  TINTEGER);
     PushStProc("LEN",      stLEN);
     PushStProc("LSL",      stLSL);
     PushStProc("LONG",     stLONG);
+    
     PushStType("LONGREAL", TLONGREAL);
     PushStProc("NEW",      stNEW);
     PushStProc("ODD",      stODD);
@@ -406,7 +408,7 @@
 опнжедспю GetQIdent*(Unit: РлНДСКЭ; Name: ЛрХОШ.РСсГЕК): РСхЛЪ;
   оепел
     cur, res: РСхЛЪ;
-    line, col: INTEGER;
+    line, col: жекне;
   мювюкн
     res := осярн;
     йННПД_сЯР(line, col);
@@ -429,7 +431,7 @@
 опнжедспю GetIdent*(Name: ЛрХОШ.РСсГЕК): РСхЛЪ;
   оепел
     cur, res: РСхЛЪ;
-    line, col: INTEGER;
+    line, col: жекне;
   мювюкн
     res := осярн;
     йННПД_сЯР(line, col);
@@ -443,7 +445,7 @@
     бепмсрэ res
   йнмеж GetIdent;
 
-опнжедспю Relation*(Op: INTEGER): BOOLEAN;
+опнжедспю Relation*(Op: жекне): BOOLEAN;
   оепел Res: BOOLEAN;
   мювюкн
     бшанп Op хг
@@ -456,7 +458,7 @@
     бепмсрэ Res
   йнмеж Relation;
 
-опнжедспю Arith(a, b: LONGREAL; T: РСрХО; Op, line, col: INTEGER): LONGREAL;
+опнжедспю Arith(a, b: LONGREAL; T: РСрХО; Op, line, col: жекне): LONGREAL;
   CONST max = ЛяЙЮМ.maxDBL;
   оепел res: LONGREAL;
   мювюкн
@@ -496,7 +498,7 @@
     бепмсрэ res
   йнмеж Arith;
 
-опнжедспю strcmp(a, b: LONGREAL; Op: INTEGER): LONGREAL;
+опнжедспю strcmp(a, b: LONGREAL; Op: жекне): LONGREAL;
   оепел
     sa, sb: РСйНМЯРяРП;
     Res: LONGREAL;
@@ -512,8 +514,8 @@
     бепмсрэ Res
   йнмеж strcmp;
 
-опнжедспю Calc*(a, b: LONGREAL; Ta, Tb: РСрХО; Op, line, col: INTEGER; оеп Res: LONGREAL; оеп TRes: РСрХО);
-  оепел c: LONGREAL; ai, bi: INTEGER;
+опнжедспю Calc*(a, b: LONGREAL; Ta, Tb: РСрХО; Op, line, col: жекне; оеп Res: LONGREAL; оеп TRes: РСрХО);
+  оепел c: LONGREAL; ai, bi: жекне;
   мювюкн
     ai := FLOOR(a);
     bi := FLOOR(b);
@@ -597,7 +599,7 @@
 опнжедспю ConstExpr*(оеп Value: LONGREAL; оеп T: РСрХО);
   оепел
     e: РбШПЮФЕМХЕ;
-    line, col: INTEGER;
+    line, col: жекне;
   мювюкн
     Const := хярхмю;
     йННПД_сЯР(line, col);
@@ -609,7 +611,7 @@
     Const := кнфэ
   йнмеж ConstExpr;
 
-опнжедспю IdType*(оеп line, col: INTEGER): РСрХО;
+опнжедспю IdType*(оеп line, col: жекне): РСрХО;
   оепел
     id: РСхЛЪ;
     Name: ЛрХОШ.РСсГЕК;
@@ -663,14 +665,14 @@
     бепмсрэ Res
   йнмеж IdType;
 
-опнжедспю FieldOffset(Align, RecSize: INTEGER): INTEGER;
+опнжедспю FieldOffset(Align, RecSize: жекне): жекне;
   мювюкн
     ЛоПНБ.рЕЯР2(RecSize <= ЛйНМЯР.ЖЕКНЕ_ЛЮЙЯ - (Align - RecSize MOD Align) MOD Align, 83)
     бепмсрэ RecSize + (Align - RecSize MOD Align) MOD Align
   йнмеж FieldOffset;
 
-опнжедспю Dim*(T: РСрХО): INTEGER;
-  оепел n: INTEGER;
+опнжедспю Dim*(T: РСрХО): жекне;
+  оепел n: жекне;
   мювюкн
     n := 0;
     онйю (T.tType = TARRAY) & (T.Len = 0) декюрэ
@@ -758,7 +760,7 @@
     Name: ЛрХОШ.РСсГЕК;
     field: РСоНКЕ;
     Tf: РСрХО;
-    line, col: INTEGER;
+    line, col: жекне;
     id_T: BOOLEAN;
   мювюкн
     онйю ЛяЙЮМ.tLex = lxIDENT декюрэ
@@ -813,7 +815,7 @@
 опнжедспю SetVars(T: РСрХО);
   оепел
     cur: РСхЛЪ;
-    n: INTEGER;
+    n: жекне;
   мювюкн
     cur := unit.Idents.ЯКЕДСЧЫ(РСхЛЪ);
     онйю cur.T = осярн декюрэ
@@ -856,7 +858,7 @@
     йнмеж
   йнмеж SetVars;
 
-опнжедспю рХО_яНГДЮРЭ(tType, Len, Size, Number: INTEGER; Base: РСрХО; Fields: BOOLEAN; NewType: РСрХО): РСрХО;
+опнжедспю рХО_яНГДЮРЭ(tType, Len, Size, Number: жекне; Base: РСрХО; Fields: BOOLEAN; NewType: РСрХО): РСрХО;
   оепел
     nov: РСрХО;
   мювюкн
@@ -880,7 +882,7 @@
     бепмсрэ nov
   йнмеж рХО_яНГДЮРЭ;
 
-опнжедспю FormalType(оеп line, col: INTEGER): РСрХО;
+опнжедспю FormalType(оеп line, col: жекне): РСрХО;
   оепел
     TA: РСрХО;
   мювюкн
@@ -904,7 +906,7 @@
       field: РСоНКЕ;
       Tf: РСрХО;
       fp: РСхЛЪ;
-      line, col: INTEGER;
+      line, col: жекне;
       proc: BOOLEAN;
   мювюкн
     proc := T = осярн;
@@ -973,7 +975,7 @@
     йнмеж
   йнмеж ParamType;
 
-опнжедспю AddPtrBase(Name: ЛрХОШ.РСсГЕК; line, col: INTEGER; T: РСрХО);
+опнжедспю AddPtrBase(Name: ЛрХОШ.РСсГЕК; line, col: жекне; T: РСрХО);
   оепел nov: PTRBASE;
   мювюкн
     NEW(nov);
@@ -986,7 +988,7 @@
   йнмеж AddPtrBase;
 
 опнжедспю FormalList(T: РСрХО; оеп Res: РСрХО);
-  оепел line, col: INTEGER;
+  оепел line, col: жекне;
   мювюкн
     еякх ЛяЙЮМ.tLex = lxLRound рнцдю
       Next;
@@ -1003,7 +1005,7 @@
     йнмеж
   йнмеж FormalList;
 
-опнжедспю CallFlag(оеп Call: INTEGER): BOOLEAN;
+опнжедспю CallFlag(оеп Call: жекне): BOOLEAN;
   оепел
     flag: ЛяРП.РяРПНЙЮ;
     res: BOOLEAN;
@@ -1031,7 +1033,7 @@
     бепмсрэ res
   йнмеж CallFlag;
 
-опнжедспю RecFlag(оеп rec: INTEGER): BOOLEAN;
+опнжедспю RecFlag(оеп rec: жекне): BOOLEAN;
   оепел
     flag: ЛяРП.РяРПНЙЮ;
     res: BOOLEAN;
@@ -1060,7 +1062,7 @@
   оепел
     v: LONGREAL;
     T, nov: РСрХО;
-    line, col, line2, col2: INTEGER;
+    line, col, line2, col2: жекне;
     id_T: BOOLEAN;
   мювюкн
     бшанп ЛяЙЮМ.tLex хг
@@ -1152,7 +1154,7 @@
     бепмсрэ nov
   йнмеж StructType;
 
-опнжедспю ParseType(оеп line, col: INTEGER): РСрХО;
+опнжедспю ParseType(оеп line, col: жекне): РСрХО;
   оепел
     Res: РСрХО;
   мювюкн
@@ -1167,7 +1169,7 @@
 опнжедспю PopBlock;
   оепел
     cur: РСхЛЪ;
-    n: INTEGER;
+    n: жекне;
   мювюкн
     cur := unit.Idents.ЯКЕДСЧЫ(РСхЛЪ);
     n := 0;
@@ -1204,7 +1206,7 @@
     Value: LONGREAL;
     T, NewType: РСрХО;
     Name: ЛрХОШ.РСсГЕК;
-    line, col, Call: INTEGER;
+    line, col, Call: жекне;
     Export, func: BOOLEAN;
     last, id: РСхЛЪ;
     e: РбШПЮФЕМХЕ;
@@ -1341,7 +1343,7 @@
 
 опнжедспю Rtl_дНАЮБ(u: РлНДСКЭ);
 
-    опнжедспю AddProc(name: ЛяРП.РяРПНЙЮ; num: INTEGER);
+    опнжедспю AddProc(name: ЛяРП.РяРПНЙЮ; num: жекне);
       оепел
         id: РСхЛЪ;
       мювюкн
@@ -1377,12 +1379,12 @@
 
 опнжедспю ImportList;
   оепел
-    cond, col, line, namecol, nameline: INTEGER;
+    cond, col, line, namecol, nameline: жекне;
     name, alias: ЛрХОШ.РСсГЕК;
     u, self: РлНДСКЭ;
     FName: ЛяРП.РяРПНЙЮ;
 
-  опнжедспю лНДСКЭ_дНАЮБХРЭ(newcond: INTEGER);
+  опнжедспю лНДСКЭ_дНАЮБХРЭ(newcond: жекне);
     оепел
       str: РСоСМЙРяРП;
     мювюкн
@@ -1466,9 +1468,9 @@
 
 опнжедспю оЯЕБДН_дНАЮБ;
   оепел
-    temp: РлНДСКЭ;
+    ЛНДСКЭ: РлНДСКЭ;
   мювюкн
-    temp := unit;
+    ЛНДСКЭ := unit;
     Header(ЛяЙЮМ.сГЕК_дНАЮБ("SYSTEM"));
     PushSysProc("ADR",     sysADR);
     PushSysProc("SIZE",    sysSIZE);
@@ -1480,12 +1482,12 @@
     PushSysProc("MOVE",    sysMOVE);
     PushSysType("CARD16",  TCARD16);
     sys := unit;
-    unit := temp
+    unit := ЛНДСКЭ
   йнмеж оЯЕБДН_дНАЮБ;
 
 опнжедспю лНДСКЭ_вХРЮРЭ(Path, Name1, Ext: ЛяРП.РяРПНЙЮ): BOOLEAN;
   оепел
-    FHandle: INTEGER;
+    FHandle: жекне;
     name, Name, b: ЛяРП.РяРПНЙЮ;
     idmod: РСхЛЪ;
     Res, temp: BOOLEAN;
@@ -1578,14 +1580,14 @@
   йнмеж йНД_мЮЯРПНХРЭ;
 
 опнжедспю delfirstchar(оеп s: ЛяРП.РяРПНЙЮ);
-  оепел i: INTEGER;
+  оепел i: жекне;
   мювюкн
     дкъ i := 0 дн LENGTH(s) - 1 декюрэ
       s[i] := s[i + 1]
     йнмеж
   йнмеж delfirstchar;
 
-опнжедспю йНЛОХКХПНБЮРЭ*(platform, stksize: INTEGER);
+опнжедспю йНЛОХКХПНБЮРЭ*(platform, stksize: жекне);
   оепел
     full, path, name, ext, temp, path2: ЛяРП.РяРПНЙЮ;
   мювюкн

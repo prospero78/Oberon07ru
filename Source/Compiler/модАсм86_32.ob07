@@ -73,32 +73,32 @@
   РоПНЖЕДСПЮ = опнжедспю (err: BOOLEAN);
 
   РСоСМЙРюЯЛ* = сйюгюрекэ мю гюохяэ (ЛрХОШ.РоСМЙР)
-      cmd, clen, varadr, adr, tcmd, codeadr: INTEGER; short: BOOLEAN
+      cmd, clen, varadr, adr, tcmd, codeadr: жекне; short: BOOLEAN
     йнмеж;
 
-  TFLT = люяяхб 2 хг INTEGER;
+  TFLT = люяяхб 2 хг жекне;
 
-  TIDX* = люяяхб ADIM хг INTEGER;
+  TIDX* = люяяхб ADIM хг жекне;
 
   РяЕЙЖХЪхЛЪ = люяяхб 8 хг CHAR;
 
   РяЕЙЖХЪ = гюохяэ
       name: РяЕЙЖХЪхЛЪ;
-      size, adr, sizealign, OAPfile, reserved6, reserved7, reserved8, attrflags: INTEGER
+      size, adr, sizealign, OAPfile, reserved6, reserved7, reserved8, attrflags: жекне
     йнмеж;
 
   РгЮЦНКНБНЙ = гюохяэ
       msdos: люяяхб 180 хг CHAR;
       typecomp, seccount: mSys.CARD16;
-      time, reserved1, reserved2: INTEGER;
+      time, reserved1, reserved2: жекне;
       PEoptsize, infflags, PEfile, compver: mSys.CARD16;
       codesize, datasize, initdatasize, startadr,
       codeadr, rdataadr, loadadr, secalign, filealign,
       oldestver, version, oldestverNT, reserved3,
-      filesize, headersize, dllcrc: INTEGER;
+      filesize, headersize, dllcrc: жекне;
       UI, reserved4: mSys.CARD16;
-      stksize, stkalloc, heapsize, heapalloc, reserved5, structcount: INTEGER;
-      structs: люяяхб 16 хг гюохяэ adr, size: INTEGER йнмеж;
+      stksize, stkalloc, heapsize, heapalloc, reserved5, structcount: жекне;
+      structs: люяяхб 16 хг гюохяэ adr, size: жекне йнмеж;
       sections: люяяхб 3 хг РяЕЙЖХЪ
     йнмеж;
 
@@ -107,7 +107,7 @@
       NumberOfSections: mSys.CARD16;
       TimeDateStamp,
       PointerToSymbolTable,
-      NumberOfSymbols: INTEGER;
+      NumberOfSymbols: жекне;
       SizeOfOptionalHeader,
       Characteristics: mSys.CARD16;
       text, data, bss: РяЕЙЖХЪ
@@ -115,20 +115,20 @@
 
   РгЮЦНКНБНЙKol = гюохяэ
       menuet01: люяяхб 8 хг CHAR;
-      ver, start, size, mem, sp, param, path: INTEGER
+      ver, start, size, mem, sp, param, path: жекне
     йнмеж;
 
   ETABLE = гюохяэ
       reserved1, time, reserved2, dllnameoffset, firstnum, adrcount,
-      namecount, arradroffset, arrnameptroffset, arrnumoffset: INTEGER;
-      arradr, arrnameptr: люяяхб 10000H хг INTEGER;
+      namecount, arradroffset, arrnameptroffset, arrnumoffset: жекне;
+      arradr, arrnameptr: люяяхб 10000H хг жекне;
       arrnum: люяяхб 10000H хг mSys.CARD16;
       text: люяяхб 1000000 хг CHAR;
-      textlen, size: INTEGER
+      textlen, size: жекне
     йнмеж;
 
   РпЕКНЙ = гюохяэ
-      Page, Size: INTEGER;
+      Page, Size: жекне;
       reloc: люяяхб 1024 хг mSys.CARD16
     йнмеж;
 
@@ -137,49 +137,49 @@
   start: РСоСМЙРюЯЛ;
   MemErr: РоПНЖЕДСПЮ;
   dll, con, gui, kos, elf, obj: BOOLEAN;
-  Lcount, reccount, topstk: INTEGER;
-  recarray: люяяхб 2048 хг INTEGER;
+  Lcount, reccount, topstk: жекне;
+  recarray: люяяхб 2048 хг жекне;
   current*: РСоСМЙРюЯЛ;
   callstk: люяяхб 1024, 2 хг РСоСМЙРюЯЛ;
   OutFile: ЛяРП.РяРПНЙЮ;
-  Code: люяяхб 4000000 хг CHAR; ccount: INTEGER; Data: люяяхб 1000000 хг CHAR; dcount: INTEGER;
-  Labels: люяяхб 200000 хг INTEGER;
-  rdata: люяяхб 400H хг INTEGER;
+  Code: люяяхб 4000000 хг CHAR; ccount: жекне; Data: люяяхб 1000000 хг CHAR; dcount: жекне;
+  Labels: люяяхб 200000 хг жекне;
+  rdata: люяяхб 400H хг жекне;
   Header: РгЮЦНКНБНЙ;
   etable: ETABLE;
   ExecName: ЛяРП.РяРПНЙЮ;
-  LoadAdr: INTEGER; Reloc: люяяхб 200000 хг CHAR; rcount: INTEGER;
-  RtlProc: люяяхб 20 хг INTEGER; OutFilePos: INTEGER;
+  LoadAdr: жекне; Reloc: люяяхб 200000 хг CHAR; rcount: жекне;
+  RtlProc: люяяхб 20 хг жекне; OutFilePos: жекне;
   RelocSection: РяЕЙЖХЪ;
   felf: ЛяРП.РяРПНЙЮ;
-  fpu*: INTEGER;
+  fpu*: жекне;
   isfpu: BOOLEAN;
-  maxfpu: INTEGER;
+  maxfpu: жекне;
   fpucmd: РСоСМЙРюЯЛ;
   kosexp: люяяхб 65536 хг гюохяэ
     Name: ЛрХОШ.РСсГЕК;
-    Adr, NameLabel: INTEGER
+    Adr, NameLabel: жекне
   йнмеж;
-  kosexpcount: INTEGER;
+  kosexpcount: жекне;
 
 опнжедспю setfelf*(name: ЛяРП.РяРПНЙЮ);
   мювюкн
     felf := name
   йнмеж setfelf;
 
-опнжедспю AddRtlProc*(idx, proc: INTEGER);
+опнжедспю AddRtlProc*(idx, proc: жекне);
   мювюкн
     RtlProc[idx] := proc
   йнмеж AddRtlProc;
 
-опнжедспю IntToCard16(i: INTEGER): mSys.CARD16;
+опнжедспю IntToCard16(i: жекне): mSys.CARD16;
   оепел w: mSys.CARD16;
   мювюкн
     mSys.GET(mSys.ADR(i), w)
     бепмсрэ w
   йнмеж IntToCard16;
 
-опнжедспю CopyStr(оеп Dest: люяяхб хг CHAR; Source: люяяхб хг CHAR; оеп di: INTEGER; si: INTEGER);
+опнжедспю CopyStr(оеп Dest: люяяхб хг CHAR; Source: люяяхб хг CHAR; оеп di: жекне; si: жекне);
   мювюкн
     DEC(di);
     онбрнпърэ
@@ -189,19 +189,19 @@
     онйюме Dest[di] = 0X
   йнмеж CopyStr;
 
-опнжедспю exch(оеп a, b: INTEGER);
-  оепел c: INTEGER;
+опнжедспю exch(оеп a, b: жекне);
+  оепел c: жекне;
   мювюкн
     c := a;
     a := b;
     b := c
   йнмеж exch;
 
-опнжедспю Sort(оеп NamePtr, Adr: люяяхб хг INTEGER; Text: люяяхб хг CHAR; LB, RB: INTEGER);
-  оепел L, R: INTEGER;
+опнжедспю Sort(оеп NamePtr, Adr: люяяхб хг жекне; Text: люяяхб хг CHAR; LB, RB: жекне);
+  оепел L, R: жекне;
 
-      опнжедспю strle(s1, s2: INTEGER): BOOLEAN;
-      оепел S1, S2: люяяхб 256 хг CHAR; i: INTEGER;
+      опнжедспю strle(s1, s2: жекне): BOOLEAN;
+      оепел S1, S2: люяяхб 256 хг CHAR; i: жекне;
       мювюкн
         i := 0;
         CopyStr(S1, Text, i, s1);
@@ -236,7 +236,7 @@
   йнмеж Sort;
 
 опнжедспю PackExport(Name: люяяхб хг CHAR);
-  оепел i: INTEGER;
+  оепел i: жекне;
   мювюкн
     Sort(etable.arrnameptr, etable.arradr, etable.text, 0, etable.namecount - 1);
     дкъ i := 0 дн etable.namecount - 1 декюрэ
@@ -255,7 +255,7 @@
     etable.size := etable.size + etable.textlen
   йнмеж PackExport;
 
-опнжедспю ProcExport*(Number: INTEGER; Name: ЛрХОШ.РСсГЕК; NameLabel: INTEGER);
+опнжедспю ProcExport*(Number: жекне; Name: ЛрХОШ.РСсГЕК; NameLabel: жекне);
   мювюкн
     еякх dll рнцдю
       etable.arradr[etable.adrcount] := Number;
@@ -272,7 +272,7 @@
     йнмеж
   йнмеж ProcExport;
 
-опнжедспю Err(code: INTEGER);
+опнжедспю Err(code: жекне);
   мювюкн
     бшанп code хг
     |1: ЛнЬ.яННАЫ(67); ЛйНМЯ.яРПНЙЮ_оЕВЮРЭ(OutFile)
@@ -285,12 +285,12 @@
     ЛоПНЖ.гЮЙНМВХРЭ(1)
   йнмеж Err;
 
-опнжедспю Align*(n, m: INTEGER): INTEGER;
+опнжедспю Align*(n, m: жекне): жекне;
     бепмсрэ n + (m - n MOD m) MOD m
   йнмеж Align;
 
 опнжедспю PutReloc(R: РпЕКНЙ);
-  оепел i: INTEGER;
+  оепел i: жекне;
   мювюкн
     mSys.PUT(mSys.ADR(Reloc[rcount]), R.Page);
     INC(rcount, 4);
@@ -302,8 +302,8 @@
     йнмеж
   йнмеж PutReloc;
 
-опнжедспю InitArray(оеп adr: INTEGER; chars: ЛяРП.РяРПНЙЮ);
-  оепел i, x, n: INTEGER;
+опнжедспю InitArray(оеп adr: жекне; chars: ЛяРП.РяРПНЙЮ);
+  оепел i, x, n: жекне;
   мювюкн
     n := LEN(chars) - 1;
     i := 0;
@@ -315,28 +315,28 @@
     йнмеж
   йнмеж InitArray;
 
-опнжедспю WriteF(F, A, N: INTEGER);
+опнжедспю WriteF(F, A, N: жекне);
   мювюкн
     еякх ЛтЮИК.гЮОХЯЮРЭ(F, A, N) # N рнцдю
       Err(2)
     йнмеж
   йнмеж WriteF;
 
-опнжедспю Write(A, N: INTEGER);
+опнжедспю Write(A, N: жекне);
   мювюкн
     mSys.MOVE(A, OutFilePos, N);
     OutFilePos := OutFilePos + N
   йнмеж Write;
 
-опнжедспю Fill(n: INTEGER; c: CHAR);
-  оепел i: INTEGER;
+опнжедспю Fill(n: жекне; c: CHAR);
+  оепел i: жекне;
   мювюкн
     дкъ i := 1 дн n декюрэ
       Write(mSys.ADR(c), 1)
     йнмеж
   йнмеж Fill;
 
-опнжедспю SetSection(оеп Section: РяЕЙЖХЪ; name: РяЕЙЖХЪхЛЪ; size, adr, sizealign, OAPfile, attrflags: INTEGER);
+опнжедспю SetSection(оеп Section: РяЕЙЖХЪ; name: РяЕЙЖХЪхЛЪ; size, adr, sizealign, OAPfile, attrflags: жекне);
   мювюкн
     Section.name := name;
     Section.size := size;
@@ -346,9 +346,9 @@
     Section.attrflags := attrflags;
   йнмеж SetSection;
 
-опнжедспю WritePE(FName: люяяхб хг CHAR; stksize, codesize, datasize, rdatasize, gsize: INTEGER);
+опнжедспю WritePE(FName: люяяхб хг CHAR; stksize, codesize, datasize, rdatasize, gsize: жекне);
   CONST textattr = 60000020H; rdataattr = 40000040H; dataattr = 0C0000040H; relocattr = 42000040H;
-  оепел i, F, adr, acodesize, compver, version, stkalloc, heapsize, heapalloc, filesize, filebuf: INTEGER;
+  оепел i, F, adr, acodesize, compver, version, stkalloc, heapsize, heapalloc, filesize, filebuf: жекне;
       cur: РСоСМЙРюЯЛ;
   мювюкн
 
@@ -487,7 +487,7 @@
     current := current.ЯКЕДСЧЫ(РСоСМЙРюЯЛ)
   йнмеж New;
 
-опнжедспю Empty(varadr: INTEGER);
+опнжедспю Empty(varadr: жекне);
   мювюкн
     New;
     current.clen := 0;
@@ -495,7 +495,7 @@
     current.varadr := varadr
   йнмеж Empty;
 
-опнжедспю OutByte(byte: INTEGER);
+опнжедспю OutByte(byte: жекне);
   мювюкн
     New;
     current.clen := 1;
@@ -503,7 +503,7 @@
     INC(ccount)
   йнмеж OutByte;
 
-опнжедспю OutInt(int: INTEGER);
+опнжедспю OutInt(int: жекне);
   мювюкн
     New;
     current.clen := 4;
@@ -548,7 +548,7 @@
   йнмеж PopEDX;
 
 опнжедспю OutCode(cmd: ЛяРП.РяРПНЙЮ);
-  оепел a, b: INTEGER;
+  оепел a, b: жекне;
   мювюкн
     New;
     a := mSys.ADR(Code[ccount]);
@@ -567,7 +567,7 @@
     current := last
   йнмеж Del;
 
-опнжедспю NewLabel*(): INTEGER;
+опнжедспю NewLabel*(): жекне;
   мювюкн
     INC(Lcount)
     бепмсрэ Lcount
@@ -592,7 +592,7 @@
     DEC(topstk)
   йнмеж бШГНБ_гЮЙНМВХРЭ;
 
-опнжедспю мЮЯРПНХРЭ*(mem: РоПНЖЕДСПЮ; UI: INTEGER);
+опнжедспю мЮЯРПНХРЭ*(mem: РоПНЖЕДСПЮ; UI: жекне);
   оепел
     nov: РСоСМЙРюЯЛ;
   мювюкн
@@ -614,7 +614,7 @@
   йнмеж мЮЯРПНХРЭ;
 
 опнжедспю datastr(str: ЛяРП.РяРПНЙЮ);
-  оепел i, n: INTEGER;
+  оепел i, n: жекне;
   мювюкн
     i := 0;
     n := LEN(str);
@@ -627,14 +627,14 @@
     INC(dcount)
   йнмеж datastr;
 
-опнжедспю dataint(n: INTEGER);
+опнжедспю dataint(n: жекне);
   мювюкн
     mSys.PUT(mSys.ADR(Data[dcount]), n);
     INC(dcount, 4)
   йнмеж dataint;
 
-опнжедспю jmp*(jamp: CHAR; label: INTEGER);
-  оепел n: INTEGER;
+опнжедспю jmp*(jamp: CHAR; label: жекне);
+  оепел n: жекне;
   мювюкн
     New;
     бшанп jamp хг
@@ -656,20 +656,20 @@
     INC(ccount, 4)
   йнмеж jmp;
 
-опнжедспю jmplong(jamp: CHAR; label: INTEGER);
+опнжедспю jmplong(jamp: CHAR; label: жекне);
   мювюкн
     jmp(jamp, label);
     current.short := кнфэ
   йнмеж jmplong;
 
-опнжедспю Label*(label: INTEGER);
+опнжедспю Label*(label: жекне);
   мювюкн
     New;
     current.varadr := mSys.ADR(Labels[label]);
     current.tcmd := LCMD
   йнмеж Label;
 
-опнжедспю CmdN(Number: INTEGER);
+опнжедспю CmdN(Number: жекне);
   мювюкн
     New;
     current.clen := 4;
@@ -679,7 +679,7 @@
     INC(ccount, 4)
   йнмеж CmdN;
 
-опнжедспю IntByte(bytecode, intcode: ЛяРП.РяРПНЙЮ; n: INTEGER);
+опнжедспю IntByte(bytecode, intcode: ЛяРП.РяРПНЙЮ; n: жекне);
   мювюкн
     еякх (n <= 127) & (n >= -128) рнцдю
       OutCode(bytecode);
@@ -700,7 +700,7 @@
     DEC(fpu)
   йнмеж DropFpu;
 
-опнжедспю AfterRet(func, float: BOOLEAN; callconv, parsize: INTEGER);
+опнжедспю AfterRet(func, float: BOOLEAN; callconv, parsize: жекне);
   мювюкн
     еякх callconv = cdecl рнцдю
       OutCode("81C4");
@@ -715,8 +715,8 @@
     йнмеж
   йнмеж AfterRet;
 
-опнжедспю FpuSave(local: INTEGER);
-  оепел i: INTEGER;
+опнжедспю FpuSave(local: жекне);
+  оепел i: жекне;
   мювюкн
     еякх fpu > maxfpu рнцдю
       maxfpu := fpu
@@ -736,8 +736,8 @@
     isfpu := хярхмю
   йнмеж Incfpu;
 
-опнжедспю FpuLoad(local: INTEGER; float: BOOLEAN);
-  оепел i: INTEGER;
+опнжедспю FpuLoad(local: жекне; float: BOOLEAN);
+  оепел i: жекне;
   мювюкн
     дкъ i := fpu дн 1 BY -1 декюрэ
       IntByte("DD45", "DD85", -local - i * 8)
@@ -748,8 +748,8 @@
     йнмеж
   йнмеж FpuLoad;
 
-опнжедспю Call*(proc: INTEGER; func, float: BOOLEAN; callconv, ccall, bases, level, parsize, local: INTEGER);
-  оепел i: INTEGER;
+опнжедспю Call*(proc: жекне; func, float: BOOLEAN; callconv, ccall, bases, level, parsize, local: жекне);
+  оепел i: жекне;
   мювюкн
     еякх ccall # 0 рнцдю
       дкъ i := level дн level - bases + ORD(ccall = 1) + 1 BY -1 декюрэ
@@ -765,7 +765,7 @@
     FpuLoad(local, func & float)
   йнмеж Call;
 
-опнжедспю CallRTL(Proc: INTEGER);
+опнжедспю CallRTL(Proc: жекне);
   мювюкн
     New;
     current.clen := 5;
@@ -777,7 +777,7 @@
     INC(ccount, 4)
   йнмеж CallRTL;
 
-опнжедспю PushInt*(n: INTEGER);
+опнжедспю PushInt*(n: жекне);
   мювюкн
     OutByte(68H);
     CmdN(n)
@@ -801,14 +801,14 @@
     start := asmlist.ЯКЕДСЧЫ(РСоСМЙРюЯЛ)
   йнмеж Prolog;
 
-опнжедспю AddRec*(base: INTEGER);
+опнжедспю AddRec*(base: жекне);
   мювюкн
     INC(reccount);
     recarray[reccount] := base
   йнмеж AddRec;
 
-опнжедспю CmpOpt(inv: BOOLEAN): INTEGER;
-  оепел cur: РСоСМЙРюЯЛ; c: INTEGER;
+опнжедспю CmpOpt(inv: BOOLEAN): жекне;
+  оепел cur: РСоСМЙРюЯЛ; c: жекне;
   мювюкн
     c := ORD(Code[current.ОПЕДШДСЫ.ОПЕДШДСЫ(РСоСМЙРюЯЛ).cmd]);
     еякх inv рнцдю
@@ -829,8 +829,8 @@
     бепмсрэ c - 16
   йнмеж CmpOpt;
 
-опнжедспю ifwh*(L: INTEGER);
-  оепел c: INTEGER;
+опнжедспю ifwh*(L: жекне);
+  оепел c: жекне;
   мювюкн
     еякх current.ОПЕДШДСЫ(РСоСМЙРюЯЛ).tcmd = ICMP2 рнцдю
       c := CmpOpt(хярхмю);
@@ -843,14 +843,14 @@
     йнмеж
   йнмеж ifwh;
 
-опнжедспю PushConst*(Number: INTEGER);
+опнжедспю PushConst*(Number: жекне);
   мювюкн
     IntByte("6A", "68", Number);
     current.ОПЕДШДСЫ(РСоСМЙРюЯЛ).varadr := Number
   йнмеж PushConst;
 
-опнжедспю IfWhile*(L: INTEGER; orop: BOOLEAN);
-  оепел c, L1: INTEGER;
+опнжедспю IfWhile*(L: жекне; orop: BOOLEAN);
+  оепел c, L1: жекне;
   мювюкн
     L1 := NewLabel();
     еякх current.ОПЕДШДСЫ(РСоСМЙРюЯЛ).tcmd = ICMP2 рнцдю
@@ -882,7 +882,7 @@
     CallRTL(_disprec)
   йнмеж disprec;
 
-опнжедспю String*(Number, Len: INTEGER; str: ЛяРП.РяРПНЙЮ);
+опнжедспю String*(Number, Len: жекне; str: ЛяРП.РяРПНЙЮ);
   мювюкн
     Labels[Number] := -dcount;
     еякх Len > 1 рнцдю
@@ -909,8 +909,8 @@
     йнмеж
   йнмеж InsertFpuInit;
 
-опнжедспю ProcBeg*(Number, Local: INTEGER; Module: BOOLEAN);
-  оепел i: INTEGER;
+опнжедспю ProcBeg*(Number, Local: жекне; Module: BOOLEAN);
+  оепел i: жекне;
   мювюкн
     еякх Module рнцдю
       OutCode("EB0C");
@@ -944,7 +944,7 @@
     InsertFpuInit
   йнмеж Leave;
 
-опнжедспю ProcEnd*(Number, Param: INTEGER; func, float: BOOLEAN);
+опнжедспю ProcEnd*(Number, Param: жекне; func, float: BOOLEAN);
   мювюкн
     еякх func & ~float рнцдю
       PopEAX
@@ -960,7 +960,7 @@
     InsertFpuInit
   йнмеж ProcEnd;
 
-опнжедспю Module*(Name: ЛяРП.РяРПНЙЮ; Number: INTEGER);
+опнжедспю Module*(Name: ЛяРП.РяРПНЙЮ; Number: жекне);
   мювюкн
     String(Number + 2, LENGTH(Name), Name);
     jmplong(JMP, Number + 1)
@@ -971,7 +971,7 @@
     OutCode(s)
   йнмеж Asm;
 
-опнжедспю GlobalAdr*(offset: INTEGER);
+опнжедспю GlobalAdr*(offset: жекне);
   мювюкн
     OutByte(0BAH);
     OutInt(offset);
@@ -980,7 +980,7 @@
     PushEDX
   йнмеж GlobalAdr;
 
-опнжедспю Mono*(Number: INTEGER);
+опнжедспю Mono*(Number: жекне);
   мювюкн
     PopEDX;
     PushInt(Number)
@@ -1005,7 +1005,7 @@
     OutCode("F71424")
   йнмеж NegSet;
 
-опнжедспю Int*(Op: INTEGER);
+опнжедспю Int*(Op: жекне);
   мювюкн
     PopEDX;
     бшанп Op хг
@@ -1016,7 +1016,7 @@
     йнмеж
   йнмеж Int;
 
-опнжедспю Set*(Op: INTEGER);
+опнжедспю Set*(Op: жекне);
   мювюкн
     PopEDX;
     OutCode("58");
@@ -1031,13 +1031,13 @@
     PushEAX
   йнмеж Set;
 
-опнжедспю Setfpu*(newfpu: INTEGER);
+опнжедспю Setfpu*(newfpu: жекне);
   мювюкн
     fpu := newfpu
   йнмеж Setfpu;
 
 опнжедспю PushFlt*(x: LONGREAL);
-  оепел f: TFLT; L: INTEGER;
+  оепел f: TFLT; L: жекне;
   мювюкн
     mSys.PUT(mSys.ADR(f), x);
     Incfpu;
@@ -1056,8 +1056,8 @@
     йнмеж
   йнмеж PushFlt;
 
-опнжедспю farith*(op: INTEGER);
-  оепел n: INTEGER;
+опнжедспю farith*(op: жекне);
+  оепел n: жекне;
   мювюкн
     OutCode("DE");
     бшанп op хг
@@ -1071,8 +1071,8 @@
     DEC(fpu)
   йнмеж farith;
 
-опнжедспю fcmp*(Op: INTEGER);
-  оепел n: INTEGER;
+опнжедспю fcmp*(Op: жекне);
+  оепел n: жекне;
   мювюкн
     OutCode("33C9DED9DFE09E0F");
     бшанп Op хг
@@ -1095,7 +1095,7 @@
     OutCode("D9E0")
   йнмеж fneg;
 
-опнжедспю OnError*(n: INTEGER);
+опнжедспю OnError*(n: жекне);
   мювюкн
     OutByte(68H);
     OutInt(ЛсРХКЭ.Line * 16 + n);
@@ -1132,7 +1132,7 @@
     PushEDX
   йнмеж Dup;
 
-опнжедспю Inclusion*(Op: INTEGER);
+опнжедспю Inclusion*(Op: жекне);
   мювюкн
     PopEDX;
     PopEAX;
@@ -1149,8 +1149,8 @@
     OutCode("F71C24")
   йнмеж NegInt;
 
-опнжедспю CmpInt*(Op: INTEGER);
-  оепел n: INTEGER;
+опнжедспю CmpInt*(Op: жекне);
+  оепел n: жекне;
   мювюкн
     OutCode("33C95A583BC20F"); current.tcmd := ICMP1;
     бшанп Op хг
@@ -1167,7 +1167,7 @@
     PushECX;
   йнмеж CmpInt;
 
-опнжедспю CallVar*(func, float: BOOLEAN; callconv, parsize, local: INTEGER);
+опнжедспю CallVar*(func, float: BOOLEAN; callconv, parsize, local: жекне);
   мювюкн
     PopEDX;
     OutCode("8B1285D2750A");
@@ -1178,7 +1178,7 @@
     FpuLoad(local, func & float)
   йнмеж CallVar;
 
-опнжедспю LocalAdr*(offset, bases: INTEGER);
+опнжедспю LocalAdr*(offset, bases: жекне);
   мювюкн
     еякх bases = 0 рнцдю
       Empty(offset);
@@ -1193,20 +1193,20 @@
     йнмеж
   йнмеж LocalAdr;
 
-опнжедспю Field*(offset: INTEGER);
+опнжедспю Field*(offset: жекне);
   мювюкн
     еякх offset # 0 рнцдю
       IntByte("830424", "810424", offset)
     йнмеж
   йнмеж Field;
 
-опнжедспю DerefType*(n: INTEGER);
+опнжедспю DerefType*(n: жекне);
   мювюкн
     IntByte("8B5424", "8B9424", n);
     OutCode("FF72FC")
   йнмеж DerefType;
 
-опнжедспю Guard*(T: INTEGER; Check: BOOLEAN);
+опнжедспю Guard*(T: жекне; Check: BOOLEAN);
   мювюкн
     еякх Check рнцдю
       PopEAX;
@@ -1229,7 +1229,7 @@
     йнмеж
   йнмеж Guard;
 
-опнжедспю StProc*(proc: INTEGER);
+опнжедспю StProc*(proc: жекне);
   мювюкн
     бшанп proc хг
     |stINC:   PopEDX; OutCode("590111")
@@ -1249,7 +1249,7 @@
     йнмеж
   йнмеж StProc;
 
-опнжедспю Assert*(proc, assrt: INTEGER);
+опнжедспю Assert*(proc, assrt: жекне);
   мювюкн
     PopEDX;
     OutCode("85D2751368");
@@ -1264,7 +1264,7 @@
     jmplong(JMP, ASSRT)
   йнмеж Assert;
 
-опнжедспю StFunc*(func: INTEGER);
+опнжедспю StFunc*(func: жекне);
   мювюкн
     бшанп func хг
     |stABS:    PopEDX; OutCode("85D27D02F7DA"); PushEDX
@@ -1283,10 +1283,10 @@
     йнмеж
   йнмеж StFunc;
 
-опнжедспю Load*(T: INTEGER);
+опнжедспю Load*(T: жекне);
   оепел
     lastcmd: РСоСМЙРюЯЛ;
-    offset: INTEGER;
+    offset: жекне;
 
   опнжедспю del;
     мювюкн
@@ -1357,7 +1357,7 @@
     йнмеж
   йнмеж Load;
 
-опнжедспю Save*(T: INTEGER);
+опнжедспю Save*(T: жекне);
   мювюкн
     бшанп T хг
     |TINTEGER, TSET, TPOINTER, TPROC:
@@ -1387,8 +1387,8 @@
     йнмеж
   йнмеж Save;
 
-опнжедспю OpenArray*(A: TIDX; n: INTEGER);
-  оепел i: INTEGER;
+опнжедспю OpenArray*(A: TIDX; n: жекне);
+  оепел i: жекне;
   мювюкн
     PopEDX;
     дкъ i := n - 1 дн 0 BY -1 декюрэ
@@ -1397,7 +1397,7 @@
     PushEDX
   йнмеж OpenArray;
 
-опнжедспю OpenIdx*(n: INTEGER);
+опнжедспю OpenIdx*(n: жекне);
   мювюкн
     OutByte(54H);
     еякх n > 1 рнцдю
@@ -1412,7 +1412,7 @@
     PushEDX;
   йнмеж OpenIdx;
 
-опнжедспю FixIdx*(len, size: INTEGER);
+опнжедспю FixIdx*(len, size: жекне);
   мювюкн
     PopEDX;
     IntByte("5983FA", "5981FA", len);
@@ -1455,8 +1455,8 @@
     PushEDX;
   йнмеж CheckNIL;
 
-опнжедспю ExtArray*(A: TIDX; n, m: INTEGER);
-  оепел i: INTEGER;
+опнжедспю ExtArray*(A: TIDX; n, m: жекне);
+  оепел i: жекне;
   мювюкн
     дкъ i := n - 1 дн 0 BY -1 декюрэ
       PushConst(A[i])
@@ -1467,7 +1467,7 @@
     CallRTL(_arrayrot)
   йнмеж ExtArray;
 
-опнжедспю ADR*(dim: INTEGER);
+опнжедспю ADR*(dim: жекне);
   мювюкн
     еякх dim > 0 рнцдю
       PopEDX;
@@ -1477,7 +1477,7 @@
     йнмеж
   йнмеж ADR;
 
-опнжедспю Len*(dim: INTEGER);
+опнжедспю Len*(dim: жекне);
   мювюкн
     PopEDX;
     еякх dim < 0 рнцдю
@@ -1490,7 +1490,7 @@
     йнмеж
   йнмеж Len;
 
-опнжедспю For*(inc: BOOLEAN; оеп LBeg, LEnd: INTEGER);
+опнжедспю For*(inc: BOOLEAN; оеп LBeg, LEnd: жекне);
   мювюкн
     LEnd := NewLabel();
     LBeg := NewLabel();
@@ -1503,7 +1503,7 @@
     йнмеж
   йнмеж For;
 
-опнжедспю NextFor*(step, LBeg, LEnd: INTEGER);
+опнжедспю NextFor*(step, LBeg, LEnd: жекне);
   мювюкн
     OutCode("8B542404");
     еякх step = 1 рнцдю
@@ -1518,8 +1518,8 @@
     OutCode("83C408")
   йнмеж NextFor;
 
-опнжедспю CaseLabel*(a, b, LBeg: INTEGER);
-  оепел L: INTEGER;
+опнжедспю CaseLabel*(a, b, LBeg: жекне);
+  оепел L: жекне;
   мювюкн
     L := NewLabel();
     IntByte("83FA", "81FA", a);
@@ -1539,7 +1539,7 @@
     PopEDX
   йнмеж Drop;
 
-опнжедспю strcmp*(Op, LR: INTEGER);
+опнжедспю strcmp*(Op, LR: жекне);
   мювюкн
     бшанп Op хг
     |lxEQ: PushConst(0)
@@ -1587,11 +1587,11 @@
     йнмеж
   йнмеж Optimization;
 
-опнжедспю WriteKOS(FName: люяяхб хг CHAR; stk, size, datasize, gsize: INTEGER; obj: BOOLEAN);
+опнжедспю WriteKOS(FName: люяяхб хг CHAR; stk, size, datasize, gsize: жекне; obj: BOOLEAN);
   CONST strsize = 2048;
   оепел
     Header: РгЮЦНКНБНЙKol;
-    F, i, filesize, filebuf, a, sec, adr, size2: INTEGER;
+    F, i, filesize, filebuf, a, sec, adr, size2: жекне;
     cur: РСоСМЙРюЯЛ;
     Coff: РгЮЦНКНБНЙCoff;
     sym: люяяхб 18 * 4 хг CHAR;
@@ -1715,20 +1715,20 @@
     ЛтЮИК.гЮЙПШРЭ(F)
   йнмеж WriteKOS;
 
-опнжедспю WriteELF(FName: люяяхб хг CHAR; code, data, glob: INTEGER);
+опнжедспю WriteELF(FName: люяяхб хг CHAR; code, data, glob: жекне);
   оепел
-    F, res, delta, filebuf: INTEGER;
+    F, res, delta, filebuf: жекне;
     cur: РСоСМЙРюЯЛ;
     bytes: люяяхб 817H + 55FH + 4900 хг CHAR;
-    опнжедспю Add(offset: INTEGER);
-    оепел m: INTEGER;
+    опнжедспю Add(offset: жекне);
+    оепел m: жекне;
     мювюкн
       mSys.GET(mSys.ADR(bytes[offset]), m);
       mSys.PUT(mSys.ADR(bytes[offset]), m + delta)
     йнмеж Add;
 
-    опнжедспю Sub(offset: INTEGER);
-    оепел m: INTEGER;
+    опнжедспю Sub(offset: жекне);
+    оепел m: жекне;
     мювюкн
       mSys.GET(mSys.ADR(bytes[offset]), m);
       mSys.PUT(mSys.ADR(bytes[offset]), m - delta)
@@ -1803,9 +1803,9 @@
     ЛтЮИК.гЮЙПШРЭ(F)
   йнмеж WriteELF;
 
-опнжедспю FixLabels(FName: люяяхб хг CHAR; stk, gsize, glob: INTEGER);
+опнжедспю FixLabels(FName: люяяхб хг CHAR; stk, gsize, glob: жекне);
   оепел
-    size, asize, i, rdatasize, RCount, n, temp, temp2, temp3: INTEGER;
+    size, asize, i, rdatasize, RCount, n, temp, temp2, temp3: жекне;
     cur: РСоСМЙРюЯЛ;
     R: РпЕКНЙ;
     c: CHAR;
@@ -1958,7 +1958,7 @@
   йнмеж FixLabels;
 
 опнжедспю OutStringZ(str: люяяхб хг CHAR);
-        оепел i: INTEGER;
+        оепел i: жекне;
         мювюкн
           New;
           current.clen := LENGTH(str);
@@ -1971,8 +1971,8 @@
           INC(current.clen)
         йнмеж OutStringZ;
 
-опнжедспю Epilog*(gsize: INTEGER; FName: люяяхб хг CHAR; stk: INTEGER);
-        оепел i, glob: INTEGER;
+опнжедспю Epilog*(gsize: жекне; FName: люяяхб хг CHAR; stk: жекне);
+        оепел i, glob: жекне;
         мювюкн
           glob := 0;
           gsize := Align(gsize, 4) + 4;

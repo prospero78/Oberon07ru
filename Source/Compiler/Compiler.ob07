@@ -61,7 +61,7 @@
 рхош
 
   РлЕРЙЮ = сйюгюрекэ мю гюохяэ (ЛрХОШ.РоСМЙР)
-      a, b: INTEGER
+      a, b: жекне
     йнмеж;
 
 оепел
@@ -77,7 +77,7 @@
     йнмеж
   йнмеж бШПЮФ_гЮЦПСГХРЭ;
 
-опнжедспю яРП_дКХМЮ(adr: LONGREAL): INTEGER;
+опнжедспю яРП_дКХМЮ(adr: LONGREAL): жекне;
   оепел
     s: ЛдЕЖК.РСйНМЯРяРП;
   мювюкн
@@ -85,14 +85,14 @@
     бепмсрэ s.Len
   йнмеж яРП_дКХМЮ;
 
-опнжедспю Assert(cond: BOOLEAN; line, col, code: INTEGER);
+опнжедспю Assert(cond: BOOLEAN; line, col, code: жекне);
   мювюкн
     еякх ~cond рнцдю
       ЛоПНБ.рЕЯР(кнфэ, line, col, code)
     йнмеж
   йнмеж Assert;
 
-опнжедспю Assert2(cond: BOOLEAN; code: INTEGER);
+опнжедспю Assert2(cond: BOOLEAN; code: жекне);
   мювюкн
     еякх ~cond рнцдю
       ЛоПНБ.рЕЯР(кнфэ, ЛяЙЮМ.line, ЛяЙЮМ.col, code)
@@ -104,7 +104,7 @@
     ЛдЕЖК.Next
   йнмеж Next;
 
-опнжедспю Check(key: INTEGER);
+опнжедспю Check(key: жекне);
   мювюкн
     ЛдЕЖК.Check(key)
   йнмеж Check;
@@ -128,7 +128,7 @@
     id: ЛдЕЖК.РСхЛЪ;
     name: ЛрХОШ.РСсГЕК;
     e1: ЛдЕЖК.РбШПЮФЕМХЕ;
-    line, col, i, n, bases, glob, loc, idx: INTEGER;
+    line, col, i, n, bases, glob, loc, idx: жекне;
     imp, break, guard: BOOLEAN;
     f: ЛдЕЖК.РСоНКЕ;
     T, BaseT: ЛдЕЖК.РСрХО;
@@ -353,7 +353,7 @@
 опнжедспю Set(оеп e: ЛдЕЖК.РбШПЮФЕМХЕ);
   оепел
     a, b: ЛдЕЖК.РбШПЮФЕМХЕ;
-    line, col: INTEGER;
+    line, col: жекне;
     s: SET; flag: BOOLEAN;
   мювюкн
     Next;
@@ -425,9 +425,9 @@
     йнмеж
   йнмеж Str;
 
-опнжедспю StFunc(оеп e: ЛдЕЖК.РбШПЮФЕМХЕ; func: INTEGER);
+опнжедспю StFunc(оеп e: ЛдЕЖК.РбШПЮФЕМХЕ; func: жекне);
   оепел
-    line, col, line2, col2, a, b, p: INTEGER;
+    line, col, line2, col2, a, b, p: жекне;
     e1, e2: ЛдЕЖК.РбШПЮФЕМХЕ;
     T: ЛдЕЖК.РСрХО;
     str, str2: ЛдЕЖК.РСйНМЯРяРП;
@@ -661,7 +661,7 @@
 
 опнжедспю ProcTypeComp(T1, T2: ЛдЕЖК.РСрХО): BOOLEAN;
   оепел
-    sp: INTEGER;
+    sp: жекне;
     stk: люяяхб 100, 2 хг ЛдЕЖК.РСрХО;
 
     опнжедспю ProcTypeComp1(T1, T2: ЛдЕЖК.РСрХО): BOOLEAN;
@@ -683,7 +683,7 @@
 
       опнжедспю Check(): BOOLEAN;
         оепел
-          i: INTEGER;
+          i: жекне;
           res: BOOLEAN;
         мювюкн
           i := 0;
@@ -816,7 +816,7 @@
 
 опнжедспю Call(param: ЛдЕЖК.РСоНКЕ);
   оепел
-    line, col, i, n: INTEGER;
+    line, col, i, n: жекне;
     e1: ЛдЕЖК.РбШПЮФЕМХЕ;
     s: ЛдЕЖК.РСйНМЯРяРП;
     A: X86.TIDX;
@@ -880,7 +880,7 @@
 
 опнжедспю Factor(оеп e: ЛдЕЖК.РбШПЮФЕМХЕ);
   оепел
-    line, col, ccall, p: INTEGER;
+    line, col, ccall, p: жекне;
     begcall: X86.РСоСМЙРюЯЛ;
     s, str2: ЛдЕЖК.РСйНМЯРяРП;
   мювюкн
@@ -1002,7 +1002,7 @@
     бепмсрэ (a.T.tType = TSTRING) & (яРП_дКХМЮ(a.Value) = 1) хкх (a.T.tType = TCHAR)
   йнмеж IsChr;
 
-опнжедспю StrRel(a, b: ЛдЕЖК.РбШПЮФЕМХЕ; Op: INTEGER);
+опнжедспю StrRel(a, b: ЛдЕЖК.РбШПЮФЕМХЕ; Op: жекне);
   мювюкн
     еякх ~(IsChr(a) хкх IsChr(b)) рнцдю
       X86.strcmp(Op, 0)
@@ -1015,8 +1015,8 @@
     йнмеж
   йнмеж StrRel;
 
-опнжедспю log2(n: INTEGER): INTEGER;
-  оепел x, i: INTEGER;
+опнжедспю log2(n: жекне): жекне;
+  оепел x, i: жекне;
   мювюкн
     x := 1;
     i := 0;
@@ -1030,8 +1030,8 @@
     бепмсрэ i
   йнмеж log2;
 
-опнжедспю Operation(оеп a, b: ЛдЕЖК.РбШПЮФЕМХЕ; Op, line, col: INTEGER);
-  оепел n, m: INTEGER;
+опнжедспю Operation(оеп a, b: ЛдЕЖК.РбШПЮФЕМХЕ; Op, line, col: жекне);
+  оепел n, m: жекне;
   мювюкн
     бшанп Op хг
     |lxPlus, lxMinus, lxMult, lxSlash:
@@ -1114,7 +1114,7 @@
 опнжедспю Term(оеп e: ЛдЕЖК.РбШПЮФЕМХЕ);
   оепел
     a: ЛдЕЖК.РбШПЮФЕМХЕ;
-    Op, line, col, L: INTEGER;
+    Op, line, col, L: жекне;
   мювюкн
     Factor(e);
     онйю (ЛяЙЮМ.tLex = lxMult) хкх (ЛяЙЮМ.tLex = lxSlash) хкх
@@ -1140,7 +1140,7 @@
 опнжедспю Simple(оеп e: ЛдЕЖК.РбШПЮФЕМХЕ);
   оепел
     a: ЛдЕЖК.РбШПЮФЕМХЕ;
-    Op, line, col, uOp, uline, ucol, L: INTEGER;
+    Op, line, col, uOp, uline, ucol, L: жекне;
   мювюкн
     uOp := 0;
     еякх (ЛяЙЮМ.tLex = lxPlus) хкх (ЛяЙЮМ.tLex = lxMinus) рнцдю
@@ -1196,7 +1196,7 @@
 опнжедспю Expr(оеп e: ЛдЕЖК.РбШПЮФЕМХЕ);
   оепел
     a: ЛдЕЖК.РбШПЮФЕМХЕ;
-    Op, line, col, line2, col2, fpu: INTEGER;
+    Op, line, col, line2, col2, fpu: жекне;
     T: ЛдЕЖК.РСрХО;
     beg: X86.РСоСМЙРюЯЛ;
     s: ЛдЕЖК.РСйНМЯРяРП;
@@ -1269,7 +1269,7 @@
 опнжедспю IfWhileOper(wh: BOOLEAN);
   оепел
     e: ЛдЕЖК.РбШПЮФЕМХЕ;
-    line, col, L, L3: INTEGER;
+    line, col, L, L3: жекне;
   мювюкн
     L := X86.NewLabel();
     еякх wh рнцдю
@@ -1307,7 +1307,7 @@
 опнжедспю йКяКНБН_онбрнп;
   оепел
     e: ЛдЕЖК.РбШПЮФЕМХЕ;
-    line, col, L: INTEGER;
+    line, col, L: жекне;
   мювюкн
     Next;
     L := X86.NewLabel();
@@ -1325,7 +1325,7 @@
 опнжедспю йКяКНБН_дкъ;
   оепел
     e: ЛдЕЖК.РбШПЮФЕМХЕ;
-    line, col, LBeg, LEnd, iValue: INTEGER;
+    line, col, LBeg, LEnd, iValue: жекне;
     Value: LONGREAL;
     T: ЛдЕЖК.РСрХО;
     name: ЛрХОШ.РСсГЕК;
@@ -1378,7 +1378,7 @@
     Next
   йнмеж йКяКНБН_дкъ;
 
-опнжедспю лЕРЙЮ_оПНБЕПХРЭ(a, b: INTEGER; Labels: ЛрХОШ.РСяОХЯНЙ): BOOLEAN;
+опнжедспю лЕРЙЮ_оПНБЕПХРЭ(a, b: жекне; Labels: ЛрХОШ.РСяОХЯНЙ): BOOLEAN;
   оепел 
     cur: РлЕРЙЮ;
   мювюкн
@@ -1389,12 +1389,12 @@
     бепмсрэ cur = осярн
   йнмеж лЕРЙЮ_оПНБЕПХРЭ;
 
-опнжедспю LabelVal(оеп a: INTEGER; int: BOOLEAN);
+опнжедспю LabelVal(оеп a: жекне; int: BOOLEAN);
   оепел
     Value: LONGREAL;
     T: ЛдЕЖК.РСрХО;
     s: ЛдЕЖК.РСйНМЯРяРП;
-    line, col: INTEGER;
+    line, col: жекне;
   мювюкн
     ЛдЕЖК.йННПД_сЯР(line, col);
     ЛдЕЖК.ConstExpr(Value, T);
@@ -1409,11 +1409,11 @@
     йнмеж
   йнмеж LabelVal;
 
-опнжедспю Label(int: BOOLEAN; Labels: ЛрХОШ.РСяОХЯНЙ; LBeg: INTEGER);
+опнжедспю Label(int: BOOLEAN; Labels: ЛрХОШ.РСяОХЯНЙ; LBeg: жекне);
   оепел
-    a, b: INTEGER;
+    a, b: жекне;
     label: РлЕРЙЮ;
-    line, col: INTEGER;
+    line, col: жекне;
   мювюкн
     ЛдЕЖК.йННПД_сЯР(line, col);
     LabelVal(a, int);
@@ -1432,8 +1432,8 @@
     X86.CaseLabel(a, b, LBeg)
   йнмеж Label;
 
-опнжедспю Variant(int: BOOLEAN; Labels: ЛрХОШ.РСяОХЯНЙ; EndCase: INTEGER);
-  оепел LBeg, LEnd: INTEGER;
+опнжедспю Variant(int: BOOLEAN; Labels: ЛрХОШ.РСяОХЯНЙ; EndCase: жекне);
+  оепел LBeg, LEnd: жекне;
   мювюкн
     LBeg := X86.NewLabel();
     LEnd := X86.NewLabel();
@@ -1457,7 +1457,7 @@
   оепел
     e: ЛдЕЖК.РбШПЮФЕМХЕ;
     int: BOOLEAN;
-    line, col, EndCase: INTEGER;
+    line, col, EndCase: жекне;
     Labels: ЛрХОШ.РСяОХЯНЙ;
   мювюкн
     Next;
@@ -1491,8 +1491,8 @@
     ЛяОХЯ.нВХЯРХРЭ(Labels)
   йнмеж CaseOper;
 
-опнжедспю CheckCode(Code: ЛяРП.РяРПНЙЮ; Len, line, col: INTEGER);
-  оепел i: INTEGER;
+опнжедспю CheckCode(Code: ЛяРП.РяРПНЙЮ; Len, line, col: жекне);
+  оепел i: жекне;
   мювюкн
     Assert(~ODD(Len), line, col, 34);
     дкъ i := 0 дн Len - 1 декюрэ
@@ -1500,9 +1500,9 @@
     йнмеж
   йнмеж CheckCode;
 
-опнжедспю StProc(proc: INTEGER);
+опнжедспю StProc(proc: жекне);
   оепел
-    line, col, line2, col2, iValue: INTEGER;
+    line, col, line2, col2, iValue: жекне;
     e1, e2: ЛдЕЖК.РбШПЮФЕМХЕ;
     Value: LONGREAL;
     T: ЛдЕЖК.РСрХО;
@@ -1732,7 +1732,7 @@
 опнжедспю IdentOper;
   оепел
     e1, e2: ЛдЕЖК.РбШПЮФЕМХЕ;
-    line, col, ccall: INTEGER;
+    line, col, ccall: жекне;
     begcall: X86.РСоСМЙРюЯЛ;
     s: ЛдЕЖК.РСйНМЯРяРП;
   мювюкн
@@ -1844,11 +1844,11 @@
 опнжедспю яРЮПР;
   оепел SelfName, SelfPath, CName, CExt, FName, Path, StdPath,
       Name, Ext, temp, system, stk, felf: ЛяРП.РяРПНЙЮ;
-      platform, stksize: INTEGER;
+      platform, stksize: жекне;
 
-    опнжедспю яРЩЙпЮГЛ_оНКСВ(): INTEGER;
+    опнжедспю яРЩЙпЮГЛ_оНКСВ(): жекне;
       оепел
-        res, i: INTEGER;
+        res, i: жекне;
       мювюкн
         res := 0;
         i := 0;
@@ -1865,8 +1865,8 @@
         бепмсрэ res
       йнмеж яРЩЙпЮГЛ_оНКСВ;
 
-    опнжедспю getver(): INTEGER;
-      оепел res, i: INTEGER; err: BOOLEAN;
+    опнжедспю getver(): жекне;
+      оепел res, i: жекне; err: BOOLEAN;
 
       опнжедспю hexdgt(c: CHAR): BOOLEAN;
           бепмсрэ ("0" <= c) & (c <= "9") хкх
@@ -1874,8 +1874,8 @@
                    ("a" <= c) & (c <= "f")
         йнмеж hexdgt;
 
-      опнжедспю hex(c: CHAR): INTEGER;
-        оепел res: INTEGER;
+      опнжедспю hex(c: CHAR): жекне;
+        оепел res: жекне;
         мювюкн
             еякх    ("0" <= c) & (c <= "9") рнцдю
               res := ORD(c) - ORD("0")

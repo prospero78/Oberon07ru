@@ -50,9 +50,9 @@
 оепел
 
     Lex: ЛяРП.РяРПНЙЮ;
-    File, ccol, cline, count*, col*, line*, tLex*, vINT*: INTEGER;
+    File, ccol, cline, count*, col*, line*, tLex*, vINT*: жекне;
     vFLT*: LONGREAL; id*: ЛрХОШ.РСсГЕК; ch, vCHX*: CHAR;
-    buf, bufpos: INTEGER; CR, UTF8: BOOLEAN;
+    buf, bufpos: жекне; CR, UTF8: BOOLEAN;
     Nodes: люяяхб 256 хг ЛрХОШ.РСсГЕК;
     _START*, _version*: ЛрХОШ.РСсГЕК;
 
@@ -169,9 +169,9 @@
         INC(bufpos)
     йнмеж Next;
 
-опнжедспю тЮИК_нРЙПШРЭ*(FName: люяяхб хг CHAR; оеп FHandle: INTEGER): BOOLEAN;
+опнжедспю тЮИК_нРЙПШРЭ*(FName: люяяхб хг CHAR; оеп FHandle: жекне): BOOLEAN;
     оепел
-      n, size: INTEGER; c: CHAR;
+      n, size: жекне; c: CHAR;
     мювюкн
         File := ЛтЮИК.нРЙПШРЭ(FName, 0);
         FHandle := File;
@@ -255,9 +255,9 @@
         йнмеж
     йнмеж хЛЪ_оНКСВ;
 
-опнжедспю вХЯКН16_Б_жЕКНЕ*(ch: CHAR): INTEGER;
+опнжедспю вХЯКН16_Б_жЕКНЕ*(ch: CHAR): жекне;
     оепел
-        Res: INTEGER;
+        Res: жекне;
     мювюкн
         Res := ORD(ch);
         бшанп ch хг
@@ -268,8 +268,8 @@
         бепмсрэ Res
     йнмеж вХЯКН16_Б_жЕКНЕ;
 
-опнжедспю яРП_Б_жЕК16*(str: ЛяРП.РяРПНЙЮ): INTEGER;
-    оепел i, res, n: INTEGER; flag: BOOLEAN;
+опнжедспю яРП_Б_жЕК16*(str: ЛяРП.РяРПНЙЮ): жекне;
+    оепел i, res, n: жекне; flag: BOOLEAN;
     мювюкн
         res := 0;
         i := 0;
@@ -292,7 +292,7 @@
     йнмеж яРП_Б_жЕК16;
 
 опнжедспю яРП_Б_яХЛБ(str: ЛяРП.РяРПНЙЮ): CHAR;
-    оепел res: INTEGER;
+    оепел res: жекне;
     мювюкн
         res := яРП_Б_жЕК16(str);
         еякх (res < 0) хкх (res > 0FFH) рнцдю
@@ -302,9 +302,9 @@
         бепмсрэ CHR(res)
     йнмеж яРП_Б_яХЛБ;
 
-опнжедспю яРП_Б_жЕК*(str: ЛяРП.РяРПНЙЮ): INTEGER;
+опнжедспю яРП_Б_жЕК*(str: ЛяРП.РяРПНЙЮ): жекне;
     оепел
-        i, res: INTEGER;
+        i, res: жекне;
         flag: BOOLEAN;
     мювюкн
         res := 0;
@@ -332,18 +332,18 @@
 
 опнжедспю яРП_Б_бЕЫ(str: ЛяРП.РяРПНЙЮ): LONGREAL;
     оепел
-        i, scale: INTEGER;
+        i, scale: жекне;
         res, m, d: LONGREAL;
         minus, nez: BOOLEAN;
 
-    опнжедспю Error(e: INTEGER; оеп cont: BOOLEAN);
+    опнжедспю Error(e: жекне; оеп cont: BOOLEAN);
         мювюкн
             tLex := e;
             res := 0.0D0;
             cont := кнфэ
         йнмеж Error;
 
-    опнжедспю Inf(оеп cont: BOOLEAN; оеп i: INTEGER);
+    опнжедспю Inf(оеп cont: BOOLEAN; оеп i: жекне);
         мювюкн
             еякх ЛсРХКЭ.аЕЯЙНМЕВ(res) рнцдю
               Error(lxERR7, cont)
@@ -430,7 +430,7 @@
         йнмеж part4;
 
     опнжедспю part5(): BOOLEAN;
-          оепел cont: BOOLEAN; i: INTEGER;
+          оепел cont: BOOLEAN; i: жекне;
           мювюкн
             cont := хярхмю;
             еякх scale = ЛйНМЯР.ЖЕКНЕ_ЛЮЙЯ рнцдю
@@ -510,9 +510,9 @@
         яХЛБ_дНАЮБ(0X)
     йнмеж вХЯКН_оНКСВ;
 
-опнжедспю пЮГДЕКХРЕКЭ_оНКСВ(ch: CHAR): INTEGER;
+опнжедспю пЮГДЕКХРЕКЭ_оНКСВ(ch: CHAR): жекне;
     оепел
-        Res: INTEGER;
+        Res: жекне;
     мювюкн
         бшанп ch хг
         |"+": Res := lxPlus
@@ -542,7 +542,7 @@
 
 опнжедспю йНЛЛЕМРЮПХИ_оПНОСЯРХРЭ;
     оепел
-        c, level: INTEGER;
+        c, level: жекне;
         cont: BOOLEAN;
     мювюкн
         c := 1;
@@ -665,7 +665,7 @@
         йнмеж
     йнмеж кЕЙЯЕЛЮ_оНКСВ;
 
-опнжедспю йКЧВяКНБН_дНАЮБХРЭ(Name: ЛяРП.РяРПНЙЮ; key: INTEGER);
+опнжедспю йКЧВяКНБН_дНАЮБХРЭ(Name: ЛяРП.РяРПНЙЮ; key: жекне);
     оепел node: ЛрХОШ.РСсГЕК;
     мювюкн
         node := сГЕК_дНАЮБ(Name);
@@ -674,7 +674,7 @@
 
 опнжедспю мЮЯРПНХРЭ;
     оепел
-      i: INTEGER;
+      i: жекне;
       node: ЛрХОШ.РСсГЕК;
     мювюкн
         дкъ i := 0 дн LEN(Nodes) - 1 декюрэ
