@@ -11,7 +11,7 @@
 ֿ׀־ײִֵ׃׀ְ ׂוסע*(cond: BOOLEAN; line, col, code: INTEGER);
   ְֽ׳ְֻ־
     ֵָֻׁ ~cond ׂ־ְֳִ
-      ל־ר.ErrMsgPos(line, col, code, לװאיכ.פאיכ.טלÿ);
+      ל־ר.ׁממבשÊממנה(line, col, code, לװאיכ.פאיכ.טלÿ);
       לֿנמצ.ַאךמםקטעü(1)
     Ê־ֵֽײ
   Ê־ֵֽײ ׂוסע;
