@@ -739,7 +739,7 @@
 опнжедспю FpuLoad(local: жекне; float: аскебн);
   оепел i: жекне;
   мювюкн
-    дкъ i := fpu дн 1 BY -1 декюрэ
+    дкъ i := fpu дн 1 он -1 декюрэ
       IntByte("DD45", "DD85", -local - i * 8)
     йнмеж;
     еякх float рнцдю
@@ -752,7 +752,7 @@
   оепел i: жекне;
   мювюкн
     еякх ccall # 0 рнцдю
-      дкъ i := level дн level - bases + ORD(ccall = 1) + 1 BY -1 декюрэ
+      дкъ i := level дн level - bases + ORD(ccall = 1) + 1 он -1 декюрэ
         IntByte("FF75", "FFB5", 4 * i + 4)
       йнмеж;
       еякх ccall = 1 рнцдю
@@ -928,7 +928,7 @@
       OutInt(ASR(Local, 2));
       OutCode("9CFCF3AB8BFA9D")
     хмюве
-      дкъ i := 4 дн Local BY 4 декюрэ
+      дкъ i := 4 дн Local он 4 декюрэ
         OutCode("6A00")
       йнмеж
     йнмеж;
@@ -1391,7 +1391,7 @@
   оепел i: жекне;
   мювюкн
     PopEDX;
-    дкъ i := n - 1 дн 0 BY -1 декюрэ
+    дкъ i := n - 1 дн 0 он -1 декюрэ
       PushConst(A[i])
     йнмеж;
     PushEDX
@@ -1458,7 +1458,7 @@
 опнжедспю ExtArray*(A: TIDX; n, m: жекне);
   оепел i: жекне;
   мювюкн
-    дкъ i := n - 1 дн 0 BY -1 декюрэ
+    дкъ i := n - 1 дн 0 он -1 декюрэ
       PushConst(A[i])
     йнмеж;
     OutByte(54H);

@@ -185,7 +185,7 @@
       юеякх (id.VarKind = ЛдЕЖК.paramvar) хкх (id.T.tType IN {TARRAY, TRECORD}) рнцдю
         еякх ЛдЕЖК.Dim(e.T) > 0 рнцдю
           n := ЛдЕЖК.Dim(e.T);
-          дкъ i := n дн 1 BY -1 декюрэ
+          дкъ i := n дн 1 он -1 декюрэ
             X86.LocalAdr(id.Offset + i * 4, bases);
             X86.Load(TINTEGER)
           йнмеж

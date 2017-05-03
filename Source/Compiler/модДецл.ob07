@@ -371,6 +371,7 @@
     Охрана_Создать;
     PushStProc("ABS",      stABS);
     PushStProc("ASR",      stASR);
+    
     PushStProc("ASSERT",   stASSERT);
     PushStProc("ЗАЩИТА",   stASSERT);
     
@@ -400,6 +401,7 @@
     
     PushStProc("LEN",      stLEN);
     PushStProc("LSL",      stLSL);
+    
     PushStProc("LONG",     stLONG);
     PushStProc("ДЛИН",     stLONG);
     
@@ -418,12 +420,14 @@
     
     PushStProc("ROR",      stROR);
     PushStType("SET",      TSET);
+    
     PushStProc("SHORT",    stSHORT);
     PushStProc("КОРОТ",    stSHORT);
     
     PushStProc("UNPK",     stUNPK);
     PushStProc("BITS",     stBITS);
     PushStProc("LSR",      stLSR);
+    
     PushStProc("LENGTH",   stLENGTH);
     PushStProc("ДЛИНА",   stLENGTH);
     Охрана_Создать
