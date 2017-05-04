@@ -504,7 +504,7 @@
       res := ДЛИН(FLT(FLOOR(a) MOD FLOOR(b)))
     ИНАЧЕ
     КОНЕЦ;
-    мПров.Тест(~мУтиль.Бесконеч(res), line, col, FOVER);
+    мПров.Тест(~мУтиль.ЕслиБесконеч(res), line, col, FOVER);
     ВЫБОР T.tType ИЗ
     |TINTEGER: 
       мПров.Тест((res <= ДЛИН(FLT(мКонст.целое_макс))) & (res >= ДЛИН(FLT(мКонст.целое_мин))), line, col, IOVER)
