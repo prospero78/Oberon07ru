@@ -38,7 +38,7 @@
   lxBY = 3; lxDIV = 6;
   lxMOD = 17; 
 
-  lxNot = 55; lxAnd = 56; lxComma = 57; lxSemi = 58;
+  lxSemi = 58;
   lxStick = 59; lxLRound = 60; lxLSquare = 61; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
   lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69; lxColon = 70;
   lxEQ = 71; lxNE = 72; lxLT = 73; lxGT = 74; lxLE = 75; lxGE = 76;
@@ -290,7 +290,7 @@
             КОНЕЦ
           КОНЕЦ;
           e.T := e.T.Base
-        ПОКАНЕ мСкан.tLex # lxComma;
+        ПОКАНЕ мСкан.tLex # мКонст.опЗапятая;
         Check(lxRSquare);
         e.vparam := ЛОЖЬ;
         guard := ЛОЖЬ;
@@ -392,7 +392,7 @@
       ЕСЛИ flag ТОГДА
         s := s + {FLOOR(a.Value) .. FLOOR(b.Value)}
       КОНЕЦ;
-      ЕСЛИ мСкан.tLex = lxComma ТОГДА
+      ЕСЛИ мСкан.tLex = мКонст.опЗапятая ТОГДА
         Next;
         Assert2(мСкан.tLex # lxRCurly, 36)
       ИНАЧЕ
@@ -477,7 +477,7 @@
       pExpr(e1);
       Assert(e1.T.tType = TINTEGER, line, col, 52);
       Выраж_Загрузить(e1);
-      Check(lxComma);
+      Check(мКонст.опЗапятая);
       Next;
       мДецл.Коорд_Уст(line, col);
       pExpr(e2);
@@ -626,7 +626,7 @@
       pExpr(e1);
       Assert(e1.T.tType = TINTEGER, line, col, 52);
       Выраж_Загрузить(e1);
-      Check(lxComma);
+      Check(мКонст.опЗапятая);
       Next;
       мДецл.Коорд_Уст(line, col);
       pExpr(e1);
@@ -870,7 +870,7 @@
       КОНЕЦ;
       param := param.следующ(мДецл.туПоле);
       ЕСЛИ param # ПУСТО ТОГДА
-        Check(lxComma);
+        Check(мКонст.опЗапятая);
         Next
       КОНЕЦ
     КОНЕЦ;
@@ -978,7 +978,7 @@
       pExpr(e);
       Check(lxRRound);
       Next
-    |lxNot:
+    |мКонст.опОтриц:
       Next;
       мДецл.Коорд_Уст(line, col);
       Factor(e);
@@ -1065,7 +1065,7 @@
       ИНАЧЕ
         X86.idivmod(Op = lxMOD)
       КОНЕЦ
-    |lxAnd, мКонст.lxOR:
+    |мКонст.опИ, мКонст.lxOR:
       Assert((a.T.tType = TBOOLEAN) & (b.T.tType = TBOOLEAN), line, col, 37)
     |мКонст.ксВ:
       Assert((a.T.tType = TINTEGER) & (b.T.tType = TSET), line, col, 37);
@@ -1119,18 +1119,18 @@
     Factor(e);
     ПОКА (мСкан.tLex = мКонст.опУмнож) ИЛИ (мСкан.tLex = мКонст.опДелен) ИЛИ
       (мСкан.tLex = lxDIV) ИЛИ (мСкан.tLex = lxMOD) ИЛИ
-       (мСкан.tLex = lxAnd) ДЕЛАТЬ
+       (мСкан.tLex = мКонст.опИ) ДЕЛАТЬ
       Выраж_Загрузить(e);
       мДецл.Коорд_Уст(line, col);
       Op := мСкан.tLex;
       Next;
-      ЕСЛИ Op = lxAnd ТОГДА
+      ЕСЛИ Op = мКонст.опИ ТОГДА
         L := X86.NewLabel();
         X86.IfWhile(L, ЛОЖЬ)
       КОНЕЦ;
       Factor(a);
       Выраж_Загрузить(a);
-      ЕСЛИ Op = lxAnd ТОГДА
+      ЕСЛИ Op = мКонст.опИ ТОГДА
         X86.Label(L)
       КОНЕЦ;
       Operation(e, a, Op, line, col)
@@ -1439,7 +1439,7 @@
     LEnd := X86.NewLabel();
     ЕСЛИ ~((мСкан.tLex = lxStick) ИЛИ (мСкан.tLex = мКонст.ксКОНЕЦ)) ТОГДА
       Label(int, Labels, LBeg);
-      ПОКА мСкан.tLex = lxComma ДЕЛАТЬ
+      ПОКА мСкан.tLex = мКонст.опЗапятая ДЕЛАТЬ
         Next;
         Label(int, Labels, LBeg)
       КОНЕЦ;
@@ -1519,7 +1519,7 @@
       Assert(e1.eType = eVAR, line, col, 63);
       Assert(~e1.Read, line, col, 115);
       Assert(e1.T.tType = TINTEGER, line, col, 128);
-      ЕСЛИ мСкан.tLex = lxComma ТОГДА
+      ЕСЛИ мСкан.tLex = мКонст.опЗапятая ТОГДА
         Next;
         мДецл.Коорд_Уст(line, col);
         мДецл.ConstExpr(Value, T);
@@ -1560,7 +1560,7 @@
       Assert(e1.eType = eVAR, line, col, 63);
       Assert(~e1.Read, line, col, 115);
       Assert(e1.T.tType = TSET, line, col, 138);
-      Check(lxComma);
+      Check(мКонст.опЗапятая);
       Next;
       мДецл.Коорд_Уст(line, col);
       мДецл.ConstExpr(Value, T);
@@ -1577,7 +1577,7 @@
     |stCOPY:
       Expr(e1);
       Assert(ЕслиСтрока(e1), line, col, 141);
-      Check(lxComma);
+      Check(мКонст.опЗапятая);
       ЕСЛИ e1.T.tType = TSTRING ТОГДА
         str := мДецл.Стр_Получ(e1.Value);
         ЕСЛИ str.Len = 1 ТОГДА
@@ -1610,7 +1610,7 @@
       Expr(e1);
       Assert(e1.T.tType = TBOOLEAN, line, col, 117);
       Выраж_Загрузить(e1);
-      ЕСЛИ мСкан.tLex = lxComma ТОГДА
+      ЕСЛИ мСкан.tLex = мКонст.опЗапятая ТОГДА
         Next;
         мДецл.Коорд_Уст(line, col);
         мДецл.ConstExpr(Value, T);
@@ -1625,7 +1625,7 @@
       Assert(e1.eType = eVAR, line, col, 63);
       Assert(e1.T.tType IN {TREAL, TLONGREAL}, line, col, 149);
       Assert(~e1.Read, line, col, 115);
-      Check(lxComma);
+      Check(мКонст.опЗапятая);
       Next;
       мДецл.Коорд_Уст(line, col);
       ЕСЛИ proc = stUNPK ТОГДА
@@ -1652,7 +1652,7 @@
       Expr(e1);
       Assert(e1.T.tType = TINTEGER, line, col, 52);
       Выраж_Загрузить(e1);
-      Check(lxComma);
+      Check(мКонст.опЗапятая);
       Next;
       мДецл.Коорд_Уст(line, col);
       Expr(e1);
@@ -1663,7 +1663,7 @@
       Expr(e1);
       Assert(e1.T.tType = TINTEGER, line, col, 52);
       Выраж_Загрузить(e1);
-      Check(lxComma);
+      Check(мКонст.опЗапятая);
       Next;
       мДецл.Коорд_Уст(line, col);
       ЕСЛИ proc = sysGET ТОГДА
@@ -1696,7 +1696,7 @@
       Expr(e1);
       Assert(e1.T.tType = TINTEGER, line, col, 52);
       Выраж_Загрузить(e1);
-      Check(lxComma);
+      Check(мКонст.опЗапятая);
       X86.PushCall(begcall);
       X86.Param;
       Next;
@@ -1704,7 +1704,7 @@
       Expr(e1);
       Assert(e1.T.tType = TINTEGER, line, col, 52);
       Выраж_Загрузить(e1);
-      Check(lxComma);
+      Check(мКонст.опЗапятая);
       X86.Вызов_Закончить;
       Next;
       мДецл.Коорд_Уст(line, col);

@@ -41,7 +41,7 @@
   lxDIV = 6;
   lxMOD = 17;
 
-  lxNot = 55; lxAnd = 56; lxComma = 57; lxSemi = 58;
+  lxSemi = 58;
   lxStick = 59; lxLRound = 60; lxLSquare = 61; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
   lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69; lxColon = 70;
   lxEQ = 71; lxNE = 72; lxLT = 73; lxGT = 74; lxLE = 75; lxGE = 76;
@@ -255,7 +255,7 @@
         |мКонст.ксИЗ:      code := 41
         |lxRCurly:  code := 51
         |lxLRound:  code := 56
-        |lxComma:   code := 61
+        |мКонст.опЗапятая:   code := 61
         |мКонст.ксТОГДА:    code := 98
         |lxRSquare: code := 109
         |мКонст.ксДЕЛАТЬ:      code := 118
@@ -572,7 +572,7 @@
       мПров.Тест(bi # 0, line, col, 48);
       TRes := Ta;
       Res := Arith(a, b, Ta, Op, line, col)
-    |lxAnd:
+    |мКонст.опИ:
       мПров.Тест(Ta.tType = TBOOLEAN, line, col, 37);
       Res := ДЛИН(FLT(ORD((ai # 0) & (bi # 0))))
     |мКонст.lxOR:
@@ -619,7 +619,7 @@
       Res := ДЛИН(FLT(ORD(ai IN BITS(bi))))
     ИНАЧЕ
     КОНЕЦ;
-    ЕСЛИ Relation(Op) ИЛИ (Op = lxAnd) ИЛИ (Op = мКонст.lxOR) ТОГДА
+    ЕСЛИ Relation(Op) ИЛИ (Op = мКонст.опИ) ИЛИ (Op = мКонст.lxOR) ТОГДА
       TRes := sttypes[TBOOLEAN]
     КОНЕЦ
   КОНЕЦ Calc;
@@ -809,7 +809,7 @@
         field.Export := ИСТИНА;
         Next
       КОНЕЦ;
-      ЕСЛИ мСкан.tLex = lxComma ТОГДА
+      ЕСЛИ мСкан.tLex = мКонст.опЗапятая ТОГДА
         Next;
         Check(lxIDENT)
       АЕСЛИ мСкан.tLex = lxColon ТОГДА
@@ -969,7 +969,7 @@
         КОНЕЦ
       КОНЕЦ;
       Next;
-      ЕСЛИ мСкан.tLex = lxComma ТОГДА
+      ЕСЛИ мСкан.tLex = мКонст.опЗапятая ТОГДА
         Next;
         Check(lxIDENT)
       АЕСЛИ мСкан.tLex = lxColon ТОГДА
@@ -1094,8 +1094,8 @@
     id_T: БУЛЕВО;
   НАЧАЛО
     ВЫБОР мСкан.tLex ИЗ
-    |мКонст.ксМАССИВ, lxComma:
-      ЕСЛИ мСкан.tLex = lxComma ТОГДА
+    |мКонст.ксМАССИВ, мКонст.опЗапятая:
+      ЕСЛИ мСкан.tLex = мКонст.опЗапятая ТОГДА
         мПров.Тест2(Comma, 39)
       КОНЕЦ;
       Next;
@@ -1104,7 +1104,7 @@
       мПров.Тест(T.tType = TINTEGER, line, col, 52);
       мПров.Тест(v > 0.0D0, line, col, 78);
       nov := Тип_Создать(TARRAY, FLOOR(v), 0, 0, ПУСТО, ЛОЖЬ, NewType);
-      ЕСЛИ мСкан.tLex = lxComma ТОГДА
+      ЕСЛИ мСкан.tLex = мКонст.опЗапятая ТОГДА
         nov.Base := StructType(ИСТИНА, ПУСТО)
       АЕСЛИ мСкан.tLex = мКонст.ксИЗ ТОГДА
         Next;
@@ -1295,7 +1295,7 @@
       ПОКА мСкан.tLex = lxIDENT ДЕЛАТЬ
         IdentDef;
         PushIdent(Name, line, col, IDVAR, ПУСТО, ПУСТО, Export, 0);
-        ЕСЛИ мСкан.tLex = lxComma ТОГДА
+        ЕСЛИ мСкан.tLex = мКонст.опЗапятая ТОГДА
           Next;
           Check(lxIDENT)
         АЕСЛИ мСкан.tLex = lxColon ТОГДА
@@ -1457,7 +1457,7 @@
           alias := name;
           cond := 1
       |1: ВЫБОР мСкан.tLex ИЗ
-          |lxComma:  Модуль_Добавить(0)
+          |мКонст.опЗапятая:  Модуль_Добавить(0)
           |lxSemi:   Модуль_Добавить(4); Next
           |lxAssign: cond := 2
           ИНАЧЕ
@@ -1468,7 +1468,7 @@
           Коорд_Уст(nameline, namecol);
           cond := 3
       |3: ВЫБОР мСкан.tLex ИЗ
-          |lxComma: Модуль_Добавить(0)
+          |мКонст.опЗапятая: Модуль_Добавить(0)
           |lxSemi:  Модуль_Добавить(4); Next
           ИНАЧЕ
             мПров.Тест2(ЛОЖЬ, 29)
