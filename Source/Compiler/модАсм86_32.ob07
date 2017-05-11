@@ -1098,7 +1098,7 @@
 ѕ–ќ÷≈ƒ”–ј OnError*(n: ÷≈Ћќ≈);
   Ќј„јЋќ
     OutByte(68H);
-    OutInt(м”тиль.Line * 16 + n);
+    OutInt(м”тиль.строка * 16 + n);
     jmplong(JMP, м”тиль.Unit + 3)
    ќЌ≈÷ OnError;
 
@@ -1253,7 +1253,7 @@
   Ќј„јЋќ
     PopEDX;
     OutCode("85D2751368");
-    OutInt(м”тиль.Line * 16 + 1);
+    OutInt(м”тиль.строка * 16 + 1);
     PushInt(м”тиль.Unit + 2);
     ≈—Ћ» proc = stASSERT “ќ√ƒј
       OutCode("6A026A")
