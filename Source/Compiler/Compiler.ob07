@@ -1034,7 +1034,7 @@
   ПЕРЕМ n, m: ЦЕЛОЕ;
   НАЧАЛО
     ВЫБОР Op ИЗ
-    |мКонст.опПлюс, мКонст.опМинус, мКонст.lxMult, lxSlash:
+    |мКонст.опПлюс, мКонст.опМинус, мКонст.опУмнож, lxSlash:
       Assert((a.T.tType IN {TINTEGER, TREAL, TLONGREAL, TSET}) & (a.T.tType = b.T.tType), line, col, 37);
       Assert(~((Op = lxSlash) & (a.T.tType = TINTEGER)), line, col, 37);
       ВЫБОР a.T.tType ИЗ
@@ -1056,7 +1056,7 @@
           ЕСЛИ Op = lxMOD ТОГДА
             n := ORD(-BITS(LSL(-1, n)));
             X86.PushConst(n);
-            X86.Set(мКонст.lxMult)
+            X86.Set(мКонст.опУмнож)
           ИНАЧЕ
             X86.PushConst(n);
             X86.StFunc(X86.stASR)
@@ -1117,7 +1117,7 @@
     Op, line, col, L: ЦЕЛОЕ;
   НАЧАЛО
     Factor(e);
-    ПОКА (мСкан.tLex = мКонст.lxMult) ИЛИ (мСкан.tLex = lxSlash) ИЛИ
+    ПОКА (мСкан.tLex = мКонст.опУмнож) ИЛИ (мСкан.tLex = lxSlash) ИЛИ
       (мСкан.tLex = lxDIV) ИЛИ (мСкан.tLex = lxMOD) ИЛИ
        (мСкан.tLex = lxAnd) ДЕЛАТЬ
       Выраж_Загрузить(e);

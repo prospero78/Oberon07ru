@@ -36,7 +36,7 @@
 
   ADIM* = 5;
 
-  lxMinus = 52; lxMult = 53; lxSlash = 54;
+  lxMult = 53; lxSlash = 54;
   lxEQ = 71; lxNE = 72; lxLT = 73; lxGT = 74; lxLE = 75; lxGE = 76;
 
   TINTEGER = 1; TREAL = 2; TLONGREAL = 3; TCHAR = 4; TSET = 5; TBOOLEAN = 6; TVOID = 7;
@@ -1010,7 +1010,7 @@
     PopEDX;
     ВЫБОР Op ИЗ
     |мКонст.опПлюс:  OutCode("011424")
-    |lxMinus: OutCode("291424")
+    |мКонст.опМинус: OutCode("291424")
     |lxMult:  OutCode("58F7EA"); PushEAX
     ИНАЧЕ
     КОНЕЦ
@@ -1022,7 +1022,7 @@
     OutCode("58");
     ВЫБОР Op ИЗ
     |мКонст.опПлюс:  OutCode("0B")
-    |lxMinus: OutCode("F7D223")
+    |мКонст.опМинус: OutCode("F7D223")
     |lxMult:  OutCode("23")
     |lxSlash: OutCode("33")
     ИНАЧЕ
@@ -1062,7 +1062,7 @@
     OutCode("DE");
     ВЫБОР op ИЗ
     |мКонст.опПлюс:  n := 0C1H
-    |lxMinus: n := 0E9H
+    |мКонст.опМинус: n := 0E9H
     |lxMult:  n := 0C9H
     |lxSlash: n := 0F9H
     ИНАЧЕ
