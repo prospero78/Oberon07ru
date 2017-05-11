@@ -38,7 +38,7 @@
   lxBY = 3; lxDIV = 6;
   lxMOD = 17; 
 
-  lxSlash = 54; lxNot = 55; lxAnd = 56; lxComma = 57; lxSemi = 58;
+  lxNot = 55; lxAnd = 56; lxComma = 57; lxSemi = 58;
   lxStick = 59; lxLRound = 60; lxLSquare = 61; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
   lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69; lxColon = 70;
   lxEQ = 71; lxNE = 72; lxLT = 73; lxGT = 74; lxLE = 75; lxGE = 76;
@@ -1034,9 +1034,9 @@
   ПЕРЕМ n, m: ЦЕЛОЕ;
   НАЧАЛО
     ВЫБОР Op ИЗ
-    |мКонст.опПлюс, мКонст.опМинус, мКонст.опУмнож, lxSlash:
+    |мКонст.опПлюс, мКонст.опМинус, мКонст.опУмнож, мКонст.опДелен:
       Assert((a.T.tType IN {TINTEGER, TREAL, TLONGREAL, TSET}) & (a.T.tType = b.T.tType), line, col, 37);
-      Assert(~((Op = lxSlash) & (a.T.tType = TINTEGER)), line, col, 37);
+      Assert(~((Op = мКонст.опДелен) & (a.T.tType = TINTEGER)), line, col, 37);
       ВЫБОР a.T.tType ИЗ
       |TINTEGER: X86.Int(Op)
       |TSET: X86.Set(Op)
@@ -1117,7 +1117,7 @@
     Op, line, col, L: ЦЕЛОЕ;
   НАЧАЛО
     Factor(e);
-    ПОКА (мСкан.tLex = мКонст.опУмнож) ИЛИ (мСкан.tLex = lxSlash) ИЛИ
+    ПОКА (мСкан.tLex = мКонст.опУмнож) ИЛИ (мСкан.tLex = мКонст.опДелен) ИЛИ
       (мСкан.tLex = lxDIV) ИЛИ (мСкан.tLex = lxMOD) ИЛИ
        (мСкан.tLex = lxAnd) ДЕЛАТЬ
       Выраж_Загрузить(e);

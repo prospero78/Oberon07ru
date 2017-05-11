@@ -36,7 +36,6 @@
 
   ADIM* = 5;
 
-  lxMult = 53; lxSlash = 54;
   lxEQ = 71; lxNE = 72; lxLT = 73; lxGT = 74; lxLE = 75; lxGE = 76;
 
   TINTEGER = 1; TREAL = 2; TLONGREAL = 3; TCHAR = 4; TSET = 5; TBOOLEAN = 6; TVOID = 7;
@@ -1011,7 +1010,7 @@
     ВЫБОР Op ИЗ
     |мКонст.опПлюс:  OutCode("011424")
     |мКонст.опМинус: OutCode("291424")
-    |lxMult:  OutCode("58F7EA"); PushEAX
+    |мКонст.опУмнож:  OutCode("58F7EA"); PushEAX
     ИНАЧЕ
     КОНЕЦ
   КОНЕЦ Int;
@@ -1023,8 +1022,8 @@
     ВЫБОР Op ИЗ
     |мКонст.опПлюс:  OutCode("0B")
     |мКонст.опМинус: OutCode("F7D223")
-    |lxMult:  OutCode("23")
-    |lxSlash: OutCode("33")
+    |мКонст.опУмнож:  OutCode("23")
+    |мКонст.опДелен: OutCode("33")
     ИНАЧЕ
     КОНЕЦ;
     OutCode("C2");
@@ -1063,8 +1062,8 @@
     ВЫБОР op ИЗ
     |мКонст.опПлюс:  n := 0C1H
     |мКонст.опМинус: n := 0E9H
-    |lxMult:  n := 0C9H
-    |lxSlash: n := 0F9H
+    |мКонст.опУмнож:  n := 0C9H
+    |мКонст.опДелен: n := 0F9H
     ИНАЧЕ
     КОНЕЦ;
     OutByte(n);
