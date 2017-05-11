@@ -38,8 +38,7 @@
     lxDIV = 6; 
      
     lxMOD = 17;
-
-    lxSemi = 58;
+    
     lxStick = 59; lxLRound = 60; lxLSquare = 61; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
     lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69; lxColon = 70;
     lxEQ = 71; lxNE = 72; lxLT = 73; lxGT = 74; lxLE = 75; lxGE = 76;
@@ -522,7 +521,7 @@
         |"~": Res := м онст.опќтриц
         |"&": Res := м онст.оп»
         |",": Res := м онст.оп«ап€та€
-        |";": Res := lxSemi
+        |";": Res := м онст.оп“чк«пт
         |"|": Res := lxStick
         |"[": Res := lxLSquare
         |"{": Res := lxLCurly

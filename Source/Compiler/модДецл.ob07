@@ -41,7 +41,6 @@
   lxDIV = 6;
   lxMOD = 17;
 
-  lxSemi = 58;
   lxStick = 59; lxLRound = 60; lxLSquare = 61; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
   lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69; lxColon = 70;
   lxEQ = 71; lxNE = 72; lxLT = 73; lxGT = 74; lxLE = 75; lxGE = 76;
@@ -246,7 +245,7 @@
       ¬џЅќ– key »«
         |м онст.ксћќƒ”Ћ№:  code := 21
         |lxIDENT:   code := 22
-        |lxSemi:    code := 23
+        |м онст.оп“чк«пт:    code := 23
         |м онст.кс ќЌ≈÷:     code := 24
         |lxDot:     code := 25
         |lxEQ:      code := 35
@@ -820,7 +819,7 @@
         мѕров.“ест(Tf # ѕ”—“ќ, line, col, 42);
         мѕров.“ест(notrecurs(id_T, Tf), line, col, 96);
         SetFields(T, Tf, »—“»Ќј);
-        ≈—Ћ» м—кан.tLex = lxSemi “ќ√ƒј
+        ≈—Ћ» м—кан.tLex = м онст.оп“чк«пт “ќ√ƒј
           Next;
           Check(lxIDENT)
         »Ќј„≈
@@ -994,7 +993,7 @@
       break := Ћќ∆№;
       ѕќ¬“ќ–я“№
         Section(T);
-        ≈—Ћ» м—кан.tLex = lxSemi “ќ√ƒј
+        ≈—Ћ» м—кан.tLex = м онст.оп“чк«пт “ќ√ƒј
           Next
         »Ќј„≈
           break := »—“»Ќј
@@ -1262,7 +1261,7 @@
         Check(lxEQ);
         Next;
         ConstExpr(Value, T);
-        Check(lxSemi);
+        Check(м онст.оп“чк«пт);
         last.Value := Value;
         last.T := T;
         Next
@@ -1283,7 +1282,7 @@
         ѕамќш_ѕроверить(NewType = ѕ”—“ќ);
         last.T := NewType;
         T := StructType(Ћќ∆№, NewType);
-        Check(lxSemi);
+        Check(м онст.оп“чк«пт);
         Next
        ќЌ≈÷
      ќЌ≈÷;
@@ -1304,7 +1303,7 @@
           T := ParseType(line, col);
           мѕров.“ест(T # ѕ”—“ќ, line, col, 42);
           SetVars(T);
-          Check(lxSemi);
+          Check(м онст.оп“чк«пт);
           Next
         »Ќј„≈
           мѕров.“ест2(Ћќ∆№, 85)
@@ -1333,7 +1332,7 @@
       ќхрана_—оздать;
       FormalList(ѕ”—“ќ, curBlock.T.Base);
       id.T.Call := Call;
-      Check(lxSemi);
+      Check(м онст.оп“чк«пт);
       Next;
       DeclSeq;
       id.LocalSize := id.VarSize - id.ParamSize;
@@ -1361,7 +1360,7 @@
       Check(lxIDENT);
       мѕров.“ест2(м—кан.id = Name, 87);
       Next;
-      Check(lxSemi);
+      Check(м онст.оп“чк«пт);
       Next;
       X86.ProcEnd(id.Number, (id.ParamSize + (id.Level - 3) * 4) * ORD(curBlock.T.Call IN {stdcall, winapi, defcall}), func, curBlock.T.Base.tType IN {TREAL, TLONGREAL});
       PopBlock;
@@ -1458,7 +1457,7 @@
           cond := 1
       |1: ¬џЅќ– м—кан.tLex »«
           |м онст.оп«ап€та€:  ћодуль_ƒобавить(0)
-          |lxSemi:   ћодуль_ƒобавить(4); Next
+          |м онст.оп“чк«пт:   ћодуль_ƒобавить(4); Next
           |lxAssign: cond := 2
           »Ќј„≈
             мѕров.“ест2(Ћќ∆№, 28)
@@ -1469,7 +1468,7 @@
           cond := 3
       |3: ¬џЅќ– м—кан.tLex »«
           |м онст.оп«ап€та€: ћодуль_ƒобавить(0)
-          |lxSemi:  ћодуль_ƒобавить(4); Next
+          |м онст.оп“чк«пт:  ћодуль_ƒобавить(4); Next
           »Ќј„≈
             мѕров.“ест2(Ћќ∆№, 29)
            ќЌ≈÷
@@ -1552,7 +1551,7 @@
       PushIdent(unit.Name, м—кан.line, м—кан.col, IDMOD, sttypes[TVOID], unit, Ћќ∆№, 0);
       idmod := unit.Idents.следующ(ту»м€);
       ќхрана_—оздать;
-      Next; Check(lxSemi);
+      Next; Check(м онст.оп“чк«пт);
       Next;
       ≈—Ћ» м—кан.tLex = м онст.кс»ћѕќ–“ “ќ√ƒј
         temp := main;
