@@ -1099,7 +1099,7 @@
   Ќј„јЋќ
     OutByte(68H);
     OutInt(м”тиль.строка_ном * 16 + n);
-    jmplong(JMP, м”тиль.Unit + 3)
+    jmplong(JMP, м”тиль.модуль_ном + 3)
    ќЌ≈÷ OnError;
 
 ѕ–ќ÷≈ƒ”–ј idivmod*(opmod: Ѕ”Ћ≈¬ќ);
@@ -1254,7 +1254,7 @@
     PopEDX;
     OutCode("85D2751368");
     OutInt(м”тиль.строка_ном * 16 + 1);
-    PushInt(м”тиль.Unit + 2);
+    PushInt(м”тиль.модуль_ном + 2);
     ≈—Ћ» proc = stASSERT “ќ√ƒј
       OutCode("6A026A")
     »Ќј„≈
