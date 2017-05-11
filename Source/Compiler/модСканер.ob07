@@ -39,7 +39,7 @@
      
     lxMOD = 17;
 
-    lxMinus = 52; lxMult = 53; lxSlash = 54; lxNot = 55; lxAnd = 56; lxComma = 57; lxSemi = 58;
+    lxMult = 53; lxSlash = 54; lxNot = 55; lxAnd = 56; lxComma = 57; lxSemi = 58;
     lxStick = 59; lxLRound = 60; lxLSquare = 61; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
     lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69; lxColon = 70;
     lxEQ = 71; lxNE = 72; lxLT = 73; lxGT = 74; lxLE = 75; lxGE = 76;
@@ -516,7 +516,7 @@
     НАЧАЛО
         ВЫБОР ch ИЗ
         |"+": Res := мКонст.опПлюс
-        |"-": Res := lxMinus
+        |"-": Res := мКонст.опМинус
         |"*": Res := lxMult
         |"/": Res := lxSlash
         |"~": Res := lxNot

@@ -38,7 +38,7 @@
   lxBY = 3; lxDIV = 6;
   lxMOD = 17; 
 
-  lxPlus = 51; lxMinus = 52; lxMult = 53; lxSlash = 54; lxNot = 55; lxAnd = 56; lxComma = 57; lxSemi = 58;
+  lxMult = 53; lxSlash = 54; lxNot = 55; lxAnd = 56; lxComma = 57; lxSemi = 58;
   lxStick = 59; lxLRound = 60; lxLSquare = 61; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
   lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69; lxColon = 70;
   lxEQ = 71; lxNE = 72; lxLT = 73; lxGT = 74; lxLE = 75; lxGE = 76;
@@ -387,7 +387,7 @@
         X86.Dup
       КОНЕЦ;
       X86.rset;
-      X86.Set(lxPlus);
+      X86.Set(мКонст.опПлюс);
       flag := (a.eType = eCONST) & (b.eType = eCONST) & flag;
       ЕСЛИ flag ТОГДА
         s := s + {FLOOR(a.Value) .. FLOOR(b.Value)}
@@ -1034,7 +1034,7 @@
   ПЕРЕМ n, m: ЦЕЛОЕ;
   НАЧАЛО
     ВЫБОР Op ИЗ
-    |lxPlus, lxMinus, lxMult, lxSlash:
+    |мКонст.опПлюс, мКонст.опМинус, lxMult, lxSlash:
       Assert((a.T.tType IN {TINTEGER, TREAL, TLONGREAL, TSET}) & (a.T.tType = b.T.tType), line, col, 37);
       Assert(~((Op = lxSlash) & (a.T.tType = TINTEGER)), line, col, 37);
       ВЫБОР a.T.tType ИЗ
@@ -1143,7 +1143,7 @@
     Op, line, col, uOp, uline, ucol, L: ЦЕЛОЕ;
   НАЧАЛО
     uOp := 0;
-    ЕСЛИ (мСкан.tLex = lxPlus) ИЛИ (мСкан.tLex = lxMinus) ТОГДА
+    ЕСЛИ (мСкан.tLex = мКонст.опПлюс) ИЛИ (мСкан.tLex = мКонст.опМинус) ТОГДА
       мДецл.Коорд_Уст(uline, ucol);
       uOp := мСкан.tLex;
       Next
@@ -1152,7 +1152,7 @@
     ЕСЛИ uOp # 0 ТОГДА
       Assert(e.T.tType IN {TINTEGER, TREAL, TLONGREAL, TSET}, uline, ucol, 37);
       Выраж_Загрузить(e);
-      ЕСЛИ uOp = lxMinus ТОГДА
+      ЕСЛИ uOp = мКонст.опМинус ТОГДА
         ВЫБОР e.T.tType ИЗ
         |TINTEGER: X86.NegInt
         |TSET: X86.NegSet
@@ -1160,7 +1160,7 @@
         ИНАЧЕ
         КОНЕЦ
       КОНЕЦ;
-      ЕСЛИ (uOp = lxMinus) & (e.eType = eCONST) ТОГДА
+      ЕСЛИ (uOp = мКонст.опМинус) & (e.eType = eCONST) ТОГДА
         ВЫБОР e.T.tType ИЗ
         |TINTEGER:
           Assert(e.Value # ДЛИН(FLT(мКонст.целое_мин)), uline, ucol, мДецл.IOVER)
@@ -1175,7 +1175,7 @@
       КОНЕЦ;
       e.vparam := ЛОЖЬ
     КОНЕЦ;
-    ПОКА (мСкан.tLex = lxPlus) ИЛИ (мСкан.tLex = lxMinus) ИЛИ (мСкан.tLex = мКонст.lxOR) ДЕЛАТЬ
+    ПОКА (мСкан.tLex = мКонст.опПлюс) ИЛИ (мСкан.tLex = мКонст.опМинус) ИЛИ (мСкан.tLex = мКонст.lxOR) ДЕЛАТЬ
       Выраж_Загрузить(e);
       мДецл.Коорд_Уст(line, col);
       Op := мСкан.tLex;
