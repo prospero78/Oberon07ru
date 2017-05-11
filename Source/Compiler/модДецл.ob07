@@ -41,7 +41,7 @@
   lxDIV = 6;
   lxMOD = 17;
 
-  lxPlus = 51; lxMinus = 52; lxMult = 53; lxSlash = 54; lxNot = 55; lxAnd = 56; lxComma = 57; lxSemi = 58;
+  lxMinus = 52; lxMult = 53; lxSlash = 54; lxNot = 55; lxAnd = 56; lxComma = 57; lxSemi = 58;
   lxStick = 59; lxLRound = 60; lxLSquare = 61; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
   lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69; lxColon = 70;
   lxEQ = 71; lxNE = 72; lxLT = 73; lxGT = 74; lxLE = 75; lxGE = 76;
@@ -491,7 +491,7 @@
   ПЕРЕМ res: ДЛИНВЕЩ;
   НАЧАЛО
     ВЫБОР Op ИЗ
-    |lxPlus: res := a + b
+    |мКонст.опПлюс: res := a + b
     |lxMinus: res := a - b
     |lxMult: res := a * b
     |lxSlash:
@@ -516,7 +516,7 @@
     КОНЕЦ;
     ЕСЛИ (res = 0.0D0) & (T.tType IN {TREAL, TLONGREAL}) ИЛИ (ABS(res) < ДЛИН(мКонст.вещ_мин)) & (T.tType = TREAL) ТОГДА
       ВЫБОР Op ИЗ
-      |lxPlus:  мПров.Тест(a = -b, line, col, UNDER)
+      |мКонст.опПлюс:  мПров.Тест(a = -b, line, col, UNDER)
       |lxMinus: мПров.Тест(a = b, line, col, UNDER)
       |lxMult:  мПров.Тест((a = 0.0D0) ИЛИ (b = 0.0D0), line, col, UNDER)
       |lxSlash: мПров.Тест((a = 0.0D0), line, col, UNDER)
@@ -551,13 +551,13 @@
       мПров.Тест(Ta = Tb, line, col, 37)
     КОНЕЦ;
     ВЫБОР Op ИЗ
-    |lxPlus, lxMinus, lxMult, lxSlash:
+    |мКонст.опПлюс, lxMinus, lxMult, lxSlash:
       мПров.Тест(~((Op = lxSlash) & (Ta.tType = TINTEGER)), line, col, 37);
       ЕСЛИ Ta.tType IN {TINTEGER, TREAL, TLONGREAL} ТОГДА
         Res := Arith(a, b, Ta, Op, line, col)
       АЕСЛИ Ta.tType = TSET ТОГДА
         ВЫБОР Op ИЗ
-        |lxPlus:  Res := ДЛИН(FLT(ORD(BITS(ai) + BITS(bi))))
+        |мКонст.опПлюс:  Res := ДЛИН(FLT(ORD(BITS(ai) + BITS(bi))))
         |lxMinus: Res := ДЛИН(FLT(ORD(BITS(ai) - BITS(bi))))
         |lxMult:  Res := ДЛИН(FLT(ORD(BITS(ai) * BITS(bi))))
         |lxSlash: Res := ДЛИН(FLT(ORD(BITS(ai) / BITS(bi))))
