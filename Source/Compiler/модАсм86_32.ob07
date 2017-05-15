@@ -36,7 +36,7 @@
 
   ADIM* = 5;
 
-  lxEQ = 71; lxNE = 72; lxLT = 73; lxGT = 74; lxLE = 75; lxGE = 76;
+  lxNE = 72; lxLT = 73; lxGT = 74; lxLE = 75; lxGE = 76;
 
   TINTEGER = 1; TREAL = 2; TLONGREAL = 3; TCHAR = 4; TSET = 5; TBOOLEAN = 6; TVOID = 7;
   TNIL = 8; TCARD16 = 9; TSTRING = 10; TARRAY = 11; TRECORD = 12; TPOINTER = 13; TPROC = 14;
@@ -1075,7 +1075,7 @@
   НАЧАЛО
     OutCode("33C9DED9DFE09E0F");
     ВЫБОР Op ИЗ
-    |lxEQ: n := 94H
+    |мКонст.lxEQ: n := 94H
     |lxNE: n := 95H
     |lxLT: n := 97H
     |lxGT: n := 92H
@@ -1153,7 +1153,7 @@
   НАЧАЛО
     OutCode("33C95A583BC20F"); current.tcmd := ICMP1;
     ВЫБОР Op ИЗ
-    |lxEQ: n := 94H
+    |мКонст.lxEQ: n := 94H
     |lxNE: n := 95H
     |lxLT: n := 9CH
     |lxGT: n := 9FH
@@ -1541,7 +1541,7 @@
 ПРОЦЕДУРА strcmp*(Op, LR: ЦЕЛОЕ);
   НАЧАЛО
     ВЫБОР Op ИЗ
-    |lxEQ: PushConst(0)
+    |мКонст.lxEQ: PushConst(0)
     |lxNE: PushConst(1)
     |lxLT: PushConst(2)
     |lxGT: PushConst(3)
