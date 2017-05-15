@@ -38,7 +38,7 @@
   lxBY = 3; lxDIV = 6;
   lxMOD = 17; 
 
-  lxStick = 59; lxLRound = 60; lxLSquare = 61; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
+  lxLRound = 60; lxLSquare = 61; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
   lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69;
   lxNE = 72; lxGT = 74; lxLE = 75; lxGE = 76;
 
@@ -1436,7 +1436,7 @@
   НАЧАЛО
     LBeg := X86.NewLabel();
     LEnd := X86.NewLabel();
-    ЕСЛИ ~((мСкан.tLex = lxStick) ИЛИ (мСкан.tLex = мКонст.ксКОНЕЦ)) ТОГДА
+    ЕСЛИ ~((мСкан.tLex = мКонст.опВыбор) ИЛИ (мСкан.tLex = мКонст.ксКОНЕЦ)) ТОГДА
       Label(int, Labels, LBeg);
       ПОКА мСкан.tLex = мКонст.опЗапятая ДЕЛАТЬ
         Next;
@@ -1473,7 +1473,7 @@
     Next;
     EndCase := X86.NewLabel();
     Variant(int, Labels, EndCase);
-    ПОКА мСкан.tLex = lxStick ДЕЛАТЬ
+    ПОКА мСкан.tLex = мКонст.опВыбор ДЕЛАТЬ
       Next;
       Variant(int, Labels, EndCase)
     КОНЕЦ;
