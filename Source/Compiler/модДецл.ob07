@@ -248,7 +248,7 @@
         |мКонст.опТчкЗпт:    code := 23
         |мКонст.ксКОНЕЦ:     code := 24
         |lxDot:     code := 25
-        |мКонст.lxEQ:      code := 35
+        |мКонст.опРавно:      code := 35
         |lxRRound:  code := 38
         |мКонст.ксДО:      code := 40
         |мКонст.ксИЗ:      code := 41
@@ -476,7 +476,7 @@
   ПЕРЕМ Res: БУЛЕВО;
   НАЧАЛО
     ВЫБОР Op ИЗ
-    |мКонст.lxEQ, lxNE, lxLT, lxGT,
+    |мКонст.опРавно, lxNE, lxLT, lxGT,
      lxLE, lxGE, мКонст.ксВ, мКонст.ксЕСТЬ:
       Res := ИСТИНА
     ИНАЧЕ
@@ -533,7 +533,7 @@
     sa := Стр_Получ(a);
     sb := Стр_Получ(b);
     ВЫБОР Op ИЗ
-    |мКонст.lxEQ, lxNE: Res := ДЛИН(FLT(ORD(sa.Str = sb.Str)))
+    |мКонст.опРавно, lxNE: Res := ДЛИН(FLT(ORD(sa.Str = sb.Str)))
     |lxLT, lxGT: Res := ДЛИН(FLT(ORD(sa.Str < sb.Str)))
     |lxLE, lxGE: Res := ДЛИН(FLT(ORD(sa.Str <= sb.Str)))
     ИНАЧЕ
@@ -577,7 +577,7 @@
     |мКонст.lxOR:
       мПров.Тест(Ta.tType = TBOOLEAN, line, col, 37);
       Res := ДЛИН(FLT(ORD((ai # 0) ИЛИ (bi # 0))))
-    |мКонст.lxEQ, lxNE:
+    |мКонст.опРавно, lxNE:
       ЕСЛИ Ta.tType = TSTRING ТОГДА
         Res := strcmp(a, b, Op)
       ИНАЧЕ
@@ -1258,7 +1258,7 @@
         IdentDef;
         PushIdent(Name, line, col, IDCONST, ПУСТО, ПУСТО, Export, 0);
         last := unit.Idents.следующ(туИмя);
-        Check(мКонст.lxEQ);
+        Check(мКонст.опРавно);
         Next;
         ConstExpr(Value, T);
         Check(мКонст.опТчкЗпт);
@@ -1276,7 +1276,7 @@
         PushIdent(Name, line, col, IDTYPE, ПУСТО, ПУСТО, Export, 0);
         last := unit.Idents.следующ(туИмя);
         unit.ExportType := Export;
-        Check(мКонст.lxEQ);
+        Check(мКонст.опРавно);
         Next;
         НОВ(NewType);
         ПамОш_Проверить(NewType = ПУСТО);

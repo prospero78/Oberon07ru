@@ -1075,7 +1075,7 @@
   НАЧАЛО
     OutCode("33C9DED9DFE09E0F");
     ВЫБОР Op ИЗ
-    |мКонст.lxEQ: n := 94H
+    |мКонст.опРавно: n := 94H
     |lxNE: n := 95H
     |lxLT: n := 97H
     |lxGT: n := 92H
@@ -1153,7 +1153,7 @@
   НАЧАЛО
     OutCode("33C95A583BC20F"); current.tcmd := ICMP1;
     ВЫБОР Op ИЗ
-    |мКонст.lxEQ: n := 94H
+    |мКонст.опРавно: n := 94H
     |lxNE: n := 95H
     |lxLT: n := 9CH
     |lxGT: n := 9FH
@@ -1541,7 +1541,7 @@
 ПРОЦЕДУРА strcmp*(Op, LR: ЦЕЛОЕ);
   НАЧАЛО
     ВЫБОР Op ИЗ
-    |мКонст.lxEQ: PushConst(0)
+    |мКонст.опРавно: PushConst(0)
     |lxNE: PushConst(1)
     |lxLT: PushConst(2)
     |lxGT: PushConst(3)

@@ -1082,7 +1082,7 @@
       ИНАЧЕ
         X86.CmpInt(Op)
       КОНЕЦ
-    |мКонст.lxEQ, lxNE:
+    |мКонст.опРавно, lxNE:
       Assert(((a.T.tType IN {TINTEGER, TREAL, TLONGREAL, TSET, TBOOLEAN}) & (a.T.tType = b.T.tType)) ИЛИ
         (IsChr(a) ИЛИ ЕслиСтрока(a)) & (IsChr(b) ИЛИ ЕслиСтрока(b)) ИЛИ
         (a.T.tType IN {TPOINTER, TPROC, TNIL}) & (b.T.tType = TNIL) ИЛИ
