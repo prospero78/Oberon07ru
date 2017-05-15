@@ -237,7 +237,7 @@
     мПров.Тест2(мСкан.tLex # lxEOF, 27)
   КОНЕЦ Next;
 
-ПРОЦЕДУРА Check*(key: ЦЕЛОЕ);
+ПРОЦЕДУРА Ключ_Проверить*(key: ЦЕЛОЕ);
   ПЕРЕМ
     code: ЦЕЛОЕ;
   НАЧАЛО
@@ -266,7 +266,7 @@
       КОНЕЦ;
       мПров.Тест2(ЛОЖЬ, code)
     КОНЕЦ
-  КОНЕЦ Check;
+  КОНЕЦ Ключ_Проверить;
 
 ПРОЦЕДУРА CheckIdent(Name: мТипы.туУзел): БУЛЕВО;
   ПЕРЕМ
@@ -660,9 +660,9 @@
       АЕСЛИ id.iType = IDMOD ТОГДА
         Unit := id.Unit;
         Next;
-        Check(lxDot);
+        Ключ_Проверить(lxDot);
         Next;
-        Check(lxIDENT);
+        Ключ_Проверить(lxIDENT);
         Name := мСкан.id;
         NamePtrBase := Name;
         id := GetQIdent(Unit, Name);
@@ -810,7 +810,7 @@
       КОНЕЦ;
       ЕСЛИ мСкан.tLex = мКонст.опЗапятая ТОГДА
         Next;
-        Check(lxIDENT)
+        Ключ_Проверить(lxIDENT)
       АЕСЛИ мСкан.tLex = мКонст.опДвоеточ ТОГДА
         Next;
         Коорд_Уст(line, col);
@@ -821,7 +821,7 @@
         SetFields(T, Tf, ИСТИНА);
         ЕСЛИ мСкан.tLex = мКонст.опТчкЗпт ТОГДА
           Next;
-          Check(lxIDENT)
+          Ключ_Проверить(lxIDENT)
         ИНАЧЕ
           мПров.Тест2(мСкан.tLex = мКонст.ксКОНЕЦ, 86)
         КОНЕЦ
@@ -915,11 +915,11 @@
   НАЧАЛО
     ЕСЛИ мСкан.tLex = мКонст.ксМАССИВ ТОГДА
       Next;
-      Check(мКонст.ксИЗ);
+      Ключ_Проверить(мКонст.ксИЗ);
       Next;
       TA := Тип_Создать(TARRAY, 0, 0, 0, FormalType(line, col), ЛОЖЬ, ПУСТО)
     ИНАЧЕ
-      Check(lxIDENT);
+      Ключ_Проверить(lxIDENT);
       TA := IdType(line, col);
       мПров.Тест(TA # ПУСТО, line, col, 42);
     КОНЕЦ
@@ -945,7 +945,7 @@
     ЕСЛИ мСкан.tLex = мКонст.ксПЕРЕМ ТОГДА
       ByRef := ИСТИНА;
       Next;
-      Check(lxIDENT)
+      Ключ_Проверить(lxIDENT)
     КОНЕЦ;
     cont := ИСТИНА;
     ПОКА cont ДЕЛАТЬ
@@ -970,7 +970,7 @@
       Next;
       ЕСЛИ мСкан.tLex = мКонст.опЗапятая ТОГДА
         Next;
-        Check(lxIDENT)
+        Ключ_Проверить(lxIDENT)
       АЕСЛИ мСкан.tLex = мКонст.опДвоеточ ТОГДА
         Next;
         Tf := FormalType(line, col);
@@ -1020,11 +1020,11 @@
     ЕСЛИ мСкан.tLex = lxLRound ТОГДА
       Next;
       ParamType(T);
-      Check(мКонст.опСкобкаПрКр);
+      Ключ_Проверить(мКонст.опСкобкаПрКр);
       Next;
       ЕСЛИ мСкан.tLex = мКонст.опДвоеточ ТОГДА
         Next;
-        Check(lxIDENT);
+        Ключ_Проверить(lxIDENT);
         Res := IdType(line, col);
         мПров.Тест(Res # ПУСТО, line, col, 42);
         мПров.Тест(~(Res.tType IN {TRECORD, TARRAY}), line, col, 82)
@@ -1052,7 +1052,7 @@
         мПров.Тест2(ЛОЖЬ, 44)
       КОНЕЦ;
       Next;
-      Check(мКонст.опСкобкаПрКв);
+      Ключ_Проверить(мКонст.опСкобкаПрКв);
       Next;
     ИНАЧЕ
       Call := defcall
@@ -1077,7 +1077,7 @@
         мПров.Тест2(ЛОЖЬ, 103)
       КОНЕЦ;
       Next;
-      Check(мКонст.опСкобкаПрКв);
+      Ключ_Проверить(мКонст.опСкобкаПрКв);
       Next;
     ИНАЧЕ
       rec := record
@@ -1131,20 +1131,20 @@
       ЕСЛИ мСкан.tLex = lxLRound ТОГДА
         Next;
         Коорд_Уст(line2, col2);
-        Check(lxIDENT);
+        Ключ_Проверить(lxIDENT);
         nov.Base := IdType(line, col);
         мПров.Тест(nov.Base # ПУСТО, line, col, 42);
         мПров.Тест(nov.Base.tType = TRECORD, line, col, 80);
         мПров.Тест(notrecurs(ИСТИНА, nov.Base), line, col, 96);
         nov.Size := nov.Base.Size;
         nov.Align := nov.Base.Align;
-        Check(мКонст.опСкобкаПрКр);
+        Ключ_Проверить(мКонст.опСкобкаПрКр);
         Next;
         мПров.Тест(nov.Rec = record, line, col, 112);
         мПров.Тест(nov.Base.Rec = record, line2, col2, 113)
       КОНЕЦ;
       ReadFields(nov);
-      Check(мКонст.ксКОНЕЦ);
+      Ключ_Проверить(мКонст.ксКОНЕЦ);
       nov.Size := X86.Align(nov.Size, nov.Align);
       ЕСЛИ nov.Base # ПУСТО ТОГДА
         X86.AddRec(nov.Base.Number)
@@ -1154,7 +1154,7 @@
       Next
     |мКонст.ксУКАЗАТЕЛЬ:
       Next;
-      Check(мКонст.ксДО);
+      Ключ_Проверить(мКонст.ксДО);
       Next;
       nov := Тип_Создать(TPOINTER, 0, 4, 0, ПУСТО, ЛОЖЬ, NewType);
       nov.Align := 4;
@@ -1258,10 +1258,10 @@
         IdentDef;
         PushIdent(Name, line, col, IDCONST, ПУСТО, ПУСТО, Export, 0);
         last := unit.Idents.следующ(туИмя);
-        Check(мКонст.опРавно);
+        Ключ_Проверить(мКонст.опРавно);
         Next;
         ConstExpr(Value, T);
-        Check(мКонст.опТчкЗпт);
+        Ключ_Проверить(мКонст.опТчкЗпт);
         last.Value := Value;
         last.T := T;
         Next
@@ -1276,13 +1276,13 @@
         PushIdent(Name, line, col, IDTYPE, ПУСТО, ПУСТО, Export, 0);
         last := unit.Idents.следующ(туИмя);
         unit.ExportType := Export;
-        Check(мКонст.опРавно);
+        Ключ_Проверить(мКонст.опРавно);
         Next;
         НОВ(NewType);
         ПамОш_Проверить(NewType = ПУСТО);
         last.T := NewType;
         T := StructType(ЛОЖЬ, NewType);
-        Check(мКонст.опТчкЗпт);
+        Ключ_Проверить(мКонст.опТчкЗпт);
         Next
       КОНЕЦ
     КОНЕЦ;
@@ -1296,14 +1296,14 @@
         PushIdent(Name, line, col, IDVAR, ПУСТО, ПУСТО, Export, 0);
         ЕСЛИ мСкан.tLex = мКонст.опЗапятая ТОГДА
           Next;
-          Check(lxIDENT)
+          Ключ_Проверить(lxIDENT)
         АЕСЛИ мСкан.tLex = мКонст.опДвоеточ ТОГДА
           Next;
           Коорд_Уст(line, col);
           T := ParseType(line, col);
           мПров.Тест(T # ПУСТО, line, col, 42);
           SetVars(T);
-          Check(мКонст.опТчкЗпт);
+          Ключ_Проверить(мКонст.опТчкЗпт);
           Next
         ИНАЧЕ
           мПров.Тест2(ЛОЖЬ, 85)
@@ -1317,7 +1317,7 @@
         мПров.Тест(unit.Level = 3, line, col, 45);
         мПров.Тест(unit.sys, line, col, 111)
       КОНЕЦ;
-      Check(lxIDENT);
+      Ключ_Проверить(lxIDENT);
       IdentDef;
       PushIdent(Name, line, col, IDPROC, Тип_Создать(TPROC, 0, 4, 0, sttypes[TVOID], ИСТИНА, ПУСТО), ПУСТО, Export, 0);
       id := unit.Idents.следующ(туИмя);
@@ -1332,7 +1332,7 @@
       Охрана_Создать;
       FormalList(ПУСТО, curBlock.T.Base);
       id.T.Call := Call;
-      Check(мКонст.опТчкЗпт);
+      Ключ_Проверить(мКонст.опТчкЗпт);
       Next;
       DeclSeq;
       id.LocalSize := id.VarSize - id.ParamSize;
@@ -1343,7 +1343,7 @@
       КОНЕЦ;
       func := curBlock.T.Base.tType # TVOID;
       ЕСЛИ func ТОГДА
-        Check(мКонст.ксВЕРНУТЬ);
+        Ключ_Проверить(мКонст.ксВЕРНУТЬ);
         мУтиль.КодСтрока_Уст(UnitNumber, мСкан.line);
         Next;
         Коорд_Уст(line, col);
@@ -1355,12 +1355,12 @@
       ИНАЧЕ
         мПров.Тест2(мСкан.tLex # мКонст.ксВЕРНУТЬ, 123)
       КОНЕЦ;
-      Check(мКонст.ксКОНЕЦ);
+      Ключ_Проверить(мКонст.ксКОНЕЦ);
       Next;
-      Check(lxIDENT);
+      Ключ_Проверить(lxIDENT);
       мПров.Тест2(мСкан.id = Name, 87);
       Next;
-      Check(мКонст.опТчкЗпт);
+      Ключ_Проверить(мКонст.опТчкЗпт);
       Next;
       X86.ProcEnd(id.Number, (id.ParamSize + (id.Level - 3) * 4) * ORD(curBlock.T.Call IN {stdcall, winapi, defcall}), func, curBlock.T.Base.tType IN {TREAL, TLONGREAL});
       PopBlock;
@@ -1449,7 +1449,7 @@
     ПОКА cond # 4 ДЕЛАТЬ
       Next;
       ВЫБОР cond ИЗ
-      |0: Check(lxIDENT);
+      |0: Ключ_Проверить(lxIDENT);
           name := мСкан.id;
           Коорд_Уст(line, col);
           Коорд_Уст(nameline, namecol);
@@ -1462,7 +1462,7 @@
           ИНАЧЕ
             мПров.Тест2(ЛОЖЬ, 28)
           КОНЕЦ
-      |2: Check(lxIDENT);
+      |2: Ключ_Проверить(lxIDENT);
           name := мСкан.id;
           Коорд_Уст(nameline, namecol);
           cond := 3
@@ -1543,15 +1543,15 @@
       COPY(Name, unit.File);
       мФайл.Имя_Уст(unit.File);
       StIdent;
-      Next; Check(мКонст.ксМОДУЛЬ);
+      Next; Ключ_Проверить(мКонст.ксМОДУЛЬ);
       
-      Next; Check(lxIDENT);
+      Next; Ключ_Проверить(lxIDENT);
       мПров.Тест2(мУтиль.streq(мСкан.id.имя, name), 33);
       unit.Name := мСкан.id;
       PushIdent(unit.Name, мСкан.line, мСкан.col, IDMOD, sttypes[TVOID], unit, ЛОЖЬ, 0);
       idmod := unit.Idents.следующ(туИмя);
       Охрана_Создать;
-      Next; Check(мКонст.опТчкЗпт);
+      Next; Ключ_Проверить(мКонст.опТчкЗпт);
       Next;
       ЕСЛИ мСкан.tLex = мКонст.ксИМПОРТ ТОГДА
         temp := main;
@@ -1570,10 +1570,10 @@
         Next;
         OpSeq
       КОНЕЦ;
-      Check(мКонст.ксКОНЕЦ);
-      Next; Check(lxIDENT);
+      Ключ_Проверить(мКонст.ксКОНЕЦ);
+      Next; Ключ_Проверить(lxIDENT);
       мПров.Тест2(мСкан.id = unit.Name, 26);
-      Next; Check(lxDot);
+      Next; Ключ_Проверить(lxDot);
       X86.Leave;
       unit.Closed := ИСТИНА;
       мСпис.Очистить(unit.Import);
