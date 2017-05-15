@@ -38,7 +38,7 @@
   lxBY = 3; lxDIV = 6;
   lxMOD = 17; 
 
-  lxLRound = 60; lxLSquare = 61; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
+  lxLRound = 60; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
   lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69;
   lxLE = 75; lxGE = 76;
 
@@ -262,7 +262,7 @@
         e.vparam := Ћќ∆№;
         guard := Ћќ∆№;
         Next
-      |lxLSquare:
+      |м онст.оп—кобкаЋев в:
         LoadVar;
         ѕќ¬“ќ–я“№
           Assert2(e.T.tType = TARRAY, 102);

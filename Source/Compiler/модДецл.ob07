@@ -41,7 +41,7 @@
   lxDIV = 6;
   lxMOD = 17;
 
-  lxLRound = 60; lxLSquare = 61; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
+  lxLRound = 60; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
   lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69;
   lxLE = 75; lxGE = 76;
 
@@ -1037,7 +1037,7 @@
     flag: м—тр.т—трока;
     res: Ѕ”Ћ≈¬ќ;
   Ќј„јЋќ
-    res := м—кан.tLex = lxLSquare;
+    res := м—кан.tLex = м онст.оп—кобкаЋев в;
     ≈—Ћ» res “ќ√ƒј
       Next;
       м—кан.GetLexStr(flag);
@@ -1065,7 +1065,7 @@
     flag: м—тр.т—трока;
     res: Ѕ”Ћ≈¬ќ;
   Ќј„јЋќ
-    res := м—кан.tLex = lxLSquare;
+    res := м—кан.tLex = м онст.оп—кобкаЋев в;
     ≈—Ћ» res “ќ√ƒј
       Next;
       м—кан.GetLexStr(flag);
