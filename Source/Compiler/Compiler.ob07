@@ -38,7 +38,7 @@
   lxBY = 3; lxDIV = 6;
   lxMOD = 17; 
 
-  lxLRound = 60; lxLCurly = 62; lxCaret = 63; lxRSquare = 65;
+  lxLRound = 60; lxLCurly = 62; lxCaret = 63;
   lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69;
   lxLE = 75; lxGE = 76;
 
@@ -290,7 +290,7 @@
            ќЌ≈÷;
           e.T := e.T.Base
         ѕќ јЌ≈ м—кан.tLex # м онст.оп«ап€та€;
-        Check(lxRSquare);
+        Check(м онст.оп—кобкаѕр в);
         e.vparam := Ћќ∆№;
         guard := Ћќ∆№;
         Next

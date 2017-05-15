@@ -41,7 +41,7 @@
   lxDIV = 6;
   lxMOD = 17;
 
-  lxLRound = 60; lxLCurly = 62; lxCaret = 63; lxRSquare = 65;
+  lxLRound = 60; lxLCurly = 62; lxCaret = 63;
   lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69;
   lxLE = 75; lxGE = 76;
 
@@ -256,7 +256,7 @@
         |lxLRound:  code := 56
         |м онст.оп«ап€та€:   code := 61
         |м онст.кс“ќ√ƒј:    code := 98
-        |lxRSquare: code := 109
+        |м онст.оп—кобкаѕр в: code := 109
         |м онст.ксƒ≈Ћј“№:      code := 118
         |м онст.ксѕќ јЌ≈:   code := 119
         |lxAssign:  code := 120
@@ -1052,7 +1052,7 @@
         мѕров.“ест2(Ћќ∆№, 44)
        ќЌ≈÷;
       Next;
-      Check(lxRSquare);
+      Check(м онст.оп—кобкаѕр в);
       Next;
     »Ќј„≈
       Call := defcall
@@ -1077,7 +1077,7 @@
         мѕров.“ест2(Ћќ∆№, 103)
        ќЌ≈÷;
       Next;
-      Check(lxRSquare);
+      Check(м онст.оп—кобкаѕр в);
       Next;
     »Ќј„≈
       rec := record
