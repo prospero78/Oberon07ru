@@ -42,7 +42,7 @@
   lxMOD = 17;
 
   lxStick = 59; lxLRound = 60; lxLSquare = 61; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
-  lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69; lxColon = 70;
+  lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69;
   lxNE = 72; lxLT = 73; lxGT = 74; lxLE = 75; lxGE = 76;
 
   lxERR0 = 100; lxERR1 = 101; lxERR2 = 102; lxERR3 = 103; lxERR4 = 104; lxERR5 = 105; lxERR6 = 106;
@@ -261,7 +261,7 @@
         |мКонст.ксПОКАНЕ:   code := 119
         |lxAssign:  code := 120
         |мКонст.ксВЕРНУТЬ:  code := 124
-        |lxColon:   code := 157
+        |мКонст.lxColon:   code := 157
       ИНАЧЕ
       КОНЕЦ;
       мПров.Тест2(ЛОЖЬ, code)
@@ -811,7 +811,7 @@
       ЕСЛИ мСкан.tLex = мКонст.опЗапятая ТОГДА
         Next;
         Check(lxIDENT)
-      АЕСЛИ мСкан.tLex = lxColon ТОГДА
+      АЕСЛИ мСкан.tLex = мКонст.lxColon ТОГДА
         Next;
         Коорд_Уст(line, col);
         id_T := мСкан.tLex = lxIDENT;
@@ -971,7 +971,7 @@
       ЕСЛИ мСкан.tLex = мКонст.опЗапятая ТОГДА
         Next;
         Check(lxIDENT)
-      АЕСЛИ мСкан.tLex = lxColon ТОГДА
+      АЕСЛИ мСкан.tLex = мКонст.lxColon ТОГДА
         Next;
         Tf := FormalType(line, col);
         мПров.Тест(Dim(Tf) <= X86.ADIM, line, col, 110);
@@ -1022,7 +1022,7 @@
       ParamType(T);
       Check(lxRRound);
       Next;
-      ЕСЛИ мСкан.tLex = lxColon ТОГДА
+      ЕСЛИ мСкан.tLex = мКонст.lxColon ТОГДА
         Next;
         Check(lxIDENT);
         Res := IdType(line, col);
@@ -1297,7 +1297,7 @@
         ЕСЛИ мСкан.tLex = мКонст.опЗапятая ТОГДА
           Next;
           Check(lxIDENT)
-        АЕСЛИ мСкан.tLex = lxColon ТОГДА
+        АЕСЛИ мСкан.tLex = мКонст.lxColon ТОГДА
           Next;
           Коорд_Уст(line, col);
           T := ParseType(line, col);

@@ -39,7 +39,7 @@
   lxMOD = 17; 
 
   lxStick = 59; lxLRound = 60; lxLSquare = 61; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
-  lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69; lxColon = 70;
+  lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69;
   lxNE = 72; lxLT = 73; lxGT = 74; lxLE = 75; lxGE = 76;
 
   TINTEGER = 1; TREAL = 2; TLONGREAL = 3; TCHAR = 4; TSET = 5; TBOOLEAN = 6; TVOID = 7;
@@ -1442,7 +1442,7 @@
         Next;
         Label(int, Labels, LBeg)
        ŒÕ≈÷;
-      Check(lxColon);
+      Check(Ï ÓÌÒÚ.lxColon);
       Next;
       X86.jmp(X86.JMP, LEnd);
       X86.Label(LBeg);
