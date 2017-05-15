@@ -1069,7 +1069,7 @@
     |мКонст.ксВ:
       Assert((a.T.tType = TINTEGER) & (b.T.tType = TSET), line, col, 37);
       X86.inset
-    |мКонст.lxLT, lxLE, lxGT, lxGE:
+    |мКонст.опМеньше, lxLE, lxGT, lxGE:
       Assert(((a.T.tType IN {TINTEGER, TREAL, TLONGREAL}) & (a.T.tType = b.T.tType)) ИЛИ
         (IsChr(a) ИЛИ ЕслиСтрока(a)) & (IsChr(b) ИЛИ ЕслиСтрока(b)) ИЛИ
         (a.T.tType = TSET) & (b.T.tType = TSET) & ((Op = lxLE) ИЛИ (Op = lxGE)), line, col, 37);

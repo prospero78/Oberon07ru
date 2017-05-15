@@ -476,7 +476,7 @@
   ПЕРЕМ Res: БУЛЕВО;
   НАЧАЛО
     ВЫБОР Op ИЗ
-    |мКонст.опРавно, lxNE, мКонст.lxLT, lxGT,
+    |мКонст.опРавно, lxNE, мКонст.опМеньше, lxGT,
      lxLE, lxGE, мКонст.ксВ, мКонст.ксЕСТЬ:
       Res := ИСТИНА
     ИНАЧЕ
@@ -534,7 +534,7 @@
     sb := Стр_Получ(b);
     ВЫБОР Op ИЗ
     |мКонст.опРавно, lxNE: Res := ДЛИН(FLT(ORD(sa.Str = sb.Str)))
-    |мКонст.lxLT, lxGT: Res := ДЛИН(FLT(ORD(sa.Str < sb.Str)))
+    |мКонст.опМеньше, lxGT: Res := ДЛИН(FLT(ORD(sa.Str < sb.Str)))
     |lxLE, lxGE: Res := ДЛИН(FLT(ORD(sa.Str <= sb.Str)))
     ИНАЧЕ
     КОНЕЦ
@@ -586,7 +586,7 @@
       ЕСЛИ Op = lxNE ТОГДА
         Res := ДЛИН(FLT(ORD(Res = 0.0D0)))
       КОНЕЦ
-    |мКонст.lxLT, lxGT:
+    |мКонст.опМеньше, lxGT:
       ЕСЛИ Op = lxGT ТОГДА
         c := a;
         a := b;

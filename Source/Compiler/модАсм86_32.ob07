@@ -1077,7 +1077,7 @@
     ВЫБОР Op ИЗ
     |мКонст.опРавно: n := 94H
     |lxNE: n := 95H
-    |мКонст.lxLT: n := 97H
+    |мКонст.опМеньше: n := 97H
     |lxGT: n := 92H
     |lxLE: n := 93H
     |lxGE: n := 96H
@@ -1155,7 +1155,7 @@
     ВЫБОР Op ИЗ
     |мКонст.опРавно: n := 94H
     |lxNE: n := 95H
-    |мКонст.lxLT: n := 9CH
+    |мКонст.опМеньше: n := 9CH
     |lxGT: n := 9FH
     |lxLE: n := 9EH
     |lxGE: n := 9DH
@@ -1543,7 +1543,7 @@
     ВЫБОР Op ИЗ
     |мКонст.опРавно: PushConst(0)
     |lxNE: PushConst(1)
-    |мКонст.lxLT: PushConst(2)
+    |мКонст.опМеньше: PushConst(2)
     |lxGT: PushConst(3)
     |lxLE: PushConst(4)
     |lxGE: PushConst(5)
