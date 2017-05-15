@@ -98,11 +98,6 @@
     КОНЕЦ
   КОНЕЦ Assert2;
 
-ПРОЦЕДУРА Next;
-  НАЧАЛО
-    мДецл.Next
-  КОНЕЦ Next;
-
 ПРОЦЕДУРА BaseOf(T0, T1: мДецл.туТип): БУЛЕВО;
   НАЧАЛО
     ЕСЛИ (T0.tType = T1.tType) & (T0.tType IN {TRECORD, TPOINTER}) ТОГДА
@@ -147,9 +142,9 @@
     name := мСкан.id;
     id := мДецл.GetIdent(name);
     ЕСЛИ (id # ПУСТО) & (id.iType = IDMOD) ТОГДА
-      Next;
+      мДецл.КлючСлед_Получ;
       мДецл.Ключ_Проверить(lxDot);
-      Next;
+      мДецл.КлючСлед_Получ;
       мДецл.Ключ_Проверить(lxIDENT);
       мДецл.Коорд_Уст(line, col);
       name := мСкан.id;
@@ -160,7 +155,7 @@
     e.vparam := ЛОЖЬ;
     e.deref := ЛОЖЬ;
     e.id := id;
-    Next;
+    мДецл.КлючСлед_Получ;
     ВЫБОР id.iType ИЗ
     |IDVAR:
       e.eType := eVAR;
@@ -233,7 +228,7 @@
             X86.CheckNIL
           КОНЕЦ
         КОНЕЦ;
-        Next;
+        мДецл.КлючСлед_Получ;
         мДецл.Ключ_Проверить(lxIDENT);
         мДецл.Коорд_Уст(line, col);
         name := мСкан.id;
@@ -256,12 +251,12 @@
         e.T := f.T;
         e.vparam := ЛОЖЬ;
         guard := ЛОЖЬ;
-        Next
+        мДецл.КлючСлед_Получ
       |мКонст.опСкобкаЛевКв:
         LoadVar;
         ПОВТОРЯТЬ
           Assert2(e.T.tType = TARRAY, 102);
-          Next;
+          мДецл.КлючСлед_Получ;
           мДецл.Коорд_Уст(line, col);
           pExpr(e1);
           Assert(e1.T.tType = TINTEGER, line, col, 52);
@@ -288,7 +283,7 @@
         мДецл.Ключ_Проверить(мКонст.опСкобкаПрКв);
         e.vparam := ЛОЖЬ;
         guard := ЛОЖЬ;
-        Next
+        мДецл.КлючСлед_Получ
       |lxCaret:
         LoadVar;
         Assert2(e.T.tType = TPOINTER, 104);
@@ -301,14 +296,14 @@
         e.vparam := ЛОЖЬ;
         e.deref := ИСТИНА;
         guard := ЛОЖЬ;
-        Next
+        мДецл.КлючСлед_Получ
       |lxLRound:
         LoadVar;
         ЕСЛИ e.T.tType IN {TRECORD, TPOINTER} ТОГДА
           ЕСЛИ e.T.tType = TRECORD ТОГДА
             Assert2(e.vparam, 108)
           КОНЕЦ;
-          Next;
+          мДецл.КлючСлед_Получ;
           мДецл.Ключ_Проверить(lxIDENT);
           мДецл.Коорд_Уст(line, col);
           T := мДецл.IdType(line, col);
@@ -321,7 +316,7 @@
           Assert(BaseOf(e.T, T), line, col, 108);
           e.T := T;
           мДецл.Ключ_Проверить(мКонст.опСкобкаПрКр);
-          Next;
+          мДецл.КлючСлед_Получ;
           ЕСЛИ e.T.tType = TPOINTER ТОГДА
             ЕСЛИ (мСкан.tLex = lxDot) ИЛИ (мСкан.tLex = lxCaret) ТОГДА
               X86.DupLoadCheck
@@ -350,7 +345,7 @@
     line, col: ЦЕЛОЕ;
     s: SET; flag: БУЛЕВО;
   НАЧАЛО
-    Next;
+    мДецл.КлючСлед_Получ;
     e.eType := eEXP;
     e.T := sttypes[TSET];
     e.Value := 0.0D0;
@@ -368,7 +363,7 @@
       Выраж_Загрузить(a);
       b := a;
       ЕСЛИ мСкан.tLex = lxDbl ТОГДА
-        Next;
+        мДецл.КлючСлед_Получ;
         мДецл.Коорд_Уст(line, col);
         pExpr(b);
         Assert(b.T.tType = TINTEGER, line, col, 52);
@@ -387,7 +382,7 @@
         s := s + {FLOOR(a.Value) .. FLOOR(b.Value)}
       КОНЕЦ;
       ЕСЛИ мСкан.tLex = мКонст.опЗапятая ТОГДА
-        Next;
+        мДецл.КлючСлед_Получ;
         Assert2(мСкан.tLex # lxRCurly, 36)
       ИНАЧЕ
         мДецл.Ключ_Проверить(lxRCurly)
@@ -397,7 +392,7 @@
       e.Value := ДЛИН(FLT(ORD(s)));
       e.eType := eCONST
     КОНЕЦ;
-    Next
+    мДецл.КлючСлед_Получ
   КОНЕЦ Set;
 
 ПРОЦЕДУРА ЕслиСтрока(a: мДецл.тВыражение): БУЛЕВО;
@@ -430,7 +425,7 @@
     e.eType := eEXP;
     мДецл.Коорд_Уст(line2, col2);
     мДецл.Ключ_Проверить(lxLRound);
-    Next;
+    мДецл.КлючСлед_Получ;
     мДецл.Коорд_Уст(line, col);
     ВЫБОР func ИЗ
     |stABS:
@@ -472,7 +467,7 @@
       Assert(e1.T.tType = TINTEGER, line, col, 52);
       Выраж_Загрузить(e1);
       мДецл.Ключ_Проверить(мКонст.опЗапятая);
-      Next;
+      мДецл.КлючСлед_Получ;
       мДецл.Коорд_Уст(line, col);
       pExpr(e2);
       Assert(e2.T.tType = TINTEGER, line, col, 52);
@@ -621,7 +616,7 @@
       Assert(e1.T.tType = TINTEGER, line, col, 52);
       Выраж_Загрузить(e1);
       мДецл.Ключ_Проверить(мКонст.опЗапятая);
-      Next;
+      мДецл.КлючСлед_Получ;
       мДецл.Коорд_Уст(line, col);
       pExpr(e1);
       Assert(e1.T.tType = TINTEGER, line, col, 52);
@@ -650,7 +645,7 @@
       Assert(ЛОЖЬ, line2, col2, 73)
     КОНЕЦ;
     мДецл.Ключ_Проверить(мКонст.опСкобкаПрКр);
-    Next
+    мДецл.КлючСлед_Получ
   КОНЕЦ StFunc;
 
 ПРОЦЕДУРА ProcTypeComp(T1, T2: мДецл.туТип): БУЛЕВО;
@@ -865,11 +860,11 @@
       param := param.следующ(мДецл.туПоле);
       ЕСЛИ param # ПУСТО ТОГДА
         мДецл.Ключ_Проверить(мКонст.опЗапятая);
-        Next
+        мДецл.КлючСлед_Получ
       КОНЕЦ
     КОНЕЦ;
     мДецл.Ключ_Проверить(мКонст.опСкобкаПрКр);
-    Next
+    мДецл.КлючСлед_Получ
   КОНЕЦ Call;
 
 ПРОЦЕДУРА Factor(ПЕР e: мДецл.тВыражение);
@@ -887,7 +882,7 @@
       ЕСЛИ e.eType = ePROC ТОГДА
         ЕСЛИ мСкан.tLex = lxLRound ТОГДА
           Assert2(e.id.T.Base.tType # TVOID, 73);
-          Next;
+          мДецл.КлючСлед_Получ;
           X86.PushCall(begcall);
           Call(e.id.T.Fields.предыдущ(мДецл.туПоле));
           X86.Вызов_Закончить;
@@ -907,7 +902,7 @@
         КОНЕЦ
       АЕСЛИ (e.eType = eVAR) & (e.T.tType = TPROC) & (мСкан.tLex = lxLRound) ТОГДА
         Assert2(e.T.Base.tType # TVOID, 73);
-        Next;
+        мДецл.КлючСлед_Получ;
         X86.PushCall(begcall);
         Call(e.T.Fields.предыдущ(мДецл.туПоле));
         X86.Вызов_Закончить;
@@ -921,17 +916,17 @@
       e.T := sttypes[TNIL];
       e.Value := 0.0D0;
       X86.PushConst(0);
-      Next
+      мДецл.КлючСлед_Получ
     |мКонст.ксИСТИНА:
       e.T := sttypes[TBOOLEAN];
       e.Value := 1.0D0;
       X86.PushConst(1);
-      Next
+      мДецл.КлючСлед_Получ
     |мКонст.ксЛОЖЬ:
       e.T := sttypes[TBOOLEAN];
       e.Value := 0.0D0;
       X86.PushConst(0);
-      Next
+      мДецл.КлючСлед_Получ
     |lxCHX, lxSTRING:
       ЕСЛИ мСкан.tLex = lxSTRING ТОГДА
         мСкан.GetLexStr(Lex);
@@ -951,29 +946,29 @@
         X86.PushConst(ORD(мСкан.vCHX))
       КОНЕЦ;
       e.T := sttypes[TSTRING];
-      Next
+      мДецл.КлючСлед_Получ
     |lxREAL:
       e.T := sttypes[TREAL];
       e.Value := мСкан.vFLT;
       X86.PushFlt(мСкан.vFLT);
-      Next
+      мДецл.КлючСлед_Получ
     |lxLONGREAL:
       e.T := sttypes[TLONGREAL];
       e.Value := мСкан.vFLT;
       X86.PushFlt(мСкан.vFLT);
-      Next
+      мДецл.КлючСлед_Получ
     |lxINT, lxHEX:
       e.T := sttypes[TINTEGER];
       e.Value := ДЛИН(FLT(мСкан.vINT));
       X86.PushConst(мСкан.vINT);
-      Next
+      мДецл.КлючСлед_Получ
     |lxLRound:
-      Next;
+      мДецл.КлючСлед_Получ;
       pExpr(e);
       мДецл.Ключ_Проверить(мКонст.опСкобкаПрКр);
-      Next
+      мДецл.КлючСлед_Получ
     |мКонст.опОтриц:
-      Next;
+      мДецл.КлючСлед_Получ;
       мДецл.Коорд_Уст(line, col);
       Factor(e);
       Assert(e.T.tType = TBOOLEAN, line, col, 37);
@@ -1117,7 +1112,7 @@
       Выраж_Загрузить(e);
       мДецл.Коорд_Уст(line, col);
       Op := мСкан.tLex;
-      Next;
+      мДецл.КлючСлед_Получ;
       ЕСЛИ Op = мКонст.опИ ТОГДА
         L := X86.NewLabel();
         X86.IfWhile(L, ЛОЖЬ)
@@ -1140,7 +1135,7 @@
     ЕСЛИ (мСкан.tLex = мКонст.опПлюс) ИЛИ (мСкан.tLex = мКонст.опМинус) ТОГДА
       мДецл.Коорд_Уст(uline, ucol);
       uOp := мСкан.tLex;
-      Next
+      мДецл.КлючСлед_Получ
     КОНЕЦ;
     Term(e);
     ЕСЛИ uOp # 0 ТОГДА
@@ -1173,7 +1168,7 @@
       Выраж_Загрузить(e);
       мДецл.Коорд_Уст(line, col);
       Op := мСкан.tLex;
-      Next;
+      мДецл.КлючСлед_Получ;
       ЕСЛИ Op = мКонст.lxOR ТОГДА
         L := X86.NewLabel();
         X86.IfWhile(L, ИСТИНА)
@@ -1201,7 +1196,7 @@
     ЕСЛИ мДецл.Relation(мСкан.tLex) ТОГДА
       мДецл.Коорд_Уст(line, col);
       Op := мСкан.tLex;
-      Next;
+      мДецл.КлючСлед_Получ;
       ЕСЛИ Op = мКонст.ксЕСТЬ ТОГДА
         Assert(e.T.tType IN {TRECORD, TPOINTER}, line, col, 37);
         ЕСЛИ e.T.tType = TRECORD ТОГДА
@@ -1270,7 +1265,7 @@
       X86.Label(L)
     КОНЕЦ;
     ПОВТОРЯТЬ
-      Next;
+      мДецл.КлючСлед_Получ;
       мДецл.Коорд_Уст(line, col);
       Expr(e);
       Assert(e.T.tType = TBOOLEAN, line, col, 117);
@@ -1282,20 +1277,20 @@
       КОНЕЦ;
       L3 := X86.NewLabel();
       X86.ifwh(L3);
-      Next;
+      мДецл.КлючСлед_Получ;
       pOpSeq;
       X86.jmp(X86.JMP, L);
       X86.Label(L3)
     ПОКАНЕ мСкан.tLex # мКонст.ксАЕСЛИ;
     ЕСЛИ ~wh & (мСкан.tLex = мКонст.ксИНАЧЕ) ТОГДА
-      Next;
+      мДецл.КлючСлед_Получ;
       pOpSeq
     КОНЕЦ;
     мДецл.Ключ_Проверить(мКонст.ксКОНЕЦ);
     ЕСЛИ ~wh ТОГДА
       X86.Label(L)
     КОНЕЦ;
-    Next
+    мДецл.КлючСлед_Получ
   КОНЕЦ IfWhileOper;
 
 ПРОЦЕДУРА КлСлово_ПОВТОР;
@@ -1303,12 +1298,12 @@
     e: мДецл.тВыражение;
     line, col, L: ЦЕЛОЕ;
   НАЧАЛО
-    Next;
+    мДецл.КлючСлед_Получ;
     L := X86.NewLabel();
     X86.Label(L);
     pOpSeq;
     мДецл.Ключ_Проверить(мКонст.ксПОКАНЕ);
-    Next;
+    мДецл.КлючСлед_Получ;
     мДецл.Коорд_Уст(line, col);
     Expr(e);
     Assert(e.T.tType = TBOOLEAN, line, col, 117);
@@ -1325,7 +1320,7 @@
     name: мТипы.туУзел;
     id: мДецл.туИмя;
   НАЧАЛО
-    Next;
+    мДецл.КлючСлед_Получ;
     мДецл.Ключ_Проверить(lxIDENT);
     name := мСкан.id;
     id := мДецл.GetIdent(name);
@@ -1334,9 +1329,9 @@
     Assert2(id.VarKind = 0, 127);
     Assert2(id.T.tType = TINTEGER, 128);
     Assert2(id.Level = мДецл.unit.Level, 129);
-    Next;
+    мДецл.КлючСлед_Получ;
     мДецл.Ключ_Проверить(lxAssign);
-    Next;
+    мДецл.КлючСлед_Получ;
     мДецл.Коорд_Уст(line, col);
     ЕСЛИ id.Level = 3 ТОГДА
       X86.GlobalAdr(id.Offset)
@@ -1349,14 +1344,14 @@
     Выраж_Загрузить(e);
     X86.Save(TINTEGER);
     мДецл.Ключ_Проверить(мКонст.ксДО);
-    Next;
+    мДецл.КлючСлед_Получ;
     мДецл.Коорд_Уст(line, col);
     Expr(e);
     Assert(e.T.tType = TINTEGER, line, col, 52);
     Выраж_Загрузить(e);
     iValue := 1;
     ЕСЛИ мСкан.tLex = lxBY ТОГДА
-      Next;
+      мДецл.КлючСлед_Получ;
       мДецл.Коорд_Уст(line, col);
       мДецл.ConstExpr(Value, T);
       Assert(T.tType = TINTEGER, line, col, 52);
@@ -1364,12 +1359,12 @@
       Assert(iValue # 0, line, col, 122)
     КОНЕЦ;
     мДецл.Ключ_Проверить(мКонст.ксДЕЛАТЬ);
-    Next;
+    мДецл.КлючСлед_Получ;
     X86.For(iValue > 0, LBeg, LEnd);
     pOpSeq;
     X86.NextFor(iValue, LBeg, LEnd);
     мДецл.Ключ_Проверить(мКонст.ксКОНЕЦ);
-    Next
+    мДецл.КлючСлед_Получ
   КОНЕЦ КлСлово_ДЛЯ;
 
 ПРОЦЕДУРА Метка_Проверить(a, b: ЦЕЛОЕ; Labels: мТипы.туСписок): БУЛЕВО;
@@ -1413,7 +1408,7 @@
     LabelVal(a, int);
     b := a;
     ЕСЛИ мСкан.tLex = lxDbl ТОГДА
-      Next;
+      мДецл.КлючСлед_Получ;
       LabelVal(b, int)
     КОНЕЦ;
     Assert(a <= b, line, col, 54);
@@ -1434,11 +1429,11 @@
     ЕСЛИ ~((мСкан.tLex = мКонст.опВыбор) ИЛИ (мСкан.tLex = мКонст.ксКОНЕЦ)) ТОГДА
       Label(int, Labels, LBeg);
       ПОКА мСкан.tLex = мКонст.опЗапятая ДЕЛАТЬ
-        Next;
+        мДецл.КлючСлед_Получ;
         Label(int, Labels, LBeg)
       КОНЕЦ;
       мДецл.Ключ_Проверить(мКонст.опДвоеточ);
-      Next;
+      мДецл.КлючСлед_Получ;
       X86.jmp(X86.JMP, LEnd);
       X86.Label(LBeg);
       pOpSeq;
@@ -1454,7 +1449,7 @@
     line, col, EndCase: ЦЕЛОЕ;
     Labels: мТипы.туСписок;
   НАЧАЛО
-    Next;
+    мДецл.КлючСлед_Получ;
     мДецл.Коорд_Уст(line, col);
     Expr(e);
     Assert(e.T.tType IN {TCHAR, TSTRING, TINTEGER}, line, col, 156);
@@ -1465,15 +1460,15 @@
     X86.Drop;
     Labels := мСпис.Создать();
     мДецл.ПамОш_Проверить(Labels = ПУСТО);
-    Next;
+    мДецл.КлючСлед_Получ;
     EndCase := X86.NewLabel();
     Variant(int, Labels, EndCase);
     ПОКА мСкан.tLex = мКонст.опВыбор ДЕЛАТЬ
-      Next;
+      мДецл.КлючСлед_Получ;
       Variant(int, Labels, EndCase)
     КОНЕЦ;
     ЕСЛИ мСкан.tLex = мКонст.ксИНАЧЕ ТОГДА
-      Next;
+      мДецл.КлючСлед_Получ;
       pOpSeq
     ИНАЧЕ
       мУтиль.КодСтрока_Уст(мДецл.UnitNumber, мСкан.line);
@@ -1481,7 +1476,7 @@
     КОНЕЦ;
     мДецл.Ключ_Проверить(мКонст.ксКОНЕЦ);
     X86.Label(EndCase);
-    Next;
+    мДецл.КлючСлед_Получ;
     мСпис.Очистить(Labels)
   КОНЕЦ CaseOper;
 
@@ -1505,7 +1500,7 @@
   НАЧАЛО
     мДецл.Коорд_Уст(line2, col2);
     мДецл.Ключ_Проверить(lxLRound);
-    Next;
+    мДецл.КлючСлед_Получ;
     мДецл.Коорд_Уст(line, col);
     ВЫБОР proc ИЗ
     |stINC, stDEC:
@@ -1514,7 +1509,7 @@
       Assert(~e1.Read, line, col, 115);
       Assert(e1.T.tType = TINTEGER, line, col, 128);
       ЕСЛИ мСкан.tLex = мКонст.опЗапятая ТОГДА
-        Next;
+        мДецл.КлючСлед_Получ;
         мДецл.Коорд_Уст(line, col);
         мДецл.ConstExpr(Value, T);
         Assert(T.tType = TINTEGER, line, col, 52);
@@ -1555,7 +1550,7 @@
       Assert(~e1.Read, line, col, 115);
       Assert(e1.T.tType = TSET, line, col, 138);
       мДецл.Ключ_Проверить(мКонст.опЗапятая);
-      Next;
+      мДецл.КлючСлед_Получ;
       мДецл.Коорд_Уст(line, col);
       мДецл.ConstExpr(Value, T);
       Assert(T.tType = TINTEGER, line, col, 52);
@@ -1580,7 +1575,7 @@
         КОНЕЦ
       КОНЕЦ;
       Str(e1);
-      Next;
+      мДецл.КлючСлед_Получ;
       мДецл.Коорд_Уст(line, col);
       Designator(e2);
       Assert(e2.eType = eVAR, line, col, 63);
@@ -1605,7 +1600,7 @@
       Assert(e1.T.tType = TBOOLEAN, line, col, 117);
       Выраж_Загрузить(e1);
       ЕСЛИ мСкан.tLex = мКонст.опЗапятая ТОГДА
-        Next;
+        мДецл.КлючСлед_Получ;
         мДецл.Коорд_Уст(line, col);
         мДецл.ConstExpr(Value, T);
         Assert(T.tType = TINTEGER, line, col, 52);
@@ -1620,7 +1615,7 @@
       Assert(e1.T.tType IN {TREAL, TLONGREAL}, line, col, 149);
       Assert(~e1.Read, line, col, 115);
       мДецл.Ключ_Проверить(мКонст.опЗапятая);
-      Next;
+      мДецл.КлючСлед_Получ;
       мДецл.Коорд_Уст(line, col);
       ЕСЛИ proc = stUNPK ТОГДА
         Designator(e2);
@@ -1647,7 +1642,7 @@
       Assert(e1.T.tType = TINTEGER, line, col, 52);
       Выраж_Загрузить(e1);
       мДецл.Ключ_Проверить(мКонст.опЗапятая);
-      Next;
+      мДецл.КлючСлед_Получ;
       мДецл.Коорд_Уст(line, col);
       Expr(e1);
       Assert(e1.T.tType = TINTEGER, line, col, 52);
@@ -1658,7 +1653,7 @@
       Assert(e1.T.tType = TINTEGER, line, col, 52);
       Выраж_Загрузить(e1);
       мДецл.Ключ_Проверить(мКонст.опЗапятая);
-      Next;
+      мДецл.КлючСлед_Получ;
       мДецл.Коорд_Уст(line, col);
       ЕСЛИ proc = sysGET ТОГДА
         X86.PushCall(begcall);
@@ -1684,7 +1679,7 @@
       мСкан.GetLexStr(Lex);
       CheckCode(Lex, мСкан.count - 1, line, col);
       X86.Asm(Lex);
-      Next
+      мДецл.КлючСлед_Получ
     |sysMOVE:
       begcall := X86.current;
       Expr(e1);
@@ -1693,14 +1688,14 @@
       мДецл.Ключ_Проверить(мКонст.опЗапятая);
       X86.PushCall(begcall);
       X86.Param;
-      Next;
+      мДецл.КлючСлед_Получ;
       мДецл.Коорд_Уст(line, col);
       Expr(e1);
       Assert(e1.T.tType = TINTEGER, line, col, 52);
       Выраж_Загрузить(e1);
       мДецл.Ключ_Проверить(мКонст.опЗапятая);
       X86.Вызов_Закончить;
-      Next;
+      мДецл.КлючСлед_Получ;
       мДецл.Коорд_Уст(line, col);
       Expr(e1);
       Assert(e1.T.tType = TINTEGER, line, col, 52);
@@ -1709,12 +1704,12 @@
       Assert(ЛОЖЬ, line2, col2, 132)
     КОНЕЦ;
     мДецл.Ключ_Проверить(мКонст.опСкобкаПрКр);
-    Next;
+    мДецл.КлючСлед_Получ;
     ЕСЛИ proc = sysMOVE ТОГДА
       X86.StProc(X86.sysMOVE);
     АЕСЛИ proc = sysBIT ТОГДА
       мДецл.Ключ_Проверить(lxAssign);
-      Next;
+      мДецл.КлючСлед_Получ;
       мДецл.Коорд_Уст(line, col);
       Expr(e1);
       Assert(e1.T.tType = TBOOLEAN, line, col, 117);
@@ -1737,7 +1732,7 @@
     ЕСЛИ (e1.eType = eVAR) & (e1.T.tType # TPROC) ТОГДА
       мДецл.Ключ_Проверить(lxAssign);
       Assert(~e1.Read, line, col, 115);
-      Next;
+      мДецл.КлючСлед_Получ;
       мДецл.Коорд_Уст(line, col);
       Expr(e2);
       Assert(AssComp(e2, e1.T, ЛОЖЬ), line, col, 131);
@@ -1767,14 +1762,14 @@
       Assert((e1.id.T.Base.tType = TVOID) ИЛИ (e1.id.T.Call = мДецл.winapi), line, col, 132);
       ЕСЛИ e1.id.ParamCount > 0 ТОГДА
         мДецл.Ключ_Проверить(lxLRound);
-        Next;
+        мДецл.КлючСлед_Получ;
         X86.PushCall(begcall);
         Call(e1.id.T.Fields.предыдущ(мДецл.туПоле));
         X86.Вызов_Закончить
       АЕСЛИ мСкан.tLex = lxLRound ТОГДА
-        Next;
+        мДецл.КлючСлед_Получ;
         мДецл.Ключ_Проверить(мКонст.опСкобкаПрКр);
-        Next
+        мДецл.КлючСлед_Получ
       КОНЕЦ;
       ЕСЛИ e1.id.Level = 3 ТОГДА
         ccall := 0
@@ -1788,7 +1783,7 @@
       StProc(e1.id.StProc)
     АЕСЛИ (e1.eType = eVAR) & (e1.T.tType = TPROC) ТОГДА
       ЕСЛИ мСкан.tLex = lxLRound ТОГДА
-        Next;
+        мДецл.КлючСлед_Получ;
         Assert((e1.T.Base.tType = TVOID) ИЛИ (e1.T.Call = мДецл.winapi), line, col, 132);
         X86.PushCall(begcall);
         Call(e1.T.Fields.предыдущ(мДецл.туПоле));
@@ -1796,7 +1791,7 @@
         X86.CallVar(ЛОЖЬ, ЛОЖЬ, e1.T.Call, e1.T.Len, мДецл.curBlock.LocalSize)
       АЕСЛИ мСкан.tLex = lxAssign ТОГДА
         Assert(~e1.Read, line, col, 115);
-        Next;
+        мДецл.КлючСлед_Получ;
         мДецл.Коорд_Уст(line, col);
         Expr(e2);
         Assert(AssComp(e2, e1.T, ЛОЖЬ), line, col, 131);
@@ -1830,7 +1825,7 @@
   НАЧАЛО
     КлСлово_Выбрать;
     ПОКА мСкан.tLex = мКонст.опТчкЗпт ДЕЛАТЬ
-      Next;
+      мДецл.КлючСлед_Получ;
       КлСлово_Выбрать
     КОНЕЦ
   КОНЕЦ OpSeq;
