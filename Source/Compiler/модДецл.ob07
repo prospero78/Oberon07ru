@@ -43,7 +43,7 @@
 
   lxStick = 59; lxLRound = 60; lxLSquare = 61; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
   lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69;
-  lxNE = 72; lxLT = 73; lxGT = 74; lxLE = 75; lxGE = 76;
+  lxNE = 72; lxGT = 74; lxLE = 75; lxGE = 76;
 
   lxERR0 = 100; lxERR1 = 101; lxERR2 = 102; lxERR3 = 103; lxERR4 = 104; lxERR5 = 105; lxERR6 = 106;
   lxERR7 = 107; lxERR8 = 108; lxERR9 = 109; lxERR10 = 110; lxERR11 = 111; lxERR20 = 120;
@@ -476,7 +476,7 @@
   ПЕРЕМ Res: БУЛЕВО;
   НАЧАЛО
     ВЫБОР Op ИЗ
-    |мКонст.опРавно, lxNE, lxLT, lxGT,
+    |мКонст.опРавно, lxNE, мКонст.lxLT, lxGT,
      lxLE, lxGE, мКонст.ксВ, мКонст.ксЕСТЬ:
       Res := ИСТИНА
     ИНАЧЕ
@@ -534,7 +534,7 @@
     sb := Стр_Получ(b);
     ВЫБОР Op ИЗ
     |мКонст.опРавно, lxNE: Res := ДЛИН(FLT(ORD(sa.Str = sb.Str)))
-    |lxLT, lxGT: Res := ДЛИН(FLT(ORD(sa.Str < sb.Str)))
+    |мКонст.lxLT, lxGT: Res := ДЛИН(FLT(ORD(sa.Str < sb.Str)))
     |lxLE, lxGE: Res := ДЛИН(FLT(ORD(sa.Str <= sb.Str)))
     ИНАЧЕ
     КОНЕЦ
@@ -586,7 +586,7 @@
       ЕСЛИ Op = lxNE ТОГДА
         Res := ДЛИН(FLT(ORD(Res = 0.0D0)))
       КОНЕЦ
-    |lxLT, lxGT:
+    |мКонст.lxLT, lxGT:
       ЕСЛИ Op = lxGT ТОГДА
         c := a;
         a := b;
