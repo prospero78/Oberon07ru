@@ -43,7 +43,7 @@
 
   lxLRound = 60; lxLSquare = 61; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
   lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69;
-  lxNE = 72; lxLE = 75; lxGE = 76;
+  lxLE = 75; lxGE = 76;
 
   lxERR0 = 100; lxERR1 = 101; lxERR2 = 102; lxERR3 = 103; lxERR4 = 104; lxERR5 = 105; lxERR6 = 106;
   lxERR7 = 107; lxERR8 = 108; lxERR9 = 109; lxERR10 = 110; lxERR11 = 111; lxERR20 = 120;
@@ -476,7 +476,7 @@
   ПЕРЕМ Res: БУЛЕВО;
   НАЧАЛО
     ВЫБОР Op ИЗ
-    |мКонст.опРавно, lxNE, мКонст.опМеньше, мКонст.опБольше,
+    |мКонст.опРавно, мКонст.опНеРавно, мКонст.опМеньше, мКонст.опБольше,
      lxLE, lxGE, мКонст.ксВ, мКонст.ксЕСТЬ:
       Res := ИСТИНА
     ИНАЧЕ
@@ -533,7 +533,7 @@
     sa := Стр_Получ(a);
     sb := Стр_Получ(b);
     ВЫБОР Op ИЗ
-    |мКонст.опРавно, lxNE: Res := ДЛИН(FLT(ORD(sa.Str = sb.Str)))
+    |мКонст.опРавно, мКонст.опНеРавно: Res := ДЛИН(FLT(ORD(sa.Str = sb.Str)))
     |мКонст.опМеньше, мКонст.опБольше: Res := ДЛИН(FLT(ORD(sa.Str < sb.Str)))
     |lxLE, lxGE: Res := ДЛИН(FLT(ORD(sa.Str <= sb.Str)))
     ИНАЧЕ
@@ -577,13 +577,13 @@
     |мКонст.lxOR:
       мПров.Тест(Ta.tType = TBOOLEAN, line, col, 37);
       Res := ДЛИН(FLT(ORD((ai # 0) ИЛИ (bi # 0))))
-    |мКонст.опРавно, lxNE:
+    |мКонст.опРавно, мКонст.опНеРавно:
       ЕСЛИ Ta.tType = TSTRING ТОГДА
         Res := strcmp(a, b, Op)
       ИНАЧЕ
         Res := ДЛИН(FLT(ORD(a = b)))
       КОНЕЦ;
-      ЕСЛИ Op = lxNE ТОГДА
+      ЕСЛИ Op = мКонст.опНеРавно ТОГДА
         Res := ДЛИН(FLT(ORD(Res = 0.0D0)))
       КОНЕЦ
     |мКонст.опМеньше, мКонст.опБольше:

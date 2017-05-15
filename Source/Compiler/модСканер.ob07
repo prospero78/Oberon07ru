@@ -41,7 +41,7 @@
     
     lxLRound = 60; lxLSquare = 61; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
     lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69;
-    lxNE = 72; lxLE = 75; lxGE = 76;
+    lxLE = 75; lxGE = 76;
 
     lxERR0 = 100; lxERR1 = 101; lxERR2 = 102; lxERR3 = 103; lxERR4 = 104; lxERR5 = 105; lxERR6 = 106;
     lxERR7 = 107; lxERR8 = 108; lxERR9 = 109; lxERR10 = 110; lxERR11 = 111; lxERR20 = 120;
@@ -527,7 +527,7 @@
         |"{": выход := lxLCurly
         |"^": выход := lxCaret
         |"=": выход := м онст.оп–авно
-        |"#": выход := lxNE
+        |"#": выход := м онст.опЌе–авно
         |")": выход := lxRRound
         |"]": выход := lxRSquare
         |"}": выход := lxRCurly

@@ -36,7 +36,7 @@
 
   ADIM* = 5;
 
-  lxNE = 72; lxLE = 75; lxGE = 76;
+  lxLE = 75; lxGE = 76;
 
   TINTEGER = 1; TREAL = 2; TLONGREAL = 3; TCHAR = 4; TSET = 5; TBOOLEAN = 6; TVOID = 7;
   TNIL = 8; TCARD16 = 9; TSTRING = 10; TARRAY = 11; TRECORD = 12; TPOINTER = 13; TPROC = 14;
@@ -1076,7 +1076,7 @@
     OutCode("33C9DED9DFE09E0F");
     ¬џЅќ– Op »«
     |м онст.оп–авно: n := 94H
-    |lxNE: n := 95H
+    |м онст.опЌе–авно: n := 95H
     |м онст.опћеньше: n := 97H
     |м онст.опЅольше: n := 92H
     |lxLE: n := 93H
@@ -1154,7 +1154,7 @@
     OutCode("33C95A583BC20F"); current.tcmd := ICMP1;
     ¬џЅќ– Op »«
     |м онст.оп–авно: n := 94H
-    |lxNE: n := 95H
+    |м онст.опЌе–авно: n := 95H
     |м онст.опћеньше: n := 9CH
     |м онст.опЅольше: n := 9FH
     |lxLE: n := 9EH
@@ -1542,7 +1542,7 @@
   Ќј„јЋќ
     ¬џЅќ– Op »«
     |м онст.оп–авно: PushConst(0)
-    |lxNE: PushConst(1)
+    |м онст.опЌе–авно: PushConst(1)
     |м онст.опћеньше: PushConst(2)
     |м онст.опЅольше: PushConst(3)
     |lxLE: PushConst(4)
