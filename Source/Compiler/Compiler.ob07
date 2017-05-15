@@ -38,7 +38,7 @@
   lxBY = 3; lxDIV = 6;
   lxMOD = 17; 
 
-  lxLRound = 60; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
+  lxLRound = 60; lxLCurly = 62; lxCaret = 63; lxRSquare = 65;
   lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69;
   lxLE = 75; lxGE = 76;
 
@@ -325,7 +325,7 @@
           КОНЕЦ;
           Assert(BaseOf(e.T, T), line, col, 108);
           e.T := T;
-          Check(lxRRound);
+          Check(мКонст.опСкобкаПрКр);
           Next;
           ЕСЛИ e.T.tType = TPOINTER ТОГДА
             ЕСЛИ (мСкан.tLex = lxDot) ИЛИ (мСкан.tLex = lxCaret) ТОГДА
@@ -654,7 +654,7 @@
     ИНАЧЕ
       Assert(ЛОЖЬ, line2, col2, 73)
     КОНЕЦ;
-    Check(lxRRound);
+    Check(мКонст.опСкобкаПрКр);
     Next
   КОНЕЦ StFunc;
 
@@ -873,7 +873,7 @@
         Next
       КОНЕЦ
     КОНЕЦ;
-    Check(lxRRound);
+    Check(мКонст.опСкобкаПрКр);
     Next
   КОНЕЦ Call;
 
@@ -975,7 +975,7 @@
     |lxLRound:
       Next;
       pExpr(e);
-      Check(lxRRound);
+      Check(мКонст.опСкобкаПрКр);
       Next
     |мКонст.опОтриц:
       Next;
@@ -1713,7 +1713,7 @@
     ИНАЧЕ
       Assert(ЛОЖЬ, line2, col2, 132)
     КОНЕЦ;
-    Check(lxRRound);
+    Check(мКонст.опСкобкаПрКр);
     Next;
     ЕСЛИ proc = sysMOVE ТОГДА
       X86.StProc(X86.sysMOVE);
@@ -1778,7 +1778,7 @@
         X86.Вызов_Закончить
       АЕСЛИ мСкан.tLex = lxLRound ТОГДА
         Next;
-        Check(lxRRound);
+        Check(мКонст.опСкобкаПрКр);
         Next
       КОНЕЦ;
       ЕСЛИ e1.id.Level = 3 ТОГДА

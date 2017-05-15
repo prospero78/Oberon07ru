@@ -41,7 +41,7 @@
   lxDIV = 6;
   lxMOD = 17;
 
-  lxLRound = 60; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
+  lxLRound = 60; lxLCurly = 62; lxCaret = 63; lxRSquare = 65;
   lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69;
   lxLE = 75; lxGE = 76;
 
@@ -249,7 +249,7 @@
         |м онст.кс ќЌ≈÷:     code := 24
         |lxDot:     code := 25
         |м онст.оп–авно:      code := 35
-        |lxRRound:  code := 38
+        |м онст.оп—кобкаѕр р:  code := 38
         |м онст.ксƒќ:      code := 40
         |м онст.кс»«:      code := 41
         |lxRCurly:  code := 51
@@ -1020,7 +1020,7 @@
     ≈—Ћ» м—кан.tLex = lxLRound “ќ√ƒј
       Next;
       ParamType(T);
-      Check(lxRRound);
+      Check(м онст.оп—кобкаѕр р);
       Next;
       ≈—Ћ» м—кан.tLex = м онст.опƒвоеточ “ќ√ƒј
         Next;
@@ -1138,7 +1138,7 @@
         мѕров.“ест(notrecurs(»—“»Ќј, nov.Base), line, col, 96);
         nov.Size := nov.Base.Size;
         nov.Align := nov.Base.Align;
-        Check(lxRRound);
+        Check(м онст.оп—кобкаѕр р);
         Next;
         мѕров.“ест(nov.Rec = record, line, col, 112);
         мѕров.“ест(nov.Base.Rec = record, line2, col2, 113)

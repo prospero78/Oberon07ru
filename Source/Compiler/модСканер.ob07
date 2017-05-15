@@ -39,7 +39,7 @@
      
     lxMOD = 17;
     
-    lxLRound = 60; lxLCurly = 62; lxCaret = 63; lxRRound = 64; lxRSquare = 65;
+    lxLRound = 60; lxLCurly = 62; lxCaret = 63; lxRSquare = 65;
     lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69;
     lxLE = 75; lxGE = 76;
 
@@ -528,7 +528,7 @@
         |"^": выход := lxCaret
         |"=": выход := м онст.оп–авно
         |"#": выход := м онст.опЌе–авно
-        |")": выход := lxRRound
+        |")": выход := м онст.оп—кобкаѕр р
         |"]": выход := lxRSquare
         |"}": выход := lxRCurly
         |">": выход := м онст.опЅольше
