@@ -261,7 +261,7 @@
         |мКонст.ксПОКАНЕ:   code := 119
         |lxAssign:  code := 120
         |мКонст.ксВЕРНУТЬ:  code := 124
-        |мКонст.lxColon:   code := 157
+        |мКонст.опДвоеточ:   code := 157
       ИНАЧЕ
       КОНЕЦ;
       мПров.Тест2(ЛОЖЬ, code)
@@ -811,7 +811,7 @@
       ЕСЛИ мСкан.tLex = мКонст.опЗапятая ТОГДА
         Next;
         Check(lxIDENT)
-      АЕСЛИ мСкан.tLex = мКонст.lxColon ТОГДА
+      АЕСЛИ мСкан.tLex = мКонст.опДвоеточ ТОГДА
         Next;
         Коорд_Уст(line, col);
         id_T := мСкан.tLex = lxIDENT;
@@ -971,7 +971,7 @@
       ЕСЛИ мСкан.tLex = мКонст.опЗапятая ТОГДА
         Next;
         Check(lxIDENT)
-      АЕСЛИ мСкан.tLex = мКонст.lxColon ТОГДА
+      АЕСЛИ мСкан.tLex = мКонст.опДвоеточ ТОГДА
         Next;
         Tf := FormalType(line, col);
         мПров.Тест(Dim(Tf) <= X86.ADIM, line, col, 110);
@@ -1022,7 +1022,7 @@
       ParamType(T);
       Check(lxRRound);
       Next;
-      ЕСЛИ мСкан.tLex = мКонст.lxColon ТОГДА
+      ЕСЛИ мСкан.tLex = мКонст.опДвоеточ ТОГДА
         Next;
         Check(lxIDENT);
         Res := IdType(line, col);
@@ -1297,7 +1297,7 @@
         ЕСЛИ мСкан.tLex = мКонст.опЗапятая ТОГДА
           Next;
           Check(lxIDENT)
-        АЕСЛИ мСкан.tLex = мКонст.lxColon ТОГДА
+        АЕСЛИ мСкан.tLex = мКонст.опДвоеточ ТОГДА
           Next;
           Коорд_Уст(line, col);
           T := ParseType(line, col);

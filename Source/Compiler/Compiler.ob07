@@ -1442,7 +1442,7 @@
         Next;
         Label(int, Labels, LBeg)
       КОНЕЦ;
-      Check(мКонст.lxColon);
+      Check(мКонст.опДвоеточ);
       Next;
       X86.jmp(X86.JMP, LEnd);
       X86.Label(LBeg);
