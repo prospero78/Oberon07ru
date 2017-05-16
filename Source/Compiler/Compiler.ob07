@@ -38,7 +38,7 @@
   lxBY = 3; lxDIV = 6;
   lxMOD = 17; 
 
-  lxLRound = 60; lxLCurly = 62; lxCaret = 63;
+  lxLRound = 60; lxCaret = 63;
   lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69;
   lxLE = 75; lxGE = 76;
 
@@ -980,7 +980,7 @@
       КОНЕЦ;
       X86.Not;
       e.vparam := ЛОЖЬ
-    |lxLCurly:
+    |мКонст.опСкобкаЛевФиг:
       Set(e)
     ИНАЧЕ
       Assert2(ЛОЖЬ, 36)

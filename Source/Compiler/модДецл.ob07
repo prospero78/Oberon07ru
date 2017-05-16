@@ -41,7 +41,7 @@
   lxDIV = 6;
   lxMOD = 17;
 
-  lxLRound = 60; lxLCurly = 62; lxCaret = 63;
+  lxLRound = 60; lxCaret = 63;
   lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69;
   lxLE = 75; lxGE = 76;
 
