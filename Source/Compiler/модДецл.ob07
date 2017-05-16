@@ -1429,7 +1429,7 @@
             мПров.Тест(ЛОЖЬ, nameline, namecol, 32)
           КОНЕЦ
         КОНЕЦ;
-        мСкан.Вернуть(self.scanner);
+        мСкан.Откатить(self.scanner);
         u := unit;
         unit := self;
         мФайл.Имя_Уст(unit.File)

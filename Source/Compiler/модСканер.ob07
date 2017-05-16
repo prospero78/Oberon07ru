@@ -122,25 +122,25 @@
         scanner.UTF8 := UTF8
     КОНЕЦ Сохранить;
 
-ПРОЦЕДУРА Вернуть*(scanner: мТипы.туСканер);
+ПРОЦЕДУРА Откатить*(сканер_: мТипы.туСканер);
     НАЧАЛО
-        File := scanner.файл_ном;
-        ccol := scanner.ccol;
-        cline := scanner.cline;
-        ch := scanner.ch;
-        Lex := scanner.Lex;
-        count := scanner.счетчик;
-        col := scanner.col;
-        line := scanner.строка_ном;
-        tLex := scanner.tLex;
-        vINT := scanner.vINT;
-        vFLT := scanner.vFLT;
-        vCHX := scanner.vCHX;
-        buf := scanner.buf;
-        bufpos := scanner.bufpos;
-        CR := scanner.CR;
-        UTF8 := scanner.UTF8
-    КОНЕЦ Вернуть;
+        File := сканер_.файл_ном;
+        ccol := сканер_.ccol;
+        cline := сканер_.cline;
+        ch := сканер_.ch;
+        Lex := сканер_.Lex;
+        count := сканер_.счетчик;
+        col := сканер_.col;
+        line := сканер_.строка_ном;
+        tLex := сканер_.tLex;
+        vINT := сканер_.vINT;
+        vFLT := сканер_.vFLT;
+        vCHX := сканер_.vCHX;
+        buf := сканер_.buf;
+        bufpos := сканер_.bufpos;
+        CR := сканер_.CR;
+        UTF8 := сканер_.UTF8
+    КОНЕЦ Откатить;
 
 ПРОЦЕДУРА Next;
     ПЕРЕМ
