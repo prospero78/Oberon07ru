@@ -1819,7 +1819,7 @@
 
 ПРОЦЕДУРА Старт;
     ПЕРЕМ
-        SelfName, SelfPath, CName, CExt, FName, Path, StdPath,
+        сам_имя, сам_путь, CName, CExt, FName, Path, StdPath,
         Name, Ext, temp, system, stk, felf: мСтр.тСтрока;
         platform, stksize: ЦЕЛОЕ;
 
@@ -1894,7 +1894,7 @@
       мОш.Сообщ(мОшКонст.ошМалоПарам);
       мПроц.Закончить(1)
     КОНЕЦ;
-    мУтиль.СтрПарам(SelfName, 0);
+    мУтиль.СтрПарам(сам_имя, 0);
     мУтиль.СтрПарам(FName, 1);
     мУтиль.СтрПарам(system, 2);
     мУтиль.СтрПарам(stk, 3);
@@ -1906,14 +1906,14 @@
       мОш.Сообщ(121);
       мПроц.Закончить(1)
     КОНЕЦ;
-    мСтр.Разделить(SelfName, SelfPath, CName, CExt);
+    мСтр.Разделить(сам_имя, сам_путь, CName, CExt);
     temp := Name;
     ЕСЛИ мУтиль.streq(system, "obj") ТОГДА
       platform := 6;
     мСтр.Сложить(temp, ".obj", temp)
     АЕСЛИ мУтиль.streq(system, "elf") ТОГДА
       platform := 5;
-      felf := SelfPath;
+      felf := сам_путь;
       мСтр.Сложить(felf, "Elf", felf);
       X86.setfelf(felf)
     АЕСЛИ мУтиль.streq(system, "kos") ТОГДА
@@ -1940,19 +1940,19 @@
     ЕСЛИ platform = 6 ТОГДА
       stksize := getver()
     КОНЕЦ;
-    мСтр.Сложить(SelfPath, "Lib", SelfPath);
-    мСтр.Сложить(SelfPath, мКонст.слэш, SelfPath);
+    мСтр.Сложить(сам_путь, "Lib", сам_путь);
+    мСтр.Сложить(сам_путь, мКонст.слэш, сам_путь);
     ЕСЛИ platform = 5 ТОГДА
-      мСтр.Сложить(SelfPath, "Linux32", SelfPath)
+      мСтр.Сложить(сам_путь, "Linux32", сам_путь)
     АЕСЛИ platform IN {4, 6} ТОГДА
-      мСтр.Сложить(SelfPath, "KolibriOS", SelfPath)
+      мСтр.Сложить(сам_путь, "KolibriOS", сам_путь)
     АЕСЛИ platform IN {1, 2, 3} ТОГДА
-      мСтр.Сложить(SelfPath, "Windows32", SelfPath)
+      мСтр.Сложить(сам_путь, "Windows32", сам_путь)
     КОНЕЦ;
-    мСтр.Сложить(SelfPath, мКонст.слэш, SelfPath);
+    мСтр.Сложить(сам_путь, мКонст.слэш, сам_путь);
     X86.Настроить(мДецл.ПамОш_Проверить, platform);
     X86.Prolog(temp);
-    мДецл.Код_Настроить(SelfPath, Path, Name, Ext, platform IN {1, 2, 3}, OpSeq, Expr, AssComp, sttypes);
+    мДецл.Код_Настроить(сам_путь, Path, Name, Ext, platform IN {1, 2, 3}, OpSeq, Expr, AssComp, sttypes);
     мДецл.Компилировать(platform, stksize);
     мКонс.Строка_Печать("   +Компиляция успешна!"); мКонс.НовСтр;
     мКонс.Время_Затрачено
