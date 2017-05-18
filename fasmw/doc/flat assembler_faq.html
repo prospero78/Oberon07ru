@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)http://flatassembler.net/docs.php?article=faq -->
+<html dir="ltr" lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <title>flat assembler</title>
+  <link rel="alternate" type="application/atom+xml" title="flat assembler" href="http://flatassembler.net/atom.php">
+  <link rel="stylesheet" href="./flat assembler_faq_files/fasm.css" type="text/css">
+  <style type="text/css">
+    body { background-color: #F0D4B0; }
+  </style>
+<script type="text/javascript">try {
+var AG_onLoad=function(func){if(document.readyState==="complete"||document.readyState==="interactive")func();else if(document.addEventListener)document.addEventListener("DOMContentLoaded",func);else if(document.attachEvent)document.attachEvent("DOMContentLoaded",func)};
+var AG_removeElementById = function(id) { var element = document.getElementById(id); if (element && element.parentNode) { element.parentNode.removeChild(element); }};
+var AG_removeElementBySelector = function(selector) { if (!document.querySelectorAll) { return; } var nodes = document.querySelectorAll(selector); if (nodes) { for (var i = 0; i < nodes.length; i++) { if (nodes[i] && nodes[i].parentNode) { nodes[i].parentNode.removeChild(nodes[i]); } } } };
+var AG_each = function(selector, fn) { if (!document.querySelectorAll) return; var elements = document.querySelectorAll(selector); for (var i = 0; i < elements.length; i++) { fn(elements[i]); }; };
+var AG_removeParent = function(el, fn) { while (el && el.parentNode) { if (fn(el)) { el.parentNode.removeChild(el); return; } el = el.parentNode; } };
+var AdFox_getCodeScript = function() {};
+AG_onLoad(function() { AG_each('iframe[id^="AdFox_iframe_"]', function(el) { if (el && el.parentNode) { el.parentNode.removeChild(el); } }); });
+try { Object.defineProperty(window, 'noAdsAtAll', { get: function() { return true; } }); } catch (ex) {}
+} catch (ex) { console.error('Error executing AG js: ' + ex); }</script></head>
+
+<body>
+
+  <p class="mediumtext">
+    <span class="maintitle">flat assembler</span><br>Documentation and tutorials.
+  </p>
+
+  <p class="navigation">
+    <a class="boldlink" href="http://flatassembler.net/index.php">Main&nbsp;index</a>
+    <a class="boldlink" href="http://flatassembler.net/download.php">Download</a>
+    <a class="boldlink" href="http://flatassembler.net/docs.php">Documentation</a>
+    <a class="boldlink" href="http://flatassembler.net/examples.php">Examples</a>
+    <a class="boldlink" href="http://board.flatassembler.net/">Message&nbsp;board</a>
+  </p>
+
+  <div class="container">
+     
+<p class="largetext"><b><span class="mediumtext">flat assembler</span><br>
+Freqently Asked Questions</b></p>
+<p class="largetext">Here you can find the answers for some of the most common questions about the flat assembler,
+the ones that were really frequently asked.
+If you've got some question or problem which is not discussed here, you can look for more help on the message board.</p>
+
+<p class="mediumtext"><b>Why do I get <span class="mediumcode">out of memory</span> error even though I have more than enough memory in my system?</b></p>
+<p class="smalltext">
+In multitasking environments flat assembler avoids allocating all the possible memory, and thus the memory usage
+is by default limited to some smaller quantity - in Linux the default limit is 16 MB, in Windows it is all available
+physical memory and half of the available swap space. If you want to change this limit, use the
+<span class="smallcode">-m</span> option in command line, followed by the number of kilobytes.
+</p>
+
+<p class="mediumtext"><b>Does flat assembler have some directive like <span class="mediumcode">incbin</span>?</b></p>
+<p class="smalltext">Yes, it is called <span class="smallcode">file</span>,
+and you can use it like any other data definition directives
+(that means it can be preceded with label without a colon).
+It also allows you to specify the offset in file and count of bytes you want to include.
+For more information look into the section
+<a href="http://flatassembler.net/docs.php?article=manual#1.2.2">1.2.2</a>
+of the manual.</p>
+
+<p class="mediumtext"><b>Why the instruction <span class="mediumcode">mov eax,'ABCD'</span> is assembled into <span class="mediumcode">mov eax,44434241h</span>?
+Shouldn't it be reversed?</b></p>
+<p class="smalltext">Altough the most of other assemblers interpret quoted values treating the
+first character as the most significant, I've decided to use this different approach,
+just because it's more handy in the most situations.
+That's because for x86 architecture the least significant byte is the first
+byte in memory, so if you want to check whether there is <span class="smallcode">'ABCD'</span> string at
+<span class="smallcode">ebx</span> address, you can just write <span class="smallcode">cmp dword [ebx],'ABCD'</span>.</p>
+
+<p class="mediumtext"><b>I'm trying to conditionally define some constant with <span class="mediumcode">equ</span> directive by
+putting it in the <span class="mediumcode">if</span> block, but it seems that even when this condition is
+false, the constant gets defined. Why?</b></p>
+<p class="smalltext">That's because all symbolic constants and macroinstruction (that means
+every symbol you define with <span class="smallcode">equ</span>, <span class="smallcode">macro</span>,
+or <span class="smallcode">struc</span> directive) are processed at the preprocessor stage,
+while directives like <span class="smallcode">if</span> or <span class="smallcode">repeat</span> are processed
+at assembly stage, when all macroinstructions and symbolic constants have already been replaced with corresponding
+values (generally structures which you have to end with the <span class="smallcode">end</span> directive followed
+by the name of structure are processed at assembly stage). On the other hand, the numerical constants
+(which you define with <span class="smallcode">=</span> symbol) are of the same kind as labels,
+and therefore are processed at assembly stage, so you can define and use them conditionally.</p>
+
+<p class="mediumtext"><b>In COFF and PE formats I can mark section as containing initialized data
+with the <span class="mediumcode">data</span> flag in the section declaration.
+How can I mark section as containing uninitialized data?</b></p>
+<p class="smalltext">Flat assembler marks the section with flag of uninitialized data automatically
+when the section contains uninitialized data only (this is the data declared with reservation directives,
+or with <span class="smallcode">?</span> values gives to data declarations).
+When you create such section, you don't have to declare <span class="smallcode">data</span> or
+<span class="smallcode">code</span> flag, as it will be marked as uninitialized data automatically.
+</p>
+
+<p class="mediumtext"><b>If I put an <span class="mediumcode">extrn</span> directive in my code,
+flat assembler emits the external reference to the object file even if the code doesn't reference the symbol,
+how can I avoid it?</b></p>
+<p class="smalltext">You can redefine <span class="smallcode">extrn</span> as macroinstruction,
+which will emit the reference only if the symbol is used somewhere, for example:
+</p>
+<pre class="smallcode">   macro extrn symbol
+    {
+     if used symbol
+      extrn symbol
+     end if
+    }
+</pre>
+<p class="smalltext">
+You can also use the <span class="smallcode">global</span> macro, which automatically detects whether
+symbol has to be declared as public or external and this way allows to
+use the common headers for all the object files of project. It looks like:
+</p>
+<pre class="smallcode">   macro global [symbol]
+    {
+     local isextrn,isglobal
+     if defined symbol &amp; ~ defined isextrn
+       public symbol
+     else if used symbol &amp; defined isglobal
+       extrn symbol
+       isextrn = 1
+     end if
+     isglobal = 1
+    }
+</pre>
+
+<p class="mediumtext"><b>Can I use the compiled resource file instead of macros to build the resource
+section when creating PE format?</b></p>
+<p class="smalltext">Yes, flat assembler has such feature since the 1.50 release. You can create the resource section from
+resource file made by any resource compiler or editor, just declare it this way:
+</p>
+<pre class="smallcode">   section '.rsrc' data readable resource from 'my.res'
+</pre>
+<p class="smalltext">And you don't need to put anything more in such section. In case you don't want the separate section for resource,
+you can put the resources into any other section with <span class="smallcode">data</span> directive:
+</p>
+<pre class="smallcode">   data resource from 'my.res'
+   end data
+</pre>
+
+<p class="mediumtext"><b>How to define an array of structures?</b></p>
+<p class="smalltext">
+Since structure macroinstruction needs a label for each its instance, the structure cannot be simply repeated, since in each repeat structure needs an unique label, otherwise you would get the <span class="smallcode">symbol already defined</span> error. One way to overcome this is to actually create the unique label for each copy of structure, like:
+</p>
+<pre class="smallcode">   StrucArray:
+    rept 100
+     {
+       local s
+       s MYSTRUC
+     }
+</pre>
+<p class="smalltext">
+The other solution can be used when array doesn't have to be initialized and your data structure has the fixed size - like the ones defined with the <span class="smallcode">struct</span> macro (the <span class="smallcode">struct</span> defines the constant holding the size of structure with the name created by attaching <span class="smallcode">sizeof.</span> before the name of structure). Then you can easily calculate how much space the array needs and just reserve this amount of bytes:
+</p>
+<pre class="smallcode">   StrucArray rb 100*sizeof.MYSTRUC
+</pre>
+
+<p class="mediumtext"><b>Why do I get <span class="mediumcode">invalid use of symbol</span> error when assembling PE or object file?</b></p>
+<p class="smalltext">
+This error happens when value of some relocatable label is used in context, in which assembler
+cannot guarantee that the value encoded in instruction will be correct after relocating the code.
+The labels are considered relocatable only with output formats that generate relocation information, which
+are the object formats and PE (but only in case when the fixups data is included into executable by programmer).
+</p>
+
+<p class="mediumtext"><b>Can I link object files or static libraries into executable with flat assembler?</b></p>
+<p class="smalltext">
+No - this is the job of a linker, not assembler. Though flat assembler is able to output some types of executables directly, it has nothing to do with linking -
+it just formats the output code to be an executable file instead of object or flat binary, with the general rule that output code is always generated in the same order and way as it is defined by source.
+But if you prefer to work with many modules and libraries, you should use the object output of flat assembler, and then link it into final executable with some linker.
+</p>
+
+<p class="mediumtext"><b>My anti-virus software reports that package downloaded from this website contains viruses. Are you infecting my computer?</b></p>
+<p class="smalltext">
+The modern anti-virus programs use sophisticated heuristicts to detect suspicious files, and some of the
+small programs provided as an examples, that come with flat assembler, are sometimes considered risky
+by them, or even reported as trojans or viruses. However this is most likely a false alarm.
+It is recommended that in case of doubt you use some service like <a href="http://www.virustotal.com/">Virus Total</a> to
+check a suspicious file with many different anti-virus engines. 
+</p>
+
+
+  </div>
+
+  <p class="navigation">
+    <a class="boldlink" href="http://flatassembler.net/index.php">Main&nbsp;index</a>
+    <a class="boldlink" href="http://flatassembler.net/download.php">Download</a>
+    <a class="boldlink" href="http://flatassembler.net/docs.php">Documentation</a>
+    <a class="boldlink" href="http://flatassembler.net/examples.php">Examples</a>
+    <a class="boldlink" href="http://board.flatassembler.net/">Message&nbsp;board</a>
+  </p>
+
+  <p>
+     Copyright © 2004-2016, <a href="http://niewidoczna.pl/" title="Niewidoczna Pracownia — The Unseen Workshop">Tomasz Grysztar</a>.
+  </p>
+
+
+
+
+</body></html>

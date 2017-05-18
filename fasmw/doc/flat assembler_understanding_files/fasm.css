@@ -1,0 +1,195 @@
+
+body
+{
+        width: 800px;
+        margin-top: 4px;
+        margin-bottom: 4px;
+        margin-left: auto;
+        margin-right: auto;
+}
+
+body, table, td
+{
+        font-family: Verdana, Helvetica, sans-serif;
+        font-size: 10px;
+        color: #000020;
+        text-align: center;
+}
+
+p, pre, h1, h2, h3, h4, h5
+{
+        padding: 5px;
+        margin: 0;
+}
+
+.tinytext, .smalltext, .mediumtext, .largetext
+{
+        font-family: Verdana, Helvetica, sans-serif;
+        color: #000020;
+}
+
+.tinytext
+{
+        font-size : 9px;
+}
+
+.smalltext
+{
+        font-size : 10px;
+}
+
+.mediumtext
+{
+        font-size : 11px;
+}
+
+.largetext
+{
+        font-size : 13px;
+}
+
+pre, code, .smallcode, .mediumcode, .largecode
+{
+        font-family: "Courier New", Courier, monospace;
+        color: #000070;
+}
+
+.smallcode, pre.smalltext, .smalltext pre, .smalltext code
+{
+        font-size : 11px;
+}
+
+.mediumcode, pre.mediumtext, .mediumtext pre, .mediumtext code
+{
+        font-size : 12px;
+}
+
+.largecode, pre.largetext, .largetext pre, .largetext code
+{
+        font-size : 13px;
+}
+
+.announcement
+{
+        font-size : 12px;
+        color: #E23E3E;
+}
+
+a, a:link, a:active, a:visited
+{
+        color: #000020;
+        font-family: Verdana, Helvetica, sans-serif;
+}
+
+a:hover
+{
+        text-decoration: underline;
+        color: #E23E3E;
+        font-family: Verdana, Helvetica, sans-serif;
+}
+
+a.boldlink, a.boldlink:link, a.boldlink:visited, a.boldlink:active
+{
+        font-weight: bold;
+        text-decoration: none;
+        color: #000020;
+        font-family: Verdana, Helvetica, sans-serif;
+}
+
+a.boldlink:hover
+{
+        font-weight: bold;
+        text-decoration: underline;
+        color: #E23E3E;
+        font-family: Verdana, Helvetica, sans-serif;
+}
+
+.maintitle,h1,h2
+{
+        font-weight: bold;
+        font-size: 22px;
+        font-family: "Trebuchet MS",Verdana, Helvetica, sans-serif;
+        text-decoration: none;
+        line-height: 120%;
+        color: #000000;
+}
+
+.navigation a
+{
+        padding-left: 4px;
+        padding-right: 4px;
+}
+
+.container
+{
+        width: 760px;
+        margin-left: auto;
+        margin-right:auto;
+        background-color: #F8F8F8;
+        border: 1px solid black;
+        padding: 12px;
+        text-align: left;
+}
+
+.links
+{
+        text-align: center;
+}
+
+.links table
+{
+        width: 85%;
+        margin-left: auto;
+        margin-right: auto;
+}
+
+.links td
+{
+        text-align: left;
+        font-family: Verdana, Helvetica, sans-serif;
+        font-size: 11px;
+        padding: 8px;
+}
+
+.doctable
+{
+        border-collapse: collapse;
+        margin-left: 6px;
+        margin-bottom: 6px;
+        border: 1px solid black;
+}
+
+.doctable td, .doctable th
+{
+        background-color: white;
+        border: 1px solid black;
+        padding: 0px;
+}
+
+.intable
+{
+        border: none;
+        margin: 0px;
+        width: 100%;
+}
+
+.intable td
+{
+        background-color: white;
+        border: none;
+        padding: 0px;
+}
+
+input, textarea, select
+{
+        font-family: Verdana, Helvetica, sans-serif;
+        font-size: 10px;
+}
+
+.bginput, .bgbutton, textarea, select
+{
+        color: #000000;
+        background-color: #DEDEDE;
+        text-indent: 2px;
+}
+

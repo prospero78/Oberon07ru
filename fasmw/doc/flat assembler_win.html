@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)http://flatassembler.net/docs.php?article=win32 -->
+<html dir="ltr" lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <title>flat assembler</title>
+  <link rel="alternate" type="application/atom+xml" title="flat assembler" href="http://flatassembler.net/atom.php">
+  <link rel="stylesheet" href="./flat assembler_win_files/fasm.css" type="text/css">
+  <style type="text/css">
+    body { background-color: #F0D4B0; }
+  </style>
+<script type="text/javascript">try {
+var AG_onLoad=function(func){if(document.readyState==="complete"||document.readyState==="interactive")func();else if(document.addEventListener)document.addEventListener("DOMContentLoaded",func);else if(document.attachEvent)document.attachEvent("DOMContentLoaded",func)};
+var AG_removeElementById = function(id) { var element = document.getElementById(id); if (element && element.parentNode) { element.parentNode.removeChild(element); }};
+var AG_removeElementBySelector = function(selector) { if (!document.querySelectorAll) { return; } var nodes = document.querySelectorAll(selector); if (nodes) { for (var i = 0; i < nodes.length; i++) { if (nodes[i] && nodes[i].parentNode) { nodes[i].parentNode.removeChild(nodes[i]); } } } };
+var AG_each = function(selector, fn) { if (!document.querySelectorAll) return; var elements = document.querySelectorAll(selector); for (var i = 0; i < elements.length; i++) { fn(elements[i]); }; };
+var AG_removeParent = function(el, fn) { while (el && el.parentNode) { if (fn(el)) { el.parentNode.removeChild(el); return; } el = el.parentNode; } };
+var AdFox_getCodeScript = function() {};
+AG_onLoad(function() { AG_each('iframe[id^="AdFox_iframe_"]', function(el) { if (el && el.parentNode) { el.parentNode.removeChild(el); } }); });
+try { Object.defineProperty(window, 'noAdsAtAll', { get: function() { return true; } }); } catch (ex) {}
+} catch (ex) { console.error('Error executing AG js: ' + ex); }</script></head>
+
+<body>
+
+  <p class="mediumtext">
+    <span class="maintitle">flat assembler</span><br>Documentation and tutorials.
+  </p>
+
+  <p class="navigation">
+    <a class="boldlink" href="http://flatassembler.net/index.php">Main&nbsp;index</a>
+    <a class="boldlink" href="http://flatassembler.net/download.php">Download</a>
+    <a class="boldlink" href="http://flatassembler.net/docs.php">Documentation</a>
+    <a class="boldlink" href="http://flatassembler.net/examples.php">Examples</a>
+    <a class="boldlink" href="http://board.flatassembler.net/">Message&nbsp;board</a>
+  </p>
+
+  <div class="container">
+     
+<h1 class="largetext">Windows programming headers</h1>
+
+<p><b>
+<a href="http://flatassembler.net/docs.php?article=win32#1" class="mediumtext" style="padding-left: 20pt;">1. Basic headers</a><br>
+<a href="http://flatassembler.net/docs.php?article=win32#1.1" class="smalltext" style="padding-left: 40pt;">1.1 Structures</a><br>
+<a href="http://flatassembler.net/docs.php?article=win32#1.2" class="smalltext" style="padding-left: 40pt;">1.2 Imports</a><br>
+<a href="http://flatassembler.net/docs.php?article=win32#1.3" class="smalltext" style="padding-left: 40pt;">1.3 Procedures (32-bit)</a><br>
+<a href="http://flatassembler.net/docs.php?article=win32#1.4" class="smalltext" style="padding-left: 40pt;">1.4 Procedures (64-bit)</a><br>
+<a href="http://flatassembler.net/docs.php?article=win32#1.5" class="smalltext" style="padding-left: 40pt;">1.5 Customizing procedures</a><br>
+<a href="http://flatassembler.net/docs.php?article=win32#1.6" class="smalltext" style="padding-left: 40pt;">1.6 Exports</a><br>
+<a href="http://flatassembler.net/docs.php?article=win32#1.7" class="smalltext" style="padding-left: 40pt;">1.7 Component Object Model</a><br>
+<a href="http://flatassembler.net/docs.php?article=win32#1.8" class="smalltext" style="padding-left: 40pt;">1.8 Resources</a><br>
+<a href="http://flatassembler.net/docs.php?article=win32#1.9" class="smalltext" style="padding-left: 40pt;">1.9 Text encoding</a><br>
+<br><a href="http://flatassembler.net/docs.php?article=win32#2" class="mediumtext" style="padding-left: 20pt;">2. Extended headers</a><br>
+<a href="http://flatassembler.net/docs.php?article=win32#2.1" class="smalltext" style="padding-left: 40pt;">2.1 Procedure parameters</a><br>
+<a href="http://flatassembler.net/docs.php?article=win32#2.2" class="smalltext" style="padding-left: 40pt;">2.2 Structuring the source</a><br>
+<br>
+</b></p>
+
+<p class="smalltext">
+With the Windows version of flat assembler comes the package of
+standard includes designed to help in writing the programs for
+Windows environment.
+</p>
+<p class="smalltext">
+The includes package contains the headers for 32-bit and 64-bit Windows
+programming in the root folder and the specialized includes in the
+subfolders. In general, the headers include the required specialized files for you, though sometimes you might prefer to include some of the macroinstruction packages yourself (since few of them are not included by some or even all of the headers).
+</p>
+<p class="smalltext">
+There are six headers for 32-bit Windows that you can choose from, with names starting with <span class="smallcode">win32</span> followed by either a letter <span class="smallcode">a</span> for using the ASCII encoding, or a letter <span class="smallcode">w</span> for the WideChar encoding. The <span class="smallcode">win32a.inc</span> and <span class="smallcode">win32w.inc</span> are the basic headers,
+the <span class="smallcode">win32ax.inc</span> and <span class="smallcode">win32wx.inc</span> are the extended headers, they provide more advanced macroinstructions, those extensions will be discussed separately. Finally the <span class="smallcode">win32axp.inc</span> and <span class="smallcode">win32wxp.inc</span> are the same extended headers with enabled feature of checking the count of parameters in procedure calls.
+</p>
+<p class="smalltext">
+There are analogous six packages for the 64-bit Windows, with
+names starting with <span class="smallcode">win64</span>. They provide in general the
+same functionality as the ones for 32-bit Windows, with just a few
+differences explained later.
+</p>
+
+<p class="smalltext">
+You can include the headers any way you prefer, by providing the full path or using the custom environment variable, but the simplest method is to define the <span class="smallcode">INCLUDE</span> environment variable properly pointing to the directory containing headers and then include them just like:
+</p>
+<pre class="smallcode">  include 'win32a.inc'
+</pre>
+<p class="smalltext">
+It's important to note that all macroinstructions, as opposed to internal directives of flat assembler, are case sensitive and the lower case is used for the most of them. If you'd prefer to use the other case than default, you should do the appropriate adjustments with <span class="smallcode">fix</span> directive.
+</p>
+
+<h2 id="1" class="mediumtext">1. Basic headers</h2>
+
+<p class="smalltext">
+The basic headers <span class="smallcode">win32a.inc</span>, <span class="smallcode">win32w.inc</span>,
+<span class="smallcode">win64a.inc</span> and <span class="smallcode">win64w.inc</span>
+include declarations of Windows equates and structures and provide the standard set of macroinstructions.
+</p>
+
+<h3 id="1.1" class="smalltext">1.1  Structures</h3>
+<p class="smalltext">
+All headers enable the <span class="smallcode">struct</span> macroinstruction, which allows to define structures in a way more similar to other assemblers than the <span class="smallcode">struc</span> directive. The definition of structure should be started with <span class="smallcode">struct</span> macroinstruction followed by the name, and ended with <span class="smallcode">ends</span> macroinstruction. In lines between only data definition directives are allowed, with labels being the pure names for the fields of structure:
+</p>
+<pre class="smallcode">  struct POINT
+    x dd ?
+    y dd ?
+  ends
+</pre>
+<p class="smalltext">
+With such definition this line:
+</p>
+<pre class="smallcode">  point1 POINT
+</pre>
+<p class="smalltext">
+will declare the <span class="smallcode">point1</span> structure with the <span class="smallcode">point1.x</span> and <span class="smallcode">point1.y</span> fields, giving them the default values - the same ones as provided in the definition of structure (in this case the defaults are both uninitialized values). But declaration of structure also accepts the parameters, in the same count as the number of fields in the structure, and those parameters, when specified, override the default values for fields. For example:
+</p>
+<pre class="smallcode">  point2 POINT 10,20
+</pre>
+<p class="smalltext">
+initializes the <span class="smallcode">point2.x</span> field with value 10, and the <span class="smallcode">point2.y</span> with value 20.
+</p>
+
+<p class="smalltext">
+The <span class="smallcode">struct</span> macro not only enables to declare the structures of given type, but also defines labels for offsets of fields inside the structure and constants for sized of every field and the whole structure. For example the above definition of <span class="smallcode">POINT</span> structure defines the <span class="smallcode">POINT.x</span> and <span class="smallcode">POINT.y</span> labels to be the offsets of fields inside the structure, and <span class="smallcode">sizeof.POINT.x</span>, <span class="smallcode">sizeof.POINT.y</span> and <span class="smallcode">sizeof.POINT</span> as sizes of the corresponding fields and of the whole structure. The offset labels may be used for accessing the structures addressed indirectly, like:
+</p>
+<pre class="smallcode">  mov eax,[ebx+POINT.x]
+</pre>
+<p class="smalltext">
+when the <span class="smallcode">ebx</span> register contains the pointer to <span class="smallcode">POINT</span> structure. Note that field size checking will be performed with such
+accessing as well.
+</p>
+
+<p class="smalltext">
+The structures itself are also allowed inside the structure definitions, so the structures may have some other structures as a fields:
+</p>
+<pre class="smallcode">  struct LINE
+    start POINT
+    end   POINT
+  ends
+</pre>
+<p class="smalltext">
+When no default values for substructure fields are specified, as in this example, the defaults from the definition of the type of substructure apply.
+</p>
+<p class="smalltext">
+Since value for each field is a single parameter in the declaration of the structure, to initialize the substructures with custom values the parameters for each substructure must be grouped into a single parameter for the structure:
+</p>
+<pre class="smallcode">  line1 LINE &lt;0,0&gt;,&lt;100,100&gt;
+</pre>
+<p class="smalltext">
+The above declaration initializes each of the <span class="smallcode">line1.start.x</span> and <span class="smallcode">line1.start.y</span> fields with 0, and each of the <span class="smallcode">line1.end.x</span> and <span class="smallcode">line1.end.y</span> with 100.
+</p>
+
+<p class="smalltext">
+When the size of data defined by some value passed to the declaration structure is smaller than the size of corresponding field, it is padded to that size with undefined bytes (and when it is larger, the error happens). For example:
+</p>
+<pre class="smallcode">  struct FOO
+    data db 256 dup (?)
+  ends
+
+  some FOO &lt;"ABC",0&gt;
+</pre>
+<p class="smalltext">
+fills the first four bytes of <span class="smallcode">some.data</span> with defined values and reserves the rest.
+</p>
+
+<p class="smalltext">
+Inside the structures also unions and unnamed substructures can be defined. The definition of union should start with <span class="smallcode">union</span> and end with <span class="smallcode">ends</span>, like in this example:
+</p>
+<pre class="smallcode">  struct BAR
+    field_1 dd ?
+    union
+      field_2  dd ?
+      field_2b db ?
+    ends
+  ends
+</pre>
+<p class="smalltext">
+Each of the fields defined inside union has the same offset and they share the same memory. Only the first field of union is initialized with given value, the values for the rest of fields are ignored (however if one of the other fields requires more memory than the first one, the union is padded to the required size with undefined bytes). The whole union is initialized by the single parameter given in structure declaration, and this parameter gives value to the first field of union.
+</p>
+
+<p class="smalltext">
+The unnamed substructure is defined in a similar way to the union, only starts with the <span class="smallcode">struct</span> line instead of <span class="smallcode">union</span>, like:
+</p>
+<pre class="smallcode">  struct WBB
+    word dw ?
+    struct
+      byte1 db ?
+      byte2 db ?
+    ends
+  ends
+</pre>
+<p class="smalltext">
+Such substructure only takes one parameter in the declaration of whole structure to define its values, and this parameter can itself be the group of parameters defining each field of the substructure. So the above type of structure may get declared like:
+</p>
+<pre class="smallcode">  my WBB 1,&lt;2,3&gt;
+</pre>
+<p class="smalltext">
+The fields inside unions and unnamed substructures are accessed just as if the were directly the fields of the parent structure. For example with above declaration <span class="smallcode">my.byte1</span> and <span class="smallcode">my.byte2</span> are correct labels for the substructure fields.
+</p>
+
+<p class="smalltext">
+The substructures and unions can be nested with no limits for the nesting depth:
+</p>
+<pre class="smallcode">  struct LINE
+    union
+      start POINT
+      struct
+        x1  dd ?
+        y1  dd ?
+      ends
+    ends
+    union
+      end   POINT
+      struct
+        x2  dd ?
+        y2  dd ?
+      ends
+    ends
+  ends
+</pre>
+
+<p class="smalltext">
+The definition of structure may also be based on some of the already defined structure types and it inherits all the fields from that structure, for example:
+</p>
+<pre class="smallcode">  struct CPOINT POINT
+    color dd ?
+  ends
+</pre>
+<p class="smalltext">
+defines the same structure as:
+</p>
+<pre class="smallcode">  struct CPOINT
+    x     dd ?
+    y     dd ?
+    color dd ?
+  ends
+</pre>
+
+<p class="smalltext">
+All headers define the <span class="smallcode">CHAR</span> data type, which can be used to
+define character strings in the data structures.
+</p>
+
+<h3 id="1.2" class="smalltext">1.2  Imports</h3>
+<p class="smalltext">
+The import macroinstructions help to build the import data for PE file (usually put in the separate section).
+There are two macroinstructions for this purpose. The first one is called <span class="smallcode">library</span>, must be placed directly in the beginning of the import data and it defines from what libraries  the functions will be imported. It should be followed by any amount of the pairs of parameters, each pair being the label for the table of imports from the given library, and the quoted string defining the name of the library. For example:
+</p>
+<pre class="smallcode">  library kernel32,'KERNEL32.DLL',\
+          user32,'USER32.DLL'
+</pre>
+<p class="smalltext">
+declares to import from the two libraries. For each of libraries, the table of imports must be then declared somewhere inside the import data. This is done with <span class="smallcode">import</span> macroinstruction, which needs first parameter to define the label for the table (the same as declared earlier to the <span class="smallcode">library</span> macro), and then the pairs of parameters each containing the label for imported pointer and the quoted string defining the name of function exactly as exported by library. For example the above <span class="smallcode">library</span> declaration may be completed with following <span class="smallcode">import</span> declarations:
+</p>
+<pre class="smallcode">  import kernel32,\
+         ExitProcess,'ExitProcess'
+
+  import user32,\
+         MessageBeep,'MessageBeep',\
+         MessageBox,'MessageBoxA'
+</pre>
+<p class="smalltext">
+The labels defined by first parameters in each pair passed to the <span class="smallcode">import</span> macro address the double word pointers, which after loading the PE are filled with the addresses to exported procedures.
+</p>
+<p class="smalltext">
+Instead of quoted string for the name of procedure to import, the number may be given to define import by ordinal, like:
+</p>
+<pre class="smallcode">  import custom,\
+         ByName,'FunctionName',\
+         ByOrdinal,17
+</pre>
+<p class="smalltext">
+The import macros optimize the import data, so only imports for functions that are used somewhere in program are placed in the import tables, and if some import table would be empty this way, the whole library is not referenced at all. For this reason it's handy to have the complete import table for each library - the package contains such tables for some of the standard libraries, they are stored in the <span class="smallcode">APIA</span> and <span class="smallcode">APIW</span> subdirectories and import the ASCII and WideChar variants of the API functions. Each file contains one import table, with lowercase label the same as the name of the file. So the complete tables for importing from the <span class="smallcode">KERNEL32.DLL</span> and <span class="smallcode">USER32.DLL</span> libraries can be defined this way (assuming your <span class="smallcode">INCLUDE</span> environment variable points to the directory containing the includes package):
+</p>
+<pre class="smallcode">  library kernel32,'KERNEL32.DLL',\
+          user32,'USER32.DLL'
+
+  include 'apia\kernel32.inc'
+  include 'apiw\user32.inc'
+</pre>
+
+<h3 id="1.3" class="smalltext">1.3  Procedures (32-bit)</h3>
+<p class="smalltext">
+Headers for 32-bit Windows provide four macroinstructions for calling procedures with parameters passed on stack.
+The <span class="smallcode">stdcall</span> calls directly the procedure specified by the first argument
+using the STDCALL calling convention. The rest of arguments passed to macro define the parameters to
+procedure and are stored on the stack in reverse order. The <span class="smallcode">invoke</span> macro does the same, however it
+calls the procedure indirectly, through the pointer labelled by the first argument. Thus <span class="smallcode">invoke</span>
+can be used to call the procedures through pointers defined in the import tables. This line:
+</p>
+<pre class="smallcode">  invoke MessageBox,0,szText,szCaption,MB_OK
+</pre>
+<p class="smalltext">
+is equivalent to:
+</p>
+<pre class="smallcode">  stdcall [MessageBox],0,szText,szCaption,MB_OK
+</pre>
+and they both generate this code:
+<pre class="smallcode">  push MB_OK
+  push szCaption
+  push szText
+  push 0
+  call [MessageBox]
+</pre>
+<p class="smalltext">
+The <span class="smallcode">ccall</span> and <span class="smallcode">cinvoke</span> are analogous to
+the <span class="smallcode">stdcall</span> and <span class="smallcode">invoke</span>, but they should be
+used to call the procedures that use the C calling convention, where the stack frame has to be restored by the caller.
+</p>
+
+<p class="smalltext">
+To define the procedure that uses the stack for parameters and local variables, you should use the
+<span class="smallcode">proc</span> macroinstruction. In its simplest form it has to be followed by
+the name for the procedure and then names for the all the parameters it takes, like:
+</p>
+<pre class="smallcode">  proc WindowProc,hwnd,wmsg,wparam,lparam
+</pre>
+<p class="smalltext">
+The comma between the name of procedure and the first parameter is optional.
+The procedure instructions should follow in the next lines, ended with the <span class="smallcode">endp</span> macroinstruction.
+The stack frame is set up automatically on the entry to procedure, the EBP register is used as a base
+to access the parameters, so you should avoid using this register for other purposes.
+The names specified for the parameters are used to define EBP-based labels, which you can use to access
+the parameters as regular variables. For example the <span class="smallcode">mov&nbsp;eax,[hwnd]</span> instruction inside the procedure defined as in above sample, is equivalent to <span class="smallcode">mov&nbsp;eax,[ebp+8]</span>. The scope of those labels is limited to the procedure, so you may use the same names for other purposes outside the given procedure.
+</p>
+<p class="smalltext">
+Since any parameters are pushed on the stack as double words when calling such procedures, the labels for
+parameters are defined to mark the double word data by default, however you can you specify the sizes for the parameters if you want, by following the name of parameter with colon and the size operator.
+The previous sample can be rewritten this way, which is again equivalent:
+</p>
+<pre class="smallcode">  proc WindowProc,hwnd:DWORD,wmsg:DWORD,wparam:DWORD,lparam:DWORD
+</pre>
+<p class="smalltext">
+If you specify a size smaller than double word, the given label applies to the smaller portion of the
+whole double word stored on stack. If you you specify a larger size, like far pointer of quad word, the
+two double word parameters are defined to hold this value, but are labelled as one variable.
+</p>
+<p class="smalltext">
+The name of procedure can be also followed by either the <span class="smallcode">stdcall</span> or
+<span class="smallcode">c</span> keyword to define the calling convention it uses. When no such type is
+specified, the default is used, which is equivalent to STDCALL. Then also the <span class="smallcode">uses</span> keyword may follow, and after it the list of registers (separated only with spaces) that will be automatically stored on entry to procedure and restored on exit.
+In this case the comma after the list of registers and before the first parameter is required.
+So the fully featured procedure statement might look like this:
+</p>
+<pre class="smallcode">  proc WindowProc stdcall uses ebx esi edi,\
+       hwnd:DWORD,wmsg:DWORD,wparam:DWORD,lparam:DWORD
+</pre>
+<p class="smalltext">
+To declare the local variable you can use the <span class="smallcode">local</span> macroinstruction,
+followed by one or more declarations separated with commas, each one consisting of the name for
+variable followed by colon and the type of variable - either one of the standard types (must be upper case) or the name of data structure. For example:
+</p>
+<pre class="smallcode">  local hDC:DWORD,rc:RECT
+</pre>
+<p class="smalltext">
+To declare a local array, you can follow the name of variable by the size of array enclosed in square
+brackets, like:
+</p>
+<pre class="smallcode">  local str[256]:BYTE
+</pre>
+<p class="smalltext">
+The other way to define the local variables is to declare them inside the block started with "locals" macroinstruction and ended with "endl", in this case they can be defined just like regular data. This declaration is the equivalent of the earlier sample:
+</p>
+<pre class="smallcode">  locals
+    hDC dd ?
+    rc RECT
+  endl
+</pre>
+<p class="smalltext">
+The local variables can be declared anywhere inside the procedure, with the only limitation that they have to be declared before they are used. The scope of labels for the variables defined as local is limited to inside the procedure, you can use the same names for other purposes outside the procedure.
+If you give some initialized values to the variables declared as local, the macroinstruction generates the instructions that will initialize these variables with the given values and puts these instruction at the same position in procedure, where the declaration is placed.
+</p>
+<p class="smalltext">
+The <span class="smallcode">ret</span> placed anywhere inside the procedure, generates the complete code
+needed to correctly exit the procedure, restoring the stack frame and the registers used by procedure.
+If you need to generate the raw return instruction, use the <span class="smallcode">retn</span> mnemonic, or follow the <span class="smallcode">ret</span> with the number parameter, what also causes it to be interpreted as single instruction.
+</p>
+<p class="smalltext">
+To recapitulate, the complete definition of procedure may look like this:
+</p>
+<pre class="smallcode">  proc WindowProc uses ebx esi edi,hwnd,wmsg,wparam,lparam
+    local hDC:DWORD,rc:RECT
+    ; the instructions
+    ret
+  endp
+</pre>
+
+<h3 id="1.4" class="smalltext">1.4  Procedures (64-bit)</h3>
+<p class="smalltext">
+In 64-bit Windows there is only one calling convention, and thus only two macroinstructions for calling procedures are provided.
+The <span class="smallcode">fastcall</span> calls directly the procedure specified by the first argument using the standard convention of 64-bit Windows system.
+The <span class="smallcode">invoke</span> macro does the same, but indirectly, through the pointer labelled by the first argument.
+Parameters are provided by the arguments that follow, and they can be of any size up to 64 bits.
+The macroinstructions use RAX register as a temporary storage when some parameter value cannot be copied directly into the stack using the
+<span class="smallcode">mov</span> instruction. If the parameter is preceded with <span class="smallcode">addr</span> word, it is treated as an address and is
+calculated with the <span class="smallcode">lea</span> instruction - so if the address is absolute, it will get calculated as RIP-relative,
+thus preventing generating a relocation in case of file with fixups.
+</p>
+<p class="smalltext">
+Because in 64-bit Windows the floating-point parameters are passed in a different way, they have to be marked by preceding each one of them
+with <span class="smallcode">float</span> word. They can be either double word or quad word in size.
+Here is an example of calling some OpenGL procedures with either double-precision or single-precision parameters:
+</p>
+<pre class="smallcode">  invoke glVertex3d,float 0.6,float -0.6,float 0.0
+  invoke glVertex2f,float dword 0.1,float dword 0.2
+</pre>
+<p class="smalltext">
+The stack space for parameters are allocated before each call and freed immediately after it.
+However it is possible to allocate this space just once for all the calls inside some given block of code,
+for this purpose there are <span class="smallcode">frame</span> and <span class="smallcode">endf</span> macros provided. They should be used to enclose a block,
+inside which the RSP register is not altered between the procedure calls and they prevent each call from allocating
+stack space for parameters, as it is reserved just once by the <span class="smallcode">frame</span> macro and then freed at the end by the <span class="smallcode">endf</span> macro.
+</p>
+<pre class="smallcode">  frame ; allocate stack space just once
+    invoke TranslateMessage,msg
+    invoke DispatchMessage,msg
+  endf
+</pre>
+<p class="smalltext">
+The <span class="smallcode">proc</span> macro for 64-bit Windows has the same syntax and features as 32-bit one (though <span class="smallcode">stdcall</span> and <span class="smallcode">c</span> options are of no use in its case).
+It should be noted however that in the calling convention used in 64-bit Windows first four parameters are passed in registers (RCX, RDX, R8 and R9),
+and therefore, even though there is a space reserved for them at the stack and it is labelled with name provided in the procedure definition,
+those four parameters will not initially reside there. They should be accessed by directly reading the registers. But if those registers are
+needed to be used for some other purpose, it is recommended to store the value of such parameter into the memory cell reserved for it.
+The beginning of such procedure may look like:
+</p>
+<pre class="smallcode">  proc WindowProc hwnd,wmsg,wparam,lparam
+    mov [hwnd],rcx
+    mov [wmsg],edx
+    mov [wparam],r8
+    mov [lparam],r9
+    ; now registers can be used for other purpose
+    ; and parameters can still be accessed later
+</pre>
+
+<h3 id="1.5" class="smalltext">1.5  Customizing procedures</h3>
+<p class="smalltext">
+It is possible to create a custom code for procedure framework when using <span class="smallcode">proc</span> macroinstruction.
+There are three symbolic variables, <span class="smallcode">prologue@proc</span>, <span class="smallcode">epilogue@proc</span> and <span class="smallcode">close@proc</span>,
+which define the names of macroinstructions that <span class="smallcode">proc</span> calls upon entry to the procedure,
+return from procedure (created with <span class="smallcode">ret</span> macro) and at the end of procedure (made with <span class="smallcode">endp</span> macro).
+Those variables can be re-defined to point to some other macroinstructions, so that all the code
+generated with <span class="smallcode">proc</span> macro can be customized.
+</p>
+<p class="smalltext">
+Each of those three macroinstructions takes five parameters.
+The first one provides a label of procedure entry point, which is the name of procedure aswell.
+The second one is a bitfield containing some flags, notably the bit 4 is set when the caller is supposed to restore the stack, and cleared otherwise.
+The third one is a value that specifies the number of bytes that parameters to the procedure take on the stack.
+The fourth one is a value that specified the number of bytes that should be reserved for the local variables.
+Finally, the fifth an last parameter is the list of comma-separated registers, which procedure declared to be used
+and which should therefore be saved by prologue and restored by epilogue.
+</p>
+<p class="smalltext">
+The prologue macro apart from generating code that would set up the stack frame and the pointer to local variables
+has to define two symbolic variables, <span class="smallcode">parmbase@proc</span> and <span class="smallcode">localbase@proc</span>.
+The first one should provide the base address for where the parameters reside, and the second
+one should provide the address for where the local variables reside - usually relative to
+EBP/RBP register, but it is possible to use other bases if it can be ensured that those pointers
+will be valid at any point inside the procedure where parameters or local variables are accessed.
+It is also up to the prologue macro to make any alignments necessary for valid procedure implementation;
+the size of local variables provided as fourth parameter may itself be not aligned at all.
+</p>
+<p class="smalltext">
+The default behavior of <span class="smallcode">proc</span> is defined by <span class="smallcode">prologuedef</span> and <span class="smallcode">epiloguedef</span> macros
+(in default case there is no need for closing macro, so the <span class="smallcode">close@proc</span> has an empty value).
+If it is needed to return to the defaults after some customizations were used, it should be done
+with the following three lines:
+</p>
+<pre class="smallcode">  prologue@proc equ prologuedef
+  epilogue@proc equ epiloguedef
+  close@proc equ
+</pre>
+<p class="smalltext">
+As an example of modified prologue, below is the macroinstruction that implements stack-probing prologue for
+32-bit Windows. Such method of allocation should be used every time the area of local variables may
+get larger than 4096 bytes.
+</p>
+<pre class="smallcode">  macro sp_prologue procname,flag,parmbytes,localbytes,reglist
+  { local loc
+    loc = (localbytes+3) and (not 3)
+    parmbase@proc equ ebp+8
+    localbase@proc equ ebp-loc
+    if parmbytes | localbytes
+     push ebp
+     mov ebp,esp
+     if localbytes
+      repeat localbytes shr 12
+       mov byte [esp-%*4096],0
+      end repeat
+      sub esp,loc
+     end if
+    end if
+    irps reg, reglist \{ push reg \} }
+
+  prologue@proc equ sp_prologue
+</pre>
+<p class="smalltext">
+It can be easily modified to use any other stack probing method of the programmer's preference.
+</p>
+<p class="smalltext">
+The 64-bit headers provide an additional set of prologue/epilogue macros, which allow to define
+procedure that uses RSP to access parameters and local variables (so RBP register is free to use for any other by procedure)
+and also allocates the common space for all the procedure calls made inside, so that <span class="smallcode">fastcall</span>
+or <span class="smallcode">invoke</span> macros called do not need to allocate any stack space themselves. It is an effect
+similar to the one obtained by putting the code inside the procedure into <span class="smallcode">frame</span> block, but in
+this case the allocation of stack space for procedure calls is merged with the allocation of space
+for local variables. The code inside such procedure must not alter RSP register in any way.
+To switch to this behavior of 64-bit <span class="smallcode">proc</span>, use the following instructions:
+</p>
+<pre class="smallcode">  prologue@proc equ static_rsp_prologue
+  epilogue@proc equ static_rsp_epilogue
+  close@proc equ static_rsp_close
+</pre>
+
+<h3 id="1.6" class="smalltext">1.6  Exports</h3>
+<p class="smalltext">
+The <span class="smallcode">export</span> macroinstruction constructs the export data for the PE file
+(it should be either placed in the section marked as export, or within the <span class="smallcode">data&nbsp;export</span> block. The first argument should be quoted string defining the
+name of library file, and the rest should be any number of pairs of arguments, first in each pair being the name of procedure defined somewhere inside the source, and the second being the quoted string containing the name under which this procedure should be exported by the library. This sample:
+</p>
+<pre class="smallcode">  export 'MYLIB.DLL',\
+         MyStart,'Start',\
+         MyStop,'Stop'
+</pre>
+<p class="smalltext">
+defines the table exporting two functions, which are defined under the names <span class="smallcode">MyStart</span> and <span class="smallcode">MyStop</span> in the sources, but will be exported by library under the shorter names. The macroinstruction take care of the alphabetical sorting of the table, which is required by PE format.
+</p>
+
+<h3 id="1.7" class="smalltext">1.7  Component Object Model</h3>
+<p class="smalltext">
+The <span class="smallcode">interface</span> macro allows to declare the interface of the COM object type, the first parameter is the name of interface, and then the consecutive names of the methods should follow, like in this example:
+</p>
+<pre class="smallcode">  interface ITaskBarList,\
+             QueryInterface,\
+             AddRef,\
+             Release,\
+             HrInit,\
+             AddTab,\
+             DeleteTab,\
+             ActivateTab,\
+             SetActiveAlt
+</pre>
+<p class="smalltext">
+The <span class="smallcode">comcall</span> macro may be then used to call the method of the given object.
+The first parameter to this macro should be the handle to object, the second one should be name of COM interface implemented by this object,
+and then the name of method and parameters to this method. For example:
+</p>
+<pre class="smallcode">  comcall ebx,ITaskBarList,ActivateTab,[hwnd]
+</pre>
+<p class="smalltext">
+uses the contents of EBX register as a handle to COM object with <span class="smallcode">ITaskBarList</span> interface,
+and calls the <span class="smallcode">ActivateTab</span> method of this object with the <span class="smallcode">[hwnd]</span> parameter.
+</p>
+<p class="smalltext">
+You can also use the name of COM interface in the same way as the name of data structure, to define the variable that will hold the handle to object of given type:
+</p>
+<pre class="smallcode">  ShellTaskBar ITaskBarList
+</pre>
+<p class="smalltext">
+The above line defines the variable, in which the handle to COM object can be stored. After storing there the handle to an object, its methods can be called with the <span class="smallcode">cominvk</span>. This macro needs only the name of the variable with assigned interface and the name of method as first two parameters, and then parameters for the method. So the <span class="smallcode">ActivateTab</span> method of object whose handle is stored in the <span class="smallcode">ShellTaskBar</span> variable as defined above can be called this way:
+</p>
+<pre class="smallcode">  cominvk ShellTaskBar,ActivateTab,[hwnd]
+</pre>
+which does the same as:
+<pre class="smallcode">  comcall [ShellTaskBar],ITaskBarList,ActivateTab,[hwnd]
+</pre>
+
+<h3 id="1.8" class="smalltext">1.8  Resources</h3>
+<p class="smalltext">
+There are two ways to create resources, one is to include the external resource file created with some other program,
+and the other one is to create resource section manually. The latter method, though doesn't need any additional program to be involved,
+is more laborious, but the standard headers provide the assistance - the set of elementary macroinstructions that serve as bricks to compose the resource section.
+</p>
+<p class="smalltext">
+The <span class="smallcode">directory</span> macroinstruction must be placed directly in the beginning of manually built resource data and it defines what types of resources it contains. It should be followed by the pairs of values, the first one in each pair being the identifier of the type of resource, and the second one the label of subdirectory of the resources of given type. It may look like this:
+</p>
+<pre class="smallcode">  directory RT_MENU,menus,\
+            RT_ICON,icons,\
+            RT_GROUP_ICON,group_icons
+</pre>
+<p class="smalltext">
+The subdirectories can be placed anywhere in the resource area after the main directory, and they have to be defined with the <span class="smallcode">resource</span> macroinstruction, which requires first parameter to be the label of the subdirectory (corresponding to the entry in main directory) followed by the trios of parameters - in
+each such entry the first parameter defines the identifier of resource (this value is freely chosen by the programmer and is then used to access the given resource from the program), the second specifies the language and the third one is the label of resource. Standard equates should be used to create language identifiers. For example the subdirectory of menus may be defined this way:
+</p>
+<pre class="smallcode">  resource menus,\
+           1,LANG_ENGLISH+SUBLANG_DEFAULT,main_menu,\
+           2,LANG_ENGLISH+SUBLANG_DEFAULT,other_menu
+</pre>
+<p class="smalltext">
+If the resource is of kind for which the language doesn't matter, the language identifier <span class="smallcode">LANG_NEUTRAL</span> should be used. To define the resources of various types there are specialized macroinstructions, which should be placed inside the resource area.
+</p>
+<p class="smalltext">
+The bitmaps are the resources with <span class="smallcode">RT_BITMAP</span> type identifier. To define the bitmap resource use the <span class="smallcode">bitmap</span> macroinstruction with the first parameter being the label of resource (corresponding to the entry in the subdirectory of bitmaps) and the second being the quoted string containing the path to the bitmap file, like:
+</p>
+<pre class="smallcode">  bitmap program_logo,'logo.bmp'
+</pre>
+<p class="smalltext">
+The are two resource types related to icons, the <span class="smallcode">RT_GROUP_ICON</span> is the type for the resource, which has to be linked to one or more resources of <span class="smallcode">RT_ICON</span> type, each one containing single image. This allows to declare images of different sizes and color depths under the common resource identifier. This identifier, given to the resource of <span class="smallcode">RT_GROUP_ICON</span> type may be then passed to the <span class="smallcode">LoadIcon</span> function, and it will choose the image of suitable dimensions from the group. To define the icon, use the <span class="smallcode">icon</span> macroinstruction, with first parameter being the label of <span class="smallcode">RT_GROUP_ICON</span> resource, followed by the pairs of parameters declaring the images. First parameter in each pair should be the label of <span class="smallcode">RT_ICON</span> resource, and the second one the quoted string containing the path to the icon file. In the simplest variant, when group of icon contains just one image, it will look like:
+</p>
+<pre class="smallcode">  icon main_icon,icon_data,'main.ico'
+</pre>
+<p class="smalltext">
+where the <span class="smallcode">main_icon</span> is the label for entry in resource subdirectory for <span class="smallcode">RT_GROUP_ICON</span> type, and the <span class="smallcode">icon_data</span> is the label for entry of <span class="smallcode">RT_ICON</span> type.
+</p>
+<p class="smalltext">
+The cursors are defined in a way similar to icons, with the <span class="smallcode">RT_GROUP_CURSOR</span> and <span class="smallcode">RT_CURSOR</span> types and the <span class="smallcode">cursor</span> macro, which takes parameters analogous to those taken by <span class="smallcode">icon</span> macro. So the definition of cursor may look like this:
+</p>
+<pre class="smallcode">  cursor my_cursor,cursor_data,'my.cur'
+</pre>
+<p class="smalltext">
+The menus have the <span class="smallcode">RT_MENU</span> type of resource and are defined with the <span class="smallcode">menu</span> macroinstruction followed by few others defining the items inside the menu. The <span class="smallcode">menu</span> itself takes only one parameter - the label of resource. The <span class="smallcode">menuitem</span> defines the item in the menu, it takes up to five parameters, but only two are required - the first one is the quoted string containing the text for the item, and the second one is the identifier value (which is the value that will be returned when user selects the given item from the menu).
+The <span class="smallcode">menuseparator</span> defines a separator in the menu and doesn't require any parameters.
+</p>
+<p class="smalltext">
+The optional third parameter of <span class="smallcode">menuitem</span> specifies the menu resource flags. There are two such flags available - <span class="smallcode">MFR_END</span> is the flag for the last item in the given menu, and the <span class="smallcode">MFR_POPUP</span> marks that the given item is the submenu, and the following items will be items composing that submenu until the item with <span class="smallcode">MFR_END</span> flag is found. The <span class="smallcode">MFR_END</span> flag can be also given as the parameter to the <span class="smallcode">menuseparator</span> and is the only parameter this macroinstruction can take. For the menu definition to be complete, every submenu must be closed by the item with <span class="smallcode">MFR_END</span> flag, and the whole menu must also be closed this way. Here is an example of complete definition of the menu:
+</p>
+<pre class="smallcode">  menu main_menu
+       menuitem '&amp;File',100,MFR_POPUP
+                menuitem '&amp;New',101
+                menuseparator
+                menuitem 'E&amp;xit',109,MFR_END
+       menuitem '&amp;Help',900,MFR_POPUP + MFR_END
+                menuitem '&amp;About...',901,MFR_END
+</pre>
+<p class="smalltext">
+The optional fourth parameter of <span class="smallcode">menuitem</span> specifies the state flags for the given item, these flags are the same as the ones used by API functions, like <span class="smallcode">MFS_CHECKED</span> or <span class="smallcode">MFS_DISABLED</span>. Similarly, the fifth parameter can specify the type flags. For example this will define item checked with a radio-button mark:
+</p>
+<pre class="smallcode">  menuitem 'Selection',102, ,MFS_CHECKED,MFT_RADIOCHECK
+</pre>
+<p class="smalltext">
+The dialog boxes have the <span class="smallcode">RT_DIALOG</span> type of resource and are defined with the <span class="smallcode">dialog</span> macroinstruction followed by any number of items defined with <span class="smallcode">dialogitem</span> ended with the <span class="smallcode">enddialog</span>.
+</p>
+<p class="smalltext">
+The <span class="smallcode">dialog</span> can take up to eleven parameters, first seven being required. First parameter, as usual, specifies the label of resource, second is the quoted string containing the title of the dialog box, the next four parameters specify the horizontal and vertical coordinates, the width and the height of the dialog box window respectively. The seventh parameter specifies the style flags for the dialog box window, the optional eighth one specifies the extended style flags. The ninth parameter can specify the menu for window - it should be the identifier of menu resource, the same as one specified in the subdirectory of resources with <span class="smallcode">RT_MENU</span> type. Finally the tenth and eleventh parameter can be used to define the font for the dialog box - first of them should be the quoted string containing the name of font, and the latter one the number defining the size of font. When these optional parameters are not specified, the default MS Sans Serif of size 8 is used.
+</p>
+<p class="smalltext">
+This example shows the <span class="smallcode">dialog</span> macroinstruction with all the parameters except for the menu (which is left with blank value), the optional ones are in the second line:
+</p>
+<pre class="smallcode">  dialog about,'About',50,50,200,100,WS_CAPTION+WS_SYSMENU,\
+               WS_EX_TOPMOST, ,'Times New Roman',10
+</pre>
+<p class="smalltext">
+The <span class="smallcode">dialogitem</span> has eight required parameters and one optional. First parameter should be the quoted string containing the class name for the item. Second parameter can be either the quoted string containing text for the item, or resource identifier in case when the contents of item has to be defined by some additional resource (like the item of <span class="smallcode">STATIC</span> class with the <span class="smallcode">SS_BITMAP</span> style). The third parameter is the identifier for the item, used to identify the item by the API functions. Next four parameters specify the horizontal, vertical coordinates, the width and height of the item respectively. The eighth parameter specifies the style for the item, and the optional ninth specifies the extended style flags. An example dialog item definition:
+</p>
+<pre class="smallcode">  dialogitem 'BUTTON','OK',IDOK,10,10,45,15,WS_VISIBLE+WS_TABSTOP
+</pre>
+<p class="smalltext">
+And an example of static item containing bitmap, assuming that there exists a bitmap resource of identifier 7:
+</p>
+<pre class="smallcode">  dialogitem 'STATIC',7,0,10,50,50,20,WS_VISIBLE+SS_BITMAP
+</pre>
+<p class="smalltext">
+The definition of dialog resource can contain any amount of items or none at all, and it should be always ended with <span class="smallcode">enddialog</span> macroinstruction.
+</p>
+<p class="smalltext">
+The resources of type <span class="smallcode">RT_ACCELERATOR</span> are created with <span class="smallcode">accelerator</span> macroinstruction. After first parameter traditionally being the label of resource, there should follow the trios of parameters - the accelerator flags followed by the virtual key code or ASCII character and the identifier value (which is like the identifier of the menu item). A simple accelerator definition may look like this:
+</p>
+<pre class="smallcode">  accelerator main_keys,\
+              FVIRTKEY+FNOINVERT,VK_F1,901,\
+              FVIRTKEY+FNOINVERT,VK_F10,109
+</pre>
+<p class="smalltext">
+The version information is the resource of type <span class="smallcode">RT_VERSION</span> and is created with the <span class="smallcode">versioninfo</span> macroinstruction. After the label of the resource, the second parameter specifies the operating system of PE file (usually <span class="smallcode">VOS__WINDOWS32</span>), third parameter the type of file (the most common are <span class="smallcode">VFT_APP</span> for program and <span class="smallcode">VFT_DLL</span> for library), fourth the subtype (usually <span class="smallcode">VFT2_UNKNOWN</span>), fifth the language identifier, sixth the code page and then the quoted string parameters, being the pairs of property name and corresponding value. The simplest version information can be defined like:
+</p>
+<pre class="smallcode">  versioninfo vinfo,VOS__WINDOWS32,VFT_APP,VFT2_UNKNOWN,\
+                    LANG_ENGLISH+SUBLANG_DEFAULT,0,\
+              'FileDescription','Description of program',\
+              'LegalCopyright','Copyright et cetera',\
+              'FileVersion','1.0',\
+              'ProductVersion','1.0'
+</pre>
+<p class="smalltext">
+Other kinds of resources may be defined with <span class="smallcode">resdata</span> macroinstruction, which takes only one parameter - the label of resource, and can be followed by any instructions defining the data, ended with <span class="smallcode">endres</span> macroinstruction, like:
+</p>
+<pre class="smallcode">  resdata manifest
+    file 'manifest.xml'
+  endres
+</pre>
+
+<h3 id="1.9" class="smalltext">1.9  Text encoding</h3>
+<p class="smalltext">
+The resource macroinstructions use the <span class="smallcode">du</span> directive to define any Unicode strings inside resources - since this directive simply zero extends the characters to the 16-bit values, for the strings containing some non-ASCII characters, the <span class="smallcode">du</span> may need to be redefined. For some of the encodings the macroinstructions redefining the <span class="smallcode">du</span> to generate the Unicode texts properly are provided in the <span class="smallcode">ENCODING</span> subdirectory. For example if the source text is encoded with Windows 1250 code page, such line should be put somewhere in the beginning of the source:
+</p>
+<pre class="smallcode">  include 'encoding\win1250.inc'
+</pre>
+
+<h2 id="2" class="mediumtext">2.  Extended headers</h2>
+
+<p class="smalltext">
+The files <span class="smallcode">win32ax.inc</span>, <span class="smallcode">win32wx.inc</span>, <span class="smallcode">win64ax.inc</span> and <span class="smallcode">win64wx.inc</span> provide all the functionality of base headers and include a few more features involving more complex macroinstructions. Also if no PE format is declared before including the extended headers, the headers declare it automatically. The files <span class="smallcode">win32axp.inc</span>, <span class="smallcode">win32wxp.inc</span>, <span class="smallcode">win64axp.inc</span> and <span class="smallcode">win64wxp.inc</span> are the variants of extended headers which additionally perform checking the count of parameters to procedure calls.
+</p>
+
+<h3 id="2.1" class="smalltext">2.1  Procedure parameters</h3>
+<p class="smalltext">
+With the extended headers the macroinstructions for calling procedures allow more types of parameters than just the double word values as with basic headers. First of all, when the quoted string is passes as a parameter to procedure, it is used to define string data placed among the code, and passes to procedure the double word pointer to this string. This allows to easily define the strings that don't have to be re-used, just in the line calling the procedure that requires pointers to those strings, like:
+</p>
+<pre class="smallcode">  invoke MessageBox,HWND_DESKTOP,"Message","Caption",MB_OK
+</pre>
+<p class="smalltext">
+If the parameter is the group containing some values separated with commas, it is treated in the same way as simple quoted string parameter.
+</p>
+<p class="smalltext">
+If the parameter is preceded by the <span class="smallcode">addr</span> word, it means that this value is an address and this address should be passed to procedure, even if it cannot be done directly - like in the case of local variables, which have addresses relative to EBP/RBP register.
+In 32-bit case the EDX register is used temporarily to calculate the value of address and pass it to the procedure. For example:
+</p>
+<pre class="smallcode">  invoke RegisterClass,addr wc
+</pre>
+<p class="smalltext">
+in case when the <span class="smallcode">wc</span> is the local variable with address EBP-100h, will generate this sequence of instructions:
+</p>
+<pre class="smallcode">  lea edx,[ebp-100h]
+  push edx
+  call [RegisterClass]
+</pre>
+<p class="smalltext">
+However when the given address is not relative to any register, it is stored directly.
+</p>
+<p class="smalltext">
+In 64-bit case the <span class="smallcode">addr</span> prefix is allowed even when only standard headers are used, as it can be useful even in case of the regular addresses, because it enforces RIP-relative address calculation.
+</p>
+<p class="smalltext">
+With 32-bit headers, if the parameter is preceded by the word <span class="smallcode">double</span>, it is treated as 64-bit value and passed to the procedure as two 32-bit parameters. For example:
+</p>
+<pre class="smallcode">  invoke glColor3d,double 1.0,double 0.1,double 0.1
+</pre>
+<p class="smalltext">
+will pass the three 64-bit parameters as six double words to procedure. If the parameter following <span class="smallcode">double</span> is the memory operand, it should not have size operator, the <span class="smallcode">double</span> already works as the size override.
+</p>
+<p class="smalltext">
+Finally, the calls to procedures can be nested, that is call to one procedure may be used as the parameter to another. In such case the value returned in EAX/RAX by the nested procedure is passed as the parameter to the procedure which it is nested in. A sample of such nesting:
+</p>
+<pre class="smallcode">  invoke MessageBox,&lt;invoke GetTopWindow,[hwnd]&gt;,\
+                    "Message","Caption",MB_OK
+</pre>
+<p class="smalltext">
+There are no limits for the depth of nesting the procedure calls.
+</p>
+
+<h3 id="2.2" class="smalltext">2.2  Structuring the source</h3>
+<p class="smalltext">
+The extended headers enable some macroinstructions that help with easy structuring the program. The <span class="smallcode">.data</span> and <span class="smallcode">.code</span> are just the shortcuts to the declarations of sections for data and for the code. The <span class="smallcode">.end</span> macroinstruction should be put at the end of program, with one parameter specifying the entry point of program, and it also automatically generates the import section using all the standard import tables.
+In 64-bit Windows the <span class="smallcode">.end</span> automatically aligns the stack on 16 bytes boundary.
+</p>
+<p class="smalltext">
+The <span class="smallcode">.if</span> macroinstruction generates a piece of code that checks for some simple condition at the execution time, and depending on the result continues execution of following block or skips it. The block should be ended with <span class="smallcode">.endif</span>, but earlier also <span class="smallcode">.elseif</span> macroinstruction might be used once or more and begin the code that will be executed under some additional condition, when the previous conditions were not met, and the <span class="smallcode">.else</span> as the last before <span class="smallcode">.endif</span> to begin the block that will be executed when all the conditions were false.
+</p>
+<p class="smalltext">
+The condition can be specified by using comparison operator - one of the <span class="smallcode">=</span>, <span class="smallcode">&lt;</span>, <span class="smallcode">&gt;</span>, <span class="smallcode">&lt;=</span>, <span class="smallcode">&gt;=</span>, and <span class="smallcode">&lt;&gt;</span>
+- between the two values, first of which must be either register or memory operand.
+The values are compared as unsigned ones, unless the comparison expression is preceded by the word <span class="smallcode">signed</span>.
+If you provide only single value as a condition, it will be tested to be zero,
+and the condition will be true only if it's not. For example:
+</p>
+<pre class="smallcode">  .if eax
+    ret
+  .endif
+</pre>
+<p class="smalltext">
+generates the instructions, which skip over the <span class="smallcode">ret</span> when the EAX is zero.
+</p>
+<p class="smalltext">
+There are also some special symbols recognized as conditions: the <span class="smallcode">ZERO?</span> is true when the ZF flag is set,
+in the same way the <span class="smallcode">CARRY?</span>, <span class="smallcode">SIGN?</span>, <span class="smallcode">OVERFLOW?</span> and <span class="smallcode">PARITY?</span> correspond to the state of CF, SF, OF and PF flags.
+</p>
+<p class="smalltext">
+The simple conditions like above can be composed into complex conditional expressions
+using the <span class="smallcode">&amp;</span>, <span class="smallcode">|</span> operators for conjunction and alternative, the<span class="smallcode">~</span> operator for negation, and parenthesis. For example:
+</p>
+<pre class="smallcode">  .if eax&lt;=100 &amp; ( ecx | edx )
+    inc ebx
+  .endif
+</pre>
+<p class="smalltext">
+will generate the compare and jump instructions that will cause the given block to get executed only when EAX is below or
+equal 100 and at the same time at least one of the ECX and EDX is not zero.
+</p>
+<p class="smalltext">
+The <span class="smallcode">.while</span> macroinstruction generates the instructions that will repeat executing the given block (ended with <span class="smallcode">.endw</span> macroinstruction) as long as the condition is true. The condition should follow the <span class="smallcode">.while</span> and can be specified in the same way as for the <span class="smallcode">.if</span>.
+</p>
+<p class="smalltext">
+The pair of <span class="smallcode">.repeat</span> and <span class="smallcode">.until</span> macroinstructions define the block that will be repeatedly executed until the given condition will be met - this time the condition should follow the <span class="smallcode">.until</span> macroinstruction, placed at the end of block, like:
+</p>
+<pre class="smallcode">  .repeat
+    add ecx,2
+  .until ecx&gt;100
+</pre>
+  </div>
+
+  <p class="navigation">
+    <a class="boldlink" href="http://flatassembler.net/index.php">Main&nbsp;index</a>
+    <a class="boldlink" href="http://flatassembler.net/download.php">Download</a>
+    <a class="boldlink" href="http://flatassembler.net/docs.php">Documentation</a>
+    <a class="boldlink" href="http://flatassembler.net/examples.php">Examples</a>
+    <a class="boldlink" href="http://board.flatassembler.net/">Message&nbsp;board</a>
+  </p>
+
+  <p>
+     Copyright © 2004-2016, <a href="http://niewidoczna.pl/" title="Niewidoczna Pracownia — The Unseen Workshop">Tomasz Grysztar</a>.
+  </p>
+
+
+
+
+</body></html>
