@@ -255,19 +255,19 @@
               Âûðàæ_Çàãðóçèòü(e1);
               ÅÑËÈ e.T.Len = 0 ÒÎÃÄÀ
                 BaseT := ìÄåöë.OpenBase(e.T);
-                X86.PushConst(BaseT.Size);
+                X86.PushConst(BaseT.ðàçìåð);
                 X86.OpenIdx(ìÄåöë.Dim(e.T))
               ÈÍÀ×Å
                 ÅÑËÈ e1.eType = eCONST ÒÎÃÄÀ
                   idx := FLOOR(e1.Value);
                   ìÏðîâ.Òåñò((idx >= 0) & (idx < e.T.Len), line, col, 159);
-                  ÅÑËÈ e.T.Base.Size # 1 ÒÎÃÄÀ
+                  ÅÑËÈ e.T.Base.ðàçìåð # 1 ÒÎÃÄÀ
                     X86.Drop;
-                    X86.PushConst(e.T.Base.Size * idx)
+                    X86.PushConst(e.T.Base.ðàçìåð * idx)
                   ÊÎÍÅÖ;
                   X86.Idx
                 ÈÍÀ×Å
-                  X86.FixIdx(e.T.Len, e.T.Base.Size)
+                  X86.FixIdx(e.T.Len, e.T.Base.ðàçìåð)
                 ÊÎÍÅÖ
               ÊÎÍÅÖ;
               e.T := e.T.Base
@@ -630,8 +630,8 @@
           e.Value := ÄËÈÍ(FLT(T.Number));
           X86.PushConst(T.Number)
         ÈÍÀ×Å
-          e.Value := ÄËÈÍ(FLT(T.Size));
-          X86.PushConst(T.Size)
+          e.Value := ÄËÈÍ(FLT(T.ðàçìåð));
+          X86.PushConst(T.ðàçìåð)
         ÊÎÍÅÖ
       ÈÍÀ×Å
         ìÏðîâ.Òåñò(ËÎÆÜ, line2, col2, 73)
@@ -1582,7 +1582,7 @@
         ìÏðîâ.Òåñò(e1.T.tType = TPOINTER, line, col, 145);
         ÅÑËÈ proc = stNEW ÒÎÃÄÀ
           X86.PushConst(e1.T.Base.Number);
-          X86.PushConst(X86.Align(e1.T.Base.Size + 8, 32));
+          X86.PushConst(X86.Align(e1.T.Base.ðàçìåð + 8, 32));
           X86.newrec
         ÈÍÀ×Å
           X86.disprec
@@ -1730,7 +1730,7 @@
         ìÏðîâ.Òåñò(AssComp(e2, e1.T, ËÎÆÜ), line, col, 131);
         Âûðàæ_Çàãðóçèòü(e2);
         ÅÑËÈ e1.T.tType = TRECORD ÒÎÃÄÀ
-          X86.PushConst(e1.T.Size);
+          X86.PushConst(e1.T.ðàçìåð);
           X86.PushConst(e1.T.Number);
           ÅÑËÈ e1.vparam ÒÎÃÄÀ
             X86.LocalAdr(e1.id.Offset - 4, ìÄåöë.unit.Level - e1.id.Level);
@@ -1741,7 +1741,7 @@
             X86.PushConst(e1.T.Number)
           ÊÎÍÅÖ
         ÀÅÑËÈ e2.T.tType = TARRAY ÒÎÃÄÀ
-          X86.PushConst(e2.T.Size)
+          X86.PushConst(e2.T.ðàçìåð)
         ÀÅÑËÈ (e2.T.tType = TSTRING) & (e1.T.tType = TARRAY) ÒÎÃÄÀ
           s := ìÄåöë.Ñòð_Ïîëó÷(e2.Value);
           ÅÑËÈ s.äëèíà = 1 ÒÎÃÄÀ

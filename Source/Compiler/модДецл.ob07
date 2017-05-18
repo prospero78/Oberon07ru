@@ -76,7 +76,7 @@
 ТИПЫ
 
   туТип* = УКАЗАТЕЛЬ НА ЗАПИСЬ (мТипы.тПункт)
-      tType*, Size*, Len*, Number*, Align, Call*, Rec: ЦЕЛОЕ;
+      tType*, размер*, Len*, Number*, Align, Call*, Rec: ЦЕЛОЕ;
       Base*: туТип;
       Fields*: мТипы.туСписок
     КОНЕЦ;
@@ -238,35 +238,35 @@
   КОНЕЦ КлючСлед_Получ;
 
 ПРОЦЕДУРА Ключ_Проверить*(key: ЦЕЛОЕ);
-  ПЕРЕМ
-    code: ЦЕЛОЕ;
-  НАЧАЛО
-    ЕСЛИ мСкан.сущность # key ТОГДА
-      ВЫБОР key ИЗ
-        |мКонст.ксМОДУЛЬ:  code := 21
-        |lxIDENT:   code := 22
-        |мКонст.опТчкЗпт:    code := 23
-        |мКонст.ксКОНЕЦ:     code := 24
-        |lxDot:     code := 25
-        |мКонст.опРавно:      code := 35
-        |мКонст.опСкобкаПрКр:  code := 38
-        |мКонст.ксДО:      code := 40
-        |мКонст.ксИЗ:      code := 41
-        |lxRCurly:  code := 51
-        |lxLRound:  code := 56
-        |мКонст.опЗапятая:   code := 61
-        |мКонст.ксТОГДА:    code := 98
-        |мКонст.опСкобкаПрКв: code := 109
-        |мКонст.ксДЕЛАТЬ:      code := 118
-        |мКонст.ксПОКАНЕ:   code := 119
-        |lxAssign:  code := 120
-        |мКонст.ксВЕРНУТЬ:  code := 124
-        |мКонст.опДвоеточ:   code := 157
-      ИНАЧЕ
-      КОНЕЦ;
-      мПров.Тест2(ЛОЖЬ, code)
-    КОНЕЦ
-  КОНЕЦ Ключ_Проверить;
+    ПЕРЕМ
+      code: ЦЕЛОЕ;
+    НАЧАЛО
+      ЕСЛИ мСкан.сущность # key ТОГДА
+        ВЫБОР key ИЗ
+          |мКонст.ксМОДУЛЬ:  code := 21
+          |lxIDENT:   code := 22
+          |мКонст.опТчкЗпт:    code := 23
+          |мКонст.ксКОНЕЦ:     code := 24
+          |lxDot:     code := 25
+          |мКонст.опРавно:      code := 35
+          |мКонст.опСкобкаПрКр:  code := 38
+          |мКонст.ксДО:      code := 40
+          |мКонст.ксИЗ:      code := 41
+          |lxRCurly:  code := 51
+          |lxLRound:  code := 56
+          |мКонст.опЗапятая:   code := 61
+          |мКонст.ксТОГДА:    code := 98
+          |мКонст.опСкобкаПрКв: code := 109
+          |мКонст.ксДЕЛАТЬ:      code := 118
+          |мКонст.ксПОКАНЕ:   code := 119
+          |lxAssign:  code := 120
+          |мКонст.ксВЕРНУТЬ:  code := 124
+          |мКонст.опДвоеточ:   code := 157
+        ИНАЧЕ
+        КОНЕЦ;
+        мПров.Тест2(ЛОЖЬ, code)
+      КОНЕЦ
+    КОНЕЦ Ключ_Проверить;
 
 ПРОЦЕДУРА CheckIdent(Name: мТипы.туУзел): БУЛЕВО;
   ПЕРЕМ
@@ -324,24 +324,24 @@
   НАЧАЛО
     sttypes[0] := ПУСТО;
     ДЛЯ i := TINTEGER ДО TSTRING ДЕЛАТЬ
-      НОВ(type);
-      ПамОш_Проверить(type = ПУСТО);
-      type.tType := i;
-      мСпис.Добавить(types, type);
-      sttypes[i] := type
+        НОВ(type);
+        ПамОш_Проверить(type = ПУСТО);
+        type.tType := i;
+        мСпис.Добавить(types, type);
+        sttypes[i] := type
     КОНЕЦ;
-    sttypes[TINTEGER].Size := 4;
-    sttypes[TREAL].Size := 4;
-    sttypes[TLONGREAL].Size := 8;
-    sttypes[TBOOLEAN].Size := 1;
-    sttypes[TCHAR].Size := 1;
-    sttypes[TSET].Size := 4;
-    sttypes[TVOID].Size := 0;
-    sttypes[TSTRING].Size := 0;
-    sttypes[TNIL].Size := 4;
-    sttypes[TCARD16].Size := 2;
+    sttypes[TINTEGER].размер := 4;
+    sttypes[TREAL].размер := 4;
+    sttypes[TLONGREAL].размер := 8;
+    sttypes[TBOOLEAN].размер := 1;
+    sttypes[TCHAR].размер := 1;
+    sttypes[TSET].размер := 4;
+    sttypes[TVOID].размер := 0;
+    sttypes[TSTRING].размер := 0;
+    sttypes[TNIL].размер := 4;
+    sttypes[TCARD16].размер := 2;
     ДЛЯ i := TINTEGER ДО TSTRING ДЕЛАТЬ
-      sttypes[i].Align := sttypes[i].Size
+      sttypes[i].Align := sttypes[i].размер
     КОНЕЦ
   КОНЕЦ StTypes;
 
@@ -724,16 +724,16 @@
           Tr.Align := Tf.Align
         КОНЕЦ;
         ЕСЛИ Tr.Rec = record ТОГДА
-          cur.Offset := FieldOffset(Tf.Align, Tr.Size);
-          мПров.Тест2(cur.Offset <= мКонст.целое_макс - Tf.Size, 83);
-          Tr.Size := cur.Offset + Tf.Size
+          cur.Offset := FieldOffset(Tf.Align, Tr.размер);
+          мПров.Тест2(cur.Offset <= мКонст.целое_макс - Tf.размер, 83);
+          Tr.размер := cur.Offset + Tf.размер
         АЕСЛИ Tr.Rec = noalign ТОГДА
-          cur.Offset := FieldOffset(1, Tr.Size);
-          мПров.Тест2(cur.Offset <= мКонст.целое_макс - Tf.Size, 83);
-          Tr.Size := cur.Offset + Tf.Size
+          cur.Offset := FieldOffset(1, Tr.размер);
+          мПров.Тест2(cur.Offset <= мКонст.целое_макс - Tf.размер, 83);
+          Tr.размер := cur.Offset + Tf.размер
         АЕСЛИ Tr.Rec = union ТОГДА
-          ЕСЛИ Tf.Size > Tr.Size ТОГДА
-            Tr.Size := Tf.Size
+          ЕСЛИ Tf.размер > Tr.размер ТОГДА
+            Tr.размер := Tf.размер
           КОНЕЦ;
           cur.Offset := 0
         КОНЕЦ
@@ -857,7 +857,7 @@
       ЕСЛИ(cur.VarKind = paramvar) ИЛИ (cur.VarKind = param) & (T.tType IN {TRECORD, TARRAY}) ТОГДА
         n := 4 * (1 + Dim(T) + ORD((cur.VarKind = paramvar) & (T.tType = TRECORD)))
       ИНАЧЕ
-        n := T.Size;
+        n := T.размер;
         мПров.Тест2(n <= мКонст.целое_макс - мПам.Выровнять(n), 93);
         n := n + мПам.Выровнять(n)
       КОНЕЦ;
@@ -898,7 +898,7 @@
     мСпис.Добавить(types, nov);
     nov.tType := tType;
     nov.Len := Len;
-    nov.Size := Size;
+    nov.размер := Size;
     nov.Base := Base;
     nov.Fields := ПУСТО;
     nov.Number := Number;
@@ -1115,8 +1115,8 @@
       ИНАЧЕ
         мПров.Тест2(ЛОЖЬ, 79)
       КОНЕЦ;
-      мПров.Тест2(nov.Base.Size <= мКонст.целое_макс DIV nov.Len, 83);
-      nov.Size := nov.Base.Size * nov.Len;
+      мПров.Тест2(nov.Base.размер <= мКонст.целое_макс DIV nov.Len, 83);
+      nov.размер := nov.Base.размер * nov.Len;
       nov.Align := nov.Base.Align
     |мКонст.ксЗАПИСЬ:
       КлючСлед_Получ;
@@ -1136,7 +1136,7 @@
         мПров.Тест(nov.Base # ПУСТО, line, col, 42);
         мПров.Тест(nov.Base.tType = TRECORD, line, col, 80);
         мПров.Тест(notrecurs(ИСТИНА, nov.Base), line, col, 96);
-        nov.Size := nov.Base.Size;
+        nov.размер := nov.Base.размер;
         nov.Align := nov.Base.Align;
         Ключ_Проверить(мКонст.опСкобкаПрКр);
         КлючСлед_Получ;
@@ -1145,7 +1145,7 @@
       КОНЕЦ;
       ReadFields(nov);
       Ключ_Проверить(мКонст.ксКОНЕЦ);
-      nov.Size := X86.Align(nov.Size, nov.Align);
+      nov.размер := X86.Align(nov.размер, nov.Align);
       ЕСЛИ nov.Base # ПУСТО ТОГДА
         X86.AddRec(nov.Base.Number)
       ИНАЧЕ
