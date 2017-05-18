@@ -82,7 +82,7 @@
         ñòð: ìÄåöë.òóÊîíñòÑòð;
     ÍÀ×ÀËÎ
         ñòð := ìÄåöë.Ñòð_Ïîëó÷(àäð_)
-        ÂÅÐÍÓÒÜ ñòð.Len
+        ÂÅÐÍÓÒÜ ñòð.äëèíà
     ÊÎÍÅÖ Ñòð_Äëèíà;
 
 ÏÐÎÖÅÄÓÐÀ BaseOf(òèï0_, òèï1_: ìÄåöë.òóÒèï): ÁÓËÅÂÎ;
@@ -113,222 +113,222 @@
       imp, break, guard: ÁÓËÅÂÎ;
       f: ìÄåöë.òóÏîëå;
       T, BaseT: ìÄåöë.òóÒèï;
-      s: ìÄåöë.òóÊîíñòÑòð;
+      ñòð: ìÄåöë.òóÊîíñòÑòð;
 
-      ÏÐÎÖÅÄÓÐÀ LoadVar;
-      ÍÀ×ÀËÎ
-        ÅÑËÈ glob # -1 ÒÎÃÄÀ
-          X86.GlobalAdr(glob);
-          glob := -1
-        ÀÅÑËÈ loc # -1 ÒÎÃÄÀ
-          X86.LocalAdr(loc, bases);
-          loc := -1
-        ÊÎÍÅÖ
-      ÊÎÍÅÖ LoadVar;
+    ÏÐÎÖÅÄÓÐÀ LoadVar;
+        ÍÀ×ÀËÎ
+          ÅÑËÈ glob # -1 ÒÎÃÄÀ
+            X86.GlobalAdr(glob);
+            glob := -1
+          ÀÅÑËÈ loc # -1 ÒÎÃÄÀ
+            X86.LocalAdr(loc, bases);
+            loc := -1
+          ÊÎÍÅÖ
+        ÊÎÍÅÖ LoadVar;
 
     ÍÀ×ÀËÎ
-      glob := -1;
-      loc := -1;
-      ìÄåöë.Êîîðä_Óñò(line, col);
-      ìÄåöë.Êëþ÷_Ïðîâåðèòü(lxIDENT);
-      name := ìÑêàí.id;
-      id := ìÄåöë.GetIdent(name);
-      ÅÑËÈ (id # ÏÓÑÒÎ) & (id.iType = IDMOD) ÒÎÃÄÀ
-        ìÄåöë.Êëþ÷Ñëåä_Ïîëó÷;
-        ìÄåöë.Êëþ÷_Ïðîâåðèòü(lxDot);
-        ìÄåöë.Êëþ÷Ñëåä_Ïîëó÷;
-        ìÄåöë.Êëþ÷_Ïðîâåðèòü(lxIDENT);
+        glob := -1;
+        loc := -1;
         ìÄåöë.Êîîðä_Óñò(line, col);
+        ìÄåöë.Êëþ÷_Ïðîâåðèòü(lxIDENT);
         name := ìÑêàí.id;
-        imp := id.Unit # ìÄåöë.unit;
-        id := ìÄåöë.GetQIdent(id.Unit, name)
-      ÊÎÍÅÖ;
-      ìÏðîâ.Òåñò(id # ÏÓÑÒÎ, line, col, 42);
-      e.vparam := ËÎÆÜ;
-      e.deref := ËÎÆÜ;
-      e.id := id;
-      ìÄåöë.Êëþ÷Ñëåä_Ïîëó÷;
-      ÂÛÁÎÐ id.iType ÈÇ
-      |IDVAR:
-        e.eType := eVAR;
-        e.T := id.T;
-        ÅÑËÈ id.VarKind = 0 ÒÎÃÄÀ
-          e.Read := imp
-        ÈÍÀ×Å
-          e.Read := (id.VarKind = ìÄåöë.param) & (id.T.tType IN {TRECORD, TARRAY});
-          e.vparam := id.VarKind = ìÄåöë.paramvar
-        ÊÎÍÅÖ;
-        bases := ìÄåöë.unit.Level - id.Level;
-        ÅÑËÈ id.Level = 3 ÒÎÃÄÀ
-          glob := id.Offset
-        ÀÅÑËÈ (id.VarKind = 0) ÈËÈ (id.VarKind = ìÄåöë.param) & ~(id.T.tType IN {TARRAY, TRECORD}) ÒÎÃÄÀ
-          loc := id.Offset
-        ÀÅÑËÈ (id.VarKind = ìÄåöë.paramvar) ÈËÈ (id.T.tType IN {TARRAY, TRECORD}) ÒÎÃÄÀ
-          ÅÑËÈ ìÄåöë.Dim(e.T) > 0 ÒÎÃÄÀ
-            n := ìÄåöë.Dim(e.T);
-            ÄËß i := n ÄÎ 1 ÏÎ -1 ÄÅËÀÒÜ
-              X86.LocalAdr(id.Offset + i * 4, bases);
-              X86.Load(TINTEGER)
-            ÊÎÍÅÖ
-          ÊÎÍÅÖ;
-          X86.LocalAdr(id.Offset, bases);
-          X86.Load(TINTEGER)
-        ÊÎÍÅÖ
-      |IDCONST:
-        ìÏðîâ.Òåñò(id.T # ÏÓÑÒÎ, line, col, 75);
-        e.eType := eCONST;
-        e.T := id.T;
-        e.Value := id.Value;
-        ÅÑËÈ id.T.tType IN {TINTEGER, TSET, TBOOLEAN} ÒÎÃÄÀ
-          X86.PushConst(FLOOR(e.Value))
-        ÀÅÑËÈ id.T.tType IN {TREAL, TLONGREAL} ÒÎÃÄÀ
-          X86.PushFlt(e.Value)
-        ÀÅÑËÈ id.T.tType = TSTRING ÒÎÃÄÀ
-          s := ìÄåöë.Ñòð_Ïîëó÷(e.Value);
-          ÅÑËÈ s.Len = 1 ÒÎÃÄÀ
-            X86.PushConst(ORD(s.Str[0]))
-          ÈÍÀ×Å
-            X86.PushInt(s.Number)
-          ÊÎÍÅÖ
-        ÊÎÍÅÖ
-      |IDPROC:
-        e.eType := ePROC;
-        e.T := sttypes[TVOID]
-      |IDTYPE:
-        ìÏðîâ.Òåñò(ËÎÆÜ, line, col, 101)
-      |IDSTPROC:
-        e.eType := eSTPROC;
-        e.T := sttypes[TVOID]
-      |IDSYSPROC:
-        e.eType := eSYSPROC;
-        e.T := sttypes[TVOID]
-      ÈÍÀ×Å
-      ÊÎÍÅÖ;
-      break := ËÎÆÜ;
-      guard := ËÎÆÜ;
-      ÏÎÂÒÎÐßÒÜ
-        ÂÛÁÎÐ ìÑêàí.ñóùíîñòü ÈÇ
-        |lxDot:
-          e.deref := ËÎÆÜ;
-          ìÏðîâ.Òåñò2(e.T.tType IN {TPOINTER, TRECORD}, 105);
-          ÅÑËÈ e.T.tType = TPOINTER ÒÎÃÄÀ
-            e.Read := ËÎÆÜ;
-            LoadVar;
-            e.T := e.T.Base;
-            X86.Load(TINTEGER);
-            ÅÑËÈ ~guard ÒÎÃÄÀ
-              X86.CheckNIL
-            ÊÎÍÅÖ
-          ÊÎÍÅÖ;
+        id := ìÄåöë.GetIdent(name);
+        ÅÑËÈ (id # ÏÓÑÒÎ) & (id.iType = IDMOD) ÒÎÃÄÀ
+          ìÄåöë.Êëþ÷Ñëåä_Ïîëó÷;
+          ìÄåöë.Êëþ÷_Ïðîâåðèòü(lxDot);
           ìÄåöë.Êëþ÷Ñëåä_Ïîëó÷;
           ìÄåöë.Êëþ÷_Ïðîâåðèòü(lxIDENT);
           ìÄåöë.Êîîðä_Óñò(line, col);
           name := ìÑêàí.id;
-          T := e.T;
-          ÏÎÂÒÎÐßÒÜ
-            f := ìÄåöë.GetField(T, name);
-            T := T.Base
-          ÏÎÊÀÍÅ (f # ÏÓÑÒÎ) ÈËÈ (T = ÏÓÑÒÎ);
-          ìÏðîâ.Òåñò(f # ÏÓÑÒÎ, line, col, 99);
-          ÅÑËÈ f.Unit # ìÄåöë.unit ÒÎÃÄÀ
-            ìÏðîâ.Òåñò(f.Export, line, col, 99)
-          ÊÎÍÅÖ;
-          ÅÑËÈ glob # -1 ÒÎÃÄÀ
-            glob := glob + f.Offset
-          ÀÅÑËÈ loc # -1 ÒÎÃÄÀ
-            loc := loc + f.Offset
+          imp := id.Unit # ìÄåöë.unit;
+          id := ìÄåöë.GetQIdent(id.Unit, name)
+        ÊÎÍÅÖ;
+        ìÏðîâ.Òåñò(id # ÏÓÑÒÎ, line, col, 42);
+        e.vparam := ËÎÆÜ;
+        e.deref := ËÎÆÜ;
+        e.id := id;
+        ìÄåöë.Êëþ÷Ñëåä_Ïîëó÷;
+        ÂÛÁÎÐ id.iType ÈÇ
+        |IDVAR:
+          e.eType := eVAR;
+          e.T := id.T;
+          ÅÑËÈ id.VarKind = 0 ÒÎÃÄÀ
+            e.Read := imp
           ÈÍÀ×Å
-            X86.Field(f.Offset)
+            e.Read := (id.VarKind = ìÄåöë.param) & (id.T.tType IN {TRECORD, TARRAY});
+            e.vparam := id.VarKind = ìÄåöë.paramvar
           ÊÎÍÅÖ;
-          e.T := f.T;
-          e.vparam := ËÎÆÜ;
-          guard := ËÎÆÜ;
-          ìÄåöë.Êëþ÷Ñëåä_Ïîëó÷
-        |ìÊîíñò.îïÑêîáêàËåâÊâ:
-          LoadVar;
-          ÏÎÂÒÎÐßÒÜ
-            ìÏðîâ.Òåñò2(e.T.tType = TARRAY, 102);
-            ìÄåöë.Êëþ÷Ñëåä_Ïîëó÷;
-            ìÄåöë.Êîîðä_Óñò(line, col);
-            pExpr(e1);
-            ìÏðîâ.Òåñò(e1.T.tType = TINTEGER, line, col, 52);
-            Âûðàæ_Çàãðóçèòü(e1);
-            ÅÑËÈ e.T.Len = 0 ÒÎÃÄÀ
-              BaseT := ìÄåöë.OpenBase(e.T);
-              X86.PushConst(BaseT.Size);
-              X86.OpenIdx(ìÄåöë.Dim(e.T))
-            ÈÍÀ×Å
-              ÅÑËÈ e1.eType = eCONST ÒÎÃÄÀ
-                idx := FLOOR(e1.Value);
-                ìÏðîâ.Òåñò((idx >= 0) & (idx < e.T.Len), line, col, 159);
-                ÅÑËÈ e.T.Base.Size # 1 ÒÎÃÄÀ
-                  X86.Drop;
-                  X86.PushConst(e.T.Base.Size * idx)
-                ÊÎÍÅÖ;
-                X86.Idx
-              ÈÍÀ×Å
-                X86.FixIdx(e.T.Len, e.T.Base.Size)
+          bases := ìÄåöë.unit.Level - id.Level;
+          ÅÑËÈ id.Level = 3 ÒÎÃÄÀ
+            glob := id.Offset
+          ÀÅÑËÈ (id.VarKind = 0) ÈËÈ (id.VarKind = ìÄåöë.param) & ~(id.T.tType IN {TARRAY, TRECORD}) ÒÎÃÄÀ
+            loc := id.Offset
+          ÀÅÑËÈ (id.VarKind = ìÄåöë.paramvar) ÈËÈ (id.T.tType IN {TARRAY, TRECORD}) ÒÎÃÄÀ
+            ÅÑËÈ ìÄåöë.Dim(e.T) > 0 ÒÎÃÄÀ
+              n := ìÄåöë.Dim(e.T);
+              ÄËß i := n ÄÎ 1 ÏÎ -1 ÄÅËÀÒÜ
+                X86.LocalAdr(id.Offset + i * 4, bases);
+                X86.Load(TINTEGER)
               ÊÎÍÅÖ
             ÊÎÍÅÖ;
-            e.T := e.T.Base
-          ÏÎÊÀÍÅ ìÑêàí.ñóùíîñòü # ìÊîíñò.îïÇàïÿòàÿ;
-          ìÄåöë.Êëþ÷_Ïðîâåðèòü(ìÊîíñò.îïÑêîáêàÏðÊâ);
-          e.vparam := ËÎÆÜ;
-          guard := ËÎÆÜ;
-          ìÄåöë.Êëþ÷Ñëåä_Ïîëó÷
-        |lxCaret:
-          LoadVar;
-          ìÏðîâ.Òåñò2(e.T.tType = TPOINTER, 104);
-          e.Read := ËÎÆÜ;
-          X86.Load(TINTEGER);
-          ÅÑËÈ ~guard ÒÎÃÄÀ
-            X86.CheckNIL
-          ÊÎÍÅÖ;
-          e.T := e.T.Base;
-          e.vparam := ËÎÆÜ;
-          e.deref := ÈÑÒÈÍÀ;
-          guard := ËÎÆÜ;
-          ìÄåöë.Êëþ÷Ñëåä_Ïîëó÷
-        |lxLRound:
-          LoadVar;
-          ÅÑËÈ e.T.tType IN {TRECORD, TPOINTER} ÒÎÃÄÀ
-            ÅÑËÈ e.T.tType = TRECORD ÒÎÃÄÀ
-              ìÏðîâ.Òåñò2(e.vparam, 108)
+            X86.LocalAdr(id.Offset, bases);
+            X86.Load(TINTEGER)
+          ÊÎÍÅÖ
+        |IDCONST:
+          ìÏðîâ.Òåñò(id.T # ÏÓÑÒÎ, line, col, 75);
+          e.eType := eCONST;
+          e.T := id.T;
+          e.Value := id.Value;
+          ÅÑËÈ id.T.tType IN {TINTEGER, TSET, TBOOLEAN} ÒÎÃÄÀ
+            X86.PushConst(FLOOR(e.Value))
+          ÀÅÑËÈ id.T.tType IN {TREAL, TLONGREAL} ÒÎÃÄÀ
+            X86.PushFlt(e.Value)
+          ÀÅÑËÈ id.T.tType = TSTRING ÒÎÃÄÀ
+            ñòð := ìÄåöë.Ñòð_Ïîëó÷(e.Value);
+            ÅÑËÈ ñòð.äëèíà = 1 ÒÎÃÄÀ
+              X86.PushConst(ORD(ñòð.ñòð[0]))
+            ÈÍÀ×Å
+              X86.PushInt(ñòð.íîìåð)
+            ÊÎÍÅÖ
+          ÊÎÍÅÖ
+        |IDPROC:
+          e.eType := ePROC;
+          e.T := sttypes[TVOID]
+        |IDTYPE:
+          ìÏðîâ.Òåñò(ËÎÆÜ, line, col, 101)
+        |IDSTPROC:
+          e.eType := eSTPROC;
+          e.T := sttypes[TVOID]
+        |IDSYSPROC:
+          e.eType := eSYSPROC;
+          e.T := sttypes[TVOID]
+        ÈÍÀ×Å
+        ÊÎÍÅÖ;
+        break := ËÎÆÜ;
+        guard := ËÎÆÜ;
+        ÏÎÂÒÎÐßÒÜ
+          ÂÛÁÎÐ ìÑêàí.ñóùíîñòü ÈÇ
+          |lxDot:
+            e.deref := ËÎÆÜ;
+            ìÏðîâ.Òåñò2(e.T.tType IN {TPOINTER, TRECORD}, 105);
+            ÅÑËÈ e.T.tType = TPOINTER ÒÎÃÄÀ
+              e.Read := ËÎÆÜ;
+              LoadVar;
+              e.T := e.T.Base;
+              X86.Load(TINTEGER);
+              ÅÑËÈ ~guard ÒÎÃÄÀ
+                X86.CheckNIL
+              ÊÎÍÅÖ
             ÊÎÍÅÖ;
             ìÄåöë.Êëþ÷Ñëåä_Ïîëó÷;
             ìÄåöë.Êëþ÷_Ïðîâåðèòü(lxIDENT);
             ìÄåöë.Êîîðä_Óñò(line, col);
-            T := ìÄåöë.IdType(line, col);
-            ìÏðîâ.Òåñò(T # ÏÓÑÒÎ, line, col, 42);
-            ÅÑËÈ e.T.tType = TRECORD ÒÎÃÄÀ
-              ìÏðîâ.Òåñò(T.tType = TRECORD, line, col, 106)
-            ÈÍÀ×Å
-              ìÏðîâ.Òåñò(T.tType = TPOINTER, line, col, 107)
-            ÊÎÍÅÖ;
-            ìÏðîâ.Òåñò(BaseOf(e.T, T), line, col, 108);
-            e.T := T;
-            ìÄåöë.Êëþ÷_Ïðîâåðèòü(ìÊîíñò.îïÑêîáêàÏðÊð);
-            ìÄåöë.Êëþ÷Ñëåä_Ïîëó÷;
-            ÅÑËÈ e.T.tType = TPOINTER ÒÎÃÄÀ
-              ÅÑËÈ (ìÑêàí.ñóùíîñòü = lxDot) ÈËÈ (ìÑêàí.ñóùíîñòü = lxCaret) ÒÎÃÄÀ
-                X86.DupLoadCheck
-              ÈÍÀ×Å
-                X86.DupLoad
-              ÊÎÍÅÖ;
-              guard := ÈÑÒÈÍÀ;
+            name := ìÑêàí.id;
+            T := e.T;
+            ÏÎÂÒÎÐßÒÜ
+              f := ìÄåöë.GetField(T, name);
               T := T.Base
-            ÈÍÀ×Å
-              X86.LocalAdr(e.id.Offset, ìÄåöë.unit.Level - e.id.Level)
+            ÏÎÊÀÍÅ (f # ÏÓÑÒÎ) ÈËÈ (T = ÏÓÑÒÎ);
+            ìÏðîâ.Òåñò(f # ÏÓÑÒÎ, line, col, 99);
+            ÅÑËÈ f.Unit # ìÄåöë.unit ÒÎÃÄÀ
+              ìÏðîâ.Òåñò(f.Export, line, col, 99)
             ÊÎÍÅÖ;
-            X86.Guard(T.Number, ËÎÆÜ)
+            ÅÑËÈ glob # -1 ÒÎÃÄÀ
+              glob := glob + f.Offset
+            ÀÅÑËÈ loc # -1 ÒÎÃÄÀ
+              loc := loc + f.Offset
+            ÈÍÀ×Å
+              X86.Field(f.Offset)
+            ÊÎÍÅÖ;
+            e.T := f.T;
+            e.vparam := ËÎÆÜ;
+            guard := ËÎÆÜ;
+            ìÄåöë.Êëþ÷Ñëåä_Ïîëó÷
+          |ìÊîíñò.îïÑêîáêàËåâÊâ:
+            LoadVar;
+            ÏÎÂÒÎÐßÒÜ
+              ìÏðîâ.Òåñò2(e.T.tType = TARRAY, 102);
+              ìÄåöë.Êëþ÷Ñëåä_Ïîëó÷;
+              ìÄåöë.Êîîðä_Óñò(line, col);
+              pExpr(e1);
+              ìÏðîâ.Òåñò(e1.T.tType = TINTEGER, line, col, 52);
+              Âûðàæ_Çàãðóçèòü(e1);
+              ÅÑËÈ e.T.Len = 0 ÒÎÃÄÀ
+                BaseT := ìÄåöë.OpenBase(e.T);
+                X86.PushConst(BaseT.Size);
+                X86.OpenIdx(ìÄåöë.Dim(e.T))
+              ÈÍÀ×Å
+                ÅÑËÈ e1.eType = eCONST ÒÎÃÄÀ
+                  idx := FLOOR(e1.Value);
+                  ìÏðîâ.Òåñò((idx >= 0) & (idx < e.T.Len), line, col, 159);
+                  ÅÑËÈ e.T.Base.Size # 1 ÒÎÃÄÀ
+                    X86.Drop;
+                    X86.PushConst(e.T.Base.Size * idx)
+                  ÊÎÍÅÖ;
+                  X86.Idx
+                ÈÍÀ×Å
+                  X86.FixIdx(e.T.Len, e.T.Base.Size)
+                ÊÎÍÅÖ
+              ÊÎÍÅÖ;
+              e.T := e.T.Base
+            ÏÎÊÀÍÅ ìÑêàí.ñóùíîñòü # ìÊîíñò.îïÇàïÿòàÿ;
+            ìÄåöë.Êëþ÷_Ïðîâåðèòü(ìÊîíñò.îïÑêîáêàÏðÊâ);
+            e.vparam := ËÎÆÜ;
+            guard := ËÎÆÜ;
+            ìÄåöë.Êëþ÷Ñëåä_Ïîëó÷
+          |lxCaret:
+            LoadVar;
+            ìÏðîâ.Òåñò2(e.T.tType = TPOINTER, 104);
+            e.Read := ËÎÆÜ;
+            X86.Load(TINTEGER);
+            ÅÑËÈ ~guard ÒÎÃÄÀ
+              X86.CheckNIL
+            ÊÎÍÅÖ;
+            e.T := e.T.Base;
+            e.vparam := ËÎÆÜ;
+            e.deref := ÈÑÒÈÍÀ;
+            guard := ËÎÆÜ;
+            ìÄåöë.Êëþ÷Ñëåä_Ïîëó÷
+          |lxLRound:
+            LoadVar;
+            ÅÑËÈ e.T.tType IN {TRECORD, TPOINTER} ÒÎÃÄÀ
+              ÅÑËÈ e.T.tType = TRECORD ÒÎÃÄÀ
+                ìÏðîâ.Òåñò2(e.vparam, 108)
+              ÊÎÍÅÖ;
+              ìÄåöë.Êëþ÷Ñëåä_Ïîëó÷;
+              ìÄåöë.Êëþ÷_Ïðîâåðèòü(lxIDENT);
+              ìÄåöë.Êîîðä_Óñò(line, col);
+              T := ìÄåöë.IdType(line, col);
+              ìÏðîâ.Òåñò(T # ÏÓÑÒÎ, line, col, 42);
+              ÅÑËÈ e.T.tType = TRECORD ÒÎÃÄÀ
+                ìÏðîâ.Òåñò(T.tType = TRECORD, line, col, 106)
+              ÈÍÀ×Å
+                ìÏðîâ.Òåñò(T.tType = TPOINTER, line, col, 107)
+              ÊÎÍÅÖ;
+              ìÏðîâ.Òåñò(BaseOf(e.T, T), line, col, 108);
+              e.T := T;
+              ìÄåöë.Êëþ÷_Ïðîâåðèòü(ìÊîíñò.îïÑêîáêàÏðÊð);
+              ìÄåöë.Êëþ÷Ñëåä_Ïîëó÷;
+              ÅÑËÈ e.T.tType = TPOINTER ÒÎÃÄÀ
+                ÅÑËÈ (ìÑêàí.ñóùíîñòü = lxDot) ÈËÈ (ìÑêàí.ñóùíîñòü = lxCaret) ÒÎÃÄÀ
+                  X86.DupLoadCheck
+                ÈÍÀ×Å
+                  X86.DupLoad
+                ÊÎÍÅÖ;
+                guard := ÈÑÒÈÍÀ;
+                T := T.Base
+              ÈÍÀ×Å
+                X86.LocalAdr(e.id.Offset, ìÄåöë.unit.Level - e.id.Level)
+              ÊÎÍÅÖ;
+              X86.Guard(T.Number, ËÎÆÜ)
+            ÈÍÀ×Å
+              break := ÈÑÒÈÍÀ
+            ÊÎÍÅÖ
           ÈÍÀ×Å
             break := ÈÑÒÈÍÀ
           ÊÎÍÅÖ
-        ÈÍÀ×Å
-          break := ÈÑÒÈÍÀ
-        ÊÎÍÅÖ
-      ÏÎÊÀÍÅ break;
-      LoadVar
+        ÏÎÊÀÍÅ break;
+        LoadVar
     ÊÎÍÅÖ Designator;
 
 ÏÐÎÖÅÄÓÐÀ Set(ÏÅÐ e: ìÄåöë.òÂûðàæåíèå);
@@ -516,7 +516,7 @@
         ÅÑËÈ e1.eType = eCONST ÒÎÃÄÀ
           ÅÑËÈ e1.T.tType = TSTRING ÒÎÃÄÀ
             str := ìÄåöë.Ñòð_Ïîëó÷(e1.Value);
-            e.Value := ÄËÈÍ(FLT(ORD(str.Str[0])))
+            e.Value := ÄËÈÍ(FLT(ORD(str.ñòð[0])))
           ÈÍÀ×Å
             e.Value := e1.Value
           ÊÎÍÅÖ;
@@ -573,11 +573,11 @@
         ìÏðîâ.Òåñò(ÅñëèÑòðîêà(e1), line, col, 141);
         ÅÑËÈ e1.T.tType = TSTRING ÒÎÃÄÀ
           str := ìÄåöë.Ñòð_Ïîëó÷(e1.Value);
-          ÅÑËÈ str.Len = 1 ÒÎÃÄÀ
-            X86.Mono(str.Number);
+          ÅÑËÈ str.äëèíà = 1 ÒÎÃÄÀ
+            X86.Mono(str.íîìåð);
             X86.StrMono
           ÊÎÍÅÖ;
-          e.Value := ÄËÈÍ(FLT(ÄËÈÍÀ(str.Str)));
+          e.Value := ÄËÈÍ(FLT(ÄËÈÍÀ(str.ñòð)));
           e.eType := eCONST
         ÊÎÍÅÖ;
         Str(e1);
@@ -596,9 +596,9 @@
         ÊÎÍÅÖ;
         ÅÑËÈ e1.T = sttypes[TSTRING] ÒÎÃÄÀ
           str := ìÄåöë.Ñòð_Ïîëó÷(e1.Value);
-          ÅÑËÈ str.Len = 1 ÒÎÃÄÀ
+          ÅÑËÈ str.äëèíà = 1 ÒÎÃÄÀ
             X86.Drop;
-            X86.PushInt(str.Number)
+            X86.PushInt(str.íîìåð)
           ÊÎÍÅÖ
         ÊÎÍÅÖ;
         e.T := sttypes[TINTEGER];
@@ -828,11 +828,11 @@
         ÊÎÍÅÖ;
         ÅÑËÈ (e1.T.tType = TSTRING) & (param.T.tType = TARRAY) ÒÎÃÄÀ
           s := ìÄåöë.Ñòð_Ïîëó÷(e1.Value);
-          ÅÑËÈ s.Len = 1 ÒÎÃÄÀ
-            X86.Mono(s.Number)
+          ÅÑËÈ s.äëèíà = 1 ÒÎÃÄÀ
+            X86.Mono(s.íîìåð)
           ÊÎÍÅÖ;
           ÅÑËÈ param.T.Len = 0 ÒÎÃÄÀ
-            A[0] := s.Len + 1;
+            A[0] := s.äëèíà + 1;
             X86.OpenArray(A, 1)
           ÊÎÍÅÖ
         ÊÎÍÅÖ;
@@ -926,10 +926,10 @@
           mSys.GET(mSys.ADR(str2), p);
           e.Value := ÄËÈÍ(FLT(p));
           s := ìÄåöë.Ñòð_Ïîëó÷(e.Value);
-          ÅÑËÈ s.Len = 1 ÒÎÃÄÀ
-            X86.PushConst(ORD(s.Str[0]))
+          ÅÑËÈ s.äëèíà = 1 ÒÎÃÄÀ
+            X86.PushConst(ORD(s.ñòð[0]))
           ÈÍÀ×Å
-            X86.PushInt(s.Number)
+            X86.PushInt(s.íîìåð)
           ÊÎÍÅÖ
         ÈÍÀ×Å
           str2 := ìÄåöë.ÑòðÌîíî_Ñîçäàòü(ìÑêàí.vCHX);
@@ -1236,10 +1236,10 @@
             X86.PushConst(FLOOR(e.Value))
           |TSTRING:
             s := ìÄåöë.Ñòð_Ïîëó÷(e.Value);
-            ÅÑËÈ s.Len = 1 ÒÎÃÄÀ
-              X86.PushConst(ORD(s.Str[0]))
+            ÅÑËÈ s.äëèíà = 1 ÒÎÃÄÀ
+              X86.PushConst(ORD(s.ñòð[0]))
             ÈÍÀ×Å
-              X86.PushInt(s.Number)
+              X86.PushInt(s.íîìåð)
             ÊÎÍÅÖ
           ÈÍÀ×Å
           ÊÎÍÅÖ
@@ -1385,8 +1385,8 @@
       ÈÍÀ×Å
         ìÏðîâ.Òåñò(T.tType = TSTRING, line, col, 55);
         s := ìÄåöë.Ñòð_Ïîëó÷(Value);
-        ìÏðîâ.Òåñò(s.Len = 1, line, col, 94);
-        a := ORD(s.Str[0])
+        ìÏðîâ.Òåñò(s.äëèíà = 1, line, col, 94);
+        a := ORD(s.ñòð[0])
       ÊÎÍÅÖ
     ÊÎÍÅÖ LabelVal;
 
@@ -1561,8 +1561,8 @@
         ìÄåöë.Êëþ÷_Ïðîâåðèòü(ìÊîíñò.îïÇàïÿòàÿ);
         ÅÑËÈ e1.T.tType = TSTRING ÒÎÃÄÀ
           str := ìÄåöë.Ñòð_Ïîëó÷(e1.Value);
-          ÅÑËÈ str.Len = 1 ÒÎÃÄÀ
-            X86.Mono(str.Number);
+          ÅÑËÈ str.äëèíà = 1 ÒÎÃÄÀ
+            X86.Mono(str.íîìåð);
             X86.StrMono
           ÊÎÍÅÖ
         ÊÎÍÅÖ;
@@ -1744,10 +1744,10 @@
           X86.PushConst(e2.T.Size)
         ÀÅÑËÈ (e2.T.tType = TSTRING) & (e1.T.tType = TARRAY) ÒÎÃÄÀ
           s := ìÄåöë.Ñòð_Ïîëó÷(e2.Value);
-          ÅÑËÈ s.Len = 1 ÒÎÃÄÀ
-            X86.Mono(s.Number)
+          ÅÑËÈ s.äëèíà = 1 ÒÎÃÄÀ
+            X86.Mono(s.íîìåð)
           ÊÎÍÅÖ;
-          X86.PushConst(ìÓòèëü.Ìèíèìóì(s.Len + 1, e1.T.Len))
+          X86.PushConst(ìÓòèëü.Ìèíèìóì(s.äëèíà + 1, e1.T.Len))
         ÊÎÍÅÖ;
         X86.Save(e1.T.tType)
       ÀÅÑËÈ e1.eType = ePROC ÒÎÃÄÀ
