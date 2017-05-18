@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project pyOberon -->
-<!-- Saved: 2017-05-18, 20:50:16 -->
+<!-- Saved: 2017-05-18, 22:08:14 -->
 <!-- Copyright (C) 2017 prospero78su, prospero.78.su@gmail.com -->
 <Project version="5.1">
   <Language>en_US</Language>
@@ -16,6 +16,11 @@
   <Sources>
     <Source>__init__.py</Source>
     <Source>main.py</Source>
+    <Source>pakOberon/__init__.py</Source>
+    <Source>pakOberon/modErr.py</Source>
+    <Source>pakOberon/modError.py</Source>
+    <Source>pakOberon/modErrorConstante.py</Source>
+    <Source>pakOberon/modUtil.py</Source>
   </Sources>
   <Forms/>
   <Translations/>
@@ -45,4 +50,65 @@
     <FiletypeAssociation pattern="README" type="OTHERS"/>
     <FiletypeAssociation pattern="README.*" type="OTHERS"/>
   </FiletypeAssociations>
+  <Packagers>
+    <PackagersParams>
+      <dict>
+        <key>
+          <string>CXFREEZE</string>
+        </key>
+        <value>
+          <dict>
+            <key>
+              <string>applicationIcon</string>
+            </key>
+            <value>
+              <string></string>
+            </value>
+            <key>
+              <string>baseName</string>
+            </key>
+            <value>
+              <string>Win32GUI</string>
+            </value>
+            <key>
+              <string>compress</string>
+            </key>
+            <value>
+              <bool>True</bool>
+            </value>
+            <key>
+              <string>initScript</string>
+            </key>
+            <value>
+              <string>Console</string>
+            </value>
+            <key>
+              <string>optimize</string>
+            </key>
+            <value>
+              <int>2</int>
+            </value>
+            <key>
+              <string>script</string>
+            </key>
+            <value>
+              <string>D:\Coding\WinPython-32bit-2.7.10.3\python-2.7.10\Scripts\cxfreeze.bat</string>
+            </value>
+            <key>
+              <string>targetDirectory</string>
+            </key>
+            <value>
+              <string>bin</string>
+            </value>
+            <key>
+              <string>targetName</string>
+            </key>
+            <value>
+              <string>pyOberon</string>
+            </value>
+          </dict>
+        </value>
+      </dict>
+    </PackagersParams>
+  </Packagers>
 </Project>

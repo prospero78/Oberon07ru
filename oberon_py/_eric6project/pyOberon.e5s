@@ -2,12 +2,15 @@
 <!DOCTYPE Session SYSTEM "Session-5.0.dtd">
 <!-- eric6 session file for project pyOberon -->
 <!-- This file was generated automatically, do not edit. -->
-<!-- Saved: 2017-05-18, 20:50:16 -->
+<!-- Saved: 2017-05-18, 22:08:14 -->
 <Session version="5.0">
   <Filenames>
-    <Filename cline="5" cindex="0" folds="" zoom="0">D:\Coding\00_Oberon07ru\oberon_py\main.py</Filename>
+    <Filename cline="11" cindex="0" folds="" zoom="0">D:\Coding\00_Oberon07ru\oberon_py\main.py</Filename>
+    <Filename cline="2" cindex="58" folds="" zoom="0">D:\Coding\00_Oberon07ru\oberon_py\pakOberon\modUtil.py</Filename>
+    <Filename cline="3" cindex="3" folds="" zoom="0">D:\Coding\00_Oberon07ru\oberon_py\pakOberon\modError.py</Filename>
+    <Filename cline="4" cindex="0" folds="" zoom="0">D:\Coding\00_Oberon07ru\oberon_py\pakOberon\modErrorConstante.py</Filename>
   </Filenames>
-  <ActiveWindow cline="5" cindex="0">D:\Coding\00_Oberon07ru\oberon_py\main.py</ActiveWindow>
+  <ActiveWindow cline="11" cindex="0">D:\Coding\00_Oberon07ru\oberon_py\main.py</ActiveWindow>
   <Breakpoints/>
   <Watchexpressions/>
   <DebugInfo>
@@ -24,7 +27,10 @@
   </DebugInfo>
   <Bookmarks/>
   <ProjectBrowserStates>
-    <ProjectBrowserState name="sources"/>
+    <ProjectBrowserState name="sources">
+      <ExpandedItemName>D:\Coding\00_Oberon07ru\oberon_py\pakOberon</ExpandedItemName>
+      <ExpandedItemName>D:\Coding\00_Oberon07ru\oberon_py\main.py</ExpandedItemName>
+    </ProjectBrowserState>
     <ProjectBrowserState name="forms"/>
     <ProjectBrowserState name="resources"/>
     <ProjectBrowserState name="translations"/>
