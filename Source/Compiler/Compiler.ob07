@@ -158,7 +158,7 @@
                 выраж_.Read := (id.VarKind = мДецл.param) & (id.T.тип_ном В {TRECORD, TARRAY});
                 выраж_.vparam := id.VarKind = мДецл.paramvar
             КОНЕЦ;
-            bases := мДецл.модуль.Level - id.Level;
+            bases := мДецл.модуль.уровень - id.Level;
             ЕСЛИ id.Level = 3 ТОГДА
                 glob := id.Offset
             АЕСЛИ (id.VarKind = 0) ИЛИ (id.VarKind = мДецл.param) & ~(id.T.тип_ном В {TARRAY, TRECORD}) ТОГДА
@@ -318,7 +318,7 @@
                             guard := ИСТИНА;
                             T := T.Base
                         ИНАЧЕ
-                            X86.LocalAdr(выраж_.id.Offset, мДецл.модуль.Level - выраж_.id.Level)
+                            X86.LocalAdr(выраж_.id.Offset, мДецл.модуль.уровень - выраж_.id.Level)
                         КОНЕЦ;
                         X86.Guard(T.номер, ЛОЖЬ)
                     ИНАЧЕ
@@ -815,7 +815,7 @@
         КОНЕЦ;
         ЕСЛИ param.ByRef & (e1.T.тип_ном = TRECORD) ТОГДА
             ЕСЛИ e1.vparam ТОГДА
-                X86.LocalAdr(e1.id.Offset - 4, мДецл.модуль.Level - e1.id.Level);
+                X86.LocalAdr(e1.id.Offset - 4, мДецл.модуль.уровень - e1.id.Level);
                 X86.Load(TINTEGER)
             АЕСЛИ e1.deref ТОГДА
                 X86.DerefType(0)
@@ -1206,7 +1206,7 @@
           мПров.Тест(BaseOf(e.T, T), line, col, 37);
           ЕСЛИ e.T.тип_ном = TRECORD ТОГДА
               X86.Drop;
-              X86.LocalAdr(e.id.Offset, мДецл.модуль.Level - e.id.Level)
+              X86.LocalAdr(e.id.Offset, мДецл.модуль.уровень - e.id.Level)
           КОНЕЦ;
           Выраж_Загрузить(e);
           ЕСЛИ e.T.тип_ном = TPOINTER ТОГДА
@@ -1320,7 +1320,7 @@
       мПров.Тест2(id.iType = IDVAR, 126);
       мПров.Тест2(id.VarKind = 0, 127);
       мПров.Тест2(id.T.тип_ном = TINTEGER, 128);
-      мПров.Тест2(id.Level = мДецл.модуль.Level, 129);
+      мПров.Тест2(id.Level = мДецл.модуль.уровень, 129);
       мДецл.КлючСлед_Получ;
       мДецл.Ключ_Проверить(lxAssign);
       мДецл.КлючСлед_Получ;
@@ -1733,7 +1733,7 @@
               X86.PushConst(e1.T.размер);
               X86.PushConst(e1.T.номер);
               ЕСЛИ e1.vparam ТОГДА
-                  X86.LocalAdr(e1.id.Offset - 4, мДецл.модуль.Level - e1.id.Level);
+                  X86.LocalAdr(e1.id.Offset - 4, мДецл.модуль.уровень - e1.id.Level);
                   X86.Load(TINTEGER)
               АЕСЛИ e1.deref ТОГДА
                   X86.DerefType(12)
