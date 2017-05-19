@@ -108,10 +108,10 @@
     ÏÅÐÅÌ
         id: ìÄåöë.òóÈìÿ;
         name: ìÒèïû.òóÓçåë;
-        e1: ìÄåöë.òÂûðàæåíèå;
+        âûðàæåíèå: ìÄåöë.òÂûðàæåíèå;
         line, col, i, n, bases, glob, loc, idx: ÖÅËÎÅ;
         imp, break, guard: ÁÓËÅÂÎ;
-        f: ìÄåöë.òóÏîëå;
+        ïîëå: ìÄåöë.òóÏîëå;
         T, BaseT: ìÄåöë.òóÒèï;
         ñòð: ìÄåöë.òóÊîíñòÑòð;
 
@@ -226,21 +226,21 @@
                     name := ìÑêàí.id;
                     T := âûðàæ_.T;
                     ÏÎÂÒÎÐßÒÜ
-                        f := ìÄåöë.GetField(T, name);
+                        ïîëå := ìÄåöë.GetField(T, name);
                         T := T.Base
-                    ÏÎÊÀÍÅ (f # ÏÓÑÒÎ) ÈËÈ (T = ÏÓÑÒÎ);
-                    ìÏðîâ.Òåñò(f # ÏÓÑÒÎ, line, col, 99);
-                    ÅÑËÈ f.Unit # ìÄåöë.unit ÒÎÃÄÀ
-                        ìÏðîâ.Òåñò(f.Export, line, col, 99)
+                    ÏÎÊÀÍÅ (ïîëå # ÏÓÑÒÎ) ÈËÈ (T = ÏÓÑÒÎ);
+                    ìÏðîâ.Òåñò(ïîëå # ÏÓÑÒÎ, line, col, 99);
+                    ÅÑËÈ ïîëå.Unit # ìÄåöë.unit ÒÎÃÄÀ
+                        ìÏðîâ.Òåñò(ïîëå.Export, line, col, 99)
                     ÊÎÍÅÖ;
                     ÅÑËÈ glob # -1 ÒÎÃÄÀ
-                        glob := glob + f.Offset
+                        glob := glob + ïîëå.Offset
                     ÀÅÑËÈ loc # -1 ÒÎÃÄÀ
-                        loc := loc + f.Offset
+                        loc := loc + ïîëå.Offset
                     ÈÍÀ×Å
-                        X86.Field(f.Offset)
+                        X86.Field(ïîëå.Offset)
                     ÊÎÍÅÖ;
-                    âûðàæ_.T := f.T;
+                    âûðàæ_.T := ïîëå.T;
                     âûðàæ_.vparam := ËÎÆÜ;
                     guard := ËÎÆÜ;
                     ìÄåöë.Êëþ÷Ñëåä_Ïîëó÷
@@ -250,16 +250,16 @@
                         ìÏðîâ.Òåñò2(âûðàæ_.T.tType = TARRAY, 102);
                         ìÄåöë.Êëþ÷Ñëåä_Ïîëó÷;
                         ìÄåöë.Êîîðä_Óñò(line, col);
-                        pExpr(e1);
-                        ìÏðîâ.Òåñò(e1.T.tType = TINTEGER, line, col, 52);
-                        Âûðàæ_Çàãðóçèòü(e1);
+                        pExpr(âûðàæåíèå);
+                        ìÏðîâ.Òåñò(âûðàæåíèå.T.tType = TINTEGER, line, col, 52);
+                        Âûðàæ_Çàãðóçèòü(âûðàæåíèå);
                         ÅÑËÈ âûðàæ_.T.Len = 0 ÒÎÃÄÀ
                             BaseT := ìÄåöë.OpenBase(âûðàæ_.T);
                             X86.PushConst(BaseT.ðàçìåð);
                             X86.OpenIdx(ìÄåöë.Dim(âûðàæ_.T))
                         ÈÍÀ×Å
-                            ÅÑËÈ e1.eType = eCONST ÒÎÃÄÀ
-                                idx := FLOOR(e1.Value);
+                            ÅÑËÈ âûðàæåíèå.eType = eCONST ÒÎÃÄÀ
+                                idx := FLOOR(âûðàæåíèå.Value);
                                 ìÏðîâ.Òåñò((idx >= 0) & (idx < âûðàæ_.T.Len), line, col, 159);
                                 ÅÑËÈ âûðàæ_.T.Base.ðàçìåð # 1 ÒÎÃÄÀ
                                     X86.Drop;
@@ -645,7 +645,7 @@
       sp: ÖÅËÎÅ;
       stk: ÌÀÑÑÈÂ 100, 2 ÈÇ ìÄåöë.òóÒèï;
 
-      ÏÐÎÖÅÄÓÐÀ ProcTypeComp1(T1, T2: ìÄåöë.òóÒèï): ÁÓËÅÂÎ;
+    ÏÐÎÖÅÄÓÐÀ ProcTypeComp1(T1, T2: ìÄåöë.òóÒèï): ÁÓËÅÂÎ;
         ÏÅÐÅÌ
           fp, ft: ìÄåöë.òóÏîëå;
           Res: ÁÓËÅÂÎ;
@@ -684,9 +684,9 @@
             Res := ÈÑÒÈÍÀ
           ÈÍÀ×Å
             ÅÑËÈ (T1.tType = TPROC) & (T2.tType = TPROC) & (T1 # T2) ÒÎÃÄÀ
-              Res := (T1.Call = T2.Call) & (T1.Fields.ñ÷åò÷èê = T2.Fields.ñ÷åò÷èê) & ProcTypeComp1(T1.Base, T2.Base);
-              fp := T1.Fields.ïðåäûäóù(ìÄåöë.òóÏîëå);
-              ft := T2.Fields.ïðåäûäóù(ìÄåöë.òóÏîëå);
+              Res := (T1.Call = T2.Call) & (T1.ïîëÿ.ñ÷åò÷èê = T2.ïîëÿ.ñ÷åò÷èê) & ProcTypeComp1(T1.Base, T2.Base);
+              fp := T1.ïîëÿ.ïðåäûäóù(ìÄåöë.òóÏîëå);
+              ft := T2.ïîëÿ.ïðåäûäóù(ìÄåöë.òóÏîëå);
               ÏÎÊÀ Res & (fp # ÏÓÑÒÎ) ÄÅËÀÒÜ
                 Res := (fp.ByRef = ft.ByRef) & TypeComp(fp.T, ft.T);
                 fp := fp.ñëåäóþù(ìÄåöë.òóÏîëå);
@@ -876,7 +876,7 @@
             ìÏðîâ.Òåñò2(e.id.T.Base.tType # TVOID, 73);
             ìÄåöë.Êëþ÷Ñëåä_Ïîëó÷;
             X86.PushCall(begcall);
-            Call(e.id.T.Fields.ïðåäûäóù(ìÄåöë.òóÏîëå));
+            Call(e.id.T.ïîëÿ.ïðåäûäóù(ìÄåöë.òóÏîëå));
             X86.Âûçîâ_Çàêîí÷èòü;
             e.eType := eEXP;
             e.T := e.id.T.Base;
@@ -896,7 +896,7 @@
           ìÏðîâ.Òåñò2(e.T.Base.tType # TVOID, 73);
           ìÄåöë.Êëþ÷Ñëåä_Ïîëó÷;
           X86.PushCall(begcall);
-          Call(e.T.Fields.ïðåäûäóù(ìÄåöë.òóÏîëå));
+          Call(e.T.ïîëÿ.ïðåäûäóù(ìÄåöë.òóÏîëå));
           X86.Âûçîâ_Çàêîí÷èòü;
           e.eType := eEXP;
           X86.CallVar(ÈÑÒÈÍÀ, e.T.Base.tType IN {TREAL, TLONGREAL}, e.T.Call, e.T.Len, ìÄåöë.curBlock.LocalSize);
@@ -1756,7 +1756,7 @@
           ìÄåöë.Êëþ÷_Ïðîâåðèòü(lxLRound);
           ìÄåöë.Êëþ÷Ñëåä_Ïîëó÷;
           X86.PushCall(begcall);
-          Call(e1.id.T.Fields.ïðåäûäóù(ìÄåöë.òóÏîëå));
+          Call(e1.id.T.ïîëÿ.ïðåäûäóù(ìÄåöë.òóÏîëå));
           X86.Âûçîâ_Çàêîí÷èòü
         ÀÅÑËÈ ìÑêàí.ñóùíîñòü = lxLRound ÒÎÃÄÀ
           ìÄåöë.Êëþ÷Ñëåä_Ïîëó÷;
@@ -1778,7 +1778,7 @@
           ìÄåöë.Êëþ÷Ñëåä_Ïîëó÷;
           ìÏðîâ.Òåñò((e1.T.Base.tType = TVOID) ÈËÈ (e1.T.Call = ìÄåöë.winapi), line, col, 132);
           X86.PushCall(begcall);
-          Call(e1.T.Fields.ïðåäûäóù(ìÄåöë.òóÏîëå));
+          Call(e1.T.ïîëÿ.ïðåäûäóù(ìÄåöë.òóÏîëå));
           X86.Âûçîâ_Çàêîí÷èòü;
           X86.CallVar(ËÎÆÜ, ËÎÆÜ, e1.T.Call, e1.T.Len, ìÄåöë.curBlock.LocalSize)
         ÀÅÑËÈ ìÑêàí.ñóùíîñòü = lxAssign ÒÎÃÄÀ
@@ -1793,7 +1793,7 @@
           ÊÎÍÅÖ;
           X86.Save(TPROC)
         ÈÍÀ×Å
-          ìÏðîâ.Òåñò2(e1.T.Fields.ñ÷åò÷èê = 0, 155);
+          ìÏðîâ.Òåñò2(e1.T.ïîëÿ.ñ÷åò÷èê = 0, 155);
           ìÏðîâ.Òåñò((e1.T.Base.tType = TVOID) ÈËÈ (e1.T.Call = ìÄåöë.winapi), line, col, 132);
           X86.CallVar(ËÎÆÜ, ËÎÆÜ, e1.T.Call, e1.T.Len, ìÄåöë.curBlock.LocalSize)
         ÊÎÍÅÖ
