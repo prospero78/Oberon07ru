@@ -320,7 +320,7 @@
                         ИНАЧЕ
                             X86.LocalAdr(выраж_.id.Offset, мДецл.модуль.Level - выраж_.id.Level)
                         КОНЕЦ;
-                        X86.Guard(T.Number, ЛОЖЬ)
+                        X86.Guard(T.номер, ЛОЖЬ)
                     ИНАЧЕ
                         break := ИСТИНА
                     КОНЕЦ
@@ -627,8 +627,8 @@
           ЕСЛИ T.tType = TPOINTER ТОГДА
             T := T.Base
           КОНЕЦ;
-          e.Value := ДЛИН(FLT(T.Number));
-          X86.PushConst(T.Number)
+          e.Value := ДЛИН(FLT(T.номер));
+          X86.PushConst(T.номер)
         ИНАЧЕ
           e.Value := ДЛИН(FLT(T.размер));
           X86.PushConst(T.размер)
@@ -820,7 +820,7 @@
           АЕСЛИ e1.deref ТОГДА
             X86.DerefType(0)
           ИНАЧЕ
-            X86.PushConst(e1.T.Number)
+            X86.PushConst(e1.T.номер)
           КОНЕЦ
         КОНЕЦ;
         ЕСЛИ ~param.ByRef & (param.T.tType IN {TREAL, TLONGREAL}) ТОГДА
@@ -1212,7 +1212,7 @@
           ЕСЛИ e.T.tType = TPOINTER ТОГДА
             T := T.Base
           КОНЕЦ;
-          X86.Guard(T.Number, ИСТИНА);
+          X86.Guard(T.номер, ИСТИНА);
           e.T := sttypes[TBOOLEAN];
           e.eType := eEXP;
           e.vparam := ЛОЖЬ
@@ -1581,7 +1581,7 @@
         мПров.Тест(~e1.Read, line, col, 115);
         мПров.Тест(e1.T.tType = TPOINTER, line, col, 145);
         ЕСЛИ proc = stNEW ТОГДА
-          X86.PushConst(e1.T.Base.Number);
+          X86.PushConst(e1.T.Base.номер);
           X86.PushConst(X86.Align(e1.T.Base.размер + 8, 32));
           X86.newrec
         ИНАЧЕ
@@ -1731,14 +1731,14 @@
         Выраж_Загрузить(e2);
         ЕСЛИ e1.T.tType = TRECORD ТОГДА
           X86.PushConst(e1.T.размер);
-          X86.PushConst(e1.T.Number);
+          X86.PushConst(e1.T.номер);
           ЕСЛИ e1.vparam ТОГДА
             X86.LocalAdr(e1.id.Offset - 4, мДецл.модуль.Level - e1.id.Level);
             X86.Load(TINTEGER)
           АЕСЛИ e1.deref ТОГДА
             X86.DerefType(12)
           ИНАЧЕ
-            X86.PushConst(e1.T.Number)
+            X86.PushConst(e1.T.номер)
           КОНЕЦ
         АЕСЛИ e2.T.tType = TARRAY ТОГДА
           X86.PushConst(e2.T.размер)
