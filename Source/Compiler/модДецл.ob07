@@ -76,7 +76,7 @@
 ТИПЫ
 
   туТип* = УКАЗАТЕЛЬ НА ЗАПИСЬ (мТипы.тПункт)
-      tType*, размер*, длина*, номер*, Align, Call*, Rec: ЦЕЛОЕ;
+      tType*, размер*, длина*, номер*, выравнив, Call*, Rec: ЦЕЛОЕ;
       Base*: туТип;
       поля*: мТипы.туСписок
     КОНЕЦ;
@@ -341,7 +341,7 @@
     sttypes[TNIL].размер := 4;
     sttypes[TCARD16].размер := 2;
     ДЛЯ i := TINTEGER ДО TSTRING ДЕЛАТЬ
-      sttypes[i].Align := sttypes[i].размер
+      sttypes[i].выравнив := sttypes[i].размер
     КОНЕЦ
   КОНЕЦ StTypes;
 
@@ -720,11 +720,11 @@
     ПОКА cur # ПУСТО ДЕЛАТЬ
       cur.T := Tf;
       ЕСЛИ Rec ТОГДА
-        ЕСЛИ Tf.Align > Tr.Align ТОГДА
-          Tr.Align := Tf.Align
+        ЕСЛИ Tf.выравнив > Tr.выравнив ТОГДА
+          Tr.выравнив := Tf.выравнив
         КОНЕЦ;
         ЕСЛИ Tr.Rec = record ТОГДА
-          cur.Offset := FieldOffset(Tf.Align, Tr.размер);
+          cur.Offset := FieldOffset(Tf.выравнив, Tr.размер);
           мПров.Тест2(cur.Offset <= мКонст.целое_макс - Tf.размер, 83);
           Tr.размер := cur.Offset + Tf.размер
         АЕСЛИ Tr.Rec = noalign ТОГДА
@@ -1117,12 +1117,12 @@
       КОНЕЦ;
       мПров.Тест2(nov.Base.размер <= мКонст.целое_макс DIV nov.длина, 83);
       nov.размер := nov.Base.размер * nov.длина;
-      nov.Align := nov.Base.Align
+      nov.выравнив := nov.Base.выравнив
     |мКонст.ксЗАПИСЬ:
       КлючСлед_Получ;
       ДОБ(RecCount);
       nov := Тип_Создать(TRECORD, 0, 0, RecCount, ПУСТО, ИСТИНА, NewType);
-      nov.Align := 1;
+      nov.выравнив := 1;
       Коорд_Уст(line, col);
       ЕСЛИ RecFlag(nov.Rec) ТОГДА
         мПров.Тест(модуль.sys, line, col, 111)
@@ -1137,7 +1137,7 @@
         мПров.Тест(nov.Base.tType = TRECORD, line, col, 80);
         мПров.Тест(notrecurs(ИСТИНА, nov.Base), line, col, 96);
         nov.размер := nov.Base.размер;
-        nov.Align := nov.Base.Align;
+        nov.выравнив := nov.Base.выравнив;
         Ключ_Проверить(мКонст.опСкобкаПрКр);
         КлючСлед_Получ;
         мПров.Тест(nov.Rec = record, line, col, 112);
@@ -1145,7 +1145,7 @@
       КОНЕЦ;
       ReadFields(nov);
       Ключ_Проверить(мКонст.ксКОНЕЦ);
-      nov.размер := X86.Align(nov.размер, nov.Align);
+      nov.размер := X86.Align(nov.размер, nov.выравнив);
       ЕСЛИ nov.Base # ПУСТО ТОГДА
         X86.AddRec(nov.Base.номер)
       ИНАЧЕ
@@ -1157,7 +1157,7 @@
       Ключ_Проверить(мКонст.ксДО);
       КлючСлед_Получ;
       nov := Тип_Создать(TPOINTER, 0, 4, 0, ПУСТО, ЛОЖЬ, NewType);
-      nov.Align := 4;
+      nov.выравнив := 4;
       Коорд_Уст(line, col);
       nov.Base := pParseType(line, col);
       ЕСЛИ nov.Base = ПУСТО ТОГДА
@@ -1173,7 +1173,7 @@
       ЕСЛИ CallFlag(nov.Call) ТОГДА
         мПров.Тест(модуль.sys, line, col, 111)
       КОНЕЦ;
-      nov.Align := 4;
+      nov.выравнив := 4;
       FormalList(nov, nov.Base)
     ИНАЧЕ
       мПров.Тест2(ЛОЖЬ, 39)
