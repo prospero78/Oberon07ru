@@ -76,7 +76,7 @@
 ТИПЫ
 
   туТип* = УКАЗАТЕЛЬ НА ЗАПИСЬ (мТипы.тПункт)
-      tType*, размер*, длина*, номер*, выравнив, вызов*, запись: ЦЕЛОЕ;
+      тип_ном*, размер*, длина*, номер*, выравнив, вызов*, запись: ЦЕЛОЕ;
       Base*: туТип;
       поля*: мТипы.туСписок
     КОНЕЦ;
@@ -326,7 +326,7 @@
     ДЛЯ i := TINTEGER ДО TSTRING ДЕЛАТЬ
         НОВ(type);
         ПамОш_Проверить(type = ПУСТО);
-        type.tType := i;
+        type.тип_ном := i;
         мСпис.Добавить(types, type);
         sttypes[i] := type
     КОНЕЦ;
@@ -486,8 +486,10 @@
   КОНЕЦ Relation;
 
 ПРОЦЕДУРА Arith(a, b: ДЛИНВЕЩ; T: туТип; Op, line, col: ЦЕЛОЕ): ДЛИНВЕЩ;
-  CONST max = мСкан.maxDBL;
-  ПЕРЕМ res: ДЛИНВЕЩ;
+  КОНСТ
+      max = мСкан.maxDBL;
+  ПЕРЕМ
+      res: ДЛИНВЕЩ;
   НАЧАЛО
     ВЫБОР Op ИЗ
     |мКонст.опПлюс: res := a + b
@@ -504,16 +506,16 @@
     ИНАЧЕ
     КОНЕЦ;
     мПров.Тест(~мУтиль.ЕслиБесконеч(res), line, col, FOVER);
-    ВЫБОР T.tType ИЗ
-    |TINTEGER: 
-      мПров.Тест((res <= ДЛИН(FLT(мКонст.целое_макс))) & (res >= ДЛИН(FLT(мКонст.целое_мин))), line, col, IOVER)
-    |TREAL:     
-      мПров.Тест((res <= ДЛИН(мКонст.вещ_макс)) & (res >= -ДЛИН(мКонст.вещ_макс)), line, col, FOVER)
-    |TLONGREAL: 
-      мПров.Тест((res <= max) & (res >= -max), line, col, FOVER)
+    ВЫБОР T.тип_ном ИЗ
+      |TINTEGER: 
+            мПров.Тест((res <= ДЛИН(FLT(мКонст.целое_макс))) & (res >= ДЛИН(FLT(мКонст.целое_мин))), line, col, IOVER)
+      |TREAL:     
+            мПров.Тест((res <= ДЛИН(мКонст.вещ_макс)) & (res >= -ДЛИН(мКонст.вещ_макс)), line, col, FOVER)
+      |TLONGREAL: 
+          мПров.Тест((res <= max) & (res >= -max), line, col, FOVER)
     ИНАЧЕ
     КОНЕЦ;
-    ЕСЛИ (res = 0.0D0) & (T.tType IN {TREAL, TLONGREAL}) ИЛИ (ABS(res) < ДЛИН(мКонст.вещ_мин)) & (T.tType = TREAL) ТОГДА
+    ЕСЛИ (res = 0.0D0) & (T.тип_ном В {TREAL, TLONGREAL}) ИЛИ (ABS(res) < ДЛИН(мКонст.вещ_мин)) & (T.тип_ном = TREAL) ТОГДА
       ВЫБОР Op ИЗ
       |мКонст.опПлюс:  мПров.Тест(a = -b, line, col, UNDER)
       |мКонст.опМинус: мПров.Тест(a = b, line, col, UNDER)
@@ -551,10 +553,10 @@
     КОНЕЦ;
     ВЫБОР Op ИЗ
     |мКонст.опПлюс, мКонст.опМинус, мКонст.опУмнож, мКонст.опДелен:
-      мПров.Тест(~((Op = мКонст.опДелен) & (Ta.tType = TINTEGER)), line, col, 37);
-      ЕСЛИ Ta.tType IN {TINTEGER, TREAL, TLONGREAL} ТОГДА
+      мПров.Тест(~((Op = мКонст.опДелен) & (Ta.тип_ном = TINTEGER)), line, col, 37);
+      ЕСЛИ Ta.тип_ном В {TINTEGER, TREAL, TLONGREAL} ТОГДА
         Res := Arith(a, b, Ta, Op, line, col)
-      АЕСЛИ Ta.tType = TSET ТОГДА
+      АЕСЛИ Ta.тип_ном = TSET ТОГДА
         ВЫБОР Op ИЗ
         |мКонст.опПлюс:  Res := ДЛИН(FLT(ORD(BITS(ai) + BITS(bi))))
         |мКонст.опМинус: Res := ДЛИН(FLT(ORD(BITS(ai) - BITS(bi))))
@@ -567,18 +569,18 @@
       КОНЕЦ;
       TRes := Ta
     |lxDIV, lxMOD:
-      мПров.Тест(Ta.tType = TINTEGER, line, col, 37);
+      мПров.Тест(Ta.тип_ном = TINTEGER, line, col, 37);
       мПров.Тест(bi # 0, line, col, 48);
       TRes := Ta;
       Res := Arith(a, b, Ta, Op, line, col)
     |мКонст.опИ:
-      мПров.Тест(Ta.tType = TBOOLEAN, line, col, 37);
+      мПров.Тест(Ta.тип_ном = TBOOLEAN, line, col, 37);
       Res := ДЛИН(FLT(ORD((ai # 0) & (bi # 0))))
     |мКонст.lxOR:
-      мПров.Тест(Ta.tType = TBOOLEAN, line, col, 37);
+      мПров.Тест(Ta.тип_ном = TBOOLEAN, line, col, 37);
       Res := ДЛИН(FLT(ORD((ai # 0) ИЛИ (bi # 0))))
     |мКонст.опРавно, мКонст.опНеРавно:
-      ЕСЛИ Ta.tType = TSTRING ТОГДА
+      ЕСЛИ Ta.тип_ном = TSTRING ТОГДА
         Res := strcmp(a, b, Op)
       ИНАЧЕ
         Res := ДЛИН(FLT(ORD(a = b)))
@@ -592,8 +594,8 @@
         a := b;
         b := c
       КОНЕЦ;
-      мПров.Тест(Ta.tType IN {TSTRING, TINTEGER, TREAL, TLONGREAL}, line, col, 37);
-      ЕСЛИ Ta.tType = TSTRING ТОГДА
+      мПров.Тест(Ta.тип_ном В {TSTRING, TINTEGER, TREAL, TLONGREAL}, line, col, 37);
+      ЕСЛИ Ta.тип_ном = TSTRING ТОГДА
         Res := strcmp(a, b, Op)
       ИНАЧЕ
         Res := ДЛИН(FLT(ORD(a < b)))
@@ -604,16 +606,16 @@
         a := b;
         b := c
       КОНЕЦ;
-      мПров.Тест(Ta.tType IN {TSTRING, TINTEGER, TREAL, TLONGREAL, TSET}, line, col, 37);
-      ЕСЛИ Ta.tType = TSTRING ТОГДА
+      мПров.Тест(Ta.тип_ном В {TSTRING, TINTEGER, TREAL, TLONGREAL, TSET}, line, col, 37);
+      ЕСЛИ Ta.тип_ном = TSTRING ТОГДА
         Res := strcmp(a, b, Op)
-      АЕСЛИ Ta.tType = TSET ТОГДА
+      АЕСЛИ Ta.тип_ном = TSET ТОГДА
         Res := ДЛИН(FLT(ORD(BITS(FLOOR(a)) <= BITS(FLOOR(b)))))
       ИНАЧЕ
         Res := ДЛИН(FLT(ORD(a <= b)))
       КОНЕЦ
     |мКонст.ксВ:
-      мПров.Тест((Ta.tType = TINTEGER) & (Tb.tType = TSET), line, col, 37);
+      мПров.Тест((Ta.тип_ном = TINTEGER) & (Tb.тип_ном = TSET), line, col, 37);
       мПров.Тест(ASR(ai, 5) = 0, line, col, 49);
       Res := ДЛИН(FLT(ORD(ai IN BITS(bi))))
     ИНАЧЕ
@@ -699,10 +701,11 @@
   КОНЕЦ FieldOffset;
 
 ПРОЦЕДУРА Dim*(T: туТип): ЦЕЛОЕ;
-  ПЕРЕМ n: ЦЕЛОЕ;
+  ПЕРЕМ
+      n: ЦЕЛОЕ;
   НАЧАЛО
     n := 0;
-    ПОКА (T.tType = TARRAY) & (T.длина = 0) ДЕЛАТЬ
+    ПОКА (T.тип_ном = TARRAY) & (T.длина = 0) ДЕЛАТЬ
       ДОБ(n);
       T := T.Base
     КОНЕЦ
@@ -738,7 +741,7 @@
           cur.Offset := 0
         КОНЕЦ
       ИНАЧЕ
-        Tr.длина := Tr.длина + 4 * (ORD((Tf.tType = TRECORD) & cur.ByRef) + Dim(Tf) + ORD((Tf.tType = TLONGREAL) & ~cur.ByRef) + 1)
+        Tr.длина := Tr.длина + 4 * (ORD((Tf.тип_ном = TRECORD) & cur.ByRef) + Dim(Tf) + ORD((Tf.тип_ном = TLONGREAL) & ~cur.ByRef) + 1)
       КОНЕЦ;
       cur := cur.следующ(туПоле)
     КОНЕЦ
@@ -779,7 +782,7 @@
 
 ПРОЦЕДУРА notrecurs(id: БУЛЕВО; T: туТип): БУЛЕВО;
     ВЕРНУТЬ ~(id & (модуль.Idents.следующ(туИмя).iType = IDTYPE) & (модуль.Idents.следующ(туИмя).T = T) &
-            (T.tType В {TRECORD, TARRAY}))
+            (T.тип_ном В {TRECORD, TARRAY}))
   КОНЕЦ notrecurs;
 
 ПРОЦЕДУРА ReadFields(T: туТип);
@@ -833,7 +836,7 @@
 
 ПРОЦЕДУРА OpenBase*(T: туТип): туТип;
   НАЧАЛО
-    ПОКА (T.tType = TARRAY) & (T.длина = 0) ДЕЛАТЬ
+    ПОКА (T.тип_ном = TARRAY) & (T.длина = 0) ДЕЛАТЬ
       T := T.Base
     КОНЕЦ
     ВЕРНУТЬ T
@@ -852,10 +855,10 @@
     ПОКА cur # ПУСТО ДЕЛАТЬ
       cur.T := T;
       ЕСЛИ cur.Export ТОГДА
-        мПров.Тест(~(T.tType IN {TRECORD, TARRAY}), cur.line, cur.col, 90)
+        мПров.Тест(~(T.тип_ном В {TRECORD, TARRAY}), cur.line, cur.col, 90)
       КОНЕЦ;
-      ЕСЛИ(cur.VarKind = paramvar) ИЛИ (cur.VarKind = param) & (T.tType IN {TRECORD, TARRAY}) ТОГДА
-        n := 4 * (1 + Dim(T) + ORD((cur.VarKind = paramvar) & (T.tType = TRECORD)))
+      ЕСЛИ(cur.VarKind = paramvar) ИЛИ (cur.VarKind = param) & (T.тип_ном В {TRECORD, TARRAY}) ТОГДА
+        n := 4 * (1 + Dim(T) + ORD((cur.VarKind = paramvar) & (T.тип_ном = TRECORD)))
       ИНАЧЕ
         n := T.размер;
         мПров.Тест2(n <= мКонст.целое_макс - мПам.Выровнять(n), 93);
@@ -871,7 +874,7 @@
         ЕСЛИ cur.VarKind = 0 ТОГДА
           cur.Offset := curBlock.ParamSize - curBlock.VarSize - n
         ИНАЧЕ
-          cur.Offset := curBlock.VarSize - 8 + 4 * (cur.Level + ORD((cur.VarKind = paramvar) & (T.tType = TRECORD)))
+          cur.Offset := curBlock.VarSize - 8 + 4 * (cur.Level + ORD((cur.VarKind = paramvar) & (T.тип_ном = TRECORD)))
         КОНЕЦ
       КОНЕЦ;
       мПров.Тест2(curBlock.VarSize <= мКонст.целое_макс - n, 93);
@@ -896,7 +899,7 @@
       nov := NewType
     КОНЕЦ;
     мСпис.Добавить(types, nov);
-    nov.tType := tType;
+    nov.тип_ном := tType;
     nov.длина := Len;
     nov.размер := Size;
     nov.Base := Base;
@@ -1027,7 +1030,7 @@
         Ключ_Проверить(lxIDENT);
         Res := IdType(line, col);
         мПров.Тест(Res # ПУСТО, line, col, 42);
-        мПров.Тест(~(Res.tType IN {TRECORD, TARRAY}), line, col, 82)
+        мПров.Тест(~(Res.тип_ном В {TRECORD, TARRAY}), line, col, 82)
       КОНЕЦ
     КОНЕЦ
   КОНЕЦ FormalList;
@@ -1100,7 +1103,7 @@
       КлючСлед_Получ;
       Коорд_Уст(line, col);
       ConstExpr(v, T);
-      мПров.Тест(T.tType = TINTEGER, line, col, 52);
+      мПров.Тест(T.тип_ном = TINTEGER, line, col, 52);
       мПров.Тест(v > 0.0D0, line, col, 78);
       nov := Тип_Создать(TARRAY, FLOOR(v), 0, 0, ПУСТО, ЛОЖЬ, NewType);
       ЕСЛИ мСкан.сущность = мКонст.опЗапятая ТОГДА
@@ -1134,7 +1137,7 @@
         Ключ_Проверить(lxIDENT);
         nov.Base := IdType(line, col);
         мПров.Тест(nov.Base # ПУСТО, line, col, 42);
-        мПров.Тест(nov.Base.tType = TRECORD, line, col, 80);
+        мПров.Тест(nov.Base.тип_ном = TRECORD, line, col, 80);
         мПров.Тест(notrecurs(ИСТИНА, nov.Base), line, col, 96);
         nov.размер := nov.Base.размер;
         nov.выравнив := nov.Base.выравнив;
@@ -1164,7 +1167,7 @@
         мПров.Тест(модуль.typedecl, line, col, 42);
         AddPtrBase(NamePtrBase, line, col, nov)
       ИНАЧЕ
-        мПров.Тест(nov.Base.tType = TRECORD, line, col, 81)
+        мПров.Тест(nov.Base.тип_ном = TRECORD, line, col, 81)
       КОНЕЦ
     |мКонст.ксПРОЦЕДУРА:
       КлючСлед_Получ;
@@ -1221,7 +1224,7 @@
     ПОКА cur # ПУСТО ДЕЛАТЬ
       id := GetIdent(cur.Name);
       мПров.Тест(id # ПУСТО, cur.line, cur.col, 42);
-      мПров.Тест(id.T.tType = TRECORD, cur.line, cur.col, 81);
+      мПров.Тест(id.T.тип_ном = TRECORD, cur.line, cur.col, 81);
       cur.Ptr.Base := id.T;
       cur := cur.следующ(PTRBASE)
     КОНЕЦ;
@@ -1341,7 +1344,7 @@
         КлючСлед_Получ;
         OpSeq
       КОНЕЦ;
-      func := curBlock.T.Base.tType # TVOID;
+      func := curBlock.T.Base.тип_ном # TVOID;
       ЕСЛИ func ТОГДА
         Ключ_Проверить(мКонст.ксВЕРНУТЬ);
         мУтиль.КодСтрока_Уст(UnitNumber, мСкан.line);
@@ -1350,7 +1353,7 @@
         Expr(e);
         мПров.Тест(AssComp(e, curBlock.T.Base, ЛОЖЬ), line, col, 125);
         ЕСЛИ e.eType = eVAR ТОГДА
-          X86.Load(e.T.tType)
+          X86.Load(e.T.тип_ном)
         КОНЕЦ
       ИНАЧЕ
         мПров.Тест2(мСкан.сущность # мКонст.ксВЕРНУТЬ, 123)
@@ -1362,7 +1365,7 @@
       КлючСлед_Получ;
       Ключ_Проверить(мКонст.опТчкЗпт);
       КлючСлед_Получ;
-      X86.ProcEnd(id.Number, (id.ParamSize + (id.Level - 3) * 4) * ORD(curBlock.T.вызов В {stdcall, winapi, defcall}), func, curBlock.T.Base.tType IN {TREAL, TLONGREAL});
+      X86.ProcEnd(id.Number, (id.ParamSize + (id.Level - 3) * 4) * ORD(curBlock.T.вызов В {stdcall, winapi, defcall}), func, curBlock.T.Base.тип_ном В {TREAL, TLONGREAL});
       PopBlock;
       curBlock := curBlock.Parent
     КОНЕЦ
