@@ -253,21 +253,21 @@
                         pExpr(выражение);
                         мПров.Тест(выражение.T.tType = TINTEGER, line, col, 52);
                         Выраж_Загрузить(выражение);
-                        ЕСЛИ выраж_.T.Len = 0 ТОГДА
+                        ЕСЛИ выраж_.T.длина = 0 ТОГДА
                             BaseT := мДецл.OpenBase(выраж_.T);
                             X86.PushConst(BaseT.размер);
                             X86.OpenIdx(мДецл.Dim(выраж_.T))
                         ИНАЧЕ
                             ЕСЛИ выражение.eType = eCONST ТОГДА
                                 idx := FLOOR(выражение.Value);
-                                мПров.Тест((idx >= 0) & (idx < выраж_.T.Len), line, col, 159);
+                                мПров.Тест((idx >= 0) & (idx < выраж_.T.длина), line, col, 159);
                                 ЕСЛИ выраж_.T.Base.размер # 1 ТОГДА
                                     X86.Drop;
                                     X86.PushConst(выраж_.T.Base.размер * idx)
                                 КОНЕЦ;
                                 X86.Idx
                             ИНАЧЕ
-                                X86.FixIdx(выраж_.T.Len, выраж_.T.Base.размер)
+                                X86.FixIdx(выраж_.T.длина, выраж_.T.Base.размер)
                             КОНЕЦ
                         КОНЕЦ;
                         выраж_.T := выраж_.T.Base
@@ -395,8 +395,8 @@
     ПЕРЕМ
       A: X86.TIDX;
     НАЧАЛО
-      ЕСЛИ (e.T.tType = TARRAY) & (e.T.Base.tType = TCHAR) & (e.T.Len # 0) ТОГДА
-        A[0] := e.T.Len;
+      ЕСЛИ (e.T.tType = TARRAY) & (e.T.Base.tType = TCHAR) & (e.T.длина # 0) ТОГДА
+        A[0] := e.T.длина;
         X86.OpenArray(A, 1)
       АЕСЛИ e.T.tType = TSTRING ТОГДА
         A[0] := Стр_Длина(e.Value) + 1;
@@ -448,8 +448,8 @@
       |stLEN:
         Designator(e1);
         мПров.Тест((e1.eType = eVAR) & (e1.T.tType = TARRAY), line, col, 102);
-        ЕСЛИ e1.T.Len > 0 ТОГДА
-          X86.Len(-e1.T.Len)
+        ЕСЛИ e1.T.длина > 0 ТОГДА
+          X86.Len(-e1.T.длина)
         ИНАЧЕ
           X86.Len(мДецл.Dim(e1.T))
         КОНЕЦ;
@@ -654,7 +654,7 @@
           ПЕРЕМ
             Res: БУЛЕВО;
           НАЧАЛО
-            ЕСЛИ (T1.tType = TARRAY) & (T2.tType = TARRAY) & (T1.Len = 0) & (T2.Len = 0) ТОГДА
+            ЕСЛИ (T1.tType = TARRAY) & (T2.tType = TARRAY) & (T1.длина = 0) & (T2.длина = 0) ТОГДА
               Res := TypeComp(T1.Base, T2.Base)
             ИНАЧЕ
               Res := ProcTypeComp1(T1, T2)
@@ -709,7 +709,7 @@
     ПЕРЕМ
       Res: БУЛЕВО;
     НАЧАЛО
-      ЕСЛИ (Tf.tType = TARRAY) & (Tf.Len = 0) & (Ta.tType = TARRAY) ТОГДА
+      ЕСЛИ (Tf.tType = TARRAY) & (Tf.длина = 0) & (Ta.tType = TARRAY) ТОГДА
         Res := ArrComp(Ta.Base, Tf.Base)
       ИНАЧЕ
         Res := ProcTypeComp(Ta, Tf)
@@ -732,7 +732,7 @@
         КОНЕЦ
       |TARRAY:
         ЕСЛИ param ТОГДА
-          ЕСЛИ T.Len = 0 ТОГДА
+          ЕСЛИ T.длина = 0 ТОГДА
             ЕСЛИ (T.Base.tType = TCHAR) & (e.T.tType = TSTRING) ТОГДА
               Res := ИСТИНА
             ИНАЧЕ
@@ -740,16 +740,16 @@
             КОНЕЦ
           ИНАЧЕ
             ЕСЛИ (T.Base.tType = TCHAR) & (e.T.tType = TSTRING) ТОГДА
-              Res := Стр_Длина(e.Value) <= T.Len
+              Res := Стр_Длина(e.Value) <= T.длина
             ИНАЧЕ
               Res := e.T = T
             КОНЕЦ
           КОНЕЦ
         ИНАЧЕ
-          ЕСЛИ T.Len = 0 ТОГДА
+          ЕСЛИ T.длина = 0 ТОГДА
             Res := ЛОЖЬ
           АЕСЛИ (T.Base.tType = TCHAR) & (e.T.tType = TSTRING) ТОГДА
-            Res := Стр_Длина(e.Value) <= T.Len
+            Res := Стр_Длина(e.Value) <= T.длина
           ИНАЧЕ
             Res := e.T = T
           КОНЕЦ
@@ -775,7 +775,7 @@
            TSET, TBOOLEAN, TPOINTER, TCARD16:
             Res := e.T = T
           |TARRAY:
-            ЕСЛИ T.Len > 0 ТОГДА
+            ЕСЛИ T.длина > 0 ТОГДА
               Res := e.T = T
             ИНАЧЕ
               Res := ArrComp(e.T, T)
@@ -831,7 +831,7 @@
           ЕСЛИ s.длина = 1 ТОГДА
             X86.Mono(s.номер)
           КОНЕЦ;
-          ЕСЛИ param.T.Len = 0 ТОГДА
+          ЕСЛИ param.T.длина = 0 ТОГДА
             A[0] := s.длина + 1;
             X86.OpenArray(A, 1)
           КОНЕЦ
@@ -840,7 +840,7 @@
           n := мДецл.Dim(param.T) - мДецл.Dim(e1.T);
           TA := мДецл.OpenBase(e1.T);
           ДЛЯ i := 0 ДО n - 1 ДЕЛАТЬ
-            A[i] := TA.Len;
+            A[i] := TA.длина;
             TA := TA.Base
           КОНЕЦ;
           ЕСЛИ мДецл.Dim(e1.T) = 0 ТОГДА
@@ -899,7 +899,7 @@
           Call(e.T.поля.предыдущ(мДецл.туПоле));
           X86.Вызов_Закончить;
           e.eType := eEXP;
-          X86.CallVar(ИСТИНА, e.T.Base.tType IN {TREAL, TLONGREAL}, e.T.Call, e.T.Len, мДецл.curBlock.LocalSize);
+          X86.CallVar(ИСТИНА, e.T.Base.tType IN {TREAL, TLONGREAL}, e.T.Call, e.T.длина, мДецл.curBlock.LocalSize);
           e.T := e.T.Base;
         АЕСЛИ e.eType IN {eSTPROC, eSYSPROC} ТОГДА
           StFunc(e, e.id.StProc)
@@ -1747,7 +1747,7 @@
           ЕСЛИ s.длина = 1 ТОГДА
             X86.Mono(s.номер)
           КОНЕЦ;
-          X86.PushConst(мУтиль.Минимум(s.длина + 1, e1.T.Len))
+          X86.PushConst(мУтиль.Минимум(s.длина + 1, e1.T.длина))
         КОНЕЦ;
         X86.Save(e1.T.tType)
       АЕСЛИ e1.eType = ePROC ТОГДА
@@ -1780,7 +1780,7 @@
           X86.PushCall(begcall);
           Call(e1.T.поля.предыдущ(мДецл.туПоле));
           X86.Вызов_Закончить;
-          X86.CallVar(ЛОЖЬ, ЛОЖЬ, e1.T.Call, e1.T.Len, мДецл.curBlock.LocalSize)
+          X86.CallVar(ЛОЖЬ, ЛОЖЬ, e1.T.Call, e1.T.длина, мДецл.curBlock.LocalSize)
         АЕСЛИ мСкан.сущность = lxAssign ТОГДА
           мПров.Тест(~e1.Read, line, col, 115);
           мДецл.КлючСлед_Получ;
@@ -1795,7 +1795,7 @@
         ИНАЧЕ
           мПров.Тест2(e1.T.поля.счетчик = 0, 155);
           мПров.Тест((e1.T.Base.tType = TVOID) ИЛИ (e1.T.Call = мДецл.winapi), line, col, 132);
-          X86.CallVar(ЛОЖЬ, ЛОЖЬ, e1.T.Call, e1.T.Len, мДецл.curBlock.LocalSize)
+          X86.CallVar(ЛОЖЬ, ЛОЖЬ, e1.T.Call, e1.T.длина, мДецл.curBlock.LocalSize)
         КОНЕЦ
       КОНЕЦ
     КОНЕЦ IdentOper;

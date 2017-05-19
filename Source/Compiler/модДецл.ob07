@@ -76,7 +76,7 @@
 ТИПЫ
 
   туТип* = УКАЗАТЕЛЬ НА ЗАПИСЬ (мТипы.тПункт)
-      tType*, размер*, Len*, Number*, Align, Call*, Rec: ЦЕЛОЕ;
+      tType*, размер*, длина*, Number*, Align, Call*, Rec: ЦЕЛОЕ;
       Base*: туТип;
       поля*: мТипы.туСписок
     КОНЕЦ;
@@ -145,7 +145,7 @@
 ПЕРЕМ
 
   sttypes: туТипНабор;
-  модуль*, sys: тМодуль;
+  модуль*, мод_систем: тМодуль;
   curBlock*: туИмя;
   Path, Main, Std, ExtMain: мСтр.тСтрока;
   NamePtrBase: мТипы.туУзел; ProgSize*, RecCount, UnitNumber*: ЦЕЛОЕ;
@@ -702,7 +702,7 @@
   ПЕРЕМ n: ЦЕЛОЕ;
   НАЧАЛО
     n := 0;
-    ПОКА (T.tType = TARRAY) & (T.Len = 0) ДЕЛАТЬ
+    ПОКА (T.tType = TARRAY) & (T.длина = 0) ДЕЛАТЬ
       ДОБ(n);
       T := T.Base
     КОНЕЦ
@@ -738,7 +738,7 @@
           cur.Offset := 0
         КОНЕЦ
       ИНАЧЕ
-        Tr.Len := Tr.Len + 4 * (ORD((Tf.tType = TRECORD) & cur.ByRef) + Dim(Tf) + ORD((Tf.tType = TLONGREAL) & ~cur.ByRef) + 1)
+        Tr.длина := Tr.длина + 4 * (ORD((Tf.tType = TRECORD) & cur.ByRef) + Dim(Tf) + ORD((Tf.tType = TLONGREAL) & ~cur.ByRef) + 1)
       КОНЕЦ;
       cur := cur.следующ(туПоле)
     КОНЕЦ
@@ -833,7 +833,7 @@
 
 ПРОЦЕДУРА OpenBase*(T: туТип): туТип;
   НАЧАЛО
-    ПОКА (T.tType = TARRAY) & (T.Len = 0) ДЕЛАТЬ
+    ПОКА (T.tType = TARRAY) & (T.длина = 0) ДЕЛАТЬ
       T := T.Base
     КОНЕЦ
     ВЕРНУТЬ T
@@ -897,7 +897,7 @@
     КОНЕЦ;
     мСпис.Добавить(types, nov);
     nov.tType := tType;
-    nov.Len := Len;
+    nov.длина := Len;
     nov.размер := Size;
     nov.Base := Base;
     nov.поля := ПУСТО;
@@ -1115,8 +1115,8 @@
       ИНАЧЕ
         мПров.Тест2(ЛОЖЬ, 79)
       КОНЕЦ;
-      мПров.Тест2(nov.Base.размер <= мКонст.целое_макс DIV nov.Len, 83);
-      nov.размер := nov.Base.размер * nov.Len;
+      мПров.Тест2(nov.Base.размер <= мКонст.целое_макс DIV nov.длина, 83);
+      nov.размер := nov.Base.размер * nov.длина;
       nov.Align := nov.Base.Align
     |мКонст.ксЗАПИСЬ:
       КлючСлед_Получ;
@@ -1423,7 +1423,7 @@
         ЕСЛИ ~((~self.Std & пМодуль_Читать(Path, FName, мКонст.расшир)) ИЛИ
                             пМодуль_Читать(Std, FName, мКонст.расшир)) ТОГДА
           ЕСЛИ FName = "SYSTEM" ТОГДА
-            модуль := sys;
+            модуль := мод_систем;
             self.sys := ИСТИНА
           ИНАЧЕ
             мПров.Тест(ЛОЖЬ, nameline, namecol, 32)
@@ -1508,7 +1508,7 @@
     PushSysProc("CODE",    sysCODE);
     PushSysProc("MOVE",    sysMOVE);
     PushSysType("CARD16",  TCARD16);
-    sys := модуль;
+    мод_систем := модуль;
     модуль := модуль_псевдо
   КОНЕЦ Псевдо_Добав;
 
