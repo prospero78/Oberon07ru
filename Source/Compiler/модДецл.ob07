@@ -76,7 +76,7 @@
 ТИПЫ
 
   туТип* = УКАЗАТЕЛЬ НА ЗАПИСЬ (мТипы.тПункт)
-      tType*, размер*, длина*, номер*, выравнив, Call*, Rec: ЦЕЛОЕ;
+      tType*, размер*, длина*, номер*, выравнив, вызов*, Rec: ЦЕЛОЕ;
       Base*: туТип;
       поля*: мТипы.туСписок
     КОНЕЦ;
@@ -1170,7 +1170,7 @@
       КлючСлед_Получ;
       nov := Тип_Создать(TPROC, 0, 4, 0, sttypes[TVOID], ИСТИНА, NewType);
       Коорд_Уст(line, col);
-      ЕСЛИ CallFlag(nov.Call) ТОГДА
+      ЕСЛИ CallFlag(nov.вызов) ТОГДА
         мПров.Тест(модуль.sys, line, col, 111)
       КОНЕЦ;
       nov.выравнив := 4;
@@ -1331,7 +1331,7 @@
       curBlock := id;
       Охрана_Создать;
       FormalList(ПУСТО, curBlock.T.Base);
-      id.T.Call := Call;
+      id.T.вызов := Call;
       Ключ_Проверить(мКонст.опТчкЗпт);
       КлючСлед_Получ;
       DeclSeq;
@@ -1362,7 +1362,7 @@
       КлючСлед_Получ;
       Ключ_Проверить(мКонст.опТчкЗпт);
       КлючСлед_Получ;
-      X86.ProcEnd(id.Number, (id.ParamSize + (id.Level - 3) * 4) * ORD(curBlock.T.Call IN {stdcall, winapi, defcall}), func, curBlock.T.Base.tType IN {TREAL, TLONGREAL});
+      X86.ProcEnd(id.Number, (id.ParamSize + (id.Level - 3) * 4) * ORD(curBlock.T.вызов В {stdcall, winapi, defcall}), func, curBlock.T.Base.tType IN {TREAL, TLONGREAL});
       PopBlock;
       curBlock := curBlock.Parent
     КОНЕЦ

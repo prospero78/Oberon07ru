@@ -684,7 +684,7 @@
             Res := ИСТИНА
           ИНАЧЕ
             ЕСЛИ (T1.tType = TPROC) & (T2.tType = TPROC) & (T1 # T2) ТОГДА
-              Res := (T1.Call = T2.Call) & (T1.поля.счетчик = T2.поля.счетчик) & ProcTypeComp1(T1.Base, T2.Base);
+              Res := (T1.вызов = T2.вызов) & (T1.поля.счетчик = T2.поля.счетчик) & ProcTypeComp1(T1.Base, T2.Base);
               fp := T1.поля.предыдущ(мДецл.туПоле);
               ft := T2.поля.предыдущ(мДецл.туПоле);
               ПОКА Res & (fp # ПУСТО) ДЕЛАТЬ
@@ -887,7 +887,7 @@
             ИНАЧЕ
               ccall := 2
             КОНЕЦ;
-            X86.Call(e.id.Number, ИСТИНА, e.T.tType IN {TREAL, TLONGREAL}, e.id.T.Call, ccall, e.id.Level - 3,
+            X86.Call(e.id.Number, ИСТИНА, e.T.tType В {TREAL, TLONGREAL}, e.id.T.вызов, ccall, e.id.Level - 3,
               мДецл.curBlock.Level - 3, e.id.ParamSize, мДецл.curBlock.LocalSize)
           ИНАЧЕ
             X86.PushInt(e.id.Number)
@@ -899,7 +899,7 @@
           Call(e.T.поля.предыдущ(мДецл.туПоле));
           X86.Вызов_Закончить;
           e.eType := eEXP;
-          X86.CallVar(ИСТИНА, e.T.Base.tType IN {TREAL, TLONGREAL}, e.T.Call, e.T.длина, мДецл.curBlock.LocalSize);
+          X86.CallVar(ИСТИНА, e.T.Base.tType В {TREAL, TLONGREAL}, e.T.вызов, e.T.длина, мДецл.curBlock.LocalSize);
           e.T := e.T.Base;
         АЕСЛИ e.eType IN {eSTPROC, eSYSPROC} ТОГДА
           StFunc(e, e.id.StProc)
@@ -1751,7 +1751,7 @@
         КОНЕЦ;
         X86.Save(e1.T.tType)
       АЕСЛИ e1.eType = ePROC ТОГДА
-        мПров.Тест((e1.id.T.Base.tType = TVOID) ИЛИ (e1.id.T.Call = мДецл.winapi), line, col, 132);
+        мПров.Тест((e1.id.T.Base.tType = TVOID) ИЛИ (e1.id.T.вызов = мДецл.winapi), line, col, 132);
         ЕСЛИ e1.id.ParamCount > 0 ТОГДА
           мДецл.Ключ_Проверить(lxLRound);
           мДецл.КлючСлед_Получ;
@@ -1770,17 +1770,17 @@
         ИНАЧЕ
           ccall := 2
         КОНЕЦ;
-        X86.Call(e1.id.Number, ЛОЖЬ, ЛОЖЬ, e1.id.T.Call, ccall, e1.id.Level - 3, мДецл.curBlock.Level - 3, e1.id.ParamSize, мДецл.curBlock.LocalSize)
+        X86.Call(e1.id.Number, ЛОЖЬ, ЛОЖЬ, e1.id.T.вызов, ccall, e1.id.Level - 3, мДецл.curBlock.Level - 3, e1.id.ParamSize, мДецл.curBlock.LocalSize)
       АЕСЛИ e1.eType IN {eSTPROC, eSYSPROC} ТОГДА
         StProc(e1.id.StProc)
       АЕСЛИ (e1.eType = eVAR) & (e1.T.tType = TPROC) ТОГДА
         ЕСЛИ мСкан.сущность = lxLRound ТОГДА
           мДецл.КлючСлед_Получ;
-          мПров.Тест((e1.T.Base.tType = TVOID) ИЛИ (e1.T.Call = мДецл.winapi), line, col, 132);
+          мПров.Тест((e1.T.Base.tType = TVOID) ИЛИ (e1.T.вызов = мДецл.winapi), line, col, 132);
           X86.PushCall(begcall);
           Call(e1.T.поля.предыдущ(мДецл.туПоле));
           X86.Вызов_Закончить;
-          X86.CallVar(ЛОЖЬ, ЛОЖЬ, e1.T.Call, e1.T.длина, мДецл.curBlock.LocalSize)
+          X86.CallVar(ЛОЖЬ, ЛОЖЬ, e1.T.вызов, e1.T.длина, мДецл.curBlock.LocalSize)
         АЕСЛИ мСкан.сущность = lxAssign ТОГДА
           мПров.Тест(~e1.Read, line, col, 115);
           мДецл.КлючСлед_Получ;
@@ -1794,8 +1794,8 @@
           X86.Save(TPROC)
         ИНАЧЕ
           мПров.Тест2(e1.T.поля.счетчик = 0, 155);
-          мПров.Тест((e1.T.Base.tType = TVOID) ИЛИ (e1.T.Call = мДецл.winapi), line, col, 132);
-          X86.CallVar(ЛОЖЬ, ЛОЖЬ, e1.T.Call, e1.T.длина, мДецл.curBlock.LocalSize)
+          мПров.Тест((e1.T.Base.tType = TVOID) ИЛИ (e1.T.вызов = мДецл.winapi), line, col, 132);
+          X86.CallVar(ЛОЖЬ, ЛОЖЬ, e1.T.вызов, e1.T.длина, мДецл.curBlock.LocalSize)
         КОНЕЦ
       КОНЕЦ
     КОНЕЦ IdentOper;
