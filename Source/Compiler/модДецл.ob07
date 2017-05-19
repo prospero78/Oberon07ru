@@ -145,7 +145,7 @@
 ПЕРЕМ
 
   sttypes: туТипНабор;
-  unit*, sys: тМодуль;
+  модуль*, sys: тМодуль;
   curBlock*: туИмя;
   Path, Main, Std, ExtMain: мСтр.тСтрока;
   NamePtrBase: мТипы.туУзел; ProgSize*, RecCount, UnitNumber*: ЦЕЛОЕ;
@@ -272,7 +272,7 @@
   ПЕРЕМ
     cur: туИмя;
   НАЧАЛО
-    cur := unit.Idents.следующ(туИмя);
+    cur := модуль.Idents.следующ(туИмя);
     ПОКА (cur.iType # IDGUARD) & (cur.Name # Name) ДЕЛАТЬ
       cur := cur.предыдущ(туИмя)
     КОНЕЦ
@@ -288,8 +288,8 @@
     ident.Name := ПУСТО;
     ident.iType := IDGUARD;
     ident.T := sttypes[TVOID];
-    мСпис.Добавить(unit.Idents, ident);
-    ДОБ(unit.Level)
+    мСпис.Добавить(модуль.Idents, ident);
+    ДОБ(модуль.Level)
   КОНЕЦ Охрана_Создать;
 
 ПРОЦЕДУРА PushIdent(Name: мТипы.туУзел; line, col, iType: ЦЕЛОЕ; T: туТип; u: тМодуль; Export: БУЛЕВО; StProc: ЦЕЛОЕ);
@@ -314,8 +314,8 @@
     ident.Unit := u;
     ident.Export := Export;
     ident.StProc := StProc;
-    ident.Level := unit.Level;
-    мСпис.Добавить(unit.Idents, ident)
+    ident.Level := модуль.Level;
+    мСпис.Добавить(модуль.Idents, ident)
   КОНЕЦ PushIdent;
 
 ПРОЦЕДУРА StTypes;
@@ -442,7 +442,7 @@
     cur := Unit.IdentBegin.следующ(туИмя);
     ПОКА (cur # ПУСТО) & (cur.iType # IDGUARD) ДЕЛАТЬ
       ЕСЛИ cur.Name = Name ТОГДА
-        ЕСЛИ (Unit # unit) & ~cur.Export ТОГДА
+        ЕСЛИ (Unit # модуль) & ~cur.Export ТОГДА
           res := ПУСТО
         ИНАЧЕ
           res := cur
@@ -462,7 +462,7 @@
   НАЧАЛО
     res := ПУСТО;
     Коорд_Уст(line, col);
-    cur := unit.Idents.следующ(туИмя);
+    cur := модуль.Idents.следующ(туИмя);
     ПОКА (cur # ПУСТО) & (cur.Name = Name) ДЕЛАТЬ
       res := cur;
       cur := ПУСТО
@@ -666,7 +666,7 @@
         Name := мСкан.id;
         NamePtrBase := Name;
         id := GetQIdent(Unit, Name);
-        ЕСЛИ Unit # unit ТОГДА
+        ЕСЛИ Unit # модуль ТОГДА
           мПров.Тест2(id # ПУСТО, 42);
           мПров.Тест2(id.iType = IDTYPE, 77);
           Коорд_Уст(line, col);
@@ -674,7 +674,7 @@
           Res := id.T
         ИНАЧЕ
           ЕСЛИ id = ПУСТО ТОГДА
-            мПров.Тест2((unit.Level = 3) & unit.typedecl, 42);
+            мПров.Тест2((модуль.Level = 3) & модуль.typedecl, 42);
             Коорд_Уст(line, col);
             КлючСлед_Получ;
             Res := ПУСТО
@@ -768,7 +768,7 @@
     ПОКА (T # ПУСТО) & res ДЕЛАТЬ
       field := GetField(T, Name);
       ЕСЛИ field # ПУСТО ТОГДА
-        ЕСЛИ (field.Unit = unit) ИЛИ field.Export ТОГДА
+        ЕСЛИ (field.Unit = модуль) ИЛИ field.Export ТОГДА
           res := ЛОЖЬ
         КОНЕЦ
       КОНЕЦ;
@@ -778,8 +778,8 @@
   КОНЕЦ Unique;
 
 ПРОЦЕДУРА notrecurs(id: БУЛЕВО; T: туТип): БУЛЕВО;
-    ВЕРНУТЬ ~(id & (unit.Idents.следующ(туИмя).iType = IDTYPE) & (unit.Idents.следующ(туИмя).T = T) &
-            (T.tType IN {TRECORD, TARRAY}))
+    ВЕРНУТЬ ~(id & (модуль.Idents.следующ(туИмя).iType = IDTYPE) & (модуль.Idents.следующ(туИмя).T = T) &
+            (T.tType В {TRECORD, TARRAY}))
   КОНЕЦ notrecurs;
 
 ПРОЦЕДУРА ReadFields(T: туТип);
@@ -799,12 +799,12 @@
       field.Name := Name;
       field.T := ПУСТО;
       field.Export := ЛОЖЬ;
-      field.Unit := unit;
+      field.Unit := модуль;
       КлючСлед_Получ;
       ЕСЛИ мСкан.сущность = мКонст.опУмнож ТОГДА
-        мПров.Тест2(unit.Level = 3, 89);
-        мПров.Тест2(unit.typedecl, 91);
-        мПров.Тест2(unit.ExportType, 92);
+        мПров.Тест2(модуль.Level = 3, 89);
+        мПров.Тест2(модуль.typedecl, 91);
+        мПров.Тест2(модуль.ExportType, 92);
         field.Export := ИСТИНА;
         КлючСлед_Получ
       КОНЕЦ;
@@ -844,7 +844,7 @@
     cur: туИмя;
     n: ЦЕЛОЕ;
   НАЧАЛО
-    cur := unit.Idents.следующ(туИмя);
+    cur := модуль.Idents.следующ(туИмя);
     ПОКА cur.T = ПУСТО ДЕЛАТЬ
       cur := cur.предыдущ(туИмя)
     КОНЕЦ;
@@ -960,7 +960,7 @@
       ЕСЛИ proc ТОГДА
         PushIdent(Name, line, col, IDVAR, ПУСТО, ПУСТО, ЛОЖЬ, 0);
         ДОБ(curBlock.ParamCount);
-        fp := unit.Idents.следующ(туИмя);
+        fp := модуль.Idents.следующ(туИмя);
         ЕСЛИ ByRef ТОГДА
           fp.VarKind := paramvar
         ИНАЧЕ
@@ -1125,7 +1125,7 @@
       nov.Align := 1;
       Коорд_Уст(line, col);
       ЕСЛИ RecFlag(nov.Rec) ТОГДА
-        мПров.Тест(unit.sys, line, col, 111)
+        мПров.Тест(модуль.sys, line, col, 111)
       КОНЕЦ;
       Коорд_Уст(line, col);
       ЕСЛИ мСкан.сущность = lxLRound ТОГДА
@@ -1161,7 +1161,7 @@
       Коорд_Уст(line, col);
       nov.Base := pParseType(line, col);
       ЕСЛИ nov.Base = ПУСТО ТОГДА
-        мПров.Тест(unit.typedecl, line, col, 42);
+        мПров.Тест(модуль.typedecl, line, col, 42);
         AddPtrBase(NamePtrBase, line, col, nov)
       ИНАЧЕ
         мПров.Тест(nov.Base.tType = TRECORD, line, col, 81)
@@ -1171,7 +1171,7 @@
       nov := Тип_Создать(TPROC, 0, 4, 0, sttypes[TVOID], ИСТИНА, NewType);
       Коорд_Уст(line, col);
       ЕСЛИ CallFlag(nov.Call) ТОГДА
-        мПров.Тест(unit.sys, line, col, 111)
+        мПров.Тест(модуль.sys, line, col, 111)
       КОНЕЦ;
       nov.Align := 4;
       FormalList(nov, nov.Base)
@@ -1198,7 +1198,7 @@
     cur: туИмя;
     n: ЦЕЛОЕ;
   НАЧАЛО
-    cur := unit.Idents.следующ(туИмя);
+    cur := модуль.Idents.следующ(туИмя);
     n := 0;
     ПОКА cur.iType # IDGUARD ДЕЛАТЬ
       cur := cur.предыдущ(туИмя);
@@ -1206,10 +1206,10 @@
     КОНЕЦ;
     cur := cur.предыдущ(туИмя);
     ДОБ(n);
-    unit.Idents.счетчик := unit.Idents.счетчик - n;
-    unit.Idents.следующ := cur;
+    модуль.Idents.счетчик := модуль.Idents.счетчик - n;
+    модуль.Idents.следующ := cur;
     cur.следующ := ПУСТО;
-    ВЫЧ(unit.Level)
+    ВЫЧ(модуль.Level)
   КОНЕЦ PopBlock;
 
 ПРОЦЕДУРА LinkPtr;
@@ -1245,7 +1245,7 @@
       КлючСлед_Получ;
       Export := ЛОЖЬ;
       ЕСЛИ мСкан.сущность = мКонст.опУмнож ТОГДА
-        мПров.Тест2(unit.Level = 3, 89);
+        мПров.Тест2(модуль.Level = 3, 89);
         Export := ИСТИНА;
         КлючСлед_Получ
       КОНЕЦ
@@ -1257,7 +1257,7 @@
       ПОКА мСкан.сущность = lxIDENT ДЕЛАТЬ
         IdentDef;
         PushIdent(Name, line, col, IDCONST, ПУСТО, ПУСТО, Export, 0);
-        last := unit.Idents.следующ(туИмя);
+        last := модуль.Idents.следующ(туИмя);
         Ключ_Проверить(мКонст.опРавно);
         КлючСлед_Получ;
         ConstExpr(Value, T);
@@ -1269,13 +1269,13 @@
     КОНЕЦ;
     ЕСЛИ мСкан.сущность = мКонст.ксТИПЫ ТОГДА
       мСпис.Очистить(PtrBases);
-      unit.typedecl := ИСТИНА;
+      модуль.typedecl := ИСТИНА;
       КлючСлед_Получ;
       ПОКА мСкан.сущность = lxIDENT ДЕЛАТЬ
         IdentDef;
         PushIdent(Name, line, col, IDTYPE, ПУСТО, ПУСТО, Export, 0);
-        last := unit.Idents.следующ(туИмя);
-        unit.ExportType := Export;
+        last := модуль.Idents.следующ(туИмя);
+        модуль.ExportType := Export;
         Ключ_Проверить(мКонст.опРавно);
         КлючСлед_Получ;
         НОВ(NewType);
@@ -1287,8 +1287,8 @@
       КОНЕЦ
     КОНЕЦ;
     LinkPtr;
-    unit.typedecl := ЛОЖЬ;
-    unit.ExportType := ЛОЖЬ;
+    модуль.typedecl := ЛОЖЬ;
+    модуль.ExportType := ЛОЖЬ;
     ЕСЛИ мСкан.сущность = мКонст.ксПЕРЕМ ТОГДА
       КлючСлед_Получ;
       ПОКА мСкан.сущность = lxIDENT ДЕЛАТЬ
@@ -1314,13 +1314,13 @@
       КлючСлед_Получ;
       Коорд_Уст(line, col);
       ЕСЛИ CallFlag(Call) ТОГДА
-        мПров.Тест(unit.Level = 3, line, col, 45);
-        мПров.Тест(unit.sys, line, col, 111)
+        мПров.Тест(модуль.Level = 3, line, col, 45);
+        мПров.Тест(модуль.sys, line, col, 111)
       КОНЕЦ;
       Ключ_Проверить(lxIDENT);
       IdentDef;
       PushIdent(Name, line, col, IDPROC, Тип_Создать(TPROC, 0, 4, 0, sttypes[TVOID], ИСТИНА, ПУСТО), ПУСТО, Export, 0);
-      id := unit.Idents.следующ(туИмя);
+      id := модуль.Idents.следующ(туИмя);
       ЕСЛИ id.Export & main ТОГДА
         ЕСЛИ Platform = 6 ТОГДА
           мПров.Тест((Name # мСкан._START) & (Name # мСкан._version), line, col, 133)
@@ -1417,22 +1417,22 @@
     НАЧАЛО
       u := Модуль_Получ(name);
       ЕСЛИ u = ПУСТО ТОГДА
-        self := unit;
-        мСкан.Сохранить(unit.scanner);
+        self := модуль;
+        мСкан.Сохранить(модуль.scanner);
         COPY(name.имя, FName);
         ЕСЛИ ~((~self.Std & пМодуль_Читать(Path, FName, мКонст.расшир)) ИЛИ
                             пМодуль_Читать(Std, FName, мКонст.расшир)) ТОГДА
           ЕСЛИ FName = "SYSTEM" ТОГДА
-            unit := sys;
+            модуль := sys;
             self.sys := ИСТИНА
           ИНАЧЕ
             мПров.Тест(ЛОЖЬ, nameline, namecol, 32)
           КОНЕЦ
         КОНЕЦ;
         мСкан.Откатить(self.scanner);
-        u := unit;
-        unit := self;
-        мФайл.Имя_Уст(unit.File)
+        u := модуль;
+        модуль := self;
+        мФайл.Имя_Уст(модуль.File)
       ИНАЧЕ
         мПров.Тест(u.Closed, nameline, namecol, 31)
       КОНЕЦ;
@@ -1440,7 +1440,7 @@
       НОВ(str);
       ПамОш_Проверить(str = ПУСТО);
       str.Str := name.имя;
-      мСпис.Добавить(unit.Import, str);
+      мСпис.Добавить(модуль.Import, str);
       cond := newcond
     КОНЕЦ Модуль_Добавить;
 
@@ -1479,25 +1479,25 @@
 
 ПРОЦЕДУРА Header(Name: мТипы.туУзел);
   НАЧАЛО
-    НОВ(unit);
-    ПамОш_Проверить(unit = ПУСТО);
-    unit.Idents := мСпис.Создать();
-    ПамОш_Проверить(unit.Idents = ПУСТО);
-    unit.Level := 0;
-    unit.Name := Name;
+    НОВ(модуль);
+    ПамОш_Проверить(модуль = ПУСТО);
+    модуль.Idents := мСпис.Создать();
+    ПамОш_Проверить(модуль.Idents = ПУСТО);
+    модуль.Level := 0;
+    модуль.Name := Name;
     Охрана_Создать;
     Охрана_Создать;
-    PushIdent(unit.Name, 0, 0, IDMOD, sttypes[TVOID], unit, ЛОЖЬ, 0);
+    PushIdent(модуль.Name, 0, 0, IDMOD, sttypes[TVOID], модуль, ЛОЖЬ, 0);
     Охрана_Создать;
-    unit.IdentBegin := unit.Idents.следующ(туИмя);
-    unit.Closed := ИСТИНА
+    модуль.IdentBegin := модуль.Idents.следующ(туИмя);
+    модуль.Closed := ИСТИНА
   КОНЕЦ Header;
 
 ПРОЦЕДУРА Псевдо_Добав;
   ПЕРЕМ
-    модуль: тМодуль;
+    модуль_псевдо: тМодуль;
   НАЧАЛО
-    модуль := unit;
+    модуль_псевдо := модуль;
     Header(мСкан.Узел_Добав("SYSTEM"));
     PushSysProc("ADR",     sysADR);
     PushSysProc("SIZE",    sysSIZE);
@@ -1508,8 +1508,8 @@
     PushSysProc("CODE",    sysCODE);
     PushSysProc("MOVE",    sysMOVE);
     PushSysType("CARD16",  TCARD16);
-    sys := unit;
-    unit := модуль
+    sys := модуль;
+    модуль := модуль_псевдо
   КОНЕЦ Псевдо_Добав;
 
 ПРОЦЕДУРА Модуль_Читать(Path, Name1, Ext: мСтр.тСтрока): БУЛЕВО;
@@ -1525,31 +1525,31 @@
     мСтр.Сложить(Path, Name, b);
     мСтр.Сложить(b, Ext, Name);
     ЕСЛИ мСкан.Файл_Открыть(Name, FHandle) ТОГДА
-      НОВ(unit);
-      ПамОш_Проверить(unit = ПУСТО);
-      unit.sys := ЛОЖЬ;
-      unit.Std := Path = Std;
-      мСпис.Добавить(prog, unit);
-      unit.Idents := мСпис.Создать();
-      ПамОш_Проверить(unit.Idents = ПУСТО);
-      unit.Import := мСпис.Создать();
-      ПамОш_Проверить(unit.Import = ПУСТО);
-      НОВ(unit.scanner);
-      ПамОш_Проверить(unit.scanner = ПУСТО);
-      unit.Closed := ЛОЖЬ;
-      unit.Level := 0;
-      unit.typedecl := ЛОЖЬ;
-      unit.ExportType := ЛОЖЬ;
-      COPY(Name, unit.File);
-      мФайл.Имя_Уст(unit.File);
+      НОВ(модуль);
+      ПамОш_Проверить(модуль = ПУСТО);
+      модуль.sys := ЛОЖЬ;
+      модуль.Std := Path = Std;
+      мСпис.Добавить(prog, модуль);
+      модуль.Idents := мСпис.Создать();
+      ПамОш_Проверить(модуль.Idents = ПУСТО);
+      модуль.Import := мСпис.Создать();
+      ПамОш_Проверить(модуль.Import = ПУСТО);
+      НОВ(модуль.scanner);
+      ПамОш_Проверить(модуль.scanner = ПУСТО);
+      модуль.Closed := ЛОЖЬ;
+      модуль.Level := 0;
+      модуль.typedecl := ЛОЖЬ;
+      модуль.ExportType := ЛОЖЬ;
+      COPY(Name, модуль.File);
+      мФайл.Имя_Уст(модуль.File);
       StIdent;
       КлючСлед_Получ; Ключ_Проверить(мКонст.ксМОДУЛЬ);
       
       КлючСлед_Получ; Ключ_Проверить(lxIDENT);
       мПров.Тест2(мУтиль.streq(мСкан.id.имя, name), 33);
-      unit.Name := мСкан.id;
-      PushIdent(unit.Name, мСкан.line, мСкан.col, IDMOD, sttypes[TVOID], unit, ЛОЖЬ, 0);
-      idmod := unit.Idents.следующ(туИмя);
+      модуль.Name := мСкан.id;
+      PushIdent(модуль.Name, мСкан.line, мСкан.col, IDMOD, sttypes[TVOID], модуль, ЛОЖЬ, 0);
+      idmod := модуль.Idents.следующ(туИмя);
       Охрана_Создать;
       КлючСлед_Получ; Ключ_Проверить(мКонст.опТчкЗпт);
       КлючСлед_Получ;
@@ -1559,10 +1559,10 @@
         ImportList;
         main := temp
       КОНЕЦ;
-      мКонс.Строка_Печать("Компилирую: "); мКонс.Строка_Печать(unit.Name.имя); мКонс.Строка_Печать("."); мКонс.НовСтр;
+      мКонс.Строка_Печать("Компилирую: "); мКонс.Строка_Печать(модуль.Name.имя); мКонс.Строка_Печать("."); мКонс.НовСтр;
       X86.Module(idmod.Name.имя, idmod.Number);
       UnitNumber := idmod.Number;
-      unit.IdentBegin := unit.Idents.следующ(туИмя);
+      модуль.IdentBegin := модуль.Idents.следующ(туИмя);
       curBlock := idmod;
       DeclSeq;
       X86.ProcBeg(idmod.Number, 0, ИСТИНА);
@@ -1572,11 +1572,11 @@
       КОНЕЦ;
       Ключ_Проверить(мКонст.ксКОНЕЦ);
       КлючСлед_Получ; Ключ_Проверить(lxIDENT);
-      мПров.Тест2(мСкан.id = unit.Name, 26);
+      мПров.Тест2(мСкан.id = модуль.Name, 26);
       КлючСлед_Получ; Ключ_Проверить(lxDot);
       X86.Leave;
-      unit.Closed := ИСТИНА;
-      мСпис.Очистить(unit.Import);
+      модуль.Closed := ИСТИНА;
+      мСпис.Очистить(модуль.Import);
       Res := ИСТИНА
     КОНЕЦ
     ВЕРНУТЬ Res
@@ -1621,7 +1621,7 @@
     Platform := platform;
     main := ЛОЖЬ;
     ЕСЛИ Модуль_Читать(Std, "RTL", мКонст.расшир) ТОГДА
-      Rtl_Добав(unit)
+      Rtl_Добав(модуль)
     ИНАЧЕ
       мОш.Сообщ(65);
       мПроц.Закончить(1)
