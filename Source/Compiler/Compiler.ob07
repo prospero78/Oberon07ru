@@ -104,7 +104,7 @@
         ¬≈–Ќ”“№ тип0_ = тип1_
      ќЌ≈÷ BaseOf;
 
-ѕ–ќ÷≈ƒ”–ј Designator(ѕ≈– e: мƒецл.т¬ыражение);
+ѕ–ќ÷≈ƒ”–ј Designator(ѕ≈– выраж_: мƒецл.т¬ыражение);
     ѕ≈–≈ћ
       id: мƒецл.ту»м€;
       name: м“ипы.ту”зел;
@@ -144,19 +144,19 @@
           id := мƒецл.GetQIdent(id.Unit, name)
          ќЌ≈÷;
         мѕров.“ест(id # ѕ”—“ќ, line, col, 42);
-        e.vparam := Ћќ∆№;
-        e.deref := Ћќ∆№;
-        e.id := id;
+        выраж_.vparam := Ћќ∆№;
+        выраж_.deref := Ћќ∆№;
+        выраж_.id := id;
         мƒецл. люч—лед_ѕолуч;
         ¬џЅќ– id.iType »«
         |IDVAR:
-          e.eType := eVAR;
-          e.T := id.T;
+          выраж_.eType := eVAR;
+          выраж_.T := id.T;
           ≈—Ћ» id.VarKind = 0 “ќ√ƒј
-            e.Read := imp
+            выраж_.Read := imp
           »Ќј„≈
-            e.Read := (id.VarKind = мƒецл.param) & (id.T.tType IN {TRECORD, TARRAY});
-            e.vparam := id.VarKind = мƒецл.paramvar
+            выраж_.Read := (id.VarKind = мƒецл.param) & (id.T.tType IN {TRECORD, TARRAY});
+            выраж_.vparam := id.VarKind = мƒецл.paramvar
            ќЌ≈÷;
           bases := мƒецл.unit.Level - id.Level;
           ≈—Ћ» id.Level = 3 “ќ√ƒј
@@ -165,7 +165,7 @@
             loc := id.Offset
           ј≈—Ћ» (id.VarKind = мƒецл.paramvar) »Ћ» (id.T.tType IN {TARRAY, TRECORD}) “ќ√ƒј
             ≈—Ћ» мƒецл.Dim(e.T) > 0 “ќ√ƒј
-              n := мƒецл.Dim(e.T);
+              n := мƒецл.Dim(выраж_.T);
               ƒЋя i := n ƒќ 1 ѕќ -1 ƒ≈Ћј“№
                 X86.LocalAdr(id.Offset + i * 4, bases);
                 X86.Load(TINTEGER)
