@@ -140,8 +140,8 @@
             мƒецл. люч_ѕроверить(lxIDENT);
             мƒецл. оорд_”ст(line, col);
             name := м—кан.id;
-            imp := id.Unit # мƒецл.модуль;
-            id := мƒецл.GetQIdent(id.Unit, name)
+            imp := id.модуль # мƒецл.модуль;
+            id := мƒецл.GetQIdent(id.модуль, name)
          ќЌ≈÷;
         мѕров.“ест(id # ѕ”—“ќ, line, col, 42);
         выраж_.vparam := Ћќ∆№;
