@@ -1,135 +1,134 @@
 (*
-    Copyright 2013 Krotov Anton
+   Copyright 2013 Krotov Anton
 
-    This file is part of Compiler.
+   This file is part of Compiler.
 
-    Compiler is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+   Compiler is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
-    Compiler is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+   Compiler is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with Compiler. If not, see <http://www.gnu.org/licenses/>.
-  *)
-
+   You should have received a copy of the GNU General Public License
+   along with Compiler. If not, see <http://www.gnu.org/licenses/>.
+   *)
 МОДУЛЬ модАсм86_32;
 
 ИМПОРТ мУтиль := модУтиль,
-    mSys := SYSTEM,
-    мСкан := модСканер,
-    мТипы := модТипы,
-    мФайл := модФайл,
-    мКонст := модКонстанты,
-    мКонс := модКонсоль,
-    мОш := модОшибки,
-    мПроц := модПроцесс,
-    мПам := модПамять,
-    мСпис := модСписок,
-    мСтр := модСтроки;
+   mSys := SYSTEM,
+   мСкан := модСканер,
+   мТипы := модТипы,
+   мФайл := модФайл,
+   мКонст := модКонстанты,
+   мКонс := модКонсоль,
+   мОш := модОшибки,
+   мПроц := модПроцесс,
+   мПам := модПамять,
+   мСпис := модСписок,
+   мСтр := модСтроки;
 
 КОНСТ
 
-  ADIM* = 5;
+   ADIM* = 5;
 
-  lxLE = 75; lxGE = 76;
+   lxLE = 75; lxGE = 76;
 
-  TINTEGER = 1; TREAL = 2; TLONGREAL = 3; TCHAR = 4; TSET = 5; TBOOLEAN = 6; TVOID = 7;
-  TNIL = 8; TCARD16 = 9; TSTRING = 10; TARRAY = 11; TRECORD = 12; TPOINTER = 13; TPROC = 14;
+   TINTEGER = 1; TREAL = 2; TLONGREAL = 3; TCHAR = 4; TSET = 5; TBOOLEAN = 6; TVOID = 7;
+   TNIL = 8; TCARD16 = 9; TSTRING = 10; TARRAY = 11; TRECORD = 12; TPOINTER = 13; TPROC = 14;
 
-  stABS* = 1; stODD* = 2; stLEN* = 3; stLSL* = 4; stASR* = 5; stROR* = 6; stFLOOR* = 7;
-  stFLT* = 8; stORD* = 9; stCHR* = 10; stLONG* = 11; stSHORT* = 12; stINC* = 13;
-  stDEC* = 14; stINCL* = 15; stEXCL* = 16; stCOPY* = 17; stNEW* = 18; stASSERT* = 19;
-  stPACK* = 20; stUNPK* = 21; stDISPOSE* = 22; stFABS* = 23; stINC1* = 24;
-  stDEC1* = 25; stASSERT1* = 26; stUNPK1* = 27; stPACK1* = 28; stLSR* = 29;
-  stLENGTH* = 30;
+   stABS* = 1; stODD* = 2; stLEN* = 3; stLSL* = 4; stASR* = 5; stROR* = 6; stFLOOR* = 7;
+   stFLT* = 8; stORD* = 9; stCHR* = 10; stLONG* = 11; stSHORT* = 12; stINC* = 13;
+   stDEC* = 14; stINCL* = 15; stEXCL* = 16; stCOPY* = 17; stNEW* = 18; stASSERT* = 19;
+   stPACK* = 20; stUNPK* = 21; stDISPOSE* = 22; stFABS* = 23; stINC1* = 24;
+   stDEC1* = 25; stASSERT1* = 26; stUNPK1* = 27; stPACK1* = 28; stLSR* = 29;
+   stLENGTH* = 30;
 
-  sysBIT* = 103; sysMOVE* = 108;
+   sysBIT* = 103; sysMOVE* = 108;
 
-  JMP* = 0E9X; CALL = 0E8X;
-  JE = 84X; JNE = 85X; JLE = 8EX; JGE = 8DX; JG = 8FX; JL = 8CX;
+   JMP* = 0E9X; CALL = 0E8X;
+   JE = 84X; JNE = 85X; JLE = 8EX; JGE = 8DX; JG = 8FX; JL = 8CX;
 
-  JCMD = 1; LCMD = 2; GCMD = 3; OCMD = 4; ECMD = 5;
-  PUSHEAX = 6; PUSHECX = 7; PUSHEDX = 8; POPEAX = 9; POPECX = 10; POPEDX = 11;
-  ICMP1 = 13; ICMP2 = 14;
+   JCMD = 1; LCMD = 2; GCMD = 3; OCMD = 4; ECMD = 5;
+   PUSHEAX = 6; PUSHECX = 7; PUSHEDX = 8; POPEAX = 9; POPECX = 10; POPEDX = 11;
+   ICMP1 = 13; ICMP2 = 14;
 
-  defcall = 0; stdcall = 1; cdecl = 2; winapi = 3;
+   defcall = 0; stdcall = 1; cdecl = 2; winapi = 3;
 
-  _rset* = 0; _inset* = 1; _saverec* = 2; _length* = 3; _checktype* = 4; _strcmp* = 5;
-  _lstrcmp* = 6; _rstrcmp* = 7; _savearr* = 8; _newrec* = 9; _disprec* = 10; _arrayidx* = 11;
-  _arrayrot* = 12; _assrt* = 13; _strcopy* = 14; _arrayidx1* = 15; _init* = 16; _close* = 17; _halt* = 18;
-  ASSRT = 19; hInstance = 20; SELFNAME = 21; RTABLE = 22;LoadLibrary = 23; GetProcAddress = 24;
-  Exports = 25; szSTART = 26; START = 27; szversion = 28; HALT = 29;
+   _rset* = 0; _inset* = 1; _saverec* = 2; _length* = 3; _checktype* = 4; _strcmp* = 5;
+   _lstrcmp* = 6; _rstrcmp* = 7; _savearr* = 8; _newrec* = 9; _disprec* = 10; _arrayidx* = 11;
+   _arrayrot* = 12; _assrt* = 13; _strcopy* = 14; _arrayidx1* = 15; _init* = 16; _close* = 17; _halt* = 18;
+   ASSRT = 19; hInstance = 20; SELFNAME = 21; RTABLE = 22;LoadLibrary = 23; GetProcAddress = 24;
+   Exports = 25; szSTART = 26; START = 27; szversion = 28; HALT = 29;
 
-  FREGS = 8;
+   FREGS = 8;
 
 ТИПЫ
 
-  тПроцедура = ПРОЦЕДУРА (err: БУЛЕВО);
+   тПроцедура = ПРОЦЕДУРА (err: БУЛЕВО);
 
-  туПунктАсм* = УКАЗАТЕЛЬ НА ЗАПИСЬ (мТипы.тПункт)
-      cmd, clen, varadr, adr, tcmd, codeadr: ЦЕЛОЕ; short: БУЛЕВО
-    КОНЕЦ;
+   туПунктАсм* = УКАЗАТЕЛЬ НА ЗАПИСЬ (мТипы.тЗвено)
+         cmd, clen, varadr, adr, tcmd, codeadr: ЦЕЛОЕ; short: БУЛЕВО
+      КОНЕЦ;
 
-  TFLT = МАССИВ 2 ИЗ ЦЕЛОЕ;
+   TFLT = МАССИВ 2 ИЗ ЦЕЛОЕ;
 
-  TIDX* = МАССИВ ADIM ИЗ ЦЕЛОЕ;
+   TIDX* = МАССИВ ADIM ИЗ ЦЕЛОЕ;
 
-  тСекцияИмя = МАССИВ 8 ИЗ СИМВ;
+   тСекцияИмя = МАССИВ 8 ИЗ СИМВ;
 
-  тСекция = ЗАПИСЬ
-      name: тСекцияИмя;
-      size, adr, sizealign, OAPfile, reserved6, reserved7, reserved8, attrflags: ЦЕЛОЕ
-    КОНЕЦ;
+   тСекция = ЗАПИСЬ
+         name: тСекцияИмя;
+         size, adr, sizealign, OAPfile, reserved6, reserved7, reserved8, attrflags: ЦЕЛОЕ
+      КОНЕЦ;
 
-  тЗаголовок = ЗАПИСЬ
-      msdos: МАССИВ 180 ИЗ СИМВ;
-      typecomp, seccount: mSys.CARD16;
-      time, reserved1, reserved2: ЦЕЛОЕ;
-      PEoptsize, infflags, PEfile, compver: mSys.CARD16;
-      codesize, datasize, initdatasize, startadr,
-      codeadr, rdataadr, loadadr, secalign, filealign,
-      oldestver, version, oldestverNT, reserved3,
-      filesize, headersize, dllcrc: ЦЕЛОЕ;
-      UI, reserved4: mSys.CARD16;
-      stksize, stkalloc, heapsize, heapalloc, reserved5, structcount: ЦЕЛОЕ;
-      structs: МАССИВ 16 ИЗ ЗАПИСЬ adr, size: ЦЕЛОЕ КОНЕЦ;
-      sections: МАССИВ 3 ИЗ тСекция
-    КОНЕЦ;
+   тЗаголовок = ЗАПИСЬ
+         msdos: МАССИВ 180 ИЗ СИМВ;
+         typecomp, seccount: mSys.CARD16;
+         time, reserved1, reserved2: ЦЕЛОЕ;
+         PEoptsize, infflags, PEfile, compver: mSys.CARD16;
+         codesize, datasize, initdatasize, startadr,
+         codeadr, rdataadr, loadadr, secalign, filealign,
+         oldestver, version, oldestverNT, reserved3,
+         filesize, headersize, dllcrc: ЦЕЛОЕ;
+         UI, reserved4: mSys.CARD16;
+         stksize, stkalloc, heapsize, heapalloc, reserved5, structcount: ЦЕЛОЕ;
+         structs: МАССИВ 16 ИЗ ЗАПИСЬ adr, size: ЦЕЛОЕ КОНЕЦ;
+         sections: МАССИВ 3 ИЗ тСекция
+      КОНЕЦ;
 
-  тЗаголовокCoff = ЗАПИСЬ
-      Machine: mSys.CARD16;
-      NumberOfSections: mSys.CARD16;
-      TimeDateStamp,
-      PointerToSymbolTable,
-      NumberOfSymbols: ЦЕЛОЕ;
-      SizeOfOptionalHeader,
-      Characteristics: mSys.CARD16;
-      text, data, bss: тСекция
-    КОНЕЦ;
+   тЗаголовокCoff = ЗАПИСЬ
+         Machine: mSys.CARD16;
+         NumberOfSections: mSys.CARD16;
+         TimeDateStamp,
+         PointerToSymbolTable,
+         NumberOfSymbols: ЦЕЛОЕ;
+         SizeOfOptionalHeader,
+         Characteristics: mSys.CARD16;
+         text, data, bss: тСекция
+      КОНЕЦ;
 
-  тЗаголовокKol = ЗАПИСЬ
-      menuet01: МАССИВ 8 ИЗ СИМВ;
-      ver, start, size, mem, sp, param, path: ЦЕЛОЕ
-    КОНЕЦ;
+   тЗаголовокKol = ЗАПИСЬ
+         menuet01: МАССИВ 8 ИЗ СИМВ;
+         ver, start, size, mem, sp, param, path: ЦЕЛОЕ
+      КОНЕЦ;
 
-  ETABLE = ЗАПИСЬ
-      reserved1, time, reserved2, dllnameoffset, firstnum, adrcount,
-      namecount, arradroffset, arrnameptroffset, arrnumoffset: ЦЕЛОЕ;
-      arradr, arrnameptr: МАССИВ 10000H ИЗ ЦЕЛОЕ;
-      arrnum: МАССИВ 10000H ИЗ mSys.CARD16;
-      text: МАССИВ 1000000 ИЗ СИМВ;
-      textlen, size: ЦЕЛОЕ
-    КОНЕЦ;
+   ETABLE = ЗАПИСЬ
+         reserved1, time, reserved2, dllnameoffset, firstnum, adrcount,
+         namecount, arradroffset, arrnameptroffset, arrnumoffset: ЦЕЛОЕ;
+         arradr, arrnameptr: МАССИВ 10000H ИЗ ЦЕЛОЕ;
+         arrnum: МАССИВ 10000H ИЗ mSys.CARD16;
+         text: МАССИВ 1000000 ИЗ СИМВ;
+         textlen, size: ЦЕЛОЕ
+      КОНЕЦ;
 
-  тРелок = ЗАПИСЬ
-      Page, Size: ЦЕЛОЕ;
-      reloc: МАССИВ 1024 ИЗ mSys.CARD16
-    КОНЕЦ;
+   тРелок = ЗАПИСЬ
+         Page, Size: ЦЕЛОЕ;
+         reloc: МАССИВ 1024 ИЗ mSys.CARD16
+      КОНЕЦ;
 
 ПЕРЕМ
   asmlist: мТипы.туСписок;
