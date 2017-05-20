@@ -132,7 +132,7 @@
       КОНЕЦ;
 
 ПЕРЕМ
-  asmlist: мСпис.туСписок;
+  asmlist: мСпис.туЦепь;
   start: туПунктАсм;
   MemErr: тПроцедура;
   dll, con, gui, kos, elf, obj: БУЛЕВО;
