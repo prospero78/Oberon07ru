@@ -1,50 +1,50 @@
 (*
-    Copyright 2013 Krotov Anton
+   Copyright 2013 Krotov Anton
 
-  This file is part of Compiler.
+   This file is part of Compiler.
 
-    Compiler is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+   Compiler is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
-    Compiler is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+   Compiler is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with Compiler. If not, see <http://www.gnu.org/licenses/>.
+   You should have received a copy of the GNU General Public License
+   along with Compiler. If not, see <http://www.gnu.org/licenses/>.
 
-  *)
+   *)
 МОДУЛЬ модСканер;
 
 ИМПОРТ мУтиль := модУтиль,
-    mSys := SYSTEM,
-    мКонст := модКонстанты,
-    мФайл := модФайл,
-    мТипы := модТипы,
-    мПам := модПамять,
-    мСтр := модСтроки;
+   mSys := SYSTEM,
+   мКонст := модКонстанты,
+   мФайл := модФайл,
+   мТипы := модТипы,
+   мПам := модПамять,
+   мСтр := модСтроки;
 
 КОНСТ
 
-    maxDBL* = 1.69D308;
-    
-    IDLENGTH = 255;
-    STRLENGTH* = 256;
+   maxDBL* = 1.69D308;
+   
+   IDLENGTH = 255;
+   STRLENGTH* = 256;
 
-    lxEOF = 0; lxINT = -1; lxREAL = -2; lxSTRING = -3; lxIDENT = -4; lxHEX = -5; lxCHX = -6; lxLONGREAL = -7;
-    lxDIV = 6; 
-     
-    lxMOD = 17;
-    
-    lxLRound = 60; lxCaret = 63;
-    lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69;
-    lxLE = 75; lxGE = 76;
+   lxEOF = 0; lxINT = -1; lxREAL = -2; lxSTRING = -3; lxIDENT = -4; lxHEX = -5; lxCHX = -6; lxLONGREAL = -7;
+   lxDIV = 6; 
+   
+   lxMOD = 17;
+   
+   lxLRound = 60; lxCaret = 63;
+   lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69;
+   lxLE = 75; lxGE = 76;
 
-    lxERR0 = 100; lxERR1 = 101; lxERR2 = 102; lxERR3 = 103; lxERR4 = 104; lxERR5 = 105; lxERR6 = 106;
-    lxERR7 = 107; lxERR8 = 108; lxERR9 = 109; lxERR10 = 110; lxERR11 = 111; lxERR20 = 120;
+   lxERR0 = 100; lxERR1 = 101; lxERR2 = 102; lxERR3 = 103; lxERR4 = 104; lxERR5 = 105; lxERR6 = 106;
+   lxERR7 = 107; lxERR8 = 108; lxERR9 = 109; lxERR10 = 110; lxERR11 = 111; lxERR20 = 120;
 
 ПЕРЕМ
 
@@ -56,15 +56,15 @@
     _START*, _version*: мТипы.туУзел;
 
 ПРОЦЕДУРА Узел_Добав*(Name: мСтр.тСтрока): мТипы.туУзел;
-    ПЕРЕМ
+   ПЕРЕМ
       cur, res: мТипы.туУзел;
 
-        ПРОЦЕДУРА Узел_Новый(Right: БУЛЕВО);
-            НАЧАЛО
+      ПРОЦЕДУРА Узел_Новый(Right: БУЛЕВО);
+         НАЧАЛО
             НОВ(res);
             мПам.Ошибка(res = ПУСТО);
             res.имя := Name;
-            res.tLex := lxIDENT;
+            res.цКлСлово := lxIDENT;
             res.левый := ПУСТО;
             res.правый := ПУСТО;
             ЕСЛИ Right ТОГДА
@@ -72,10 +72,10 @@
             ИНАЧЕ
                cur.левый := res
             КОНЕЦ
-            КОНЕЦ Узел_Новый;
+         КОНЕЦ Узел_Новый;
 
-    НАЧАЛО
-        res := ПУСТО;
+   НАЧАЛО
+      res := ПУСТО;
         cur := Nodes[ORD(Name[0])];
         ПОВТОРЯТЬ
             ЕСЛИ Name > cur.имя ТОГДА
@@ -95,7 +95,7 @@
             КОНЕЦ
         ПОКАНЕ res # ПУСТО
         ВЕРНУТЬ res
-    КОНЕЦ Узел_Добав;
+   КОНЕЦ Узел_Добав;
 
 ПРОЦЕДУРА GetLexStr*(ПЕР L: мСтр.тСтрока);
     НАЧАЛО
@@ -590,7 +590,7 @@
     КОНЕЦ Комментарий_Пропустить;
 
 ПРОЦЕДУРА Лексема_Получ*;
-    НАЧАЛО
+   НАЧАЛО
         ПОКА Пробел_Проверить(ch) ДЕЛАТЬ
             Next
         КОНЕЦ;
@@ -601,11 +601,11 @@
         |"A".."Z", "a".."z", "_": (* eng *)
             Имя_Получ;
             id := Узел_Добав(Lex);
-            сущность := id.tLex;
+            сущность := id.цКлСлово;
         |"А".."Я", "а".."я": (* rus *)
             Имя_Получ;
             id := Узел_Добав(Lex);
-            сущность := id.tLex;
+            сущность := id.цКлСлово;
         |"0".."9":
             Число_Получ;
             ВЫБОР сущность ИЗ
@@ -683,27 +683,27 @@
     КОНЕЦ Лексема_Получ;
 
 ПРОЦЕДУРА КлючСлово_Добавить(слово_: мСтр.тСтрока; номер_: ЦЕЛОЕ);
-    ПЕРЕМ
-        узел: мТипы.туУзел;
-    НАЧАЛО
-        узел := Узел_Добав(слово_);
-        узел.tLex := номер_
-    КОНЕЦ КлючСлово_Добавить;
+   ПЕРЕМ
+      узел: мТипы.туУзел;
+   НАЧАЛО
+      узел := Узел_Добав(слово_);
+      узел.цКлСлово := номер_
+   КОНЕЦ КлючСлово_Добавить;
 
 ПРОЦЕДУРА Настроить;
-    ПЕРЕМ
+   ПЕРЕМ
       i: ЦЕЛОЕ;
       узел: мТипы.туУзел;
-    НАЧАЛО
-        ДЛЯ i := 0 ДО LEN(Nodes) - 1 ДЕЛАТЬ
-            НОВ(узел);
-            мПам.Ошибка(узел = ПУСТО);
-            mSys.PUT(mSys.ADR(узел.имя), i);
-            узел.левый := ПУСТО;
-            узел.правый := ПУСТО;
-            узел.tLex := lxIDENT;
-            Nodes[i] := узел
-        КОНЕЦ;
+   НАЧАЛО
+      ДЛЯ i := 0 ДО LEN(Nodes) - 1 ДЕЛАТЬ
+         НОВ(узел);
+         мПам.Ошибка(узел = ПУСТО);
+         mSys.PUT(mSys.ADR(узел.имя), i);
+         узел.левый := ПУСТО;
+         узел.правый := ПУСТО;
+         узел.цКлСлово := lxIDENT;
+         Nodes[i] := узел
+      КОНЕЦ;
         _START := Узел_Добав("START");
         _version := Узел_Добав("version");
         КлючСлово_Добавить("MOD", lxMOD);
