@@ -1,167 +1,162 @@
 (*
-    Copyright 2013 Krotov Anton
+   Copyright 2013 Krotov Anton
 
-    This file is part of Compiler.
+   This file is part of Compiler.
 
-    Compiler is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+   Compiler is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
-    Compiler is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+   Compiler is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with Compiler. If not, see <http://www.gnu.org/licenses/>.
-  *)
+   You should have received a copy of the GNU General Public License
+   along with Compiler. If not, see <http://www.gnu.org/licenses/>.
+   *)
 
 МОДУЛЬ модДецл;
 
 ИМПОРТ мСкан := модСканер,
-    мУтиль := модУтиль,
-    X86 := модАсм86_32,
-    mSys := SYSTEM,
-    мТипы := модТипы,
-    мФайл := модФайл,
-    мКонст := модКонстанты,
-    мКонс := модКонсоль,
-    мПам := модПамять,
-    мПроц := модПроцесс,
-    мОш := модОшибки,
-    мСтр := модСтроки,
-    мСпис := модСписок,
-    мПров := модПроверка;
+   мУтиль := модУтиль,
+   X86 := модАсм86_32,
+   mSys := SYSTEM,
+   мТипы := модТипы,
+   мТип := модТип,
+   мФайл := модФайл,
+   мКонст := модКонстанты,
+   мКонс := модКонсоль,
+   мПам := модПамять,
+   мПроц := модПроцесс,
+   мОш := модОшибки,
+   мСтр := модСтроки,
+   мСпис := модСписок,
+   мПров := модПроверка;
 
 КОНСТ
 
-  lxEOF = 0; lxINT = -1; lxREAL = -2; lxSTRING = -3; lxIDENT = -4; lxHEX = -5; lxCHX = -6; lxLONGREAL = -7;
-  lxBY = 3;
-  lxDIV = 6;
-  lxMOD = 17;
+   lxEOF = 0; lxINT = -1; lxREAL = -2; lxSTRING = -3; lxIDENT = -4; lxHEX = -5; lxCHX = -6; lxLONGREAL = -7;
+   lxBY = 3;
+   lxDIV = 6;
+   lxMOD = 17;
 
-  lxLRound = 60; lxCaret = 63;
-  lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69;
-  lxLE = 75; lxGE = 76;
+   lxLRound = 60; lxCaret = 63;
+   lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69;
+   lxLE = 75; lxGE = 76;
 
-  lxERR0 = 100; lxERR1 = 101; lxERR2 = 102; lxERR3 = 103; lxERR4 = 104; lxERR5 = 105; lxERR6 = 106;
-  lxERR7 = 107; lxERR8 = 108; lxERR9 = 109; lxERR10 = 110; lxERR11 = 111; lxERR20 = 120;
+   lxERR0 = 100; lxERR1 = 101; lxERR2 = 102; lxERR3 = 103; lxERR4 = 104; lxERR5 = 105; lxERR6 = 106;
+   lxERR7 = 107; lxERR8 = 108; lxERR9 = 109; lxERR10 = 110; lxERR11 = 111; lxERR20 = 120;
 
-  IDMOD = 1; IDCONST = 2; IDTYPE = 3; IDVAR = 4; IDPROC = 5; IDSTPROC = 6; IDGUARD = 7; IDPARAM = 8; IDSYSPROC = 9;
+   IDMOD = 1; IDCONST = 2; IDTYPE = 3; IDVAR = 4; IDPROC = 5; IDSTPROC = 6; IDGUARD = 7; IDPARAM = 8; IDSYSPROC = 9;
 
-  stABS = 1; stODD = 2; stLEN = 3; stLSL = 4; stASR = 5; stROR = 6; stFLOOR = 7; stFLT = 8;
-  stORD = 9; stCHR = 10; stLONG = 11; stSHORT = 12; stINC = 13; stDEC = 14; stINCL = 15;
-  stEXCL = 16; stCOPY = 17; stNEW = 18; stASSERT = 19; stPACK = 20; stUNPK = 21; stDISPOSE = 22;
-  stBITS = 23; stLSR = 24; stLENGTH = 25;
+   stABS = 1; stODD = 2; stLEN = 3; stLSL = 4; stASR = 5; stROR = 6; stFLOOR = 7; stFLT = 8;
+   stORD = 9; stCHR = 10; stLONG = 11; stSHORT = 12; stINC = 13; stDEC = 14; stINCL = 15;
+   stEXCL = 16; stCOPY = 17; stNEW = 18; stASSERT = 19; stPACK = 20; stUNPK = 21; stDISPOSE = 22;
+   stBITS = 23; stLSR = 24; stLENGTH = 25;
 
-  sysADR = 101; sysSIZE = 102; sysBIT = 103; sysGET = 104; sysPUT = 105; sysCODE = 106;
-  sysTYPEID = 107; sysMOVE = 108;
+   sysADR = 101; sysSIZE = 102; sysBIT = 103; sysGET = 104; sysPUT = 105; sysCODE = 106;
+   sysTYPEID = 107; sysMOVE = 108;
 
-  TINTEGER = 1; TREAL = 2; TLONGREAL = 3; TCHAR = 4; TSET = 5; TBOOLEAN = 6; TVOID = 7; TNIL = 8;
-  TCARD16 = 9; TSTRING = 10; TARRAY = 11; TRECORD = 12; TPOINTER = 13; TPROC = 14;
+   TINTEGER = 1; TREAL = 2; TLONGREAL = 3; TCHAR = 4; TSET = 5; TBOOLEAN = 6; TVOID = 7; TNIL = 8;
+   TCARD16 = 9; TSTRING = 10; TARRAY = 11; TRECORD = 12; TPOINTER = 13; TPROC = 14;
 
-  paramvar* = 1; param* = 2;
+   paramvar* = 1; param* = 2;
+ 
+   defcall = 0; stdcall = 1; cdecl = 2; winapi* = 3;
 
-  defcall = 0; stdcall = 1; cdecl = 2; winapi* = 3;
+   record = 0; union = 1; noalign = 2;
 
-  record = 0; union = 1; noalign = 2;
+   eVAR = 1; eCONST = 2; eEXP = 3; ePROC = 4; eSTPROC = 5; eSYSPROC = 6;
 
-  eVAR = 1; eCONST = 2; eEXP = 3; ePROC = 4; eSTPROC = 5; eSYSPROC = 6;
-
-  IOVER* = lxERR5 - lxERR0;
-  FOVER* = lxERR7 - lxERR0;
-  UNDER* = lxERR9 - lxERR0;
+   IOVER* = lxERR5 - lxERR0;
+   FOVER* = lxERR7 - lxERR0;
+   UNDER* = lxERR9 - lxERR0;
 
 ТИПЫ
 
-  туТип* = УКАЗАТЕЛЬ НА ЗАПИСЬ (мТипы.тПункт)
-      тип_ном*, размер*, длина*, номер*, выравнив, вызов*, запись: ЦЕЛОЕ;
-      Base*: туТип;
-      поля*: мТипы.туСписок
-    КОНЕЦ;
+   туИмя* = УКАЗАТЕЛЬ НА тИмя;
 
-  туИмя* = УКАЗАТЕЛЬ НА тИмя;
-
-  тМодуль* = УКАЗАТЕЛЬ НА ЗАПИСЬ (мТипы.тПункт)
-        узел: мТипы.туУзел;
-        файл_стр: мСтр.тСтрока;
-        Idents: мТипы.туСписок;
-        импорт_спис: мТипы.туСписок;
-        IdentBegin: туИмя;
-        сканер: мТипы.туСканер;
-        уровень*: ЦЕЛОЕ;
-        закрыт, typedecl, ExportType, Std, системный: БУЛЕВО
+   тМодуль* = УКАЗАТЕЛЬ НА ЗАПИСЬ (мТипы.тПункт)
+         узел: мТипы.туУзел;
+         файл_стр: мСтр.тСтрока;
+         Idents: мТипы.туСписок;
+         импорт_спис: мТипы.туСписок;
+         IdentBegin: туИмя;
+         сканер: мТипы.туСканер;
+         уровень*: ЦЕЛОЕ;
+         закрыт, typedecl, ExportType, Std, системный: БУЛЕВО
       КОНЕЦ;
 
-  тИмя* = ЗАПИСЬ (мТипы.тПункт)
-      Name: мТипы.туУзел;
-      T*: туТип;
-      модуль*: тМодуль;
-      Parent*: туИмя;
-      Value*: ДЛИНВЕЩ;
-      line*, col*, Number*, iType*, StProc*, VarSize, ParamSize*,
-      LocalSize*, Offset*, VarKind*, Level*, ParamCount*: ЦЕЛОЕ;
-      Export: БУЛЕВО
-    КОНЕЦ;
+   тИмя* = ЗАПИСЬ (мТипы.тПункт)
+         Name: мТипы.туУзел;
+         T*: мТип.туТип;
+         модуль*: тМодуль;
+         Parent*: туИмя;
+         Value*: ДЛИНВЕЩ;
+         line*, col*, Number*, iType*, StProc*, VarSize, ParamSize*,
+         LocalSize*, Offset*, VarKind*, Level*, ParamCount*: ЦЕЛОЕ;
+         Export: БУЛЕВО
+      КОНЕЦ;
 
-  PTRBASE = УКАЗАТЕЛЬ НА ЗАПИСЬ (мТипы.тПункт)
-      Name: мТипы.туУзел;
-      line, col: ЦЕЛОЕ;
-      Ptr: туТип
-    КОНЕЦ;
+   PTRBASE = УКАЗАТЕЛЬ НА ЗАПИСЬ (мТипы.тПункт)
+         Name: мТипы.туУзел;
+         line, col: ЦЕЛОЕ;
+         Ptr: мТип.туТип
+      КОНЕЦ;
 
-  туПунктСтр = УКАЗАТЕЛЬ НА ЗАПИСЬ (мТипы.тПункт)
-      Str: мСтр.тСтрока
-    КОНЕЦ;
+   туПунктСтр = УКАЗАТЕЛЬ НА ЗАПИСЬ (мТипы.тПункт)
+         Str: мСтр.тСтрока
+      КОНЕЦ;
 
-  туПоле* = УКАЗАТЕЛЬ НА ЗАПИСЬ (мТипы.тПункт)
-      Name: мТипы.туУзел;
-      T*: туТип;
-      Offset*: ЦЕЛОЕ;
-      ByRef*, Export*: БУЛЕВО;
-      Unit*: тМодуль
-    КОНЕЦ;
+   туПоле* = УКАЗАТЕЛЬ НА ЗАПИСЬ (мТипы.тПункт)
+         Name: мТипы.туУзел;
+         T*: мТип.туТип;
+         Offset*: ЦЕЛОЕ;
+         ByRef*, Export*: БУЛЕВО;
+         Unit*: тМодуль
+      КОНЕЦ;
 
-  туКонстСтр* = УКАЗАТЕЛЬ НА ЗАПИСЬ (мТипы.тПункт)
-      стр*: мСтр.тСтрока;
-      длина*, номер*: ЦЕЛОЕ
-    КОНЕЦ;
+   туКонстСтр* = УКАЗАТЕЛЬ НА ЗАПИСЬ (мТипы.тПункт)
+         стр*: мСтр.тСтрока;
+         длина*, номер*: ЦЕЛОЕ
+      КОНЕЦ;
 
-  тВыражение* = ЗАПИСЬ
-      id*: туИмя;
-      T*: туТип;
-      eType*: ЦЕЛОЕ;
-      Value*: ДЛИНВЕЩ;
-      Read*, vparam*, deref*: БУЛЕВО
-    КОНЕЦ;
+   тВыражение* = ЗАПИСЬ
+         id*: туИмя;
+         T*: мТип.туТип;
+         eType*: ЦЕЛОЕ;
+         Value*: ДЛИНВЕЩ;
+         Read*, vparam*, deref*: БУЛЕВО
+      КОНЕЦ;
 
-  тПроцедура = ПРОЦЕДУРА;
-  тПроцедураПер = ПРОЦЕДУРА (ПЕР e: тВыражение);
-  тПроцедураСвязь = ПРОЦЕДУРА (e: тВыражение; T: туТип; param: БУЛЕВО): БУЛЕВО;
+   тПроцедура = ПРОЦЕДУРА;
+   тПроцедураПер = ПРОЦЕДУРА (ПЕР e: тВыражение);
+   тПроцедураСвязь = ПРОЦЕДУРА (e: тВыражение; T: мТип.туТип; param: БУЛЕВО): БУЛЕВО;
 
-  туТипНабор* = МАССИВ 11 ИЗ туТип;
+   туТипНабор* = МАССИВ 11 ИЗ мТип.туТип;
 
 ПЕРЕМ
 
-  sttypes: туТипНабор;
-  модуль*, мод_систем: тМодуль;
-  curBlock*: туИмя;
-  Path, Main, Std, ExtMain: мСтр.тСтрока;
-  NamePtrBase: мТипы.туУзел; ProgSize*, RecCount, UnitNumber*: ЦЕЛОЕ;
-  PtrBases, строки, types, prog: мТипы.туСписок;
-  OpSeq: тПроцедура;
-  Expr: тПроцедураПер;
-  AssComp: тПроцедураСвязь;
-  main, sizefunc, winplatf, Const*: БУЛЕВО;
-  pParseType: ПРОЦЕДУРА (ПЕР line, col: ЦЕЛОЕ): туТип;
-  пМодуль_Читать: ПРОЦЕДУРА (Path, Name, Ext: мСтр.тСтрока): БУЛЕВО;
-  Platform: ЦЕЛОЕ;
+   sttypes: туТипНабор;
+   модуль*, мод_систем: тМодуль;
+   curBlock*: туИмя;
+   Path, Main, Std, ExtMain: мСтр.тСтрока;
+   NamePtrBase: мТипы.туУзел; ProgSize*, RecCount, UnitNumber*: ЦЕЛОЕ;
+   PtrBases, строки, types, prog: мТипы.туСписок;
+   OpSeq: тПроцедура;
+   Expr: тПроцедураПер;
+   AssComp: тПроцедураСвязь;
+   main, sizefunc, winplatf, Const*: БУЛЕВО;
+   pParseType: ПРОЦЕДУРА (ПЕР line, col: ЦЕЛОЕ): мТип.туТип;
+   пМодуль_Читать: ПРОЦЕДУРА (Path, Name, Ext: мСтр.тСтрока): БУЛЕВО;
+   Platform: ЦЕЛОЕ;
 
 ПРОЦЕДУРА ПроцедурРазм_Уст*;
-  НАЧАЛО
-    sizefunc := ИСТИНА
-  КОНЕЦ ПроцедурРазм_Уст;
+   НАЧАЛО
+      sizefunc := ИСТИНА
+   КОНЕЦ ПроцедурРазм_Уст;
 
 ПРОЦЕДУРА ПамОш_Проверить*(err: БУЛЕВО);
   НАЧАЛО
@@ -292,58 +287,59 @@
     ДОБ(модуль.уровень)
   КОНЕЦ Охрана_Создать;
 
-ПРОЦЕДУРА PushIdent(Name: мТипы.туУзел; line, col, iType: ЦЕЛОЕ; T: туТип; u: тМодуль; Export: БУЛЕВО; StProc: ЦЕЛОЕ);
-  ПЕРЕМ
-    ident: туИмя;
-    i: ЦЕЛОЕ;
-  НАЧАЛО
-    мПров.Тест(CheckIdent(Name), line, col, 30);
-    НОВ(ident);
-    ПамОш_Проверить(ident = ПУСТО);
-    ident.Name := Name;
-    ident.line := line;
-    ident.col := col;
-    ЕСЛИ iType IN {IDPROC, IDMOD} ТОГДА
-      ident.Number := X86.NewLabel();
-      i := X86.NewLabel();
-      i := X86.NewLabel();
-      i := X86.NewLabel()
-    КОНЕЦ;
-    ident.iType := iType;
-    ident.T := T;
-    ident.модуль := u;
-    ident.Export := Export;
-    ident.StProc := StProc;
-    ident.Level := модуль.уровень;
-    мСпис.Добавить(модуль.Idents, ident)
-  КОНЕЦ PushIdent;
+ПРОЦЕДУРА PushIdent(Name: мТипы.туУзел; line, col, iType: ЦЕЛОЕ; T: мТип.туТип; u: тМодуль; Export: БУЛЕВО; StProc: ЦЕЛОЕ);
+   ПЕРЕМ
+      ident: туИмя;
+      i: ЦЕЛОЕ;
+   НАЧАЛО
+      мПров.Тест(CheckIdent(Name), line, col, 30);
+      НОВ(ident);
+      ПамОш_Проверить(ident = ПУСТО);
+      ident.Name := Name;
+      ident.line := line;
+      ident.col := col;
+      ЕСЛИ iType IN {IDPROC, IDMOD} ТОГДА
+         ident.Number := X86.NewLabel();
+         i := X86.NewLabel();
+         i := X86.NewLabel();
+         i := X86.NewLabel()
+      КОНЕЦ;
+      ident.iType := iType;
+      ident.T := T;
+      ident.модуль := u;
+      ident.Export := Export;
+      ident.StProc := StProc;
+      ident.Level := модуль.уровень;
+      мСпис.Добавить(модуль.Idents, ident)
+   КОНЕЦ PushIdent;
 
 ПРОЦЕДУРА StTypes;
-  ПЕРЕМ
-    type: туТип; i: ЦЕЛОЕ;
-  НАЧАЛО
-    sttypes[0] := ПУСТО;
-    ДЛЯ i := TINTEGER ДО TSTRING ДЕЛАТЬ
-        НОВ(type);
-        ПамОш_Проверить(type = ПУСТО);
-        type.тип_ном := i;
-        мСпис.Добавить(types, type);
-        sttypes[i] := type
-    КОНЕЦ;
-    sttypes[TINTEGER].размер := 4;
-    sttypes[TREAL].размер := 4;
-    sttypes[TLONGREAL].размер := 8;
-    sttypes[TBOOLEAN].размер := 1;
-    sttypes[TCHAR].размер := 1;
-    sttypes[TSET].размер := 4;
-    sttypes[TVOID].размер := 0;
-    sttypes[TSTRING].размер := 0;
-    sttypes[TNIL].размер := 4;
-    sttypes[TCARD16].размер := 2;
-    ДЛЯ i := TINTEGER ДО TSTRING ДЕЛАТЬ
-      sttypes[i].выравнив := sttypes[i].размер
-    КОНЕЦ
-  КОНЕЦ StTypes;
+   ПЕРЕМ
+      type: мТип.туТип;
+      i: ЦЕЛОЕ;
+   НАЧАЛО
+      sttypes[0] := ПУСТО;
+      ДЛЯ i := TINTEGER ДО TSTRING ДЕЛАТЬ
+         НОВ(type);
+         ПамОш_Проверить(type = ПУСТО);
+         type.тип_ном := i;
+         мСпис.Добавить(types, type);
+         sttypes[i] := type
+      КОНЕЦ;
+      sttypes[TINTEGER].размер := 4;
+      sttypes[TREAL].размер := 4;
+      sttypes[TLONGREAL].размер := 8;
+      sttypes[TBOOLEAN].размер := 1;
+      sttypes[TCHAR].размер := 1;
+      sttypes[TSET].размер := 4;
+      sttypes[TVOID].размер := 0;
+      sttypes[TSTRING].размер := 0;
+      sttypes[TNIL].размер := 4;
+      sttypes[TCARD16].размер := 2;
+      ДЛЯ i := TINTEGER ДО TSTRING ДЕЛАТЬ
+         sttypes[i].выравнив := sttypes[i].размер
+      КОНЕЦ
+   КОНЕЦ StTypes;
 
 ПРОЦЕДУРА PushStProc(Name: мСтр.тСтрока; StProc: ЦЕЛОЕ);
   НАЧАЛО
@@ -485,7 +481,7 @@
     ВЕРНУТЬ Res
   КОНЕЦ Relation;
 
-ПРОЦЕДУРА Arith(a, b: ДЛИНВЕЩ; T: туТип; Op, line, col: ЦЕЛОЕ): ДЛИНВЕЩ;
+ПРОЦЕДУРА Arith(a, b: ДЛИНВЕЩ; T: мТип.туТип; Op, line, col: ЦЕЛОЕ): ДЛИНВЕЩ;
   КОНСТ
       max = мСкан.maxDBL;
   ПЕРЕМ
@@ -543,7 +539,7 @@
     ВЕРНУТЬ Res
   КОНЕЦ strcmp;
 
-ПРОЦЕДУРА Calc*(a, b: ДЛИНВЕЩ; Ta, Tb: туТип; Op, line, col: ЦЕЛОЕ; ПЕР Res: ДЛИНВЕЩ; ПЕР TRes: туТип);
+ПРОЦЕДУРА Calc*(a, b: ДЛИНВЕЩ; Ta, Tb: мТип.туТип; Op, line, col: ЦЕЛОЕ; ПЕР Res: ДЛИНВЕЩ; ПЕР TRes: мТип.туТип);
   ПЕРЕМ c: ДЛИНВЕЩ; ai, bi: ЦЕЛОЕ;
   НАЧАЛО
     ai := FLOOR(a);
@@ -625,7 +621,7 @@
     КОНЕЦ
   КОНЕЦ Calc;
 
-ПРОЦЕДУРА ConstExpr*(ПЕР Value: ДЛИНВЕЩ; ПЕР T: туТип);
+ПРОЦЕДУРА ConstExpr*(ПЕР Value: ДЛИНВЕЩ; ПЕР T: мТип.туТип);
   ПЕРЕМ
     e: тВыражение;
     line, col: ЦЕЛОЕ;
@@ -640,12 +636,12 @@
     Const := ЛОЖЬ
   КОНЕЦ ConstExpr;
 
-ПРОЦЕДУРА IdType*(ПЕР line, col: ЦЕЛОЕ): туТип;
+ПРОЦЕДУРА IdType*(ПЕР line, col: ЦЕЛОЕ): мТип.туТип;
   ПЕРЕМ
     id: туИмя;
     Name: мТипы.туУзел;
     Unit: тМодуль;
-    Res: туТип;
+    Res: мТип.туТип;
   НАЧАЛО
     Res := ПУСТО;
     Name := мСкан.id;
@@ -700,7 +696,7 @@
     ВЕРНУТЬ RecSize + (Align - RecSize MOD Align) MOD Align
   КОНЕЦ FieldOffset;
 
-ПРОЦЕДУРА Dim*(T: туТип): ЦЕЛОЕ;
+ПРОЦЕДУРА Dim*(T: мТип.туТип): ЦЕЛОЕ;
   ПЕРЕМ
       n: ЦЕЛОЕ;
   НАЧАЛО
@@ -712,7 +708,7 @@
     ВЕРНУТЬ n
   КОНЕЦ Dim;
 
-ПРОЦЕДУРА SetFields(Tr, Tf: туТип; Rec: БУЛЕВО);
+ПРОЦЕДУРА SetFields(Tr, Tf: мТип.туТип; Rec: БУЛЕВО);
   ПЕРЕМ
     cur: туПоле;
   НАЧАЛО
@@ -747,7 +743,7 @@
     КОНЕЦ
   КОНЕЦ SetFields;
 
-ПРОЦЕДУРА GetField*(T: туТип; Name: мТипы.туУзел): туПоле;
+ПРОЦЕДУРА GetField*(T: мТип.туТип; Name: мТипы.туУзел): туПоле;
   ПЕРЕМ
     cur, Res: туПоле;
   НАЧАЛО
@@ -762,7 +758,7 @@
     ВЕРНУТЬ Res
   КОНЕЦ GetField;
 
-ПРОЦЕДУРА Unique(T: туТип; Name: мТипы.туУзел): БУЛЕВО;
+ПРОЦЕДУРА Unique(T: мТип.туТип; Name: мТипы.туУзел): БУЛЕВО;
   ПЕРЕМ
     field: туПоле;
     res: БУЛЕВО;
@@ -780,61 +776,61 @@
     ВЕРНУТЬ res
   КОНЕЦ Unique;
 
-ПРОЦЕДУРА notrecurs(id: БУЛЕВО; T: туТип): БУЛЕВО;
+ПРОЦЕДУРА notrecurs(id: БУЛЕВО; T: мТип.туТип): БУЛЕВО;
     ВЕРНУТЬ ~(id & (модуль.Idents.следующ(туИмя).iType = IDTYPE) & (модуль.Idents.следующ(туИмя).T = T) &
             (T.тип_ном В {TRECORD, TARRAY}))
   КОНЕЦ notrecurs;
 
-ПРОЦЕДУРА ReadFields(T: туТип);
-  ПЕРЕМ
-    Name: мТипы.туУзел;
-    field: туПоле;
-    Tf: туТип;
-    line, col: ЦЕЛОЕ;
-    id_T: БУЛЕВО;
-  НАЧАЛО
-    ПОКА мСкан.сущность = lxIDENT ДЕЛАТЬ
-      Name := мСкан.id;
-      мПров.Тест2(Unique(T, Name), 30);
-      НОВ(field);
-      ПамОш_Проверить(field = ПУСТО);
-      мСпис.Добавить(T.поля, field);
-      field.Name := Name;
-      field.T := ПУСТО;
-      field.Export := ЛОЖЬ;
-      field.Unit := модуль;
-      КлючСлед_Получ;
-      ЕСЛИ мСкан.сущность = мКонст.опУмнож ТОГДА
-        мПров.Тест2(модуль.уровень = 3, 89);
-        мПров.Тест2(модуль.typedecl, 91);
-        мПров.Тест2(модуль.ExportType, 92);
-        field.Export := ИСТИНА;
-        КлючСлед_Получ
-      КОНЕЦ;
+ПРОЦЕДУРА ReadFields(T: мТип.туТип);
+   ПЕРЕМ
+      Name: мТипы.туУзел;
+      field: туПоле;
+      Tf: мТип.туТип;
+      line, col: ЦЕЛОЕ;
+      id_T: БУЛЕВО;
+   НАЧАЛО
+      ПОКА мСкан.сущность = lxIDENT ДЕЛАТЬ
+         Name := мСкан.id;
+         мПров.Тест2(Unique(T, Name), 30);
+         НОВ(field);
+         ПамОш_Проверить(field = ПУСТО);
+         мСпис.Добавить(T.поля, field);
+         field.Name := Name;
+         field.T := ПУСТО;
+         field.Export := ЛОЖЬ;
+         field.Unit := модуль;
+         КлючСлед_Получ;
+         ЕСЛИ мСкан.сущность = мКонст.опУмнож ТОГДА
+            мПров.Тест2(модуль.уровень = 3, 89);
+            мПров.Тест2(модуль.typedecl, 91);
+            мПров.Тест2(модуль.ExportType, 92);
+            field.Export := ИСТИНА;
+            КлючСлед_Получ
+         КОНЕЦ;
       ЕСЛИ мСкан.сущность = мКонст.опЗапятая ТОГДА
-        КлючСлед_Получ;
-        Ключ_Проверить(lxIDENT)
+         КлючСлед_Получ;
+         Ключ_Проверить(lxIDENT)
       АЕСЛИ мСкан.сущность = мКонст.опДвоеточ ТОГДА
-        КлючСлед_Получ;
-        Коорд_Уст(line, col);
-        id_T := мСкан.сущность = lxIDENT;
-        Tf:= pParseType(line, col);
-        мПров.Тест(Tf # ПУСТО, line, col, 42);
-        мПров.Тест(notrecurs(id_T, Tf), line, col, 96);
-        SetFields(T, Tf, ИСТИНА);
-        ЕСЛИ мСкан.сущность = мКонст.опТчкЗпт ТОГДА
-          КлючСлед_Получ;
-          Ключ_Проверить(lxIDENT)
-        ИНАЧЕ
-          мПров.Тест2(мСкан.сущность = мКонст.ксКОНЕЦ, 86)
-        КОНЕЦ
-      ИНАЧЕ
-        мПров.Тест2(ЛОЖЬ, 85)
+         КлючСлед_Получ;
+         Коорд_Уст(line, col);
+         id_T := мСкан.сущность = lxIDENT;
+         Tf:= pParseType(line, col);
+         мПров.Тест(Tf # ПУСТО, line, col, 42);
+         мПров.Тест(notrecurs(id_T, Tf), line, col, 96);
+         SetFields(T, Tf, ИСТИНА);
+         ЕСЛИ мСкан.сущность = мКонст.опТчкЗпт ТОГДА
+            КлючСлед_Получ;
+            Ключ_Проверить(lxIDENT)
+         ИНАЧЕ
+            мПров.Тест2(мСкан.сущность = мКонст.ксКОНЕЦ, 86)
+         КОНЕЦ
+         ИНАЧЕ
+            мПров.Тест2(ЛОЖЬ, 85)
+         КОНЕЦ
       КОНЕЦ
-    КОНЕЦ
-  КОНЕЦ ReadFields;
+   КОНЕЦ ReadFields;
 
-ПРОЦЕДУРА OpenBase*(T: туТип): туТип;
+ПРОЦЕДУРА OpenBase*(T: мТип.туТип): мТип.туТип;
   НАЧАЛО
     ПОКА (T.тип_ном = TARRAY) & (T.длина = 0) ДЕЛАТЬ
       T := T.Base
@@ -842,7 +838,7 @@
     ВЕРНУТЬ T
   КОНЕЦ OpenBase;
 
-ПРОЦЕДУРА SetVars(T: туТип);
+ПРОЦЕДУРА SetVars(T: мТип.туТип);
   ПЕРЕМ
     cur: туИмя;
     n: ЦЕЛОЕ;
@@ -888,17 +884,17 @@
     КОНЕЦ
   КОНЕЦ SetVars;
 
-ПРОЦЕДУРА Тип_Создать(tType, Len, Size, Number: ЦЕЛОЕ; Base: туТип; Fields: БУЛЕВО; NewType: туТип): туТип;
-  ПЕРЕМ
-    nov: туТип;
-  НАЧАЛО
-    ЕСЛИ NewType = ПУСТО ТОГДА
-      НОВ(nov);
-      ПамОш_Проверить(nov = ПУСТО)
-    ИНАЧЕ
-      nov := NewType
-    КОНЕЦ;
-    мСпис.Добавить(types, nov);
+ПРОЦЕДУРА Тип_Создать(tType, Len, Size, Number: ЦЕЛОЕ; Base: мТип.туТип; Fields: БУЛЕВО; NewType: мТип.туТип): мТип.туТип;
+   ПЕРЕМ
+      nov: мТип.туТип;
+   НАЧАЛО
+      ЕСЛИ NewType = ПУСТО ТОГДА
+         НОВ(nov);
+         ПамОш_Проверить(nov = ПУСТО)
+      ИНАЧЕ
+         nov := NewType
+      КОНЕЦ;
+      мСпис.Добавить(types, nov);
     nov.тип_ном := tType;
     nov.длина := Len;
     nov.размер := Size;
@@ -912,84 +908,84 @@
     ВЕРНУТЬ nov
   КОНЕЦ Тип_Создать;
 
-ПРОЦЕДУРА FormalType(ПЕР line, col: ЦЕЛОЕ): туТип;
-  ПЕРЕМ
-    TA: туТип;
-  НАЧАЛО
-    ЕСЛИ мСкан.сущность = мКонст.ксМАССИВ ТОГДА
-      КлючСлед_Получ;
-      Ключ_Проверить(мКонст.ксИЗ);
-      КлючСлед_Получ;
-      TA := Тип_Создать(TARRAY, 0, 0, 0, FormalType(line, col), ЛОЖЬ, ПУСТО)
-    ИНАЧЕ
-      Ключ_Проверить(lxIDENT);
-      TA := IdType(line, col);
-      мПров.Тест(TA # ПУСТО, line, col, 42);
-    КОНЕЦ
-    ВЕРНУТЬ TA
-  КОНЕЦ FormalType;
-
-ПРОЦЕДУРА Section(T: туТип);
-  ПЕРЕМ
-      Name: мТипы.туУзел;
-      ByRef, cont: БУЛЕВО;
-      field: туПоле;
-      Tf: туТип;
-      fp: туИмя;
-      line, col: ЦЕЛОЕ;
-      proc: БУЛЕВО;
-  НАЧАЛО
-    proc := T = ПУСТО;
-    ЕСЛИ proc ТОГДА
-      T := curBlock.T
-    КОНЕЦ;
-    мПров.Тест2((мСкан.сущность = lxIDENT) ИЛИ (мСкан.сущность = мКонст.ксПЕРЕМ), 84);
-    ByRef := ЛОЖЬ;
-    ЕСЛИ мСкан.сущность = мКонст.ксПЕРЕМ ТОГДА
-      ByRef := ИСТИНА;
-      КлючСлед_Получ;
-      Ключ_Проверить(lxIDENT)
-    КОНЕЦ;
-    cont := ИСТИНА;
-    ПОКА cont ДЕЛАТЬ
-      Name := мСкан.id;
-      мПров.Тест2(GetField(T, Name) = ПУСТО, 30);
-      НОВ(field);
-      ПамОш_Проверить(field = ПУСТО);
-      мСпис.Добавить(T.поля, field);
-      field.Name := Name;
-      field.T := ПУСТО;
-      field.ByRef := ByRef;
-      ЕСЛИ proc ТОГДА
-        PushIdent(Name, line, col, IDVAR, ПУСТО, ПУСТО, ЛОЖЬ, 0);
-        ДОБ(curBlock.ParamCount);
-        fp := модуль.Idents.следующ(туИмя);
-        ЕСЛИ ByRef ТОГДА
-          fp.VarKind := paramvar
-        ИНАЧЕ
-          fp.VarKind := param
-        КОНЕЦ
-      КОНЕЦ;
-      КлючСлед_Получ;
-      ЕСЛИ мСкан.сущность = мКонст.опЗапятая ТОГДА
-        КлючСлед_Получ;
-        Ключ_Проверить(lxIDENT)
-      АЕСЛИ мСкан.сущность = мКонст.опДвоеточ ТОГДА
-        КлючСлед_Получ;
-        Tf := FormalType(line, col);
-        мПров.Тест(Dim(Tf) <= X86.ADIM, line, col, 110);
-        SetFields(T, Tf, ЛОЖЬ);
-        ЕСЛИ proc ТОГДА
-          SetVars(Tf)
-        КОНЕЦ;
-        cont := ЛОЖЬ
+ПРОЦЕДУРА FormalType(ПЕР line, col: ЦЕЛОЕ): мТип.туТип;
+   ПЕРЕМ
+      TA: мТип.туТип;
+   НАЧАЛО
+      ЕСЛИ мСкан.сущность = мКонст.ксМАССИВ ТОГДА
+         КлючСлед_Получ;
+         Ключ_Проверить(мКонст.ксИЗ);
+         КлючСлед_Получ;
+         TA := Тип_Создать(TARRAY, 0, 0, 0, FormalType(line, col), ЛОЖЬ, ПУСТО)
       ИНАЧЕ
-        мПров.Тест2(ЛОЖЬ, 85)
+         Ключ_Проверить(lxIDENT);
+         TA := IdType(line, col);
+         мПров.Тест(TA # ПУСТО, line, col, 42);
       КОНЕЦ
-    КОНЕЦ
-  КОНЕЦ Section;
+      ВЕРНУТЬ TA
+   КОНЕЦ FormalType;
 
-ПРОЦЕДУРА ParamType(T: туТип);
+ПРОЦЕДУРА Section(T: мТип.туТип);
+   ПЕРЕМ
+         Name: мТипы.туУзел;
+         ByRef, cont: БУЛЕВО;
+         field: туПоле;
+         Tf: мТип.туТип;
+         fp: туИмя;
+         line, col: ЦЕЛОЕ;
+         proc: БУЛЕВО;
+   НАЧАЛО
+       proc := T = ПУСТО;
+       ЕСЛИ proc ТОГДА
+         T := curBlock.T
+       КОНЕЦ;
+       мПров.Тест2((мСкан.сущность = lxIDENT) ИЛИ (мСкан.сущность = мКонст.ксПЕРЕМ), 84);
+       ByRef := ЛОЖЬ;
+       ЕСЛИ мСкан.сущность = мКонст.ксПЕРЕМ ТОГДА
+         ByRef := ИСТИНА;
+         КлючСлед_Получ;
+         Ключ_Проверить(lxIDENT)
+       КОНЕЦ;
+       cont := ИСТИНА;
+       ПОКА cont ДЕЛАТЬ
+         Name := мСкан.id;
+         мПров.Тест2(GetField(T, Name) = ПУСТО, 30);
+         НОВ(field);
+         ПамОш_Проверить(field = ПУСТО);
+         мСпис.Добавить(T.поля, field);
+         field.Name := Name;
+         field.T := ПУСТО;
+         field.ByRef := ByRef;
+         ЕСЛИ proc ТОГДА
+           PushIdent(Name, line, col, IDVAR, ПУСТО, ПУСТО, ЛОЖЬ, 0);
+           ДОБ(curBlock.ParamCount);
+           fp := модуль.Idents.следующ(туИмя);
+           ЕСЛИ ByRef ТОГДА
+             fp.VarKind := paramvar
+           ИНАЧЕ
+             fp.VarKind := param
+           КОНЕЦ
+         КОНЕЦ;
+         КлючСлед_Получ;
+         ЕСЛИ мСкан.сущность = мКонст.опЗапятая ТОГДА
+           КлючСлед_Получ;
+           Ключ_Проверить(lxIDENT)
+         АЕСЛИ мСкан.сущность = мКонст.опДвоеточ ТОГДА
+           КлючСлед_Получ;
+           Tf := FormalType(line, col);
+           мПров.Тест(Dim(Tf) <= X86.ADIM, line, col, 110);
+           SetFields(T, Tf, ЛОЖЬ);
+           ЕСЛИ proc ТОГДА
+             SetVars(Tf)
+           КОНЕЦ;
+           cont := ЛОЖЬ
+         ИНАЧЕ
+           мПров.Тест2(ЛОЖЬ, 85)
+         КОНЕЦ
+       КОНЕЦ
+   КОНЕЦ Section;
+
+ПРОЦЕДУРА ParamType(T: мТип.туТип);
   ПЕРЕМ break: БУЛЕВО;
   НАЧАЛО
     ЕСЛИ (мСкан.сущность = lxIDENT) ИЛИ (мСкан.сущность = мКонст.ксПЕРЕМ) ТОГДА
@@ -1005,7 +1001,7 @@
     КОНЕЦ
   КОНЕЦ ParamType;
 
-ПРОЦЕДУРА AddPtrBase(Name: мТипы.туУзел; line, col: ЦЕЛОЕ; T: туТип);
+ПРОЦЕДУРА AddPtrBase(Name: мТипы.туУзел; line, col: ЦЕЛОЕ; T: мТип.туТип);
   ПЕРЕМ nov: PTRBASE;
   НАЧАЛО
     НОВ(nov);
@@ -1017,7 +1013,7 @@
     мСпис.Добавить(PtrBases, nov)
   КОНЕЦ AddPtrBase;
 
-ПРОЦЕДУРА FormalList(T: туТип; ПЕР Res: туТип);
+ПРОЦЕДУРА FormalList(T: мТип.туТип; ПЕР Res: мТип.туТип);
   ПЕРЕМ line, col: ЦЕЛОЕ;
   НАЧАЛО
     ЕСЛИ мСкан.сущность = lxLRound ТОГДА
@@ -1088,12 +1084,12 @@
     ВЕРНУТЬ res
   КОНЕЦ RecFlag;
 
-ПРОЦЕДУРА StructType(Comma: БУЛЕВО; NewType: туТип): туТип;
-  ПЕРЕМ
-    v: ДЛИНВЕЩ;
-    T, nov: туТип;
-    line, col, line2, col2: ЦЕЛОЕ;
-    id_T: БУЛЕВО;
+ПРОЦЕДУРА StructType(Comma: БУЛЕВО; NewType: мТип.туТип): мТип.туТип;
+   ПЕРЕМ
+      v: ДЛИНВЕЩ;
+      T, nov: мТип.туТип;
+      line, col, line2, col2: ЦЕЛОЕ;
+      id_T: БУЛЕВО;
   НАЧАЛО
     ВЫБОР мСкан.сущность ИЗ
     |мКонст.ксМАССИВ, мКонст.опЗапятая:
@@ -1184,10 +1180,10 @@
     ВЕРНУТЬ nov
   КОНЕЦ StructType;
 
-ПРОЦЕДУРА ParseType(ПЕР line, col: ЦЕЛОЕ): туТип;
-  ПЕРЕМ
-    Res: туТип;
-  НАЧАЛО
+ПРОЦЕДУРА ParseType(ПЕР line, col: ЦЕЛОЕ): мТип.туТип;
+   ПЕРЕМ
+      Res: мТип.туТип;
+   НАЧАЛО
     ЕСЛИ мСкан.сущность = lxIDENT ТОГДА
       Res := IdType(line, col)
     ИНАЧЕ
@@ -1232,17 +1228,17 @@
   КОНЕЦ LinkPtr;
 
 ПРОЦЕДУРА DeclSeq;
-    ПЕРЕМ
-        Value: ДЛИНВЕЩ;
-        T, NewType: туТип;
-        Name: мТипы.туУзел;
-        line, col, Call: ЦЕЛОЕ;
-        Export, func: БУЛЕВО;
-        last, id: туИмя;
-        e: тВыражение;
+   ПЕРЕМ
+      Value: ДЛИНВЕЩ;
+      T, NewType: мТип.туТип;
+      Name: мТипы.туУзел;
+      line, col, Call: ЦЕЛОЕ;
+      Export, func: БУЛЕВО;
+      last, id: туИмя;
+       e: тВыражение;
 
-    ПРОЦЕДУРА IdentDef;
-        НАЧАЛО
+   ПРОЦЕДУРА IdentDef;
+      НАЧАЛО
             Name := мСкан.id;
             Коорд_Уст(line, col);
             КлючСлед_Получ;
@@ -1252,7 +1248,7 @@
               Export := ИСТИНА;
               КлючСлед_Получ
             КОНЕЦ
-        КОНЕЦ IdentDef;
+      КОНЕЦ IdentDef;
 
   НАЧАЛО
     ЕСЛИ мСкан.сущность = мКонст.ксКОНСТ ТОГДА
