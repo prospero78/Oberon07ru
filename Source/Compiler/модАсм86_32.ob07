@@ -254,21 +254,21 @@
   йнмеж PackExport;
 
 опнжедспю ProcExport*(Number: жекне; Name: ЛрХОШ.РСсГЕК; NameLabel: жекне);
-  мювюкн
-    еякх dll рнцдю
-      etable.arradr[etable.adrcount] := Number;
-      дна(etable.adrcount);
-      etable.arrnameptr[etable.namecount] := etable.textlen;
-      дна(etable.namecount);
-      CopyStr(etable.text, Name.ХЛЪ, etable.textlen, 0);
-      дна(etable.textlen)
-    юеякх obj рнцдю
-      kosexp[kosexpcount].Name := Name;
-      kosexp[kosexpcount].Adr := Number;
-      kosexp[kosexpcount].NameLabel := NameLabel;
-      дна(kosexpcount)
-    йнмеж
-  йнмеж ProcExport;
+   мювюкн
+      еякх dll рнцдю
+         etable.arradr[etable.adrcount] := Number;
+         дна(etable.adrcount);
+         etable.arrnameptr[etable.namecount] := etable.textlen;
+         дна(etable.namecount);
+         CopyStr(etable.text, Name.ХЛЪ_ЯРП, etable.textlen, 0);
+         дна(etable.textlen)
+      юеякх obj рнцдю
+         kosexp[kosexpcount].Name := Name;
+         kosexp[kosexpcount].Adr := Number;
+         kosexp[kosexpcount].NameLabel := NameLabel;
+         дна(kosexpcount)
+      йнмеж
+   йнмеж ProcExport;
 
 опнжедспю Err(code: жекне);
   мювюкн
@@ -1970,65 +1970,66 @@
         йнмеж OutStringZ;
 
 опнжедспю Epilog*(gsize: жекне; FName: люяяхб хг яхлб; stk: жекне);
-        оепел i, glob: жекне;
-        мювюкн
-          glob := 0;
-          gsize := Align(gsize, 4) + 4;
-          COPY(FName, OutFile);
-          Labels[RTABLE] := -dcount;
-          dataint(recarray[0]);
-          дкъ i := 1 дн reccount декюрэ
-                dataint(recarray[i])
-          йнмеж;
-          current := start;
-          еякх con хкх gui хкх dll рнцдю
-                PushInt(LoadLibrary);
-                PushInt(GetProcAddress);
-                OutCode("5859FF31FF3054")
-          юеякх elf рнцдю
-                OutCode("6800000000");
-                glob := current.cmd;
-          юеякх kos хкх obj рнцдю
-                OutByte(54H)
-          йнмеж;
-          GlobalAdr(0);
-          PushConst(ASR(gsize, 2));
-          PushInt(RTABLE);
-          PushInt(SELFNAME);
-          CallRTL(_init);
-          current := asmlist.ЯКЕДСЧЫ(РСоСМЙРюЯЛ);
-          еякх dll рнцдю
-                OutCode("B801000000C9C20C00")
-          йнмеж;
-          еякх obj рнцдю
-                OutCode("B801000000C9C20400")
-          йнмеж;
-          OutCode("EB05");
-          Label(ASSRT);
-          CallRTL(_assrt);
-          OutCode("EB09");
-          Label(HALT);
-          OutCode("6A006A00");
-          CallRTL(_assrt);
-          OutCode("6A00");
-          CallRTL(_halt);
-          OutByte(90H);
-          еякх obj рнцдю
-                Label(Exports);
-                CmdN(szSTART); CmdN(START);
-                CmdN(szversion); OutInt(stk);
-                дкъ i := 0 дн kosexpcount - 1 декюрэ
-                  CmdN(kosexp[i].NameLabel); CmdN(kosexp[i].Adr)
-                йнмеж;
-                OutInt(0);
-                Label(szSTART); OutStringZ("START");
-                Label(szversion); OutStringZ("version");
-                дкъ i := 0 дн kosexpcount - 1 декюрэ
-                  Label(kosexp[i].NameLabel);
-                  OutStringZ(kosexp[i].Name.ХЛЪ)
-                йнмеж
-          йнмеж;
-          FixLabels(FName, stk, gsize, glob)
-        йнмеж Epilog;
+   оепел
+      i, glob: жекне;
+   мювюкн
+      glob := 0;
+      gsize := Align(gsize, 4) + 4;
+      COPY(FName, OutFile);
+      Labels[RTABLE] := -dcount;
+      dataint(recarray[0]);
+      дкъ i := 1 дн reccount декюрэ
+         dataint(recarray[i])
+      йнмеж;
+      current := start;
+      еякх con хкх gui хкх dll рнцдю
+         PushInt(LoadLibrary);
+         PushInt(GetProcAddress);
+         OutCode("5859FF31FF3054")
+      юеякх elf рнцдю
+         OutCode("6800000000");
+         glob := current.cmd;
+      юеякх kos хкх obj рнцдю
+         OutByte(54H)
+      йнмеж;
+      GlobalAdr(0);
+      PushConst(ASR(gsize, 2));
+      PushInt(RTABLE);
+      PushInt(SELFNAME);
+      CallRTL(_init);
+      current := asmlist.ЯКЕДСЧЫ(РСоСМЙРюЯЛ);
+      еякх dll рнцдю
+         OutCode("B801000000C9C20C00")
+      йнмеж;
+      еякх obj рнцдю
+         OutCode("B801000000C9C20400")
+      йнмеж;
+      OutCode("EB05");
+      Label(ASSRT);
+      CallRTL(_assrt);
+      OutCode("EB09");
+      Label(HALT);
+      OutCode("6A006A00");
+      CallRTL(_assrt);
+      OutCode("6A00");
+      CallRTL(_halt);
+      OutByte(90H);
+      еякх obj рнцдю
+         Label(Exports);
+         CmdN(szSTART); CmdN(START);
+         CmdN(szversion); OutInt(stk);
+         дкъ i := 0 дн kosexpcount - 1 декюрэ
+            CmdN(kosexp[i].NameLabel); CmdN(kosexp[i].Adr)
+         йнмеж;
+         OutInt(0);
+         Label(szSTART); OutStringZ("START");
+         Label(szversion); OutStringZ("version");
+         дкъ i := 0 дн kosexpcount - 1 декюрэ
+            Label(kosexp[i].NameLabel);
+            OutStringZ(kosexp[i].Name.ХЛЪ_ЯРП)
+         йнмеж
+      йнмеж;
+      FixLabels(FName, stk, gsize, glob)
+   йнмеж Epilog;
 
 йнмеж ЛНДюЯЛ86_32.
