@@ -28,7 +28,7 @@
    мќш := модќшибки,
    мѕроц := модѕроцесс,
    мѕам := модѕам€ть,
-   м—пис := мод—писок,
+   м÷епь := мод÷епь,
    м—тр := мод—троки,
    м”зел := мод”зел;
 
@@ -132,7 +132,7 @@
        ќЌ≈÷;
 
 ѕ≈–≈ћ
-  asmlist: м—пис.ту÷епь;
+  asmlist: м÷епь.ту÷епь;
   start: туѕунктјсм;
   MemErr: тѕроцедура;
   dll, con, gui, kos, elf, obj: Ѕ”Ћ≈¬ќ;
@@ -482,7 +482,7 @@
     Ќќ¬(nov);
     MemErr(nov = ѕ”—“ќ);
     nov.cmd := ccount;
-    м—пис.¬ставить(asmlist, nov, current);
+    м÷епь.¬ставить(asmlist, nov, current);
     current := current.следующ(туѕунктјсм)
    ќЌ≈÷ New;
 
@@ -604,11 +604,11 @@
     obj := UI = 6;
     MemErr := mem;
     Lcount := HALT;
-    asmlist := м—пис.—оздать();
+    asmlist := м÷епь.—оздать();
     MemErr(asmlist = ѕ”—“ќ);
     Ќќ¬(nov);
     MemErr(nov = ѕ”—“ќ);
-    м—пис.ƒобавить(asmlist, nov);
+    м÷епь.ƒобавить(asmlist, nov);
     current := nov;
    ќЌ≈÷ Ќастроить;
 
