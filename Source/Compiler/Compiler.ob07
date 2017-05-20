@@ -1671,7 +1671,7 @@
       |sysCODE:
         мѕров.“ест(м—кан.сущность = lxSTRING, line, col, 150);
         м—кан.GetLexStr(Lex);
-        CheckCode(Lex, м—кан.count - 1, line, col);
+        CheckCode(Lex, м—кан.счЄтчик - 1, line, col);
         X86.Asm(Lex);
         мƒецл. люч—лед_ѕолуч
       |sysMOVE:
