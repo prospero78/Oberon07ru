@@ -131,7 +131,7 @@
        ќЌ≈÷;
 
 ѕ≈–≈ћ
-  asmlist: м“ипы.ту—писок;
+  asmlist: м—пис.ту—писок;
   start: туѕунктјсм;
   MemErr: тѕроцедура;
   dll, con, gui, kos, elf, obj: Ѕ”Ћ≈¬ќ;
