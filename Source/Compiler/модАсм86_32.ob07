@@ -29,7 +29,8 @@
    мѕроц := модѕроцесс,
    мѕам := модѕам€ть,
    м—пис := мод—писок,
-   м—тр := мод—троки;
+   м—тр := мод—троки,
+   м”зел := мод”зел;
 
  ќЌ—“
 
@@ -155,7 +156,7 @@
   maxfpu: ÷≈Ћќ≈;
   fpucmd: туѕунктјсм;
   kosexp: ћј——»¬ 65536 »« «јѕ»—№
-    Name: м“ипы.ту”зел;
+    Name: м”зел.ту”зел;
     Adr, NameLabel: ÷≈Ћќ≈
    ќЌ≈÷;
   kosexpcount: ÷≈Ћќ≈;
@@ -253,7 +254,7 @@
     etable.size := etable.size + etable.textlen
    ќЌ≈÷ PackExport;
 
-ѕ–ќ÷≈ƒ”–ј ProcExport*(Number: ÷≈Ћќ≈; Name: м“ипы.ту”зел; NameLabel: ÷≈Ћќ≈);
+ѕ–ќ÷≈ƒ”–ј ProcExport*(Number: ÷≈Ћќ≈; Name: м”зел.ту”зел; NameLabel: ÷≈Ћќ≈);
    Ќј„јЋќ
       ≈—Ћ» dll “ќ√ƒј
          etable.arradr[etable.adrcount] := Number;
