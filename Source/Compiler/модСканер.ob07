@@ -75,24 +75,24 @@
       L := Lex
     ќЌ≈÷ GetLexStr;
 
-ѕ–ќ÷≈ƒ”–ј —охранить*(scanner: ту—канер);
+ѕ–ќ÷≈ƒ”–ј —охранить*(у—канер_: ту—канер);
    Ќј„јЋќ
-      scanner.файл_ном := у‘айл.номер;
-      scanner.ccol := ccol;
-      scanner.cline := cline;
-      scanner.ch := ch;
-      scanner.Lex := Lex;
-      scanner.счетчик := count;
-      scanner.col := col;
-      scanner.строка_ном := line;
-      scanner.ц л—лово := сущность;
-      scanner.знач.целое := vINT;
-      scanner.знач.вещ := vFLT;
-      scanner.знач.символ := vCHX;
-      scanner.buf := у‘айл.буфер;
-      scanner.bufpos := у‘айл.буф_поз;
-      scanner.CR := CR;
-      scanner.UTF8 := UTF8
+      у—канер_.файл_ном := у‘айл.номер;
+      у—канер_.ccol := ccol;
+      у—канер_.cline := cline;
+      у—канер_.ch := ch;
+      у—канер_.Lex := Lex;
+      у—канер_.счетчик := count;
+      у—канер_.col := col;
+      у—канер_.строка_ном := line;
+      у—канер_.ц л—лово := сущность;
+      у—канер_.знач.целое := vINT;
+      у—канер_.знач.вещ := vFLT;
+      у—канер_.знач.символ := vCHX;
+      у—канер_.buf := у‘айл.буфер;
+      у—канер_.bufpos := у‘айл.буф_поз;
+      у—канер_.CR := CR;
+      у—канер_.UTF8 := UTF8
     ќЌ≈÷ —охранить;
 
 ѕ–ќ÷≈ƒ”–ј ќткатить*(сканер_: ту—канер);
