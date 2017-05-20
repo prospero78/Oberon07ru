@@ -113,9 +113,9 @@
       scanner.col := col;
       scanner.строка_ном := line;
       scanner.ц л—лово := сущность;
-      scanner.целое_знач := vINT;
-      scanner.вещ_знач := vFLT;
-      scanner.vCHX := vCHX;
+      scanner.знач.целое := vINT;
+      scanner.знач.вещ := vFLT;
+      scanner.знач.символ := vCHX;
       scanner.buf := buf;
       scanner.bufpos := bufpos;
       scanner.CR := CR;
@@ -133,9 +133,9 @@
       col := сканер_.col;
       line := сканер_.строка_ном;
       сущность := сканер_.ц л—лово;
-      vINT := сканер_.целое_знач;
-      vFLT := сканер_.вещ_знач;
-      vCHX := сканер_.vCHX;
+      vINT := сканер_.знач.целое;
+      vFLT := сканер_.знач.вещ;
+      vCHX := сканер_.знач.символ;
       buf := сканер_.buf;
       bufpos := сканер_.bufpos;
       CR := сканер_.CR;
