@@ -88,7 +88,7 @@
          перем : тАдрПерем;
          адр : тАдрес;
          кмд, clen, tcmd : ЦЕЛОЕ;
-         short: БУЛЕВО
+         бКороткое: БУЛЕВО
       КОНЕЦ;
 
    TFLT = МАССИВ 2 ИЗ ЦЕЛОЕ;
@@ -660,33 +660,34 @@
   КОНЕЦ dataint;
 
 ПРОЦЕДУРА jmp*(jamp: СИМВ; label: ЦЕЛОЕ);
-  ПЕРЕМ n: ЦЕЛОЕ;
-  НАЧАЛО
-    New;
-    ВЫБОР jamp ИЗ
-    |JMP, CALL:
-      n := 5
-    |JE, JLE, JGE, JG, JL, JNE:
-      Code[ccount] := 0FX;
+   ПЕРЕМ
+      n: ЦЕЛОЕ;
+   НАЧАЛО
+      New;
+      ВЫБОР jamp ИЗ
+      |JMP, CALL:
+         n := 5
+      |JE, JLE, JGE, JG, JL, JNE:
+         Code[ccount] := 0FX;
+         ДОБ(ccount);
+         n := 6
+      ИНАЧЕ
+      КОНЕЦ;
+      current.clen := n;
+      Code[ccount] := jamp;
       ДОБ(ccount);
-      n := 6
-    ИНАЧЕ
-    КОНЕЦ;
-    current.clen := n;
-    Code[ccount] := jamp;
-    ДОБ(ccount);
-    current.код.адрес := mSys.ADR(Code[ccount]);
-    current.перем.адрес := mSys.ADR(Labels[label]);
-    current.tcmd := JCMD;
-    current.short := ИСТИНА;
-    ДОБ(ccount, 4)
-  КОНЕЦ jmp;
+      current.код.адрес := mSys.ADR(Code[ccount]);
+      current.перем.адрес := mSys.ADR(Labels[label]);
+      current.tcmd := JCMD;
+      current.бКороткое := ИСТИНА;
+      ДОБ(ccount, 4)
+   КОНЕЦ jmp;
 
 ПРОЦЕДУРА jmplong(jamp: СИМВ; label: ЦЕЛОЕ);
-  НАЧАЛО
-    jmp(jamp, label);
-    current.short := ЛОЖЬ
-  КОНЕЦ jmplong;
+   НАЧАЛО
+      jmp(jamp, label);
+      current.бКороткое := ЛОЖЬ
+   КОНЕЦ jmplong;
 
 ПРОЦЕДУРА Label*(label: ЦЕЛОЕ);
   НАЧАЛО
@@ -1856,145 +1857,146 @@
          size := LoadAdr
       КОНЕЦ;
 
-    Optimization;
-    temp2 := size;
-    cur := asmlist.предыдущ(туЗвеноАсм);
-    ПОКА cur # ПУСТО ДЕЛАТЬ
-      cur.адр.адрес := size;
-      ЕСЛИ cur.tcmd = LCMD ТОГДА
-        mSys.PUT(cur.перем.адрес, size)
+      Optimization;
+      temp2 := size;
+      cur := asmlist.предыдущ(туЗвеноАсм);
+      ПОКА cur # ПУСТО ДЕЛАТЬ
+         cur.адр.адрес := size;
+         ЕСЛИ cur.tcmd = LCMD ТОГДА
+            mSys.PUT(cur.перем.адрес, size)
+         КОНЕЦ;
+         size := size + cur.clen;
+         cur := cur.следующ(туЗвеноАсм)
       КОНЕЦ;
-      size := size + cur.clen;
-      cur := cur.следующ(туЗвеноАсм)
-    КОНЕЦ;
 
-    size := temp2;
-    cur := asmlist.предыдущ(туЗвеноАсм);
-    ПОКА cur # ПУСТО ДЕЛАТЬ
-      cur.адр.адрес := size;
-      ЕСЛИ cur.tcmd = LCMD ТОГДА
-        mSys.PUT(cur.перем.адрес, size)
-      АЕСЛИ (cur.tcmd = JCMD) & cur.short ТОГДА
-        mSys.GET(cur.перем.адрес, i);
-        temp3 := i - cur.следующ(туЗвеноАсм).адр.адрес;
-        ЕСЛИ (-131 <= temp3) & (temp3 <= 123) ТОГДА
-          mSys.GET(cur(туЗвеноАсм).код.адрес - 1, c);
-          ЕСЛИ c = JMP ТОГДА
-            mSys.PUT(cur(туЗвеноАсм).код.адрес - 1, 0EBX)
-          ИНАЧЕ (*JE, JNE, JLE, JGE, JG, JL*)
-            mSys.PUT(cur(туЗвеноАсм).код.адрес - 2, ORD(c) - 16);
-            mSys.PUT(cur(туЗвеноАсм).код.адрес - 1, temp3);
-            ВЫЧ(cur(туЗвеноАсм).код.адрес)
-          КОНЕЦ;
-          cur.clen := 2
-        КОНЕЦ
+      size := temp2;
+      cur := asmlist.предыдущ(туЗвеноАсм);
+      ПОКА cur # ПУСТО ДЕЛАТЬ
+         cur.адр.адрес := size;
+         ЕСЛИ cur.tcmd = LCMD ТОГДА
+            mSys.PUT(cur.перем.адрес, size)
+         АЕСЛИ (cur.tcmd = JCMD) & cur.бКороткое ТОГДА
+            mSys.GET(cur.перем.адрес, i);
+            temp3 := i - cur.следующ(туЗвеноАсм).адр.адрес;
+            ЕСЛИ (-131 <= temp3) & (temp3 <= 123) ТОГДА
+               mSys.GET(cur(туЗвеноАсм).код.адрес - 1, c);
+               ЕСЛИ c = JMP ТОГДА
+                  mSys.PUT(cur(туЗвеноАсм).код.адрес - 1, 0EBX)
+               ИНАЧЕ (*JE, JNE, JLE, JGE, JG, JL*)
+                  mSys.PUT(cur(туЗвеноАсм).код.адрес - 2, ORD(c) - 16);
+                  mSys.PUT(cur(туЗвеноАсм).код.адрес - 1, temp3);
+                  ВЫЧ(cur(туЗвеноАсм).код.адрес)
+               КОНЕЦ;
+               cur.clen := 2
+            КОНЕЦ
+         КОНЕЦ;
+         size := size + cur.clen;
+         cur := cur.следующ(туЗвеноАсм)
       КОНЕЦ;
-      size := size + cur.clen;
-      cur := cur.следующ(туЗвеноАсм)
-    КОНЕЦ;
 
-    ЕСЛИ dll ИЛИ con ИЛИ gui ТОГДА
-      asize := Align(size, 1000H)
-    АЕСЛИ kos ИЛИ obj ТОГДА
-      asize := Align(size, 4)
-    АЕСЛИ elf ТОГДА
-      asize := 134514420 + 6508 + Align(size - 13 - LoadAdr, 1000H)
-    КОНЕЦ;
+      ЕСЛИ dll ИЛИ con ИЛИ gui ТОГДА
+         asize := Align(size, 1000H)
+      АЕСЛИ kos ИЛИ obj ТОГДА
+         asize := Align(size, 4)
+      АЕСЛИ elf ТОГДА
+         asize := 134514420 + 6508 + Align(size - 13 - LoadAdr, 1000H)
+      КОНЕЦ;
 
-    ДЛЯ i := 0 ДО Lcount ДЕЛАТЬ
-      ЕСЛИ Labels[i] < 0 ТОГДА
-        Labels[i] := -Labels[i] + asize + Align(rdatasize, 1000H)
+      ДЛЯ i := 0 ДО Lcount ДЕЛАТЬ
+         ЕСЛИ Labels[i] < 0 ТОГДА
+            Labels[i] := -Labels[i] + asize + Align(rdatasize, 1000H)
+         КОНЕЦ
+      КОНЕЦ;
+
+      temp := dcount;
+      ЕСЛИ elf ТОГДА
+         asize := asize + Align(dcount, 1000H) + 64 + 1024;
+         mSys.PUT(mSys.ADR(Code[glob + 1]), asize - 1024);
+         dcount := 0
+      КОНЕЦ;
+
+      ЕСЛИ dll ТОГДА
+         asize := asize - LoadAdr + 0DAH;
+         ДЛЯ i := 0 ДО etable.namecount - 1 ДЕЛАТЬ
+            etable.arradr[i] := Labels[etable.arradr[i]] - LoadAdr;
+            etable.arrnameptr[i] := etable.arrnameptr[i] + asize
+         КОНЕЦ;
+         etable.arradroffset := etable.arradroffset + asize;
+         etable.arrnameptroffset := etable.arrnameptroffset + asize;
+         etable.arrnumoffset := etable.arrnumoffset + asize;
+         etable.dllnameoffset := etable.dllnameoffset + asize;
+         asize := asize + LoadAdr - 0DAH
+      КОНЕЦ;
+      ЕСЛИ dll ИЛИ con ИЛИ gui ТОГДА
+         Labels[LoadLibrary] := asize + 4;
+         Labels[GetProcAddress] := asize;
+         R.Page := 0;
+         R.Size := 0;
+         RCount := 0;
+      КОНЕЦ;
+      cur := asmlist.предыдущ(туЗвеноАсм);
+
+      ДЛЯ i := 0 ДО LEN(RtlProc) - 1 ДЕЛАТЬ
+         RtlProc[i] := Labels[RtlProc[i]]
+      КОНЕЦ;
+
+      temp3 := asize + Align(rdatasize, 1000H) + dcount;
+      ПОКА cur # ПУСТО ДЕЛАТЬ
+         ВЫБОР cur.tcmd ИЗ
+            |JCMD:
+               mSys.GET(cur.перем.адрес, i);
+               mSys.PUT(cur.код.адрес, i - cur.следующ(туЗвеноАсм).адр.адрес)
+            |GCMD:
+               mSys.GET(cur.код.адрес, i);
+               mSys.PUT(cur.код.адрес, i + temp3)
+            |OCMD:
+               mSys.MOVE(cur.перем.адрес, cur.код.адрес, 4)
+         ИНАЧЕ
+         КОНЕЦ;
+         ЕСЛИ dll & (cur.tcmd IN {GCMD, OCMD}) ТОГДА
+            n := cur.адр.адрес - LoadAdr;
+            ЕСЛИ ASR(n, 12) = ASR(R.Page, 12) ТОГДА
+               R.reloc[RCount] := IntToCard16(n MOD 1000H + 3000H);
+               ДОБ(RCount);
+               ДОБ(R.Size, 2)
+            ИНАЧЕ
+               ЕСЛИ R.Size # 0 ТОГДА
+                  PutReloc(R)
+               КОНЕЦ;
+               R.Page := ASR(n, 12) * 1000H;
+               R.Size := 10;
+               R.reloc[0] := IntToCard16(n MOD 1000H + 3000H);
+               RCount := 1
+            КОНЕЦ
+         КОНЕЦ;
+         cur := cur.следующ(туЗвеноАсм)
+      КОНЕЦ;
+      ЕСЛИ R.Size # 0 ТОГДА
+         PutReloc(R)
+      КОНЕЦ;
+      ЕСЛИ dll ИЛИ con ИЛИ gui ТОГДА
+         WritePE(FName, stk, size - 1000H - LoadAdr, dcount, rdatasize, gsize)
+      АЕСЛИ kos ИЛИ obj ТОГДА
+         WriteKOS(FName, Align(stk, 4), size, dcount, gsize, obj)
+      АЕСЛИ elf ТОГДА
+         WriteELF(FName, size - LoadAdr, temp, gsize)
       КОНЕЦ
-    КОНЕЦ;
-
-    temp := dcount;
-    ЕСЛИ elf ТОГДА
-      asize := asize + Align(dcount, 1000H) + 64 + 1024;
-      mSys.PUT(mSys.ADR(Code[glob + 1]), asize - 1024);
-      dcount := 0
-    КОНЕЦ;
-
-    ЕСЛИ dll ТОГДА
-      asize := asize - LoadAdr + 0DAH;
-      ДЛЯ i := 0 ДО etable.namecount - 1 ДЕЛАТЬ
-        etable.arradr[i] := Labels[etable.arradr[i]] - LoadAdr;
-        etable.arrnameptr[i] := etable.arrnameptr[i] + asize
-      КОНЕЦ;
-      etable.arradroffset := etable.arradroffset + asize;
-      etable.arrnameptroffset := etable.arrnameptroffset + asize;
-      etable.arrnumoffset := etable.arrnumoffset + asize;
-      etable.dllnameoffset := etable.dllnameoffset + asize;
-      asize := asize + LoadAdr - 0DAH
-    КОНЕЦ;
-    ЕСЛИ dll ИЛИ con ИЛИ gui ТОГДА
-      Labels[LoadLibrary] := asize + 4;
-      Labels[GetProcAddress] := asize;
-      R.Page := 0;
-      R.Size := 0;
-      RCount := 0;
-    КОНЕЦ;
-    cur := asmlist.предыдущ(туЗвеноАсм);
-
-    ДЛЯ i := 0 ДО LEN(RtlProc) - 1 ДЕЛАТЬ
-      RtlProc[i] := Labels[RtlProc[i]]
-    КОНЕЦ;
-
-    temp3 := asize + Align(rdatasize, 1000H) + dcount;
-    ПОКА cur # ПУСТО ДЕЛАТЬ
-      ВЫБОР cur.tcmd ИЗ
-      |JCMD:
-        mSys.GET(cur.перем.адрес, i);
-        mSys.PUT(cur.код.адрес, i - cur.следующ(туЗвеноАсм).адр.адрес)
-      |GCMD:
-        mSys.GET(cur.код.адрес, i);
-        mSys.PUT(cur.код.адрес, i + temp3)
-      |OCMD:
-        mSys.MOVE(cur.перем.адрес, cur.код.адрес, 4)
-      ИНАЧЕ
-      КОНЕЦ;
-      ЕСЛИ dll & (cur.tcmd IN {GCMD, OCMD}) ТОГДА
-        n := cur.адр.адрес - LoadAdr;
-        ЕСЛИ ASR(n, 12) = ASR(R.Page, 12) ТОГДА
-          R.reloc[RCount] := IntToCard16(n MOD 1000H + 3000H);
-          ДОБ(RCount);
-          ДОБ(R.Size, 2)
-        ИНАЧЕ
-          ЕСЛИ R.Size # 0 ТОГДА
-            PutReloc(R)
-          КОНЕЦ;
-          R.Page := ASR(n, 12) * 1000H;
-          R.Size := 10;
-          R.reloc[0] := IntToCard16(n MOD 1000H + 3000H);
-          RCount := 1
-        КОНЕЦ
-      КОНЕЦ;
-      cur := cur.следующ(туЗвеноАсм)
-    КОНЕЦ;
-    ЕСЛИ R.Size # 0 ТОГДА
-      PutReloc(R)
-    КОНЕЦ;
-    ЕСЛИ dll ИЛИ con ИЛИ gui ТОГДА
-      WritePE(FName, stk, size - 1000H - LoadAdr, dcount, rdatasize, gsize)
-    АЕСЛИ kos ИЛИ obj ТОГДА
-      WriteKOS(FName, Align(stk, 4), size, dcount, gsize, obj)
-    АЕСЛИ elf ТОГДА
-      WriteELF(FName, size - LoadAdr, temp, gsize)
-    КОНЕЦ
-  КОНЕЦ FixLabels;
+   КОНЕЦ FixLabels;
 
 ПРОЦЕДУРА OutStringZ(str: МАССИВ ИЗ СИМВ);
-        ПЕРЕМ i: ЦЕЛОЕ;
-        НАЧАЛО
-          New;
-          current.clen := LENGTH(str);
-          ДЛЯ i := 0 ДО current.clen - 1 ДЕЛАТЬ
-                Code[ccount] := str[i];
-                ДОБ(ccount)
-          КОНЕЦ;
-          Code[ccount] := 0X;
-          ДОБ(ccount);
-          ДОБ(current.clen)
-        КОНЕЦ OutStringZ;
+   ПЕРЕМ
+      i: ЦЕЛОЕ;
+   НАЧАЛО
+      New;
+      current.clen := LENGTH(str);
+      ДЛЯ i := 0 ДО current.clen - 1 ДЕЛАТЬ
+         Code[ccount] := str[i];
+         ДОБ(ccount)
+      КОНЕЦ;
+      Code[ccount] := 0X;
+      ДОБ(ccount);
+      ДОБ(current.clen)
+   КОНЕЦ OutStringZ;
 
 ПРОЦЕДУРА Epilog*(gsize: ЦЕЛОЕ; FName: МАССИВ ИЗ СИМВ; stk: ЦЕЛОЕ);
    ПЕРЕМ
