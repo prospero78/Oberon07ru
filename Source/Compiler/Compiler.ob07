@@ -643,40 +643,40 @@
    КОНЕЦ StFunc;
 
 ПРОЦЕДУРА ProcTypeComp(T1, T2: мТип.туТип): БУЛЕВО;
-    ПЕРЕМ
+   ПЕРЕМ
       sp: ЦЕЛОЕ;
       stk: МАССИВ 100, 2 ИЗ мТип.туТип;
 
-    ПРОЦЕДУРА ProcTypeComp1(T1, T2: мТип.туТип): БУЛЕВО;
-        ПЕРЕМ
-          fp, ft: мДецл.туПоле;
-          Res: БУЛЕВО;
+   ПРОЦЕДУРА ProcTypeComp1(T1, T2: мТип.туТип): БУЛЕВО;
+      ПЕРЕМ
+         fp, ft: мДецл.туПоле;
+         Res: БУЛЕВО;
 
-        ПРОЦЕДУРА TypeComp(T1, T2: мТип.туТип): БУЛЕВО;
-          ПЕРЕМ
+      ПРОЦЕДУРА TypeComp(T1, T2: мТип.туТип): БУЛЕВО;
+         ПЕРЕМ
             Res: БУЛЕВО;
-          НАЧАЛО
+         НАЧАЛО
             ЕСЛИ (T1.тип_ном = TARRAY) & (T2.тип_ном = TARRAY) & (T1.длина = 0) & (T2.длина = 0) ТОГДА
-              Res := TypeComp(T1.Base, T2.Base)
+               Res := TypeComp(T1.Base, T2.Base)
             ИНАЧЕ
               Res := ProcTypeComp1(T1, T2)
             КОНЕЦ
             ВЕРНУТЬ Res
-          КОНЕЦ TypeComp;
+         КОНЕЦ TypeComp;
 
-        ПРОЦЕДУРА Check(): БУЛЕВО;
-          ПЕРЕМ
+      ПРОЦЕДУРА Check(): БУЛЕВО;
+         ПЕРЕМ
             i: ЦЕЛОЕ;
             res: БУЛЕВО;
-          НАЧАЛО
+         НАЧАЛО
             i := 0;
             res := ЛОЖЬ;
             ПОКА (i < sp) & ~res ДЕЛАТЬ
-              res := ((stk[i][0] = T1) & (stk[i][1] = T2)) ИЛИ ((stk[i][0] = T2) & (stk[i][1] = T1));
-              ДОБ(i)
+               res := ((stk[i][0] = T1) & (stk[i][1] = T2)) ИЛИ ((stk[i][0] = T2) & (stk[i][1] = T1));
+               ДОБ(i)
             КОНЕЦ
             ВЕРНУТЬ res
-          КОНЕЦ Check;
+         КОНЕЦ Check;
 
         НАЧАЛО
           ДОБ(sp);
@@ -702,164 +702,164 @@
           ВЕРНУТЬ Res
         КОНЕЦ ProcTypeComp1;
 
-    НАЧАЛО
+   НАЧАЛО
       sp := -1
       ВЕРНУТЬ ProcTypeComp1(T1, T2)
-    КОНЕЦ ProcTypeComp;
+   КОНЕЦ ProcTypeComp;
 
 ПРОЦЕДУРА ArrComp(Ta, Tf: мТип.туТип): БУЛЕВО;
-    ПЕРЕМ
+   ПЕРЕМ
       Res: БУЛЕВО;
-    НАЧАЛО
+   НАЧАЛО
       ЕСЛИ (Tf.тип_ном = TARRAY) & (Tf.длина = 0) & (Ta.тип_ном = TARRAY) ТОГДА
         Res := ArrComp(Ta.Base, Tf.Base)
       ИНАЧЕ
         Res := ProcTypeComp(Ta, Tf)
       КОНЕЦ
       ВЕРНУТЬ Res
-    КОНЕЦ ArrComp;
+   КОНЕЦ ArrComp;
 
 ПРОЦЕДУРА AssComp(e: мДецл.тВыражение; T: мТип.туТип; param: БУЛЕВО): БУЛЕВО;
-    ПЕРЕМ
+   ПЕРЕМ
       Res: БУЛЕВО;
-    НАЧАЛО
+   НАЧАЛО
       ВЫБОР T.тип_ном ИЗ
-          |TINTEGER, TREAL, TLONGREAL, TSET, TBOOLEAN, TCARD16:
+         |TINTEGER, TREAL, TLONGREAL, TSET, TBOOLEAN, TCARD16:
             Res := e.T = T
-          |TCHAR:
-              ЕСЛИ e.T.тип_ном = TSTRING ТОГДА
-                  Res := Стр_Длина(e.Value) = 1
-              ИНАЧЕ
-                  Res := e.T.тип_ном = TCHAR
-              КОНЕЦ
-          |TARRAY:
-              ЕСЛИ param ТОГДА
-                ЕСЛИ T.длина = 0 ТОГДА
-                    ЕСЛИ (T.Base.тип_ном = TCHAR) & (e.T.тип_ном = TSTRING) ТОГДА
-                        Res := ИСТИНА
-                    ИНАЧЕ
-                        Res := ArrComp(e.T, T)
-                    КОНЕЦ
-                ИНАЧЕ
-                    ЕСЛИ (T.Base.тип_ном = TCHAR) & (e.T.тип_ном = TSTRING) ТОГДА
-                        Res := Стр_Длина(e.Value) <= T.длина
-                    ИНАЧЕ
-                        Res := e.T = T
-                    КОНЕЦ
-                КОНЕЦ
-              ИНАЧЕ
-                ЕСЛИ T.длина = 0 ТОГДА
-                    Res := ЛОЖЬ
-                АЕСЛИ (T.Base.тип_ном = TCHAR) & (e.T.тип_ном = TSTRING) ТОГДА
-                    Res := Стр_Длина(e.Value) <= T.длина
-                ИНАЧЕ
-                    Res := e.T = T
-                КОНЕЦ
-              КОНЕЦ
-          |TRECORD: Res := BaseOf(T, e.T)
-          |TPOINTER: Res := BaseOf(T, e.T) ИЛИ (e.T.тип_ном = TNIL)
-          |TPROC: Res := (e.T.тип_ном = TNIL) ИЛИ (e.eType = ePROC) & ProcTypeComp(e.id.T, T) ИЛИ
-              (e.eType # ePROC) & ProcTypeComp(e.T, T)
-          ИНАЧЕ
-        Res := ЛОЖЬ
+         |TCHAR:
+            ЕСЛИ e.T.тип_ном = TSTRING ТОГДА
+               Res := Стр_Длина(e.Value) = 1
+            ИНАЧЕ
+               Res := e.T.тип_ном = TCHAR
+            КОНЕЦ
+         |TARRAY:
+            ЕСЛИ param ТОГДА
+               ЕСЛИ T.длина = 0 ТОГДА
+                  ЕСЛИ (T.Base.тип_ном = TCHAR) & (e.T.тип_ном = TSTRING) ТОГДА
+                     Res := ИСТИНА
+                  ИНАЧЕ
+                     Res := ArrComp(e.T, T)
+                  КОНЕЦ
+               ИНАЧЕ
+                  ЕСЛИ (T.Base.тип_ном = TCHAR) & (e.T.тип_ном = TSTRING) ТОГДА
+                     Res := Стр_Длина(e.Value) <= T.длина
+                  ИНАЧЕ
+                     Res := e.T = T
+                  КОНЕЦ
+               КОНЕЦ
+               ИНАЧЕ
+               ЕСЛИ T.длина = 0 ТОГДА
+                  Res := ЛОЖЬ
+               АЕСЛИ (T.Base.тип_ном = TCHAR) & (e.T.тип_ном = TSTRING) ТОГДА
+                  Res := Стр_Длина(e.Value) <= T.длина
+               ИНАЧЕ
+                  Res := e.T = T
+               КОНЕЦ
+            КОНЕЦ
+         |TRECORD: Res := BaseOf(T, e.T)
+         |TPOINTER: Res := BaseOf(T, e.T) ИЛИ (e.T.тип_ном = TNIL)
+         |TPROC: Res := (e.T.тип_ном = TNIL) ИЛИ (e.eType = ePROC) & ProcTypeComp(e.id.T, T) ИЛИ
+            (e.eType # ePROC) & ProcTypeComp(e.T, T)
+      ИНАЧЕ
+         Res := ЛОЖЬ
       КОНЕЦ
       ВЕРНУТЬ Res
-    КОНЕЦ AssComp;
+   КОНЕЦ AssComp;
 
 ПРОЦЕДУРА ParamComp(e: мДецл.тВыражение; T: мТип.туТип; ByRef: БУЛЕВО): БУЛЕВО;
-    ПЕРЕМ
+   ПЕРЕМ
       Res: БУЛЕВО;
-    НАЧАЛО
+   НАЧАЛО
       ЕСЛИ ByRef ТОГДА
-        ЕСЛИ e.eType = eVAR ТОГДА
-          ВЫБОР T.тип_ном ИЗ
-              |TINTEGER, TREAL, TLONGREAL, TCHAR,
+         ЕСЛИ e.eType = eVAR ТОГДА
+            ВЫБОР T.тип_ном ИЗ
+               |TINTEGER, TREAL, TLONGREAL, TCHAR,
                   TSET, TBOOLEAN, TPOINTER, TCARD16:
                   Res := e.T = T
-              |TARRAY:
+               |TARRAY:
                   ЕСЛИ T.длина > 0 ТОГДА
                       Res := e.T = T
                   ИНАЧЕ
                       Res := ArrComp(e.T, T)
                   КОНЕЦ
-              |TRECORD:
+               |TRECORD:
                   Res := BaseOf(T, e.T)
-              |TPROC:
+               |TPROC:
                   Res := ProcTypeComp(e.T, T)
-          ИНАЧЕ
-          КОНЕЦ
-        ИНАЧЕ
-          Res := ЛОЖЬ
-        КОНЕЦ
+            ИНАЧЕ
+            КОНЕЦ
+         ИНАЧЕ
+            Res := ЛОЖЬ
+         КОНЕЦ
       ИНАЧЕ
-        Res := AssComp(e, T, ИСТИНА)
+         Res := AssComp(e, T, ИСТИНА)
       КОНЕЦ
       ВЕРНУТЬ Res
     КОНЕЦ ParamComp;
 
 ПРОЦЕДУРА Call(param: мДецл.туПоле);
-    ПЕРЕМ
+   ПЕРЕМ
       line, col, i, n: ЦЕЛОЕ;
       e1: мДецл.тВыражение;
       s: мДецл.туКонстСтр;
       A: X86.TIDX;
       TA: мТип.туТип;
-    НАЧАЛО
+   НАЧАЛО
       ПОКА param # ПУСТО ДЕЛАТЬ
-        мДецл.Коорд_Уст(line, col);
-        X86.Param;
-        pExpr(e1);
-        мПров.Тест(ParamComp(e1, param.T, param.ByRef), line, col, 114);
-        мПров.Тест(~(param.ByRef & e1.Read), line, col, 115);
-        мПров.Тест(~((e1.eType = ePROC) & (e1.id.Level > 3)), line, col, 116);
-        ЕСЛИ (e1.eType = eVAR) & ~param.ByRef ТОГДА
+         мДецл.Коорд_Уст(line, col);
+         X86.Param;
+         pExpr(e1);
+         мПров.Тест(ParamComp(e1, param.T, param.ByRef), line, col, 114);
+         мПров.Тест(~(param.ByRef & e1.Read), line, col, 115);
+         мПров.Тест(~((e1.eType = ePROC) & (e1.id.Level > 3)), line, col, 116);
+         ЕСЛИ (e1.eType = eVAR) & ~param.ByRef ТОГДА
             X86.Load(e1.T.тип_ном)
-        КОНЕЦ;
-        ЕСЛИ param.ByRef & (e1.T.тип_ном = TRECORD) ТОГДА
+         КОНЕЦ;
+         ЕСЛИ param.ByRef & (e1.T.тип_ном = TRECORD) ТОГДА
             ЕСЛИ e1.vparam ТОГДА
-                X86.LocalAdr(e1.id.Offset - 4, мДецл.модуль.уровень - e1.id.Level);
-                X86.Load(TINTEGER)
+               X86.LocalAdr(e1.id.Offset - 4, мДецл.модуль.уровень - e1.id.Level);
+               X86.Load(TINTEGER)
             АЕСЛИ e1.deref ТОГДА
-                X86.DerefType(0)
+               X86.DerefType(0)
             ИНАЧЕ
-                X86.PushConst(e1.T.номер)
+               X86.PushConst(e1.T.номер)
             КОНЕЦ
-        КОНЕЦ;
-        ЕСЛИ ~param.ByRef & (param.T.тип_ном В {TREAL, TLONGREAL}) ТОГДА
+         КОНЕЦ;
+         ЕСЛИ ~param.ByRef & (param.T.тип_ном В {TREAL, TLONGREAL}) ТОГДА
             X86.DropFpu(param.T.тип_ном = TLONGREAL)
-        КОНЕЦ;
-        ЕСЛИ (e1.T.тип_ном = TSTRING) & (param.T.тип_ном = TARRAY) ТОГДА
+         КОНЕЦ;
+         ЕСЛИ (e1.T.тип_ном = TSTRING) & (param.T.тип_ном = TARRAY) ТОГДА
             s := мДецл.Стр_Получ(e1.Value);
             ЕСЛИ s.длина = 1 ТОГДА
-                X86.Mono(s.номер)
+               X86.Mono(s.номер)
             КОНЕЦ;
             ЕСЛИ param.T.длина = 0 ТОГДА
-                A[0] := s.длина + 1;
-                X86.OpenArray(A, 1)
+               A[0] := s.длина + 1;
+               X86.OpenArray(A, 1)
             КОНЕЦ
-        КОНЕЦ;
-        ЕСЛИ (e1.T.тип_ном = TARRAY) & (мДецл.Dim(param.T) > мДецл.Dim(e1.T)) ТОГДА
+         КОНЕЦ;
+         ЕСЛИ (e1.T.тип_ном = TARRAY) & (мДецл.Dim(param.T) > мДецл.Dim(e1.T)) ТОГДА
             n := мДецл.Dim(param.T) - мДецл.Dim(e1.T);
             TA := мДецл.OpenBase(e1.T);
             ДЛЯ i := 0 ДО n - 1 ДЕЛАТЬ
-                A[i] := TA.длина;
-                TA := TA.Base
+               A[i] := TA.длина;
+               TA := TA.Base
             КОНЕЦ;
             ЕСЛИ мДецл.Dim(e1.T) = 0 ТОГДА
-                X86.OpenArray(A, n)
+               X86.OpenArray(A, n)
             ИНАЧЕ
-                X86.ExtArray(A, n, мДецл.Dim(e1.T))
+               X86.ExtArray(A, n, мДецл.Dim(e1.T))
             КОНЕЦ
-        КОНЕЦ;
-        param := param.следующ(мДецл.туПоле);
-        ЕСЛИ param # ПУСТО ТОГДА
-          мДецл.Ключ_Проверить(мКонст.опЗапятая);
-          мДецл.КлючСлед_Получ
-        КОНЕЦ
+         КОНЕЦ;
+         param := param.следующ(мДецл.туПоле);
+         ЕСЛИ param # ПУСТО ТОГДА
+            мДецл.Ключ_Проверить(мКонст.опЗапятая);
+            мДецл.КлючСлед_Получ
+         КОНЕЦ
       КОНЕЦ;
       мДецл.Ключ_Проверить(мКонст.опСкобкаПрКр);
       мДецл.КлючСлед_Получ
-    КОНЕЦ Call;
+   КОНЕЦ Call;
 
 ПРОЦЕДУРА Factor(ПЕР e: мДецл.тВыражение);
    ПЕРЕМ
