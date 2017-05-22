@@ -72,7 +72,8 @@
    тПроцедура = ПРОЦЕДУРА (err: БУЛЕВО);
 
    туЗвеноАсм* = УКАЗАТЕЛЬ НА ЗАПИСЬ (мЗвено.тЗвено)
-         cmd, clen, varadr, adr, tcmd, codeadr: ЦЕЛОЕ; short: БУЛЕВО
+         кмд, clen, varadr, adr, tcmd, codeadr: ЦЕЛОЕ;
+         short: БУЛЕВО
       КОНЕЦ;
 
    TFLT = МАССИВ 2 ИЗ ЦЕЛОЕ;
@@ -461,7 +462,7 @@
 
       cur := asmlist.предыдущ(туЗвеноАсм);
       ПОКА cur # ПУСТО ДЕЛАТЬ
-         Write(mSys.ADR(Code[cur.cmd]), cur.clen);
+         Write(mSys.ADR(Code[cur.кмд]), cur.clen);
          cur := cur.следующ(туЗвеноАсм)
       КОНЕЦ;
       Fill(Align(codesize, 200H) - codesize, 0X);
@@ -491,7 +492,7 @@
    НАЧАЛО
       НОВ(nov);
       MemErr(nov = ПУСТО);
-      nov.cmd := ccount;
+      nov.кмд := ccount;
       мЦепь.Вставить(asmlist, nov, current);
       current := current.следующ(туЗвеноАсм)
    КОНЕЦ New;
@@ -820,7 +821,7 @@
 ПРОЦЕДУРА CmpOpt(inv: БУЛЕВО): ЦЕЛОЕ;
   ПЕРЕМ cur: туЗвеноАсм; c: ЦЕЛОЕ;
   НАЧАЛО
-    c := ORD(Code[current.предыдущ.предыдущ(туЗвеноАсм).cmd]);
+    c := ORD(Code[current.предыдущ.предыдущ(туЗвеноАсм).кмд]);
     ЕСЛИ inv ТОГДА
       ЕСЛИ ODD(c) ТОГДА
         ВЫЧ(c)
@@ -1629,7 +1630,7 @@
 
       cur := asmlist.предыдущ(туЗвеноАсм);
       ПОКА cur # ПУСТО ДЕЛАТЬ
-        Write(mSys.ADR(Code[cur.cmd]), cur.clen);
+        Write(mSys.ADR(Code[cur.кмд]), cur.clen);
         cur := cur.следующ(туЗвеноАсм)
       КОНЕЦ;
       Fill(Align(size, 4) - size, 0X);
@@ -1680,7 +1681,7 @@
       cur := asmlist.предыдущ(туЗвеноАсм);
       ПОКА cur # ПУСТО ДЕЛАТЬ
         ЕСЛИ cur.tcmd IN {OCMD, GCMD} ТОГДА
-          mSys.GET(mSys.ADR(Code[cur.cmd]), a);
+          mSys.GET(mSys.ADR(Code[cur.кмд]), a);
           ЕСЛИ a < size ТОГДА
             a := a - mSys.SIZE(тЗаголовокKol);
             sec := 1
@@ -1691,7 +1692,7 @@
             a := a - size - datasize;
             sec := 3
           КОНЕЦ;
-          mSys.PUT(mSys.ADR(Code[cur.cmd]), a);
+          mSys.PUT(mSys.ADR(Code[cur.кмд]), a);
           mSys.PUT(mSys.ADR(Reloc[rcount]), cur.adr - mSys.SIZE(тЗаголовокKol));
           ДОБ(rcount, 4);
           mSys.PUT(mSys.ADR(Reloc[rcount]), sec);
@@ -1699,7 +1700,7 @@
           mSys.PUT(mSys.ADR(Reloc[rcount]), 06X); ДОБ(rcount);
           mSys.PUT(mSys.ADR(Reloc[rcount]), 00X); ДОБ(rcount);
         КОНЕЦ;
-        Write(mSys.ADR(Code[cur.cmd]), cur.clen);
+        Write(mSys.ADR(Code[cur.кмд]), cur.clen);
         cur := cur.следующ(туЗвеноАсм)
       КОНЕЦ;
       size := size2;
@@ -1796,7 +1797,7 @@
     Fill(2DDH, 90X);
     cur := asmlist.предыдущ(туЗвеноАсм);
     ПОКА cur # ПУСТО ДЕЛАТЬ
-      Write(mSys.ADR(Code[cur.cmd]), cur.clen);
+      Write(mSys.ADR(Code[cur.кмд]), cur.clen);
       cur := cur.следующ(туЗвеноАсм)
     КОНЕЦ;
     Fill(Align(code, 1000H) - code, 90X);
@@ -2000,7 +2001,7 @@
          OutCode("5859FF31FF3054")
       АЕСЛИ elf ТОГДА
          OutCode("6800000000");
-         glob := current.cmd;
+         glob := current.кмд;
       АЕСЛИ kos ИЛИ obj ТОГДА
          OutByte(54H)
       КОНЕЦ;
