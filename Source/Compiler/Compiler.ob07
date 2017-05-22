@@ -331,7 +331,7 @@
             КОНЕЦ
         ПОКАНЕ break;
         LoadVar
-    КОНЕЦ Designator;
+   КОНЕЦ Designator;
 
 ПРОЦЕДУРА Set(ПЕР e: мДецл.тВыражение);
    ПЕРЕМ
@@ -422,225 +422,225 @@
       мДецл.КлючСлед_Получ;
       мДецл.Коорд_Уст(line, col);
       ВЫБОР func ИЗ
-      |stABS:
-         pExpr(e1);
-         мПров.Тест(e1.T.тип_ном В {TINTEGER, TREAL, TLONGREAL}, line, col, 57);
-         Выраж_Загрузить(e1);
-         ЕСЛИ e1.eType = eCONST ТОГДА
-            e.Value := ABS(e1.Value);
-            e.eType := eCONST;
-            мПров.Тест(~((e1.T.тип_ном = TINTEGER) & (e1.Value = ДЛИН(FLT(мКонст.целое_мин)))), line, col, мДецл.IOVER)
-         КОНЕЦ;
-         ЕСЛИ e1.T.тип_ном = TINTEGER ТОГДА
-            X86.StFunc(X86.stABS)
-         ИНАЧЕ
-            X86.StFunc(X86.stFABS)
-         КОНЕЦ;
-         e.T := e1.T
-      |stODD:
-         pExpr(e1);
-         мПров.Тест(e1.T.тип_ном = TINTEGER, line, col, 52);
-         Выраж_Загрузить(e1);
-         ЕСЛИ e1.eType = eCONST ТОГДА
-            e.Value := ДЛИН(FLT(ORD(ODD(FLOOR(e1.Value)))));
-            e.eType := eCONST
-         КОНЕЦ;
-         X86.StFunc(X86.stODD);
-         e.T := sttypes[TBOOLEAN]
-      |stLEN:
-         Designator(e1);
-         мПров.Тест((e1.eType = eVAR) & (e1.T.тип_ном = TARRAY), line, col, 102);
-         ЕСЛИ e1.T.длина > 0 ТОГДА
-            X86.Len(-e1.T.длина)
-         ИНАЧЕ
-            X86.Len(мДецл.Dim(e1.T))
-         КОНЕЦ;
-         e.T := sttypes[TINTEGER]
-      |stLSL, stASR, stROR, stLSR:
-         pExpr(e1);
-         мПров.Тест(e1.T.тип_ном = TINTEGER, line, col, 52);
-         Выраж_Загрузить(e1);
-         мДецл.Ключ_Проверить(мКонст.опЗапятая);
-         мДецл.КлючСлед_Получ;
-         мДецл.Коорд_Уст(line, col);
-         pExpr(e2);
-         мПров.Тест(e2.T.тип_ном = TINTEGER, line, col, 52);
-         Выраж_Загрузить(e2);
-         ЕСЛИ (e1.eType = eCONST) & (e2.eType = eCONST) ТОГДА
-            a := FLOOR(e1.Value);
-            b := FLOOR(e2.Value);
+         |stABS:
+            pExpr(e1);
+            мПров.Тест(e1.T.тип_ном В {TINTEGER, TREAL, TLONGREAL}, line, col, 57);
+            Выраж_Загрузить(e1);
+            ЕСЛИ e1.eType = eCONST ТОГДА
+               e.Value := ABS(e1.Value);
+               e.eType := eCONST;
+               мПров.Тест(~((e1.T.тип_ном = TINTEGER) & (e1.Value = ДЛИН(FLT(мКонст.целое_мин)))), line, col, мДецл.IOVER)
+            КОНЕЦ;
+            ЕСЛИ e1.T.тип_ном = TINTEGER ТОГДА
+               X86.StFunc(X86.stABS)
+            ИНАЧЕ
+               X86.StFunc(X86.stFABS)
+            КОНЕЦ;
+            e.T := e1.T
+         |stODD:
+            pExpr(e1);
+            мПров.Тест(e1.T.тип_ном = TINTEGER, line, col, 52);
+            Выраж_Загрузить(e1);
+            ЕСЛИ e1.eType = eCONST ТОГДА
+               e.Value := ДЛИН(FLT(ORD(ODD(FLOOR(e1.Value)))));
+               e.eType := eCONST
+            КОНЕЦ;
+            X86.StFunc(X86.stODD);
+            e.T := sttypes[TBOOLEAN]
+         |stLEN:
+            Designator(e1);
+            мПров.Тест((e1.eType = eVAR) & (e1.T.тип_ном = TARRAY), line, col, 102);
+            ЕСЛИ e1.T.длина > 0 ТОГДА
+               X86.Len(-e1.T.длина)
+            ИНАЧЕ
+               X86.Len(мДецл.Dim(e1.T))
+            КОНЕЦ;
+            e.T := sttypes[TINTEGER]
+         |stLSL, stASR, stROR, stLSR:
+            pExpr(e1);
+            мПров.Тест(e1.T.тип_ном = TINTEGER, line, col, 52);
+            Выраж_Загрузить(e1);
+            мДецл.Ключ_Проверить(мКонст.опЗапятая);
+            мДецл.КлючСлед_Получ;
+            мДецл.Коорд_Уст(line, col);
+            pExpr(e2);
+            мПров.Тест(e2.T.тип_ном = TINTEGER, line, col, 52);
+            Выраж_Загрузить(e2);
+            ЕСЛИ (e1.eType = eCONST) & (e2.eType = eCONST) ТОГДА
+               a := FLOOR(e1.Value);
+               b := FLOOR(e2.Value);
+               ВЫБОР func ИЗ
+                  |stLSL: a := LSL(a, b)
+                  |stASR: a := ASR(a, b)
+                  |stROR: a := ROR(a, b)
+                  |stLSR: a := LSR(a, b)
+               ИНАЧЕ
+               КОНЕЦ;
+               e.Value := ДЛИН(FLT(a));
+               e.eType := eCONST
+            КОНЕЦ;
             ВЫБОР func ИЗ
-            |stLSL: a := LSL(a, b)
-            |stASR: a := ASR(a, b)
-            |stROR: a := ROR(a, b)
-            |stLSR: a := LSR(a, b)
-         ИНАЧЕ
-         КОНЕЦ;
-         e.Value := ДЛИН(FLT(a));
-         e.eType := eCONST
-      КОНЕЦ;
-      ВЫБОР func ИЗ
-        |stLSL: X86.StFunc(X86.stLSL)
-        |stASR: X86.StFunc(X86.stASR)
-        |stROR: X86.StFunc(X86.stROR)
-        |stLSR: X86.StFunc(X86.stLSR)
-        ИНАЧЕ
-        КОНЕЦ;
-        e.T := sttypes[TINTEGER]
-      |stFLOOR:
-        pExpr(e1);
-        мПров.Тест(e1.T.тип_ном В {TREAL, TLONGREAL}, line, col, 66);
-        Выраж_Загрузить(e1);
-        ЕСЛИ e1.eType = eCONST ТОГДА
-          мПров.Тест((e1.Value - 1.0D0 < ДЛИН(FLT(мКонст.целое_макс))) & (e1.Value >= ДЛИН(FLT(мКонст.целое_мин))), line, col, 74);
-          e.Value := ДЛИН(FLT(FLOOR(e1.Value)));
-          e.eType := eCONST
-        КОНЕЦ;
-        X86.StFunc(X86.stFLOOR);
-        e.T := sttypes[TINTEGER]
-      |stFLT:
-        pExpr(e1);
-        мПров.Тест(e1.T.тип_ном = TINTEGER, line, col, 52);
-        Выраж_Загрузить(e1);
-        ЕСЛИ e1.eType = eCONST ТОГДА
-          e.Value := e1.Value;
-          e.eType := eCONST
-        КОНЕЦ;
-        X86.StFunc(X86.stFLT);
-        e.T := sttypes[TREAL]
-      |stORD:
-        pExpr(e1);
-        мПров.Тест(e1.T.тип_ном В {TCHAR, TBOOLEAN, TSET, TSTRING}, line, col, 68);
-        ЕСЛИ e1.T.тип_ном = TSTRING ТОГДА
-          мПров.Тест(Стр_Длина(e1.Value) = 1, line, col, 94)
-        КОНЕЦ;
-        Выраж_Загрузить(e1);
-        ЕСЛИ e1.eType = eCONST ТОГДА
-          ЕСЛИ e1.T.тип_ном = TSTRING ТОГДА
-            str := мДецл.Стр_Получ(e1.Value);
-            e.Value := ДЛИН(FLT(ORD(str.стр[0])))
-          ИНАЧЕ
-            e.Value := e1.Value
-          КОНЕЦ;
-          e.eType := eCONST
-        КОНЕЦ;
-        ЕСЛИ e1.T.тип_ном = TBOOLEAN ТОГДА
-          X86.StFunc(X86.stORD)
-        КОНЕЦ;
-        e.T := sttypes[TINTEGER]
-      |stBITS:
-        pExpr(e1);
-        мПров.Тест(e1.T.тип_ном = TINTEGER, line, col, 52);
-        Выраж_Загрузить(e1);
-        ЕСЛИ e1.eType = eCONST ТОГДА
-          e.Value := e1.Value;
-          e.eType := eCONST
-        КОНЕЦ;
-        e.T := sttypes[TSET]
-      |stCHR:
-        pExpr(e1);
-        мПров.Тест(e1.T.тип_ном = TINTEGER, line, col, 52);
-        Выраж_Загрузить(e1);
-        e.T := sttypes[TCHAR];
-        ЕСЛИ e1.eType = eCONST ТОГДА
-          мПров.Тест(ASR(FLOOR(e1.Value), 8) = 0, line, col, 76);
-          str2 := мДецл.СтрМоно_Создать(CHR(FLOOR(e1.Value)));
-          mSys.GET(mSys.ADR(str2), p);
-          e.Value := ДЛИН(FLT(p));
-          e.T := sttypes[TSTRING];
-          e.eType := eCONST
-        КОНЕЦ
-      |stLONG:
-        pExpr(e1);
-        мПров.Тест(e1.T.тип_ном = TREAL, line, col, 71);
-        ЕСЛИ e1.eType = eCONST ТОГДА
-          e.Value := e1.Value;
-          e.eType := eCONST
-        КОНЕЦ;
-        Выраж_Загрузить(e1);
-        e.T := sttypes[TLONGREAL]
-      |stSHORT:
-        pExpr(e1);
-        мПров.Тест(e1.T.тип_ном = TLONGREAL, line, col, 70);
-        ЕСЛИ e1.eType = eCONST ТОГДА
-          мПров.Тест(ABS(e1.Value) <= ДЛИН(мКонст.вещ_макс), line, col, мДецл.FOVER);
-          мПров.Тест(ABS(e1.Value) >= ДЛИН(мКонст.вещ_мин), line, col, мДецл.UNDER);
-          e.Value := e1.Value;
-          e.eType := eCONST
-        КОНЕЦ;
-        Выраж_Загрузить(e1);
-        e.T := sttypes[TREAL]
-      |stLENGTH:
-        pExpr(e1);
-        мПров.Тест(ЕслиСтрока(e1), line, col, 141);
-        ЕСЛИ e1.T.тип_ном = TSTRING ТОГДА
-          str := мДецл.Стр_Получ(e1.Value);
-          ЕСЛИ str.длина = 1 ТОГДА
-            X86.Mono(str.номер);
-            X86.StrMono
-          КОНЕЦ;
-          e.Value := ДЛИН(FLT(ДЛИНА(str.стр)));
-          e.eType := eCONST
-        КОНЕЦ;
-        Str(e1);
-        e.T := sttypes[TINTEGER];
-        X86.StFunc(X86.stLENGTH)
-      |sysADR:
-        мПров.Тест((мСкан.сущность = lxIDENT) ИЛИ (мСкан.сущность = lxSTRING) ИЛИ (мСкан.сущность = lxCHX), line, col, 43);
-        ЕСЛИ мСкан.сущность = lxIDENT ТОГДА
-          Designator(e1);
-          мПров.Тест((e1.eType = eVAR) ИЛИ (e1.eType = ePROC) ИЛИ (e1.T = sttypes[TSTRING]), line, col, 43);
-          ЕСЛИ e1.eType = ePROC ТОГДА
-            X86.PushInt(e1.id.Number)
-          КОНЕЦ
-        ИНАЧЕ
-          pFactor(e1)
-        КОНЕЦ;
-        ЕСЛИ e1.T = sttypes[TSTRING] ТОГДА
-          str := мДецл.Стр_Получ(e1.Value);
-          ЕСЛИ str.длина = 1 ТОГДА
-            X86.Drop;
-            X86.PushInt(str.номер)
-          КОНЕЦ
-        КОНЕЦ;
-        e.T := sttypes[TINTEGER];
-        X86.ADR(мДецл.Dim(e1.T))
-      |sysBIT:
-        pExpr(e1);
-        мПров.Тест(e1.T.тип_ном = TINTEGER, line, col, 52);
-        Выраж_Загрузить(e1);
-        мДецл.Ключ_Проверить(мКонст.опЗапятая);
-        мДецл.КлючСлед_Получ;
-        мДецл.Коорд_Уст(line, col);
-        pExpr(e1);
-        мПров.Тест(e1.T.тип_ном = TINTEGER, line, col, 52);
-        Выраж_Загрузить(e1);
-        X86.StFunc(X86.sysBIT);
-        e.T := sttypes[TBOOLEAN]
-      |sysSIZE, sysTYPEID:
-        мДецл.ПроцедурРазм_Уст;
-        мДецл.Ключ_Проверить(lxIDENT);
-        T := мДецл.IdType(line, col);
-        мПров.Тест(T # ПУСТО, line, col, 42);
-        e.eType := eCONST;
-        e.T := sttypes[TINTEGER];
-        ЕСЛИ func = sysTYPEID ТОГДА
-          мПров.Тест(T.тип_ном В {TRECORD, TPOINTER}, line, col, 47);
-          ЕСЛИ T.тип_ном = TPOINTER ТОГДА
-            T := T.Base
-          КОНЕЦ;
-          e.Value := ДЛИН(FLT(T.номер));
-          X86.PushConst(T.номер)
-        ИНАЧЕ
-          e.Value := ДЛИН(FLT(T.размер));
-          X86.PushConst(T.размер)
-        КОНЕЦ
+               |stLSL: X86.StFunc(X86.stLSL)
+               |stASR: X86.StFunc(X86.stASR)
+               |stROR: X86.StFunc(X86.stROR)
+               |stLSR: X86.StFunc(X86.stLSR)
+            ИНАЧЕ
+            КОНЕЦ;
+            e.T := sttypes[TINTEGER]
+         |stFLOOR:
+            pExpr(e1);
+            мПров.Тест(e1.T.тип_ном В {TREAL, TLONGREAL}, line, col, 66);
+            Выраж_Загрузить(e1);
+            ЕСЛИ e1.eType = eCONST ТОГДА
+               мПров.Тест((e1.Value - 1.0D0 < ДЛИН(FLT(мКонст.целое_макс))) & (e1.Value >= ДЛИН(FLT(мКонст.целое_мин))), line, col, 74);
+               e.Value := ДЛИН(FLT(FLOOR(e1.Value)));
+               e.eType := eCONST
+            КОНЕЦ;
+            X86.StFunc(X86.stFLOOR);
+            e.T := sttypes[TINTEGER]
+         |stFLT:
+            pExpr(e1);
+            мПров.Тест(e1.T.тип_ном = TINTEGER, line, col, 52);
+            Выраж_Загрузить(e1);
+            ЕСЛИ e1.eType = eCONST ТОГДА
+               e.Value := e1.Value;
+               e.eType := eCONST
+            КОНЕЦ;
+            X86.StFunc(X86.stFLT);
+            e.T := sttypes[TREAL]
+         |stORD:
+            pExpr(e1);
+            мПров.Тест(e1.T.тип_ном В {TCHAR, TBOOLEAN, TSET, TSTRING}, line, col, 68);
+            ЕСЛИ e1.T.тип_ном = TSTRING ТОГДА
+               мПров.Тест(Стр_Длина(e1.Value) = 1, line, col, 94)
+            КОНЕЦ;
+            Выраж_Загрузить(e1);
+            ЕСЛИ e1.eType = eCONST ТОГДА
+               ЕСЛИ e1.T.тип_ном = TSTRING ТОГДА
+                  str := мДецл.Стр_Получ(e1.Value);
+                  e.Value := ДЛИН(FLT(ORD(str.стр[0])))
+               ИНАЧЕ
+                  e.Value := e1.Value
+               КОНЕЦ;
+               e.eType := eCONST
+            КОНЕЦ;
+            ЕСЛИ e1.T.тип_ном = TBOOLEAN ТОГДА
+               X86.StFunc(X86.stORD)
+            КОНЕЦ;
+            e.T := sttypes[TINTEGER]
+         |stBITS:
+            pExpr(e1);
+            мПров.Тест(e1.T.тип_ном = TINTEGER, line, col, 52);
+            Выраж_Загрузить(e1);
+            ЕСЛИ e1.eType = eCONST ТОГДА
+               e.Value := e1.Value;
+               e.eType := eCONST
+            КОНЕЦ;
+            e.T := sttypes[TSET]
+         |stCHR:
+            pExpr(e1);
+            мПров.Тест(e1.T.тип_ном = TINTEGER, line, col, 52);
+            Выраж_Загрузить(e1);
+            e.T := sttypes[TCHAR];
+            ЕСЛИ e1.eType = eCONST ТОГДА
+               мПров.Тест(ASR(FLOOR(e1.Value), 8) = 0, line, col, 76);
+               str2 := мДецл.СтрМоно_Создать(CHR(FLOOR(e1.Value)));
+               mSys.GET(mSys.ADR(str2), p);
+               e.Value := ДЛИН(FLT(p));
+               e.T := sttypes[TSTRING];
+               e.eType := eCONST
+            КОНЕЦ
+         |stLONG:
+            pExpr(e1);
+            мПров.Тест(e1.T.тип_ном = TREAL, line, col, 71);
+            ЕСЛИ e1.eType = eCONST ТОГДА
+               e.Value := e1.Value;
+               e.eType := eCONST
+            КОНЕЦ;
+            Выраж_Загрузить(e1);
+            e.T := sttypes[TLONGREAL]
+         |stSHORT:
+            pExpr(e1);
+            мПров.Тест(e1.T.тип_ном = TLONGREAL, line, col, 70);
+            ЕСЛИ e1.eType = eCONST ТОГДА
+               мПров.Тест(ABS(e1.Value) <= ДЛИН(мКонст.вещ_макс), line, col, мДецл.FOVER);
+               мПров.Тест(ABS(e1.Value) >= ДЛИН(мКонст.вещ_мин), line, col, мДецл.UNDER);
+               e.Value := e1.Value;
+               e.eType := eCONST
+            КОНЕЦ;
+            Выраж_Загрузить(e1);
+            e.T := sttypes[TREAL]
+         |stLENGTH:
+            pExpr(e1);
+            мПров.Тест(ЕслиСтрока(e1), line, col, 141);
+            ЕСЛИ e1.T.тип_ном = TSTRING ТОГДА
+               str := мДецл.Стр_Получ(e1.Value);
+               ЕСЛИ str.длина = 1 ТОГДА
+                  X86.Mono(str.номер);
+                  X86.StrMono
+               КОНЕЦ;
+               e.Value := ДЛИН(FLT(ДЛИНА(str.стр)));
+               e.eType := eCONST
+            КОНЕЦ;
+            Str(e1);
+            e.T := sttypes[TINTEGER];
+            X86.StFunc(X86.stLENGTH)
+         |sysADR:
+            мПров.Тест((мСкан.сущность = lxIDENT) ИЛИ (мСкан.сущность = lxSTRING) ИЛИ (мСкан.сущность = lxCHX), line, col, 43);
+            ЕСЛИ мСкан.сущность = lxIDENT ТОГДА
+               Designator(e1);
+               мПров.Тест((e1.eType = eVAR) ИЛИ (e1.eType = ePROC) ИЛИ (e1.T = sttypes[TSTRING]), line, col, 43);
+               ЕСЛИ e1.eType = ePROC ТОГДА
+                  X86.PushInt(e1.id.Number)
+               КОНЕЦ
+            ИНАЧЕ
+               pFactor(e1)
+            КОНЕЦ;
+            ЕСЛИ e1.T = sttypes[TSTRING] ТОГДА
+               str := мДецл.Стр_Получ(e1.Value);
+               ЕСЛИ str.длина = 1 ТОГДА
+                  X86.Drop;
+                  X86.PushInt(str.номер)
+               КОНЕЦ
+            КОНЕЦ;
+            e.T := sttypes[TINTEGER];
+            X86.ADR(мДецл.Dim(e1.T))
+         |sysBIT:
+            pExpr(e1);
+            мПров.Тест(e1.T.тип_ном = TINTEGER, line, col, 52);
+            Выраж_Загрузить(e1);
+            мДецл.Ключ_Проверить(мКонст.опЗапятая);
+            мДецл.КлючСлед_Получ;
+            мДецл.Коорд_Уст(line, col);
+            pExpr(e1);
+            мПров.Тест(e1.T.тип_ном = TINTEGER, line, col, 52);
+            Выраж_Загрузить(e1);
+            X86.StFunc(X86.sysBIT);
+            e.T := sttypes[TBOOLEAN]
+         |sysSIZE, sysTYPEID:
+            мДецл.ПроцедурРазм_Уст;
+            мДецл.Ключ_Проверить(lxIDENT);
+            T := мДецл.IdType(line, col);
+            мПров.Тест(T # ПУСТО, line, col, 42);
+            e.eType := eCONST;
+            e.T := sttypes[TINTEGER];
+            ЕСЛИ func = sysTYPEID ТОГДА
+               мПров.Тест(T.тип_ном В {TRECORD, TPOINTER}, line, col, 47);
+               ЕСЛИ T.тип_ном = TPOINTER ТОГДА
+                  T := T.Base
+               КОНЕЦ;
+               e.Value := ДЛИН(FLT(T.номер));
+               X86.PushConst(T.номер)
+            ИНАЧЕ
+               e.Value := ДЛИН(FLT(T.размер));
+               X86.PushConst(T.размер)
+            КОНЕЦ
       ИНАЧЕ
-        мПров.Тест(ЛОЖЬ, line2, col2, 73)
+         мПров.Тест(ЛОЖЬ, line2, col2, 73)
       КОНЕЦ;
       мДецл.Ключ_Проверить(мКонст.опСкобкаПрКр);
       мДецл.КлючСлед_Получ
-    КОНЕЦ StFunc;
+   КОНЕЦ StFunc;
 
 ПРОЦЕДУРА ProcTypeComp(T1, T2: мТип.туТип): БУЛЕВО;
     ПЕРЕМ
