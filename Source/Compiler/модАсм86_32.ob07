@@ -78,10 +78,15 @@
    тАдрКод = ЗАПИСЬ (тАдр)
          код : ЦЕЛОЕ
       КОНЕЦ;
+      
+   тАдрПерем = ЗАПИСЬ (тАдр)
+         перем : ЦЕЛОЕ
+      КОНЕЦ;
    
    туЗвеноАсм* = УКАЗАТЕЛЬ НА ЗАПИСЬ (мЗвено.тЗвено)
          код : тАдрКод;
-         кмд, clen, varadr, adr, tcmd : ЦЕЛОЕ;
+         перем : тАдрПерем;
+         кмд, clen, adr, tcmd : ЦЕЛОЕ;
          short: БУЛЕВО
       КОНЕЦ;
 
@@ -511,7 +516,7 @@
       New;
       current.clen := 0;
       current.tcmd := ECMD;
-      current.varadr := varadr
+      current.перем.адрес := varadr
    КОНЕЦ Empty;
 
 ПРОЦЕДУРА OutByte(byte: ЦЕЛОЕ);
@@ -670,7 +675,7 @@
     Code[ccount] := jamp;
     ДОБ(ccount);
     current.код.адрес := mSys.ADR(Code[ccount]);
-    current.varadr := mSys.ADR(Labels[label]);
+    current.перем.адрес := mSys.ADR(Labels[label]);
     current.tcmd := JCMD;
     current.short := ИСТИНА;
     ДОБ(ccount, 4)
@@ -685,7 +690,7 @@
 ПРОЦЕДУРА Label*(label: ЦЕЛОЕ);
   НАЧАЛО
     New;
-    current.varadr := mSys.ADR(Labels[label]);
+    current.перем.адрес := mSys.ADR(Labels[label]);
     current.tcmd := LCMD
   КОНЕЦ Label;
 
@@ -694,7 +699,7 @@
     New;
     current.clen := 4;
     current.код.адрес := mSys.ADR(Code[ccount]);
-    current.varadr := mSys.ADR(Labels[Number]);
+    current.перем.адрес := mSys.ADR(Labels[Number]);
     current.tcmd := OCMD;
     ДОБ(ccount, 4)
   КОНЕЦ CmdN;
@@ -792,7 +797,7 @@
     Code[ccount] := CALL;
     ДОБ(ccount);
     current.код.адрес := mSys.ADR(Code[ccount]);
-    current.varadr := mSys.ADR(RtlProc[Proc]);
+    current.перем.адрес := mSys.ADR(RtlProc[Proc]);
     current.tcmd := JCMD;
     ДОБ(ccount, 4)
   КОНЕЦ CallRTL;
@@ -864,10 +869,10 @@
   КОНЕЦ ifwh;
 
 ПРОЦЕДУРА PushConst*(Number: ЦЕЛОЕ);
-  НАЧАЛО
-    IntByte("6A", "68", Number);
-    current.предыдущ(туЗвеноАсм).varadr := Number
-  КОНЕЦ PushConst;
+   НАЧАЛО
+      IntByte("6A", "68", Number);
+      current.предыдущ(туЗвеноАсм).перем.адрес := Number
+   КОНЕЦ PushConst;
 
 ПРОЦЕДУРА IfWhile*(L: ЦЕЛОЕ; orop: БУЛЕВО);
   ПЕРЕМ c, L1: ЦЕЛОЕ;
@@ -1304,22 +1309,22 @@
   КОНЕЦ StFunc;
 
 ПРОЦЕДУРА Load*(T: ЦЕЛОЕ);
-  ПЕРЕМ
-    lastcmd: туЗвеноАсм;
-    offset: ЦЕЛОЕ;
+   ПЕРЕМ
+      lastcmd: туЗвеноАсм;
+      offset: ЦЕЛОЕ;
 
-  ПРОЦЕДУРА del;
-    НАЧАЛО
-      lastcmd.tcmd := 0;
-      offset := lastcmd.varadr;
-      lastcmd := lastcmd.предыдущ(туЗвеноАсм);
-      ПОКА lastcmd.tcmd # ECMD ДЕЛАТЬ
-        lastcmd.clen := 0;
-        lastcmd.tcmd := 0;
-        lastcmd := lastcmd.предыдущ(туЗвеноАсм)
-      КОНЕЦ;
-      lastcmd.tcmd := 0
-    КОНЕЦ del;
+   ПРОЦЕДУРА del;
+      НАЧАЛО
+         lastcmd.tcmd := 0;
+         offset := lastcmd.перем.адрес;
+         lastcmd := lastcmd.предыдущ(туЗвеноАсм);
+         ПОКА lastcmd.tcmd # ECMD ДЕЛАТЬ
+            lastcmd.clen := 0;
+            lastcmd.tcmd := 0;
+            lastcmd := lastcmd.предыдущ(туЗвеноАсм)
+         КОНЕЦ;
+         lastcmd.tcmd := 0
+      КОНЕЦ del;
 
   НАЧАЛО
     lastcmd := current;
@@ -1824,32 +1829,32 @@
   КОНЕЦ WriteELF;
 
 ПРОЦЕДУРА FixLabels(FName: МАССИВ ИЗ СИМВ; stk, gsize, glob: ЦЕЛОЕ);
-  ПЕРЕМ
-    size, asize, i, rdatasize, RCount, n, temp, temp2, temp3: ЦЕЛОЕ;
-    cur: туЗвеноАсм;
-    R: тРелок;
-    c: СИМВ;
-  НАЧАЛО
-    dcount := Align(dcount, 4);
-    ЕСЛИ dll ТОГДА
-      LoadAdr := 10000000H;
-      PackExport(ExecName)
-    АЕСЛИ con ИЛИ gui ТОГДА
-      LoadAdr := 400000H
-    АЕСЛИ kos ИЛИ obj ТОГДА
-      LoadAdr := mSys.SIZE(тЗаголовокKol)
-    АЕСЛИ elf ТОГДА
-      LoadAdr := 134514420 + 1024;
-      ДОБ(gsize, 1024)
-    КОНЕЦ;
+   ПЕРЕМ
+      size, asize, i, rdatasize, RCount, n, temp, temp2, temp3: ЦЕЛОЕ;
+      cur: туЗвеноАсм;
+      R: тРелок;
+      c: СИМВ;
+   НАЧАЛО
+      dcount := Align(dcount, 4);
+      ЕСЛИ dll ТОГДА
+         LoadAdr := 10000000H;
+         PackExport(ExecName)
+      АЕСЛИ con ИЛИ gui ТОГДА
+         LoadAdr := 400000H
+      АЕСЛИ kos ИЛИ obj ТОГДА
+         LoadAdr := mSys.SIZE(тЗаголовокKol)
+      АЕСЛИ elf ТОГДА
+         LoadAdr := 134514420 + 1024;
+         ДОБ(gsize, 1024)
+      КОНЕЦ;
 
-    ЕСЛИ dll ИЛИ con ИЛИ gui ТОГДА
-      rdatasize := 0DAH + etable.size;
-      size := 1000H + LoadAdr;
-    АЕСЛИ kos ИЛИ elf ИЛИ obj ТОГДА
-      rdatasize := 0;
-      size := LoadAdr
-    КОНЕЦ;
+      ЕСЛИ dll ИЛИ con ИЛИ gui ТОГДА
+         rdatasize := 0DAH + etable.size;
+         size := 1000H + LoadAdr;
+      АЕСЛИ kos ИЛИ elf ИЛИ obj ТОГДА
+         rdatasize := 0;
+         size := LoadAdr
+      КОНЕЦ;
 
     Optimization;
     temp2 := size;
@@ -1857,7 +1862,7 @@
     ПОКА cur # ПУСТО ДЕЛАТЬ
       cur.adr := size;
       ЕСЛИ cur.tcmd = LCMD ТОГДА
-        mSys.PUT(cur.varadr, size)
+        mSys.PUT(cur.перем.адрес, size)
       КОНЕЦ;
       size := size + cur.clen;
       cur := cur.следующ(туЗвеноАсм)
@@ -1868,9 +1873,9 @@
     ПОКА cur # ПУСТО ДЕЛАТЬ
       cur.adr := size;
       ЕСЛИ cur.tcmd = LCMD ТОГДА
-        mSys.PUT(cur.varadr, size)
+        mSys.PUT(cur.перем.адрес, size)
       АЕСЛИ (cur.tcmd = JCMD) & cur.short ТОГДА
-        mSys.GET(cur.varadr, i);
+        mSys.GET(cur.перем.адрес, i);
         temp3 := i - cur.следующ(туЗвеноАсм).adr;
         ЕСЛИ (-131 <= temp3) & (temp3 <= 123) ТОГДА
           mSys.GET(cur(туЗвеноАсм).код.адрес - 1, c);
@@ -1938,13 +1943,13 @@
     ПОКА cur # ПУСТО ДЕЛАТЬ
       ВЫБОР cur.tcmd ИЗ
       |JCMD:
-        mSys.GET(cur.varadr, i);
+        mSys.GET(cur.перем.адрес, i);
         mSys.PUT(cur.код.адрес, i - cur.следующ(туЗвеноАсм).adr)
       |GCMD:
         mSys.GET(cur.код.адрес, i);
         mSys.PUT(cur.код.адрес, i + temp3)
       |OCMD:
-        mSys.MOVE(cur.varadr, cur.код.адрес, 4)
+        mSys.MOVE(cur.перем.адрес, cur.код.адрес, 4)
       ИНАЧЕ
       КОНЕЦ;
       ЕСЛИ dll & (cur.tcmd IN {GCMD, OCMD}) ТОГДА
