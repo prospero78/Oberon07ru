@@ -322,132 +322,134 @@
    ÊÎÍÅÖ InitArray;
 
 ÏĞÎÖÅÄÓĞÀ WriteF(F, A, N: ÖÅËÎÅ);
-  ÍÀ×ÀËÎ
-    ÅÑËÈ ìÔàéë.Çàïèñàòü(F, A, N) # N ÒÎÃÄÀ
-      Err(2)
-    ÊÎÍÅÖ
-  ÊÎÍÅÖ WriteF;
+   ÍÀ×ÀËÎ
+      ÅÑËÈ ìÔàéë.Çàïèñàòü(F, A, N) # N ÒÎÃÄÀ
+         Err(2)
+      ÊÎÍÅÖ
+   ÊÎÍÅÖ WriteF;
 
 ÏĞÎÖÅÄÓĞÀ Write(A, N: ÖÅËÎÅ);
-  ÍÀ×ÀËÎ
-    mSys.MOVE(A, OutFilePos, N);
-    OutFilePos := OutFilePos + N
-  ÊÎÍÅÖ Write;
+   ÍÀ×ÀËÎ
+      mSys.MOVE(A, OutFilePos, N);
+      OutFilePos := OutFilePos + N
+   ÊÎÍÅÖ Write;
 
 ÏĞÎÖÅÄÓĞÀ Fill(n: ÖÅËÎÅ; c: ÑÈÌÂ);
-  ÏÅĞÅÌ i: ÖÅËÎÅ;
-  ÍÀ×ÀËÎ
-    ÄËß i := 1 ÄÎ n ÄÅËÀÒÜ
-      Write(mSys.ADR(c), 1)
-    ÊÎÍÅÖ
-  ÊÎÍÅÖ Fill;
+   ÏÅĞÅÌ 
+      i: ÖÅËÎÅ;
+   ÍÀ×ÀËÎ
+      ÄËß i := 1 ÄÎ n ÄÅËÀÒÜ
+         Write(mSys.ADR(c), 1)
+      ÊÎÍÅÖ
+   ÊÎÍÅÖ Fill;
 
 ÏĞÎÖÅÄÓĞÀ SetSection(ÏÅĞ Section: òÑåêöèÿ; name: òÑåêöèÿÈìÿ; size, adr, sizealign, OAPfile, attrflags: ÖÅËÎÅ);
-  ÍÀ×ÀËÎ
-    Section.name := name;
-    Section.size := size;
-    Section.adr := adr;
-    Section.sizealign := sizealign;
-    Section.OAPfile := OAPfile;
-    Section.attrflags := attrflags;
-  ÊÎÍÅÖ SetSection;
+   ÍÀ×ÀËÎ
+      Section.name := name;
+      Section.size := size;
+      Section.adr := adr;
+      Section.sizealign := sizealign;
+      Section.OAPfile := OAPfile;
+      Section.attrflags := attrflags;
+   ÊÎÍÅÖ SetSection;
 
 ÏĞÎÖÅÄÓĞÀ WritePE(FName: ÌÀÑÑÈÂ ÈÇ ÑÈÌÂ; stksize, codesize, datasize, rdatasize, gsize: ÖÅËÎÅ);
-  CONST textattr = 60000020H; rdataattr = 40000040H; dataattr = 0C0000040H; relocattr = 42000040H;
-  ÏÅĞÅÌ i, F, adr, acodesize, compver, version, stkalloc, heapsize, heapalloc, filesize, filebuf: ÖÅËÎÅ;
+   CONST
+      textattr = 60000020H; rdataattr = 40000040H; dataattr = 0C0000040H; relocattr = 42000040H;
+   ÏÅĞÅÌ
+      i, F, adr, acodesize, compver, version, stkalloc, heapsize, heapalloc, filesize, filebuf: ÖÅËÎÅ;
       cur: òóÏóíêòÀñì;
-  ÍÀ×ÀËÎ
+   ÍÀ×ÀËÎ
+      compver := 0;
+      version := 0;
+      stkalloc := stksize;
+      heapsize := 100000H;
+      heapalloc := 100000H;
+      acodesize := Align(codesize, 1000H) + 1000H;
+      adr := mSys.ADR(rdata);
+      filesize := acodesize + Align(rdatasize, 1000H) + Align(datasize, 1000H) + Align(rcount, 1000H);
 
-    compver := 0;
-    version := 0;
-    stkalloc := stksize;
-    heapsize := 100000H;
-    heapalloc := 100000H;
-    acodesize := Align(codesize, 1000H) + 1000H;
-    adr := mSys.ADR(rdata);
-    filesize := acodesize + Align(rdatasize, 1000H) + Align(datasize, 1000H) + Align(rcount, 1000H);
+      InitArray(adr, "5000000040000000000000003400000000000000000000006200000000000000");
+      InitArray(adr, "0000000000000000000000000000000000000000500000004000000000000000");
+      InitArray(adr, "A4014C6F61644C6962726172794100001F0147657450726F6341646472657373");
+      InitArray(adr, "00006B65726E656C33322E646C6C0000");
 
-    InitArray(adr, "5000000040000000000000003400000000000000000000006200000000000000");
-    InitArray(adr, "0000000000000000000000000000000000000000500000004000000000000000");
-    InitArray(adr, "A4014C6F61644C6962726172794100001F0147657450726F6341646472657373");
-    InitArray(adr, "00006B65726E656C33322E646C6C0000");
+      rdata[ 0] := acodesize + 50H;
+      rdata[ 1] := acodesize + 40H;
+      rdata[ 3] := acodesize + 34H;
+      rdata[ 6] := acodesize + 62H;
+      rdata[ 7] := acodesize;
+      rdata[13] := acodesize + 50H;
+      rdata[14] := acodesize + 40H;
 
-    rdata[ 0] := acodesize + 50H;
-    rdata[ 1] := acodesize + 40H;
-    rdata[ 3] := acodesize + 34H;
-    rdata[ 6] := acodesize + 62H;
-    rdata[ 7] := acodesize;
-    rdata[13] := acodesize + 50H;
-    rdata[14] := acodesize + 40H;
+      adr := mSys.ADR(Header.msdos);
+      InitArray(adr, "4D5A90000300000004000000FFFF0000B8000000000000004000000000000000");
+      InitArray(adr, "00000000000000000000000000000000000000000000000000000000B0000000");
+      InitArray(adr, "0E1FBA0E00B409CD21B8014CCD21546869732070726F6772616D2063616E6E6F");
+      InitArray(adr, "742062652072756E20696E20444F53206D6F64652E0D0D0A2400000000000000");
+      InitArray(adr, "5DCF9F8719AEF1D419AEF1D419AEF1D497B1E2D413AEF1D4E58EE3D418AEF1D4");
+      InitArray(adr, "5269636819AEF1D4000000000000000050450000");
+      Header.typecomp := IntToCard16(014CH);
+      ÅÑËÈ dll ÒÎÃÄÀ
+         Header.seccount := IntToCard16(0004H);
+         Header.infflags := IntToCard16(210EH)
+      ÈÍÀ×Å
+         Header.seccount := IntToCard16(0003H);
+         Header.infflags := IntToCard16(010FH)
+      ÊÎÍÅÖ;
+      Header.time := ìÊîíñò.äàòà;
+      Header.PEoptsize := IntToCard16(00E0H);
+      Header.PEfile := IntToCard16(010BH);
+      Header.compver := IntToCard16(compver);
+      Header.codesize := Align(codesize, 200H);
+      Header.datasize := Align(datasize + gsize, 200H) + Align(rdatasize, 200H) + Align(rcount, 200H);
+      Header.startadr := 1000H;
+      Header.codeadr := 1000H;
+      Header.rdataadr := Header.codeadr + Align(codesize, 1000H);
+      Header.loadadr := LoadAdr;
+      Header.secalign := 1000H;
+      Header.filealign := 0200H;
+      Header.oldestver := 0004H;
+      Header.version := version;
+      Header.oldestverNT := 0004H;
+      Header.filesize := Align(codesize, 1000H) + Align(datasize + gsize, 1000H) + Align(rdatasize, 1000H) + Align(rcount, 1000H) + 1000H;
+      Header.headersize := 0400H;
+      Header.UI := IntToCard16(ORD(con) + 2);
+      Header.stksize := stksize;
+      Header.stkalloc := stkalloc;
+      Header.heapsize := heapsize;
+      Header.heapalloc := heapalloc;
+      Header.structcount := 10H;
+      ÅÑËÈ dll ÒÎÃÄÀ
+         Header.structs[0].adr := Header.rdataadr + 0DAH;
+         Header.structs[0].size := etable.size
+      ÊÎÍÅÖ;
 
-    adr := mSys.ADR(Header.msdos);
-    InitArray(adr, "4D5A90000300000004000000FFFF0000B8000000000000004000000000000000");
-    InitArray(adr, "00000000000000000000000000000000000000000000000000000000B0000000");
-    InitArray(adr, "0E1FBA0E00B409CD21B8014CCD21546869732070726F6772616D2063616E6E6F");
-    InitArray(adr, "742062652072756E20696E20444F53206D6F64652E0D0D0A2400000000000000");
-    InitArray(adr, "5DCF9F8719AEF1D419AEF1D419AEF1D497B1E2D413AEF1D4E58EE3D418AEF1D4");
-    InitArray(adr, "5269636819AEF1D4000000000000000050450000");
-    Header.typecomp := IntToCard16(014CH);
-    ÅÑËÈ dll ÒÎÃÄÀ
-      Header.seccount := IntToCard16(0004H);
-      Header.infflags := IntToCard16(210EH)
-    ÈÍÀ×Å
-      Header.seccount := IntToCard16(0003H);
-      Header.infflags := IntToCard16(010FH)
-    ÊÎÍÅÖ;
-    Header.time := ìÊîíñò.äàòà;
-    Header.PEoptsize := IntToCard16(00E0H);
-    Header.PEfile := IntToCard16(010BH);
-    Header.compver := IntToCard16(compver);
-    Header.codesize := Align(codesize, 200H);
-    Header.datasize := Align(datasize + gsize, 200H) + Align(rdatasize, 200H) + Align(rcount, 200H);
-    Header.startadr := 1000H;
-    Header.codeadr := 1000H;
-    Header.rdataadr := Header.codeadr + Align(codesize, 1000H);
-    Header.loadadr := LoadAdr;
-    Header.secalign := 1000H;
-    Header.filealign := 0200H;
-    Header.oldestver := 0004H;
-    Header.version := version;
-    Header.oldestverNT := 0004H;
-    Header.filesize := Align(codesize, 1000H) + Align(datasize + gsize, 1000H) + Align(rdatasize, 1000H) + Align(rcount, 1000H) + 1000H;
-    Header.headersize := 0400H;
-    Header.UI := IntToCard16(ORD(con) + 2);
-    Header.stksize := stksize;
-    Header.stkalloc := stkalloc;
-    Header.heapsize := heapsize;
-    Header.heapalloc := heapalloc;
-    Header.structcount := 10H;
-    ÅÑËÈ dll ÒÎÃÄÀ
-      Header.structs[0].adr := Header.rdataadr + 0DAH;
-      Header.structs[0].size := etable.size
-    ÊÎÍÅÖ;
+      Header.structs[1].adr := Header.rdataadr + 0CH;
+      Header.structs[1].size := 28H;
+      Header.structs[12].adr := Header.rdataadr;
+      Header.structs[12].size := 0CH;
 
-    Header.structs[1].adr := Header.rdataadr + 0CH;
-    Header.structs[1].size := 28H;
-    Header.structs[12].adr := Header.rdataadr;
-    Header.structs[12].size := 0CH;
+      SetSection(Header.sections[0], ".text", codesize, 1000H, Align(codesize, 200H), 400H, textattr);
+      SetSection(Header.sections[1], ".rdata", rdatasize, Align(codesize, 1000H) + 1000H, Align(rdatasize, 200H),
+         Align(codesize, 200H) + 400H, rdataattr);
+      SetSection(Header.sections[2], ".data", datasize + gsize, Align(codesize, 1000H) + Align(rdatasize, 1000H) + 1000H,
+         Align(datasize, 200H), Align(codesize, 200H) + Align(rdatasize, 200H) + 400H, dataattr);
 
-    SetSection(Header.sections[0], ".text", codesize, 1000H, Align(codesize, 200H), 400H, textattr);
-    SetSection(Header.sections[1], ".rdata", rdatasize, Align(codesize, 1000H) + 1000H, Align(rdatasize, 200H),
-      Align(codesize, 200H) + 400H, rdataattr);
-    SetSection(Header.sections[2], ".data", datasize + gsize, Align(codesize, 1000H) + Align(rdatasize, 1000H) + 1000H,
-      Align(datasize, 200H), Align(codesize, 200H) + Align(rdatasize, 200H) + 400H, dataattr);
+      ÅÑËÈ dll ÒÎÃÄÀ
+         SetSection(RelocSection, ".reloc", rcount, Header.sections[2].adr + Align(datasize + gsize, 1000H), Align(rcount, 200H),
+            Header.sections[2].OAPfile + Align(datasize, 200H), relocattr);
+         Header.structs[5].adr := RelocSection.adr;
+         Header.structs[5].size := rcount
+      ÊÎÍÅÖ;
 
-    ÅÑËÈ dll ÒÎÃÄÀ
-      SetSection(RelocSection, ".reloc", rcount, Header.sections[2].adr + Align(datasize + gsize, 1000H), Align(rcount, 200H),
-        Header.sections[2].OAPfile + Align(datasize, 200H), relocattr);
-      Header.structs[5].adr := RelocSection.adr;
-      Header.structs[5].size := rcount
-    ÊÎÍÅÖ;
-
-    F := ìÔàéë.Ñîçäàòü(FName);
-    ÅÑËÈ F = 0 ÒÎÃÄÀ
-      Err(1)
-    ÊÎÍÅÖ;
-    OutFilePos := ìÏàì.Ïîëó÷(filesize);
-    filebuf := OutFilePos;
-    ìÏàì.Îøèáêà(OutFilePos = 0);
+      F := ìÔàéë.Ñîçäàòü(FName);
+      ÅÑËÈ F = 0 ÒÎÃÄÀ
+         Err(1)
+      ÊÎÍÅÖ;
+      OutFilePos := ìÏàì.Ïîëó÷(filesize);
+      filebuf := OutFilePos;
+      ìÏàì.Îøèáêà(OutFilePos = 0);
 
     Write(mSys.ADR(Header), mSys.SIZE(òÇàãîëîâîê));
     ÅÑËÈ dll ÒÎÃÄÀ
