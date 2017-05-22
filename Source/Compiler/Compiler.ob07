@@ -109,7 +109,7 @@
 ПРОЦЕДУРА Designator(ПЕР выраж_: мДецл.тВыражение);
    ПЕРЕМ
       id: мДецл.туСущность;
-      name: мУзел.туУзел;
+      уУзел: мУзел.туУзел;
       выражение: мДецл.тВыражение;
       line, col, i, n, bases, glob, loc, idx: ЦЕЛОЕ;
       imp, break, guard: БУЛЕВО;
@@ -133,17 +133,17 @@
       loc := -1;
       мДецл.Коорд_Уст(line, col);
       мДецл.Ключ_Проверить(lxIDENT);
-      name := мСкан.id;
-      id := мДецл.GetIdent(name);
+      уУзел := мСкан.id;
+      id := мДецл.GetIdent(уУзел);
       ЕСЛИ (id # ПУСТО) & (id.iType = IDMOD) ТОГДА
          мДецл.КлючСлед_Получ;
          мДецл.Ключ_Проверить(lxDot);
          мДецл.КлючСлед_Получ;
          мДецл.Ключ_Проверить(lxIDENT);
          мДецл.Коорд_Уст(line, col);
-         name := мСкан.id;
+         уУзел := мСкан.id;
          imp := id.модуль # мДецл.модуль;
-         id := мДецл.GetQIdent(id.модуль, name)
+         id := мДецл.GetQIdent(id.модуль, уУзел)
       КОНЕЦ;
       мПров.Тест(id # ПУСТО, line, col, 42);
       выраж_.vparam := ЛОЖЬ;
@@ -151,32 +151,32 @@
       выраж_.id := id;
       мДецл.КлючСлед_Получ;
       ВЫБОР id.iType ИЗ
-      |IDVAR:
-         выраж_.eType := eVAR;
-         выраж_.T := id.T;
-         ЕСЛИ id.VarKind = 0 ТОГДА
-            выраж_.Read := imp
-         ИНАЧЕ
-            выраж_.Read := (id.VarKind = мДецл.param) & (id.T.тип_ном В {TRECORD, TARRAY});
-            выраж_.vparam := id.VarKind = мДецл.paramvar
-         КОНЕЦ;
-         bases := мДецл.модуль.уровень - id.Level;
-         ЕСЛИ id.Level = 3 ТОГДА
-            glob := id.Offset
-         АЕСЛИ (id.VarKind = 0) ИЛИ (id.VarKind = мДецл.param) & ~(id.T.тип_ном В {TARRAY, TRECORD}) ТОГДА
-            loc := id.Offset
-         АЕСЛИ (id.VarKind = мДецл.paramvar) ИЛИ (id.T.тип_ном В {TARRAY, TRECORD}) ТОГДА
-            ЕСЛИ мДецл.Dim(выраж_.T) > 0 ТОГДА
-               n := мДецл.Dim(выраж_.T);
-               ДЛЯ i := n ДО 1 ПО -1 ДЕЛАТЬ
-                  X86.LocalAdr(id.Offset + i * 4, bases);
-                  X86.Load(TINTEGER)
-               КОНЕЦ
+         |IDVAR:
+            выраж_.eType := eVAR;
+            выраж_.T := id.T;
+            ЕСЛИ id.VarKind = 0 ТОГДА
+               выраж_.Read := imp
+            ИНАЧЕ
+               выраж_.Read := (id.VarKind = мДецл.param) & (id.T.тип_ном В {TRECORD, TARRAY});
+               выраж_.vparam := id.VarKind = мДецл.paramvar
             КОНЕЦ;
-            X86.LocalAdr(id.Offset, bases);
-            X86.Load(TINTEGER)
-         КОНЕЦ
-        |IDCONST:
+            bases := мДецл.модуль.уровень - id.Level;
+            ЕСЛИ id.Level = 3 ТОГДА
+               glob := id.Offset
+            АЕСЛИ (id.VarKind = 0) ИЛИ (id.VarKind = мДецл.param) & ~(id.T.тип_ном В {TARRAY, TRECORD}) ТОГДА
+               loc := id.Offset
+            АЕСЛИ (id.VarKind = мДецл.paramvar) ИЛИ (id.T.тип_ном В {TARRAY, TRECORD}) ТОГДА
+               ЕСЛИ мДецл.Dim(выраж_.T) > 0 ТОГДА
+                  n := мДецл.Dim(выраж_.T);
+                  ДЛЯ i := n ДО 1 ПО -1 ДЕЛАТЬ
+                     X86.LocalAdr(id.Offset + i * 4, bases);
+                     X86.Load(TINTEGER)
+                  КОНЕЦ
+               КОНЕЦ;
+               X86.LocalAdr(id.Offset, bases);
+               X86.Load(TINTEGER)
+            КОНЕЦ
+         |IDCONST:
             мПров.Тест(id.T # ПУСТО, line, col, 75);
             выраж_.eType := eCONST;
             выраж_.T := id.T;
@@ -193,48 +193,48 @@
                     X86.PushInt(стр.номер)
                 КОНЕЦ
             КОНЕЦ
-        |IDPROC:
+         |IDPROC:
             выраж_.eType := ePROC;
             выраж_.T := sttypes[TVOID]
-        |IDTYPE:
+         |IDTYPE:
             мПров.Тест(ЛОЖЬ, line, col, 101)
-        |IDSTPROC:
+         |IDSTPROC:
             выраж_.eType := eSTPROC;
             выраж_.T := sttypes[TVOID]
-        |IDSYSPROC:
+         |IDSYSPROC:
             выраж_.eType := eSYSPROC;
             выраж_.T := sttypes[TVOID]
-        ИНАЧЕ
-        КОНЕЦ;
-        break := ЛОЖЬ;
-        guard := ЛОЖЬ;
-        ПОВТОРЯТЬ
-            ВЫБОР мСкан.сущность ИЗ
-                |lxDot:
-                    выраж_.deref := ЛОЖЬ;
-                    мПров.Тест2(выраж_.T.тип_ном В {TPOINTER, TRECORD}, 105);
-                    ЕСЛИ выраж_.T.тип_ном = TPOINTER ТОГДА
-                        выраж_.Read := ЛОЖЬ;
-                        LoadVar;
-                        выраж_.T := выраж_.T.Base;
-                        X86.Load(TINTEGER);
-                        ЕСЛИ ~guard ТОГДА
-                            X86.CheckNIL
-                        КОНЕЦ
-                    КОНЕЦ;
-                    мДецл.КлючСлед_Получ;
-                    мДецл.Ключ_Проверить(lxIDENT);
-                    мДецл.Коорд_Уст(line, col);
-                    name := мСкан.id;
-                    T := выраж_.T;
-                    ПОВТОРЯТЬ
-                        поле := мДецл.GetField(T, name);
-                        T := T.Base
-                    ПОКАНЕ (поле # ПУСТО) ИЛИ (T = ПУСТО);
-                    мПров.Тест(поле # ПУСТО, line, col, 99);
-                    ЕСЛИ поле.Unit # мДецл.модуль ТОГДА
-                        мПров.Тест(поле.Export, line, col, 99)
-                    КОНЕЦ;
+      ИНАЧЕ
+      КОНЕЦ;
+      break := ЛОЖЬ;
+      guard := ЛОЖЬ;
+      ПОВТОРЯТЬ
+         ВЫБОР мСкан.сущность ИЗ
+            |lxDot:
+               выраж_.deref := ЛОЖЬ;
+               мПров.Тест2(выраж_.T.тип_ном В {TPOINTER, TRECORD}, 105);
+               ЕСЛИ выраж_.T.тип_ном = TPOINTER ТОГДА
+                  выраж_.Read := ЛОЖЬ;
+                  LoadVar;
+                  выраж_.T := выраж_.T.Base;
+                  X86.Load(TINTEGER);
+                  ЕСЛИ ~guard ТОГДА
+                     X86.CheckNIL
+                  КОНЕЦ
+               КОНЕЦ;
+               мДецл.КлючСлед_Получ;
+               мДецл.Ключ_Проверить(lxIDENT);
+               мДецл.Коорд_Уст(line, col);
+               уУзел := мСкан.id;
+               T := выраж_.T;
+               ПОВТОРЯТЬ
+                  поле := мДецл.GetField(T, уУзел);
+                  T := T.Base
+               ПОКАНЕ (поле # ПУСТО) ИЛИ (T = ПУСТО);
+               мПров.Тест(поле # ПУСТО, line, col, 99);
+               ЕСЛИ поле.Unit # мДецл.модуль ТОГДА
+                  мПров.Тест(поле.Export, line, col, 99)
+               КОНЕЦ;
                     ЕСЛИ glob # -1 ТОГДА
                         glob := glob + поле.Offset
                     АЕСЛИ loc # -1 ТОГДА
