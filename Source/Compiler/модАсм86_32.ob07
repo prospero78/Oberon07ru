@@ -71,7 +71,7 @@
 
    тѕроцедура = ѕ–ќ÷≈ƒ”–ј (err: Ѕ”Ћ≈¬ќ);
 
-   туѕунктјсм* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м«вено.т«вено)
+   ту«венојсм* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м«вено.т«вено)
          cmd, clen, varadr, adr, tcmd, codeadr: ÷≈Ћќ≈; short: Ѕ”Ћ≈¬ќ
        ќЌ≈÷;
 
@@ -133,13 +133,13 @@
 
 ѕ≈–≈ћ
    asmlist: м÷епь.ту÷епь;
-   start: туѕунктјсм;
+   start: ту«венојсм;
    MemErr: тѕроцедура;
    dll, con, gui, kos, elf, obj: Ѕ”Ћ≈¬ќ;
    Lcount, reccount, topstk: ÷≈Ћќ≈;
    recarray: ћј——»¬ 2048 »« ÷≈Ћќ≈;
-   current*: туѕунктјсм;
-   callstk: ћј——»¬ 1024, 2 »« туѕунктјсм;
+   current*: ту«венојсм;
+   callstk: ћј——»¬ 1024, 2 »« ту«венојсм;
    OutFile: м—тр.т—трока;
    Code: ћј——»¬ 4000000 »« —»ћ¬; ccount: ÷≈Ћќ≈; Data: ћј——»¬ 1000000 »« —»ћ¬; dcount: ÷≈Ћќ≈;
    Labels: ћј——»¬ 200000 »« ÷≈Ћќ≈;
@@ -154,7 +154,7 @@
    fpu*: ÷≈Ћќ≈;
    isfpu: Ѕ”Ћ≈¬ќ;
    maxfpu: ÷≈Ћќ≈;
-   fpucmd: туѕунктјсм;
+   fpucmd: ту«венојсм;
    kosexp: ћј——»¬ 65536 »« «јѕ»—№
       Name: м”зел.ту”зел;
       Adr, NameLabel: ÷≈Ћќ≈
@@ -358,7 +358,7 @@
       textattr = 60000020H; rdataattr = 40000040H; dataattr = 0C0000040H; relocattr = 42000040H;
    ѕ≈–≈ћ
       i, F, adr, acodesize, compver, version, stkalloc, heapsize, heapalloc, filesize, filebuf: ÷≈Ћќ≈;
-      cur: туѕунктјсм;
+      cur: ту«венојсм;
    Ќј„јЋќ
       compver := 0;
       version := 0;
@@ -459,10 +459,10 @@
          Fill(Align(mSys.SIZE(т«аголовок), 200H) - mSys.SIZE(т«аголовок), 0X)
        ќЌ≈÷;
 
-      cur := asmlist.предыдущ(туѕунктјсм);
+      cur := asmlist.предыдущ(ту«венојсм);
       ѕќ ј cur # ѕ”—“ќ ƒ≈Ћј“№
          Write(mSys.ADR(Code[cur.cmd]), cur.clen);
-         cur := cur.следующ(туѕунктјсм)
+         cur := cur.следующ(ту«венојсм)
        ќЌ≈÷;
       Fill(Align(codesize, 200H) - codesize, 0X);
       Write(mSys.ADR(rdata), 0DAH);
@@ -487,13 +487,13 @@
 
 ѕ–ќ÷≈ƒ”–ј New;
    ѕ≈–≈ћ
-      nov: туѕунктјсм;
+      nov: ту«венојсм;
    Ќј„јЋќ
       Ќќ¬(nov);
       MemErr(nov = ѕ”—“ќ);
       nov.cmd := ccount;
       м÷епь.¬ставить(asmlist, nov, current);
-      current := current.следующ(туѕунктјсм)
+      current := current.следующ(ту«венојсм)
     ќЌ≈÷ New;
 
 ѕ–ќ÷≈ƒ”–ј Empty(varadr: ÷≈Ћќ≈);
@@ -568,7 +568,7 @@
       current.clen := a - b
     ќЌ≈÷ OutCode;
 
-ѕ–ќ÷≈ƒ”–ј Del*(last: туѕунктјсм);
+ѕ–ќ÷≈ƒ”–ј Del*(last: ту«венојсм);
    Ќј„јЋќ
       last.следующ := current.следующ;
       ≈—Ћ» current = asmlist.следующ “ќ√ƒј
@@ -583,7 +583,7 @@
       ¬≈–Ќ”“№ Lcount
     ќЌ≈÷ NewLabel;
 
-ѕ–ќ÷≈ƒ”–ј PushCall*(asmline: туѕунктјсм);
+ѕ–ќ÷≈ƒ”–ј PushCall*(asmline: ту«венојсм);
    Ќј„јЋќ
       New;
       callstk[topstk][0] := asmline;
@@ -604,7 +604,7 @@
 
 ѕ–ќ÷≈ƒ”–ј Ќастроить*(mem: тѕроцедура; UI: ÷≈Ћќ≈);
   ѕ≈–≈ћ
-    nov: туѕунктјсм;
+    nov: ту«венојсм;
   Ќј„јЋќ
     dcount := 4;
     dll := UI = 1;
@@ -808,7 +808,7 @@
     ј≈—Ћ» obj “ќ√ƒј
       OutCode("558BEC")
      ќЌ≈÷;
-    start := asmlist.следующ(туѕунктјсм)
+    start := asmlist.следующ(ту«венојсм)
    ќЌ≈÷ Prolog;
 
 ѕ–ќ÷≈ƒ”–ј AddRec*(base: ÷≈Ћќ≈);
@@ -818,9 +818,9 @@
    ќЌ≈÷ AddRec;
 
 ѕ–ќ÷≈ƒ”–ј CmpOpt(inv: Ѕ”Ћ≈¬ќ): ÷≈Ћќ≈;
-  ѕ≈–≈ћ cur: туѕунктјсм; c: ÷≈Ћќ≈;
+  ѕ≈–≈ћ cur: ту«венојсм; c: ÷≈Ћќ≈;
   Ќј„јЋќ
-    c := ORD(Code[current.предыдущ.предыдущ(туѕунктјсм).cmd]);
+    c := ORD(Code[current.предыдущ.предыдущ(ту«венојсм).cmd]);
     ≈—Ћ» inv “ќ√ƒј
       ≈—Ћ» ODD(c) “ќ√ƒј
         ¬џ„(c)
@@ -832,7 +832,7 @@
     ѕќ¬“ќ–я“№
       cur.tcmd := 0;
       cur.clen := 0;
-      cur := cur.предыдущ(туѕунктјсм)
+      cur := cur.предыдущ(ту«венојсм)
     ѕќ јЌ≈ cur.tcmd = ICMP1;
     cur.tcmd := 0;
     cur.clen := 0
@@ -842,7 +842,7 @@
 ѕ–ќ÷≈ƒ”–ј ifwh*(L: ÷≈Ћќ≈);
   ѕ≈–≈ћ c: ÷≈Ћќ≈;
   Ќј„јЋќ
-    ≈—Ћ» current.предыдущ(туѕунктјсм).tcmd = ICMP2 “ќ√ƒј
+    ≈—Ћ» current.предыдущ(ту«венојсм).tcmd = ICMP2 “ќ√ƒј
       c := CmpOpt(»—“»Ќј);
       OutCode("5A583BC2");
       jmp(CHR(c), L)
@@ -856,14 +856,14 @@
 ѕ–ќ÷≈ƒ”–ј PushConst*(Number: ÷≈Ћќ≈);
   Ќј„јЋќ
     IntByte("6A", "68", Number);
-    current.предыдущ(туѕунктјсм).varadr := Number
+    current.предыдущ(ту«венојсм).varadr := Number
    ќЌ≈÷ PushConst;
 
 ѕ–ќ÷≈ƒ”–ј IfWhile*(L: ÷≈Ћќ≈; orop: Ѕ”Ћ≈¬ќ);
   ѕ≈–≈ћ c, L1: ÷≈Ћќ≈;
   Ќј„јЋќ
     L1 := NewLabel();
-    ≈—Ћ» current.предыдущ(туѕунктјсм).tcmd = ICMP2 “ќ√ƒј
+    ≈—Ћ» current.предыдущ(ту«венојсм).tcmd = ICMP2 “ќ√ƒј
       c := CmpOpt(orop);
       OutCode("5A583BC2");
       jmp(CHR(c), L1);
@@ -905,7 +905,7 @@
    ќЌ≈÷ String;
 
 ѕ–ќ÷≈ƒ”–ј InsertFpuInit;
-  ѕ≈–≈ћ t: туѕунктјсм;
+  ѕ≈–≈ћ t: ту«венојсм;
   Ќј„јЋќ
     ≈—Ћ» isfpu “ќ√ƒј
       t := current;
@@ -1295,18 +1295,18 @@
 
 ѕ–ќ÷≈ƒ”–ј Load*(T: ÷≈Ћќ≈);
   ѕ≈–≈ћ
-    lastcmd: туѕунктјсм;
+    lastcmd: ту«венојсм;
     offset: ÷≈Ћќ≈;
 
   ѕ–ќ÷≈ƒ”–ј del;
     Ќј„јЋќ
       lastcmd.tcmd := 0;
       offset := lastcmd.varadr;
-      lastcmd := lastcmd.предыдущ(туѕунктјсм);
+      lastcmd := lastcmd.предыдущ(ту«венојсм);
       ѕќ ј lastcmd.tcmd # ECMD ƒ≈Ћј“№
         lastcmd.clen := 0;
         lastcmd.tcmd := 0;
-        lastcmd := lastcmd.предыдущ(туѕунктјсм)
+        lastcmd := lastcmd.предыдущ(ту«венојсм)
        ќЌ≈÷;
       lastcmd.tcmd := 0
      ќЌ≈÷ del;
@@ -1571,29 +1571,29 @@
 
 ѕ–ќ÷≈ƒ”–ј Optimization;
   ѕ≈–≈ћ
-    cur: туѕунктјсм;
+    cur: ту«венојсм;
     flag: Ѕ”Ћ≈¬ќ;
   Ќј„јЋќ
-    cur := asmlist.предыдущ(туѕунктјсм);
+    cur := asmlist.предыдущ(ту«венојсм);
     ѕќ ј cur # ѕ”—“ќ ƒ≈Ћј“№
       flag := Ћќ∆№;
       ¬џЅќ– cur.tcmd »«
       |PUSHEAX:
-        flag := cur.следующ(туѕунктјсм).tcmd = POPEAX
+        flag := cur.следующ(ту«венојсм).tcmd = POPEAX
       |PUSHECX:
-        flag := cur.следующ(туѕунктјсм).tcmd = POPECX
+        flag := cur.следующ(ту«венојсм).tcmd = POPECX
       |PUSHEDX:
-        flag := cur.следующ(туѕунктјсм).tcmd = POPEDX
+        flag := cur.следующ(ту«венојсм).tcmd = POPEDX
       »Ќј„≈
        ќЌ≈÷;
       ≈—Ћ» flag “ќ√ƒј
         cur.clen := 0;
         cur.tcmd := 0;
-        cur := cur.следующ(туѕунктјсм);
+        cur := cur.следующ(ту«венојсм);
         cur.clen := 0;
         cur.tcmd := 0
        ќЌ≈÷;
-      cur := cur.следующ(туѕунктјсм)
+      cur := cur.следующ(ту«венојсм)
      ќЌ≈÷
    ќЌ≈÷ Optimization;
 
@@ -1602,7 +1602,7 @@
   ѕ≈–≈ћ
     Header: т«аголовокKol;
     F, i, filesize, filebuf, a, sec, adr, size2: ÷≈Ћќ≈;
-    cur: туѕунктјсм;
+    cur: ту«венојсм;
     Coff: т«аголовокCoff;
     sym: ћј——»¬ 18 * 4 »« —»ћ¬;
     FileName: м—тр.т—трока;
@@ -1627,10 +1627,10 @@
 
       Write(mSys.ADR(Header), mSys.SIZE(т«аголовокKol));
 
-      cur := asmlist.предыдущ(туѕунктјсм);
+      cur := asmlist.предыдущ(ту«венојсм);
       ѕќ ј cur # ѕ”—“ќ ƒ≈Ћј“№
         Write(mSys.ADR(Code[cur.cmd]), cur.clen);
-        cur := cur.следующ(туѕунктјсм)
+        cur := cur.следующ(ту«венојсм)
        ќЌ≈÷;
       Fill(Align(size, 4) - size, 0X);
       Write(mSys.ADR(Data), datasize);
@@ -1677,7 +1677,7 @@
 
       size := Align(size2, 4);
       rcount := 0;
-      cur := asmlist.предыдущ(туѕунктјсм);
+      cur := asmlist.предыдущ(ту«венојсм);
       ѕќ ј cur # ѕ”—“ќ ƒ≈Ћј“№
         ≈—Ћ» cur.tcmd IN {OCMD, GCMD} “ќ√ƒј
           mSys.GET(mSys.ADR(Code[cur.cmd]), a);
@@ -1700,7 +1700,7 @@
           mSys.PUT(mSys.ADR(Reloc[rcount]), 00X); ƒќЅ(rcount);
          ќЌ≈÷;
         Write(mSys.ADR(Code[cur.cmd]), cur.clen);
-        cur := cur.следующ(туѕунктјсм)
+        cur := cur.следующ(ту«венојсм)
        ќЌ≈÷;
       size := size2;
       Fill(Align(size, 4) - size2, 0X);
@@ -1728,7 +1728,7 @@
 ѕ–ќ÷≈ƒ”–ј WriteELF(FName: ћј——»¬ »« —»ћ¬; code, data, glob: ÷≈Ћќ≈);
   ѕ≈–≈ћ
     F, res, delta, filebuf: ÷≈Ћќ≈;
-    cur: туѕунктјсм;
+    cur: ту«венојсм;
     bytes: ћј——»¬ 817H + 55FH + 4900 »« —»ћ¬;
     ѕ–ќ÷≈ƒ”–ј Add(offset: ÷≈Ћќ≈);
     ѕ≈–≈ћ m: ÷≈Ћќ≈;
@@ -1794,10 +1794,10 @@
 
     Write(mSys.ADR(bytes), 817H);
     Fill(2DDH, 90X);
-    cur := asmlist.предыдущ(туѕунктјсм);
+    cur := asmlist.предыдущ(ту«венојсм);
     ѕќ ј cur # ѕ”—“ќ ƒ≈Ћј“№
       Write(mSys.ADR(Code[cur.cmd]), cur.clen);
-      cur := cur.следующ(туѕунктјсм)
+      cur := cur.следующ(ту«венојсм)
      ќЌ≈÷;
     Fill(Align(code, 1000H) - code, 90X);
     Write(mSys.ADR(bytes[817H]), 55FH);
@@ -1816,7 +1816,7 @@
 ѕ–ќ÷≈ƒ”–ј FixLabels(FName: ћј——»¬ »« —»ћ¬; stk, gsize, glob: ÷≈Ћќ≈);
   ѕ≈–≈ћ
     size, asize, i, rdatasize, RCount, n, temp, temp2, temp3: ÷≈Ћќ≈;
-    cur: туѕунктјсм;
+    cur: ту«венојсм;
     R: т–елок;
     c: —»ћ¬;
   Ќј„јЋќ
@@ -1843,39 +1843,39 @@
 
     Optimization;
     temp2 := size;
-    cur := asmlist.предыдущ(туѕунктјсм);
+    cur := asmlist.предыдущ(ту«венојсм);
     ѕќ ј cur # ѕ”—“ќ ƒ≈Ћј“№
       cur.adr := size;
       ≈—Ћ» cur.tcmd = LCMD “ќ√ƒј
         mSys.PUT(cur.varadr, size)
        ќЌ≈÷;
       size := size + cur.clen;
-      cur := cur.следующ(туѕунктјсм)
+      cur := cur.следующ(ту«венојсм)
      ќЌ≈÷;
 
     size := temp2;
-    cur := asmlist.предыдущ(туѕунктјсм);
+    cur := asmlist.предыдущ(ту«венојсм);
     ѕќ ј cur # ѕ”—“ќ ƒ≈Ћј“№
       cur.adr := size;
       ≈—Ћ» cur.tcmd = LCMD “ќ√ƒј
         mSys.PUT(cur.varadr, size)
       ј≈—Ћ» (cur.tcmd = JCMD) & cur.short “ќ√ƒј
         mSys.GET(cur.varadr, i);
-        temp3 := i - cur.следующ(туѕунктјсм).adr;
+        temp3 := i - cur.следующ(ту«венојсм).adr;
         ≈—Ћ» (-131 <= temp3) & (temp3 <= 123) “ќ√ƒј
-          mSys.GET(cur(туѕунктјсм).codeadr - 1, c);
+          mSys.GET(cur(ту«венојсм).codeadr - 1, c);
           ≈—Ћ» c = JMP “ќ√ƒј
-            mSys.PUT(cur(туѕунктјсм).codeadr - 1, 0EBX)
+            mSys.PUT(cur(ту«венојсм).codeadr - 1, 0EBX)
           »Ќј„≈ (*JE, JNE, JLE, JGE, JG, JL*)
-            mSys.PUT(cur(туѕунктјсм).codeadr - 2, ORD(c) - 16);
-            mSys.PUT(cur(туѕунктјсм).codeadr - 1, temp3);
-            ¬џ„(cur(туѕунктјсм).codeadr)
+            mSys.PUT(cur(ту«венојсм).codeadr - 2, ORD(c) - 16);
+            mSys.PUT(cur(ту«венојсм).codeadr - 1, temp3);
+            ¬џ„(cur(ту«венојсм).codeadr)
            ќЌ≈÷;
           cur.clen := 2
          ќЌ≈÷
        ќЌ≈÷;
       size := size + cur.clen;
-      cur := cur.следующ(туѕунктјсм)
+      cur := cur.следующ(ту«венојсм)
      ќЌ≈÷;
 
     ≈—Ћ» dll »Ћ» con »Ћ» gui “ќ√ƒј
@@ -1918,7 +1918,7 @@
       R.Size := 0;
       RCount := 0;
      ќЌ≈÷;
-    cur := asmlist.предыдущ(туѕунктјсм);
+    cur := asmlist.предыдущ(ту«венојсм);
 
     ƒЋя i := 0 ƒќ LEN(RtlProc) - 1 ƒ≈Ћј“№
       RtlProc[i] := Labels[RtlProc[i]]
@@ -1929,7 +1929,7 @@
       ¬џЅќ– cur.tcmd »«
       |JCMD:
         mSys.GET(cur.varadr, i);
-        mSys.PUT(cur.codeadr, i - cur.следующ(туѕунктјсм).adr)
+        mSys.PUT(cur.codeadr, i - cur.следующ(ту«венојсм).adr)
       |GCMD:
         mSys.GET(cur.codeadr, i);
         mSys.PUT(cur.codeadr, i + temp3)
@@ -1953,7 +1953,7 @@
           RCount := 1
          ќЌ≈÷
        ќЌ≈÷;
-      cur := cur.следующ(туѕунктјсм)
+      cur := cur.следующ(ту«венојсм)
      ќЌ≈÷;
     ≈—Ћ» R.Size # 0 “ќ√ƒј
       PutReloc(R)
@@ -2009,7 +2009,7 @@
       PushInt(RTABLE);
       PushInt(SELFNAME);
       CallRTL(_init);
-      current := asmlist.следующ(туѕунктјсм);
+      current := asmlist.следующ(ту«венојсм);
       ≈—Ћ» dll “ќ√ƒј
          OutCode("B801000000C9C20C00")
        ќЌ≈÷;
