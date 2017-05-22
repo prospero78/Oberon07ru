@@ -451,148 +451,150 @@
       filebuf := OutFilePos;
       ЛоЮЛ.нЬХАЙЮ(OutFilePos = 0);
 
-    Write(mSys.ADR(Header), mSys.SIZE(РгЮЦНКНБНЙ));
-    еякх dll рнцдю
-      Write(mSys.ADR(RelocSection), mSys.SIZE(РяЕЙЖХЪ));
-      Fill(Align(mSys.SIZE(РгЮЦНКНБНЙ) + mSys.SIZE(РяЕЙЖХЪ), 200H) - (mSys.SIZE(РгЮЦНКНБНЙ) + mSys.SIZE(РяЕЙЖХЪ)), 0X)
-    хмюве
-      Fill(Align(mSys.SIZE(РгЮЦНКНБНЙ), 200H) - mSys.SIZE(РгЮЦНКНБНЙ), 0X)
-    йнмеж;
+      Write(mSys.ADR(Header), mSys.SIZE(РгЮЦНКНБНЙ));
+      еякх dll рнцдю
+         Write(mSys.ADR(RelocSection), mSys.SIZE(РяЕЙЖХЪ));
+         Fill(Align(mSys.SIZE(РгЮЦНКНБНЙ) + mSys.SIZE(РяЕЙЖХЪ), 200H) - (mSys.SIZE(РгЮЦНКНБНЙ) + mSys.SIZE(РяЕЙЖХЪ)), 0X)
+      хмюве
+         Fill(Align(mSys.SIZE(РгЮЦНКНБНЙ), 200H) - mSys.SIZE(РгЮЦНКНБНЙ), 0X)
+      йнмеж;
 
-    cur := asmlist.ОПЕДШДСЫ(РСоСМЙРюЯЛ);
-    онйю cur # осярн декюрэ
-      Write(mSys.ADR(Code[cur.cmd]), cur.clen);
-      cur := cur.ЯКЕДСЧЫ(РСоСМЙРюЯЛ)
-    йнмеж;
-    Fill(Align(codesize, 200H) - codesize, 0X);
-    Write(mSys.ADR(rdata), 0DAH);
-    еякх dll рнцдю
-      etable.time := Header.time;
-      Write(mSys.ADR(etable), 40);
-      Write(mSys.ADR(etable.arradr), etable.adrcount * 4);
-      Write(mSys.ADR(etable.arrnameptr), etable.namecount * 4);
-      Write(mSys.ADR(etable.arrnum), etable.namecount * 2);
-      Write(mSys.ADR(etable.text), etable.textlen)
-    йнмеж;
-    Fill(Align(rdatasize, 200H) - rdatasize, 0X);
-    Write(mSys.ADR(Data), datasize);
-    Fill(Align(datasize, 200H) - datasize, 0X);
-    еякх dll рнцдю
-      Write(mSys.ADR(Reloc), rcount);
-      Fill(Align(rcount, 200H) - rcount, 0X)
-    йнмеж;
-    WriteF(F, filebuf, OutFilePos - filebuf);
-    ЛтЮИК.гЮЙПШРЭ(F)
-  йнмеж WritePE;
+      cur := asmlist.ОПЕДШДСЫ(РСоСМЙРюЯЛ);
+      онйю cur # осярн декюрэ
+         Write(mSys.ADR(Code[cur.cmd]), cur.clen);
+         cur := cur.ЯКЕДСЧЫ(РСоСМЙРюЯЛ)
+      йнмеж;
+      Fill(Align(codesize, 200H) - codesize, 0X);
+      Write(mSys.ADR(rdata), 0DAH);
+      еякх dll рнцдю
+         etable.time := Header.time;
+         Write(mSys.ADR(etable), 40);
+         Write(mSys.ADR(etable.arradr), etable.adrcount * 4);
+         Write(mSys.ADR(etable.arrnameptr), etable.namecount * 4);
+         Write(mSys.ADR(etable.arrnum), etable.namecount * 2);
+         Write(mSys.ADR(etable.text), etable.textlen)
+      йнмеж;
+      Fill(Align(rdatasize, 200H) - rdatasize, 0X);
+      Write(mSys.ADR(Data), datasize);
+      Fill(Align(datasize, 200H) - datasize, 0X);
+      еякх dll рнцдю
+         Write(mSys.ADR(Reloc), rcount);
+         Fill(Align(rcount, 200H) - rcount, 0X)
+      йнмеж;
+      WriteF(F, filebuf, OutFilePos - filebuf);
+      ЛтЮИК.гЮЙПШРЭ(F)
+   йнмеж WritePE;
 
 опнжедспю New;
-  оепел nov: РСоСМЙРюЯЛ;
-  мювюкн
-    мнб(nov);
-    MemErr(nov = осярн);
-    nov.cmd := ccount;
-    ЛжЕОЭ.бЯРЮБХРЭ(asmlist, nov, current);
-    current := current.ЯКЕДСЧЫ(РСоСМЙРюЯЛ)
-  йнмеж New;
+   оепел
+      nov: РСоСМЙРюЯЛ;
+   мювюкн
+      мнб(nov);
+      MemErr(nov = осярн);
+      nov.cmd := ccount;
+      ЛжЕОЭ.бЯРЮБХРЭ(asmlist, nov, current);
+      current := current.ЯКЕДСЧЫ(РСоСМЙРюЯЛ)
+   йнмеж New;
 
 опнжедспю Empty(varadr: жекне);
-  мювюкн
-    New;
-    current.clen := 0;
-    current.tcmd := ECMD;
-    current.varadr := varadr
-  йнмеж Empty;
+   мювюкн
+      New;
+      current.clen := 0;
+      current.tcmd := ECMD;
+      current.varadr := varadr
+   йнмеж Empty;
 
 опнжедспю OutByte(byte: жекне);
-  мювюкн
-    New;
-    current.clen := 1;
-    Code[ccount] := CHR(byte);
-    дна(ccount)
-  йнмеж OutByte;
+   мювюкн
+      New;
+      current.clen := 1;
+      Code[ccount] := CHR(byte);
+      дна(ccount)
+   йнмеж OutByte;
 
 опнжедспю OutInt(int: жекне);
-  мювюкн
-    New;
-    current.clen := 4;
-    mSys.PUT(mSys.ADR(Code[ccount]), int);
-    дна(ccount, 4)
-  йнмеж OutInt;
+   мювюкн
+      New;
+      current.clen := 4;
+      mSys.PUT(mSys.ADR(Code[ccount]), int);
+      дна(ccount, 4)
+   йнмеж OutInt;
 
 опнжедспю PushEAX;
-  мювюкн
-    OutByte(50H);
-    current.tcmd := PUSHEAX
-  йнмеж PushEAX;
+   мювюкн
+      OutByte(50H);
+      current.tcmd := PUSHEAX
+   йнмеж PushEAX;
 
 опнжедспю PushECX;
-  мювюкн
-    OutByte(51H);
-    current.tcmd := PUSHECX
-  йнмеж PushECX;
+   мювюкн
+      OutByte(51H);
+      current.tcmd := PUSHECX
+   йнмеж PushECX;
 
 опнжедспю PushEDX;
-  мювюкн
-    OutByte(52H);
-    current.tcmd := PUSHEDX
-  йнмеж PushEDX;
+   мювюкн
+      OutByte(52H);
+      current.tcmd := PUSHEDX
+   йнмеж PushEDX;
 
 опнжедспю PopEAX;
-  мювюкн
-    OutByte(58H);
-    current.tcmd := POPEAX
-  йнмеж PopEAX;
+   мювюкн
+      OutByte(58H);
+      current.tcmd := POPEAX
+   йнмеж PopEAX;
 
 опнжедспю PopECX;
-  мювюкн
-    OutByte(59H);
-    current.tcmd := POPECX
-  йнмеж PopECX;
+   мювюкн
+      OutByte(59H);
+      current.tcmd := POPECX
+   йнмеж PopECX;
 
 опнжедспю PopEDX;
-  мювюкн
-    OutByte(5AH);
-    current.tcmd := POPEDX
-  йнмеж PopEDX;
+   мювюкн
+      OutByte(5AH);
+      current.tcmd := POPEDX
+   йнмеж PopEDX;
 
 опнжедспю OutCode(cmd: ЛяРП.РяРПНЙЮ);
-  оепел a, b: жекне;
-  мювюкн
-    New;
-    a := mSys.ADR(Code[ccount]);
-    b := a;
-    InitArray(a, cmd);
-    ccount := a - b + ccount;
-    current.clen := a - b
-  йнмеж OutCode;
+   оепел
+      a, b: жекне;
+   мювюкн
+      New;
+      a := mSys.ADR(Code[ccount]);
+      b := a;
+      InitArray(a, cmd);
+      ccount := a - b + ccount;
+      current.clen := a - b
+   йнмеж OutCode;
 
 опнжедспю Del*(last: РСоСМЙРюЯЛ);
-  мювюкн
-    last.ЯКЕДСЧЫ := current.ЯКЕДСЧЫ;
-    еякх current = asmlist.ЯКЕДСЧЫ рнцдю
-      asmlist.ЯКЕДСЧЫ := last
-    йнмеж;
-    current := last
-  йнмеж Del;
+   мювюкн
+      last.ЯКЕДСЧЫ := current.ЯКЕДСЧЫ;
+      еякх current = asmlist.ЯКЕДСЧЫ рнцдю
+         asmlist.ЯКЕДСЧЫ := last
+      йнмеж;
+      current := last
+   йнмеж Del;
 
 опнжедспю NewLabel*(): жекне;
-  мювюкн
-    дна(Lcount)
-    бепмсрэ Lcount
-  йнмеж NewLabel;
+   мювюкн
+      дна(Lcount)
+      бепмсрэ Lcount
+   йнмеж NewLabel;
 
 опнжедспю PushCall*(asmline: РСоСМЙРюЯЛ);
-  мювюкн
-    New;
-    callstk[topstk][0] := asmline;
-    callstk[topstk][1] := current;
-    дна(topstk)
-  йнмеж PushCall;
+   мювюкн
+      New;
+      callstk[topstk][0] := asmline;
+      callstk[topstk][1] := current;
+      дна(topstk)
+   йнмеж PushCall;
 
 опнжедспю Param*;
-  мювюкн
-    current := callstk[topstk - 1][0]
-  йнмеж Param;
+   мювюкн
+      current := callstk[topstk - 1][0]
+   йнмеж Param;
 
 опнжедспю бШГНБ_гЮЙНМВХРЭ*;
   мювюкн
