@@ -71,8 +71,17 @@
 
    тѕроцедура = ѕ–ќ÷≈ƒ”–ј (err: Ѕ”Ћ≈¬ќ);
 
+   тјдр = «јѕ»—№
+         адрес : ÷≈Ћќ≈
+       ќЌ≈÷;
+   
+   тјдр од = «јѕ»—№ (тјдр)
+         код : ÷≈Ћќ≈
+       ќЌ≈÷;
+   
    ту«венојсм* = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м«вено.т«вено)
-         кмд, clen, varadr, adr, tcmd, codeadr: ÷≈Ћќ≈;
+         код : тјдр од;
+         кмд, clen, varadr, adr, tcmd : ÷≈Ћќ≈;
          short: Ѕ”Ћ≈¬ќ
        ќЌ≈÷;
 
@@ -660,7 +669,7 @@
     current.clen := n;
     Code[ccount] := jamp;
     ƒќЅ(ccount);
-    current.codeadr := mSys.ADR(Code[ccount]);
+    current.код.адрес := mSys.ADR(Code[ccount]);
     current.varadr := mSys.ADR(Labels[label]);
     current.tcmd := JCMD;
     current.short := »—“»Ќј;
@@ -684,7 +693,7 @@
   Ќј„јЋќ
     New;
     current.clen := 4;
-    current.codeadr := mSys.ADR(Code[ccount]);
+    current.код.адрес := mSys.ADR(Code[ccount]);
     current.varadr := mSys.ADR(Labels[Number]);
     current.tcmd := OCMD;
     ƒќЅ(ccount, 4)
@@ -782,7 +791,7 @@
     current.clen := 5;
     Code[ccount] := CALL;
     ƒќЅ(ccount);
-    current.codeadr := mSys.ADR(Code[ccount]);
+    current.код.адрес := mSys.ADR(Code[ccount]);
     current.varadr := mSys.ADR(RtlProc[Proc]);
     current.tcmd := JCMD;
     ƒќЅ(ccount, 4)
@@ -986,7 +995,7 @@
   Ќј„јЋќ
     OutByte(0BAH);
     OutInt(offset);
-    current.codeadr := mSys.ADR(Code[ccount - 4]);
+    current.код.адрес := mSys.ADR(Code[ccount - 4]);
     current.tcmd := GCMD;
     PushEDX
    ќЌ≈÷ GlobalAdr;
@@ -1864,13 +1873,13 @@
         mSys.GET(cur.varadr, i);
         temp3 := i - cur.следующ(ту«венојсм).adr;
         ≈—Ћ» (-131 <= temp3) & (temp3 <= 123) “ќ√ƒј
-          mSys.GET(cur(ту«венојсм).codeadr - 1, c);
+          mSys.GET(cur(ту«венојсм).код.адрес - 1, c);
           ≈—Ћ» c = JMP “ќ√ƒј
-            mSys.PUT(cur(ту«венојсм).codeadr - 1, 0EBX)
+            mSys.PUT(cur(ту«венојсм).код.адрес - 1, 0EBX)
           »Ќј„≈ (*JE, JNE, JLE, JGE, JG, JL*)
-            mSys.PUT(cur(ту«венојсм).codeadr - 2, ORD(c) - 16);
-            mSys.PUT(cur(ту«венојсм).codeadr - 1, temp3);
-            ¬џ„(cur(ту«венојсм).codeadr)
+            mSys.PUT(cur(ту«венојсм).код.адрес - 2, ORD(c) - 16);
+            mSys.PUT(cur(ту«венојсм).код.адрес - 1, temp3);
+            ¬џ„(cur(ту«венојсм).код.адрес)
            ќЌ≈÷;
           cur.clen := 2
          ќЌ≈÷
@@ -1930,12 +1939,12 @@
       ¬џЅќ– cur.tcmd »«
       |JCMD:
         mSys.GET(cur.varadr, i);
-        mSys.PUT(cur.codeadr, i - cur.следующ(ту«венојсм).adr)
+        mSys.PUT(cur.код.адрес, i - cur.следующ(ту«венојсм).adr)
       |GCMD:
-        mSys.GET(cur.codeadr, i);
-        mSys.PUT(cur.codeadr, i + temp3)
+        mSys.GET(cur.код.адрес, i);
+        mSys.PUT(cur.код.адрес, i + temp3)
       |OCMD:
-        mSys.MOVE(cur.varadr, cur.codeadr, 4)
+        mSys.MOVE(cur.varadr, cur.код.адрес, 4)
       »Ќј„≈
        ќЌ≈÷;
       ≈—Ћ» dll & (cur.tcmd IN {GCMD, OCMD}) “ќ√ƒј
