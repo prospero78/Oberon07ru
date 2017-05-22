@@ -132,127 +132,132 @@
       йнмеж;
 
 оепел
-  asmlist: ЛжЕОЭ.РСжЕОЭ;
-  start: РСоСМЙРюЯЛ;
-  MemErr: РоПНЖЕДСПЮ;
-  dll, con, gui, kos, elf, obj: аскебн;
-  Lcount, reccount, topstk: жекне;
-  recarray: люяяхб 2048 хг жекне;
-  current*: РСоСМЙРюЯЛ;
-  callstk: люяяхб 1024, 2 хг РСоСМЙРюЯЛ;
-  OutFile: ЛяРП.РяРПНЙЮ;
-  Code: люяяхб 4000000 хг яхлб; ccount: жекне; Data: люяяхб 1000000 хг яхлб; dcount: жекне;
-  Labels: люяяхб 200000 хг жекне;
-  rdata: люяяхб 400H хг жекне;
-  Header: РгЮЦНКНБНЙ;
-  etable: ETABLE;
-  ExecName: ЛяРП.РяРПНЙЮ;
-  LoadAdr: жекне; Reloc: люяяхб 200000 хг яхлб; rcount: жекне;
-  RtlProc: люяяхб 20 хг жекне; OutFilePos: жекне;
-  RelocSection: РяЕЙЖХЪ;
-  felf: ЛяРП.РяРПНЙЮ;
-  fpu*: жекне;
-  isfpu: аскебн;
-  maxfpu: жекне;
-  fpucmd: РСоСМЙРюЯЛ;
-  kosexp: люяяхб 65536 хг гюохяэ
-    Name: ЛсГЕК.РСсГЕК;
-    Adr, NameLabel: жекне
-  йнмеж;
-  kosexpcount: жекне;
+   asmlist: ЛжЕОЭ.РСжЕОЭ;
+   start: РСоСМЙРюЯЛ;
+   MemErr: РоПНЖЕДСПЮ;
+   dll, con, gui, kos, elf, obj: аскебн;
+   Lcount, reccount, topstk: жекне;
+   recarray: люяяхб 2048 хг жекне;
+   current*: РСоСМЙРюЯЛ;
+   callstk: люяяхб 1024, 2 хг РСоСМЙРюЯЛ;
+   OutFile: ЛяРП.РяРПНЙЮ;
+   Code: люяяхб 4000000 хг яхлб; ccount: жекне; Data: люяяхб 1000000 хг яхлб; dcount: жекне;
+   Labels: люяяхб 200000 хг жекне;
+   rdata: люяяхб 400H хг жекне;
+   Header: РгЮЦНКНБНЙ;
+   etable: ETABLE;
+   ExecName: ЛяРП.РяРПНЙЮ;
+   LoadAdr: жекне; Reloc: люяяхб 200000 хг яхлб; rcount: жекне;
+   RtlProc: люяяхб 20 хг жекне; OutFilePos: жекне;
+   RelocSection: РяЕЙЖХЪ;
+   felf: ЛяРП.РяРПНЙЮ;
+   fpu*: жекне;
+   isfpu: аскебн;
+   maxfpu: жекне;
+   fpucmd: РСоСМЙРюЯЛ;
+   kosexp: люяяхб 65536 хг гюохяэ
+      Name: ЛсГЕК.РСсГЕК;
+      Adr, NameLabel: жекне
+   йнмеж;
+   kosexpcount: жекне;
 
 опнжедспю setfelf*(name: ЛяРП.РяРПНЙЮ);
-  мювюкн
-    felf := name
-  йнмеж setfelf;
+   мювюкн
+      felf := name
+   йнмеж setfelf;
 
 опнжедспю AddRtlProc*(idx, proc: жекне);
-  мювюкн
-    RtlProc[idx] := proc
-  йнмеж AddRtlProc;
+   мювюкн
+      RtlProc[idx] := proc
+   йнмеж AddRtlProc;
 
 опнжедспю IntToCard16(i: жекне): mSys.CARD16;
-  оепел w: mSys.CARD16;
-  мювюкн
-    mSys.GET(mSys.ADR(i), w)
-    бепмсрэ w
-  йнмеж IntToCard16;
+   оепел
+      w: mSys.CARD16;
+   мювюкн
+      mSys.GET(mSys.ADR(i), w)
+      бепмсрэ w
+   йнмеж IntToCard16;
 
 опнжедспю CopyStr(оеп Dest: люяяхб хг яхлб; Source: люяяхб хг яхлб; оеп di: жекне; si: жекне);
-  мювюкн
-    бшв(di);
-    онбрнпърэ
+   мювюкн
+      бшв(di);
+      онбрнпърэ
       дна(di);
       Dest[di] := Source[si];
       дна(si)
-    онйюме Dest[di] = 0X
-  йнмеж CopyStr;
+      онйюме Dest[di] = 0X
+   йнмеж CopyStr;
 
 опнжедспю exch(оеп a, b: жекне);
-  оепел c: жекне;
-  мювюкн
-    c := a;
-    a := b;
-    b := c
-  йнмеж exch;
+   оепел
+      c: жекне;
+   мювюкн
+      c := a;
+      a := b;
+      b := c
+   йнмеж exch;
 
 опнжедспю Sort(оеп NamePtr, Adr: люяяхб хг жекне; Text: люяяхб хг яхлб; LB, RB: жекне);
-  оепел L, R: жекне;
+   оепел
+      L, R: жекне;
 
-      опнжедспю strle(s1, s2: жекне): аскебн;
-      оепел S1, S2: люяяхб 256 хг яхлб; i: жекне;
+   опнжедспю strle(s1, s2: жекне): аскебн; (* БНР ЩРН ВРН??? МЕ ПЮАНРЮЕР? *)
+      оепел
+         S1, S2: люяяхб 256 хг яхлб; i: жекне;
       мювюкн
-        i := 0;
-        CopyStr(S1, Text, i, s1);
-        i := 0;
-        CopyStr(S2, Text, i, s2)
-        бепмсрэ S1 <= S2
+         i := 0;
+         CopyStr(S1, Text, i, s1);
+         i := 0;
+         CopyStr(S2, Text, i, s2)
+         бепмсрэ S1 <= S2
       йнмеж strle;
 
-  мювюкн
-    еякх LB < RB рнцдю
-      L := LB;
-      R := RB;
-      онбрнпърэ
-        онйю (L < RB) & strle(NamePtr[L], NamePtr[LB]) декюрэ
-          дна(L)
-        йнмеж;
-        онйю (R > LB) & strle(NamePtr[LB], NamePtr[R]) декюрэ
-          бшв(R)
-        йнмеж;
-        еякх L < R рнцдю
-          exch(NamePtr[L], NamePtr[R]);
-          exch(Adr[L], Adr[R])
-        йнмеж
-      онйюме L >= R;
-      еякх R > LB рнцдю
-        exch(NamePtr[LB], NamePtr[R]);
-        exch(Adr[LB], Adr[R]);
-        Sort(NamePtr, Adr, Text, LB, R - 1)
-      йнмеж;
-      Sort(NamePtr, Adr, Text, R + 1, RB)
-    йнмеж
-  йнмеж Sort;
+   мювюкн
+      еякх LB < RB рнцдю
+         L := LB;
+         R := RB;
+         онбрнпърэ
+            онйю (L < RB) & strle(NamePtr[L], NamePtr[LB]) декюрэ
+               дна(L)
+            йнмеж;
+            онйю (R > LB) & strle(NamePtr[LB], NamePtr[R]) декюрэ
+               бшв(R)
+            йнмеж;
+            еякх L < R рнцдю
+               exch(NamePtr[L], NamePtr[R]);
+               exch(Adr[L], Adr[R])
+            йнмеж
+            онйюме L >= R;
+               еякх R > LB рнцдю
+                  exch(NamePtr[LB], NamePtr[R]);
+                  exch(Adr[LB], Adr[R]);
+                  Sort(NamePtr, Adr, Text, LB, R - 1)
+               йнмеж;
+               Sort(NamePtr, Adr, Text, R + 1, RB)
+      йнмеж
+   йнмеж Sort;
 
 опнжедспю PackExport(Name: люяяхб хг яхлб);
-  оепел i: жекне;
-  мювюкн
-    Sort(etable.arrnameptr, etable.arradr, etable.text, 0, etable.namecount - 1);
-    дкъ i := 0 дн etable.namecount - 1 декюрэ
-      etable.arrnum[i] := IntToCard16(i)
-    йнмеж;
-    etable.size := 40 + etable.adrcount * 4 + etable.namecount * 6;
-    etable.arradroffset := 40;
-    etable.arrnameptroffset := 40 + etable.adrcount * 4;
-    etable.arrnumoffset := etable.arrnameptroffset + etable.namecount * 4;
-    etable.dllnameoffset := etable.size + etable.textlen;
-    CopyStr(etable.text, Name, etable.textlen, 0);
-    дна(etable.textlen);
-    дкъ i := 0 дн etable.namecount - 1 декюрэ
-      etable.arrnameptr[i] := etable.arrnameptr[i] + etable.size
-    йнмеж;
-    etable.size := etable.size + etable.textlen
-  йнмеж PackExport;
+   оепел
+      i: жекне;
+   мювюкн
+      Sort(etable.arrnameptr, etable.arradr, etable.text, 0, etable.namecount - 1);
+      дкъ i := 0 дн etable.namecount - 1 декюрэ
+         etable.arrnum[i] := IntToCard16(i)
+      йнмеж;
+      etable.size := 40 + etable.adrcount * 4 + etable.namecount * 6;
+      etable.arradroffset := 40;
+      etable.arrnameptroffset := 40 + etable.adrcount * 4;
+      etable.arrnumoffset := etable.arrnameptroffset + etable.namecount * 4;
+      etable.dllnameoffset := etable.size + etable.textlen;
+      CopyStr(etable.text, Name, etable.textlen, 0);
+      дна(etable.textlen);
+      дкъ i := 0 дн etable.namecount - 1 декюрэ
+         etable.arrnameptr[i] := etable.arrnameptr[i] + etable.size
+      йнмеж;
+      etable.size := etable.size + etable.textlen
+   йнмеж PackExport;
 
 опнжедспю ProcExport*(Number: жекне; Name: ЛсГЕК.РСсГЕК; NameLabel: жекне);
    мювюкн
@@ -272,47 +277,49 @@
    йнмеж ProcExport;
 
 опнжедспю Err(code: жекне);
-  мювюкн
-    бшанп code хг
-    |1: ЛнЬ.яННАЫ(67); ЛйНМЯ.яРПНЙЮ_оЕВЮРЭ(OutFile)
-    |2: ЛнЬ.яННАЫ(69); ЛйНМЯ.яРПНЙЮ_оЕВЮРЭ(OutFile)
-    |3: ЛнЬ.яННАЫ(58)
-    |4: ЛнЬ.яННАЫ(88)
-    хмюве
-    йнмеж;
-    ЛйНМЯ.мНБяРП;
-    ЛоПНЖ.гЮЙНМВХРЭ(1)
-  йнмеж Err;
+   мювюкн
+      бшанп code хг
+         |1: ЛнЬ.яННАЫ(67); ЛйНМЯ.яРПНЙЮ_оЕВЮРЭ(OutFile)
+         |2: ЛнЬ.яННАЫ(69); ЛйНМЯ.яРПНЙЮ_оЕВЮРЭ(OutFile)
+         |3: ЛнЬ.яННАЫ(58)
+         |4: ЛнЬ.яННАЫ(88)
+      хмюве
+      йнмеж;
+      ЛйНМЯ.мНБяРП;
+      ЛоПНЖ.гЮЙНМВХРЭ(1)
+   йнмеж Err;
 
 опнжедспю Align*(n, m: жекне): жекне;
-    бепмсрэ n + (m - n MOD m) MOD m
-  йнмеж Align;
+      бепмсрэ n + (m - n MOD m) MOD m
+   йнмеж Align;
 
 опнжедспю PutReloc(R: РпЕКНЙ);
-  оепел i: жекне;
-  мювюкн
-    mSys.PUT(mSys.ADR(Reloc[rcount]), R.Page);
-    дна(rcount, 4);
-    mSys.PUT(mSys.ADR(Reloc[rcount]), R.Size);
-    дна(rcount, 4);
-    дкъ i := 0 дн ASR(R.Size - 8, 1) - 1 декюрэ
-      mSys.PUT(mSys.ADR(Reloc[rcount]), R.reloc[i]);
-      дна(rcount, 2)
-    йнмеж
-  йнмеж PutReloc;
+   оепел
+      i: жекне;
+   мювюкн
+      mSys.PUT(mSys.ADR(Reloc[rcount]), R.Page);
+      дна(rcount, 4);
+      mSys.PUT(mSys.ADR(Reloc[rcount]), R.Size);
+      дна(rcount, 4);
+      дкъ i := 0 дн ASR(R.Size - 8, 1) - 1 декюрэ
+         mSys.PUT(mSys.ADR(Reloc[rcount]), R.reloc[i]);
+         дна(rcount, 2)
+      йнмеж
+   йнмеж PutReloc;
 
 опнжедспю InitArray(оеп adr: жекне; chars: ЛяРП.РяРПНЙЮ);
-  оепел i, x, n: жекне;
-  мювюкн
-    n := LEN(chars) - 1;
-    i := 0;
-    онйю (i < n) & (chars[i] # 0X) декюрэ
-      x := ЛяЙЮМ.вХЯКН16_Б_жЕКНЕ(chars[i]) * 16 + ЛяЙЮМ.вХЯКН16_Б_жЕКНЕ(chars[i + 1]);
-      mSys.PUT(adr, CHR(x));
-      дна(adr);
-      дна(i, 2)
-    йнмеж
-  йнмеж InitArray;
+   оепел
+      i, x, n: жекне;
+   мювюкн
+      n := LEN(chars) - 1;
+      i := 0;
+      онйю (i < n) & (chars[i] # 0X) декюрэ
+         x := ЛяЙЮМ.вХЯКН16_Б_жЕКНЕ(chars[i]) * 16 + ЛяЙЮМ.вХЯКН16_Б_жЕКНЕ(chars[i + 1]);
+         mSys.PUT(adr, CHR(x));
+         дна(adr);
+         дна(i, 2)
+      йнмеж
+   йнмеж InitArray;
 
 опнжедспю WriteF(F, A, N: жекне);
   мювюкн
