@@ -98,7 +98,7 @@
    тСекцияИмя = МАССИВ 8 ИЗ СИМВ;
 
    тСекция = ЗАПИСЬ
-         name: тСекцияИмя;
+         имя: тСекцияИмя;
          size, adr, sizealign, OAPfile, reserved6, reserved7, reserved8, attrflags: ЦЕЛОЕ
       КОНЕЦ;
 
@@ -143,7 +143,7 @@
       КОНЕЦ;
 
    тРелок = ЗАПИСЬ
-         Page, Size: ЦЕЛОЕ;
+         страница, Size: ЦЕЛОЕ;
          reloc: МАССИВ 1024 ИЗ mSys.CARD16
       КОНЕЦ;
 
@@ -313,7 +313,7 @@
    ПЕРЕМ
       i: ЦЕЛОЕ;
    НАЧАЛО
-      mSys.PUT(mSys.ADR(Reloc[rcount]), R.Page);
+      mSys.PUT(mSys.ADR(Reloc[rcount]), R.страница);
       ДОБ(rcount, 4);
       mSys.PUT(mSys.ADR(Reloc[rcount]), R.Size);
       ДОБ(rcount, 4);
@@ -361,7 +361,7 @@
 
 ПРОЦЕДУРА SetSection(ПЕР Section: тСекция; name: тСекцияИмя; size, adr, sizealign, OAPfile, attrflags: ЦЕЛОЕ);
    НАЧАЛО
-      Section.name := name;
+      Section.имя := name;
       Section.size := size;
       Section.adr := adr;
       Section.sizealign := sizealign;
@@ -1615,7 +1615,7 @@
   КОНЕЦ Optimization;
 
 ПРОЦЕДУРА WriteKOS(FName: МАССИВ ИЗ СИМВ; stk, size, datasize, gsize: ЦЕЛОЕ; obj: БУЛЕВО);
-   CONST
+   КОНСТ
       strsize = 2048;
    ПЕРЕМ
       Header: тЗаголовокKol;
@@ -1662,7 +1662,7 @@
          Coff.SizeOfOptionalHeader := IntToCard16(0);
          Coff.Characteristics := IntToCard16(0184H);
 
-         Coff.text.name := ".flat";
+         Coff.text.имя := ".flat";
          Coff.text.size := 0;
          Coff.text.adr := 0;
          Coff.text.sizealign := size;
@@ -1671,7 +1671,7 @@
          Coff.text.reserved7 := 0;
          Coff.text.attrflags := 40300020H;
 
-         Coff.data.name := ".data";
+         Coff.data.имя := ".data";
          Coff.data.size := 0;
          Coff.data.adr := 0;
          Coff.data.sizealign := datasize;
@@ -1681,7 +1681,7 @@
          Coff.data.reserved8 := 0;
          Coff.data.attrflags := 0C0300040H;
 
-         Coff.bss.name := ".bss";
+         Coff.bss.имя := ".bss";
          Coff.bss.size := 0;
          Coff.bss.adr := 0;
          Coff.bss.sizealign := gsize;
@@ -1930,7 +1930,7 @@
       ЕСЛИ dll ИЛИ con ИЛИ gui ТОГДА
          Labels[LoadLibrary] := asize + 4;
          Labels[GetProcAddress] := asize;
-         R.Page := 0;
+         R.страница := 0;
          R.Size := 0;
          RCount := 0;
       КОНЕЦ;
@@ -1955,7 +1955,7 @@
          КОНЕЦ;
          ЕСЛИ dll & (cur.tcmd IN {GCMD, OCMD}) ТОГДА
             n := cur.адр.адрес - LoadAdr;
-            ЕСЛИ ASR(n, 12) = ASR(R.Page, 12) ТОГДА
+            ЕСЛИ ASR(n, 12) = ASR(R.страница, 12) ТОГДА
                R.reloc[RCount] := IntToCard16(n MOD 1000H + 3000H);
                ДОБ(RCount);
                ДОБ(R.Size, 2)
@@ -1963,7 +1963,7 @@
                ЕСЛИ R.Size # 0 ТОГДА
                   PutReloc(R)
                КОНЕЦ;
-               R.Page := ASR(n, 12) * 1000H;
+               R.страница := ASR(n, 12) * 1000H;
                R.Size := 10;
                R.reloc[0] := IntToCard16(n MOD 1000H + 3000H);
                RCount := 1
