@@ -13,34 +13,31 @@
 
    You should have received a copy of the GNU Lesser General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*)
-
+   *)
 лндскэ ЛНДюох;
 
 хлонпр sys := SYSTEM;
 
 йнмяр
-
   OS* = "WIN";
   Slash* = "\";
 
   OFS_MAXPATHNAME = 128;
 
 рхош
-
    OFSTRUCT* = гюохяэ
-      cBytes: яхлб;
-      fFixedDisk: яхлб;
-      nErrCode: sys.CARD16;
-      Reserved1: sys.CARD16;
-      Reserved2: sys.CARD16;
-      szPathName: люяяхб OFS_MAXPATHNAME хг яхлб
-   йнмеж;
+         cBytes: яхлб;
+         fFixedDisk: яхлб;
+         nErrCode: sys.CARD16;
+         Reserved1: sys.CARD16;
+         Reserved2: sys.CARD16;
+         szPathName: люяяхб OFS_MAXPATHNAME хг яхлб
+      йнмеж;
 
 оепел
 
    sec*, dsec*: жекне;
-
+   
    GetStdHandle*: опнжедспю [winapi] (nStdHandle: жекне): жекне;
    CloseHandle*:  опнжедспю [winapi] (hObject: жекне): жекне;
    CreateFile*:   опнжедспю [winapi] (lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes,

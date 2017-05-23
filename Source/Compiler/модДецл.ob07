@@ -370,7 +370,7 @@
     PushStProc("ASR",      stASR);
     
     PushStProc("ASSERT",   stASSERT);
-    PushStProc("гюыхрю",   stASSERT);
+    PushStProc("йнмрпнкэ",   stASSERT);
     
     PushStType("BOOLEAN",  TBOOLEAN);
     PushStType("аскебн",  TBOOLEAN);
