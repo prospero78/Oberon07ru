@@ -15,7 +15,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *)
 
-лндскэ API;
+лндскэ ЛНДюох;
 
 хлонпр sys := SYSTEM;
 
@@ -67,19 +67,19 @@
 опнжедспю zeromem*(size, adr: жекне);
    йнмеж zeromem;
 
-опнжедспю яННАЫ_нРКЮДЙХ*(lpText, lpCaption: жекне);
+опнжедспю яННАЫ_нРКЮДЙХ*(РЕЙЯР_, ГЮЦНКНБНЙ_: жекне);
    мювюкн
-      MessageBoxA(0, lpText, lpCaption, 16)
+      MessageBoxA(0, РЕЙЯР_, ГЮЦНКНБНЙ_, 16)
    йнмеж яННАЫ_нРКЮДЙХ;
 
-опнжедспю FileSize*(F: жекне): жекне;
+опнжедспю тЮИКпЮГЛЕП_оНКСВХРЭ*(ТЮИК_МНЛ_: жекне): жекне;
    оепел
-      res: жекне;
+      ПЮГЛЕП: жекне;
    мювюкн
-      res := SetFilePointer(F, 0, 0, 2);
-      SetFilePointer(F, 0, 0, 0)
-      бепмсрэ res
-   йнмеж FileSize;
+      ПЮГЛЕП := SetFilePointer(ТЮИК_МНЛ_, 0, 0, 2);
+      SetFilePointer(ТЮИК_МНЛ_, 0, 0, 0)
+      бепмсрэ ПЮГЛЕП
+   йнмеж тЮИКпЮГЛЕП_оНКСВХРЭ;
 
 опнжедспю GetProc(name: люяяхб хг яхлб; hMOD, adr: жекне);
    оепел
@@ -90,52 +90,52 @@
       sys.PUT(adr, H);
    йнмеж GetProc;
 
-опнжедспю Time*(оеп sec, dsec: жекне);
+опнжедспю рХЙХ_оНКСВХРЭ*(оеп ЯЕЙ_, ДНКХ_ЯЕЙ_: жекне);
    оепел
-      t: жекне;
+      РХЙХ : жекне;
    мювюкн
-     t := GetTickCount() DIV 10;
-     sec := t DIV 100;
-     dsec := t MOD 100
-   йнмеж Time;
+      РХЙХ := GetTickCount() DIV 10;
+      ЯЕЙ_ := РХЙХ DIV 100;
+      ДНКХ_ЯЕЙ_ := РХЙХ MOD 100
+   йнмеж рХЙХ_оНКСВХРЭ;
 
-опнжедспю _NEW*(size: жекне): жекне;
-      бепмсрэ Alloc(64, size)
-   йнмеж _NEW;
+опнжедспю оЮЛЪРЭ_оНКСВХРЭ*(ПЮГЛЕП_: жекне): жекне;
+      бепмсрэ Alloc(64, ПЮГЛЕП_)
+   йнмеж оЮЛЪРЭ_оНКСВХРЭ;
 
-опнжедспю _DISPOSE*(p: жекне): жекне;
+опнжедспю оЮЛЪРЭ_нЯБНАНДХРЭ*(p: жекне): жекне;
       бепмсрэ Free(p)
-   йнмеж _DISPOSE;
+   йнмеж оЮЛЪРЭ_нЯБНАНДХРЭ;
 
-опнжедспю init* (esp: жекне);
+опнжедспю мЮЯРПНХРЭ* (esp: жекне);
    оепел
       lib, p: жекне;
    мювюкн
-     sys.MOVE(esp, sys.ADR(GetProcAddress), 4);
-     sys.MOVE(esp + 4, sys.ADR(LoadLibraryA), 4);
+      sys.MOVE(esp, sys.ADR(GetProcAddress), 4);
+      sys.MOVE(esp + 4, sys.ADR(LoadLibraryA), 4);
 
-     lib := LoadLibraryA(sys.ADR("kernel32.dll"));
-     GetProc("GetTickCount", lib, sys.ADR(GetTickCount));
+      lib := LoadLibraryA(sys.ADR("kernel32.dll"));
+      GetProc("GetTickCount", lib, sys.ADR(GetTickCount));
 
-     Time(sec, dsec);
+      рХЙХ_оНКСВХРЭ(sec, dsec);
 
-     GetProc("GetStdHandle", lib, sys.ADR(GetStdHandle));
-     GetProc("CreateFileA", lib, sys.ADR(CreateFile));
-     GetProc("CloseHandle", lib, sys.ADR(CloseHandle));
-     GetProc("OpenFile", lib, sys.ADR(OpenFile));
-     GetProc("ReadFile", lib, sys.ADR(ReadFile));
-     GetProc("WriteFile", lib, sys.ADR(WriteFile));
-     GetProc("GetCommandLineA", lib, sys.ADR(GetCommandLine));
-     GetProc("ExitProcess", lib, sys.ADR(ExitProcess));
-     GetProc("GlobalAlloc", lib, sys.ADR(Alloc));
-     GetProc("GlobalFree", lib, sys.ADR(Free));
-     GetProc("SetFilePointer", lib, sys.ADR(SetFilePointer));
+      GetProc("GetStdHandle", lib, sys.ADR(GetStdHandle));
+      GetProc("CreateFileA", lib, sys.ADR(CreateFile));
+      GetProc("CloseHandle", lib, sys.ADR(CloseHandle));
+      GetProc("OpenFile", lib, sys.ADR(OpenFile));
+      GetProc("ReadFile", lib, sys.ADR(ReadFile));
+      GetProc("WriteFile", lib, sys.ADR(WriteFile));
+      GetProc("GetCommandLineA", lib, sys.ADR(GetCommandLine));
+      GetProc("ExitProcess", lib, sys.ADR(ExitProcess));
+      GetProc("GlobalAlloc", lib, sys.ADR(Alloc));
+      GetProc("GlobalFree", lib, sys.ADR(Free));
+      GetProc("SetFilePointer", lib, sys.ADR(SetFilePointer));
 
-     lib := LoadLibraryA(sys.ADR("msvcrt.dll"));
-     GetProc("strncmp", lib, sys.ADR(strncmp));
+      lib := LoadLibraryA(sys.ADR("msvcrt.dll"));
+      GetProc("strncmp", lib, sys.ADR(strncmp));
 
-     lib := LoadLibraryA(sys.ADR("user32.dll"));
-     GetProc("MessageBoxA", lib, sys.ADR(MessageBoxA));
-   йнмеж init;
+      lib := LoadLibraryA(sys.ADR("user32.dll"));
+      GetProc("MessageBoxA", lib, sys.ADR(MessageBoxA));
+   йнмеж мЮЯРПНХРЭ;
 
-йнмеж API.
+йнмеж ЛНДюох.

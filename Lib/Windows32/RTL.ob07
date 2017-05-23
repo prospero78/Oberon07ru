@@ -17,7 +17,8 @@
 
 лндскэ RTL;
 
-хлонпр sys := SYSTEM, API;
+хлонпр sys := SYSTEM,
+   ЛюОХ := ЛНДюох;
 
 рхош
 
@@ -32,12 +33,12 @@
 
 опнжедспю [stdcall] _halt*(n: жекне);
    BEGIN
-     API.ExitProcess(n)
+     ЛюОХ.ExitProcess(n)
    END _halt;
 
 опнжедспю [stdcall] _newrec*(size, t: жекне; VAR ptr: жекне);
    BEGIN
-     ptr := API._NEW(size);
+     ptr := ЛюОХ.оЮЛЪРЭ_оНКСВХРЭ(size);
      IF ptr # 0 THEN
        sys.PUT(ptr, t);
        INC(ptr, 4)
@@ -48,7 +49,7 @@
    BEGIN
      IF ptr # 0 THEN
        DEC(ptr, 4);
-       ptr := API._DISPOSE(ptr)
+       ptr := ЛюОХ.оЮЛЪРЭ_нЯБНАНДХРЭ(ptr)
      END
    END _disprec;
 
@@ -158,7 +159,7 @@
 опнжедспю [stdcall] _strcmp*(op: жекне; b, a: ARRAY OF CHAR): BOOLEAN;
    VAR i: жекне; Res: BOOLEAN;
    BEGIN
-     i := API.strncmp(sys.ADR(a), sys.ADR(b), Min(LEN(a), LEN(b)));
+     i := ЛюОХ.strncmp(sys.ADR(a), sys.ADR(b), Min(LEN(a), LEN(b)));
      IF i = 0 THEN
        i := _length(a) - _length(b)
      END;
@@ -256,7 +257,7 @@
        Int(code, int);
        StrAppend(msg, pos, int)
      END;
-     API.яННАЫ_нРКЮДЙХ(sys.ADR(msg), SelfName)
+     ЛюОХ.яННАЫ_нРКЮДЙХ(sys.ADR(msg), SelfName)
    END _assrt;
 
 опнжедспю [stdcall] _close*;
@@ -268,8 +269,8 @@
 
 опнжедспю [stdcall] _init*(self, rec, gsize, gadr, esp: жекне);
    BEGIN
-     API.zeromem(gsize, gadr);
-     API.init(esp);
+     ЛюОХ.zeromem(gsize, gadr);
+     ЛюОХ.мЮЯРПНХРЭ(esp);
      SelfName := self;
      rtab := rec;
      CloseProc := NIL;
