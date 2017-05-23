@@ -90,47 +90,49 @@
    оепел
       i, m: жекне;
    мювюкн
-     m := bsize * idx;
-     дкъ i := 4 дн Dim + 2 декюрэ
-       m := m * Arr[i]
-     йнмеж;
-     еякх (Arr[3] > idx) & (idx >= 0) рнцдю
-       Arr[3] := c + m
-     хмюве
-       Arr[3] := 0
-     йнмеж
+      m := bsize * idx;
+      дкъ i := 4 дн Dim + 2 декюрэ
+         m := m * Arr[i]
+      йнмеж;
+      еякх (Arr[3] > idx) & (idx >= 0) рнцдю
+         Arr[3] := c + m
+      хмюве
+         Arr[3] := 0
+      йнмеж
    йнмеж _arrayidx;
 
-опнжедспю [stdcall] _arrayidx1*(VAR Arr: IntArray; bsize, idx, c: жекне);
+опнжедспю [stdcall] _arrayidx1*(оеп Arr: IntArray; bsize, idx, c: жекне);
    мювюкн
-     IF (Arr[3] > idx) & (idx >= 0) THEN
-       Arr[3] := bsize * idx + c
-     ELSE
-       Arr[3] := 0
-     йнмеж
+      еякх (Arr[3] > idx) & (idx >= 0) рнцдю
+         Arr[3] := bsize * idx + c
+      хмюве
+         Arr[3] := 0
+      йнмеж
    йнмеж _arrayidx1;
 
-опнжедспю [stdcall] _arrayrot*(m, n: жекне; VAR Arr: IntArray);
-   VAR i, j, t: жекне;
+опнжедспю [stdcall] _arrayrot*(m, n: жекне; оеп Arr: IntArray);
+   оепел
+      i, j, t: жекне;
    мювюкн
-     FOR i := 1 TO n DO
-       t := Arr[0];
-       FOR j := 0 TO m + n - 1 DO
-         Arr[j] := Arr[j + 1]
-       йнмеж;
-       Arr[m + n] := t
-     йнмеж
+      дкъ i := 1 дн n декюрэ
+         t := Arr[0];
+         дкъ j := 0 дн m + n - 1 декюрэ
+            Arr[j] := Arr[j + 1]
+         йнмеж;
+         Arr[m + n] := t
+      йнмеж
    йнмеж _arrayrot;
 
-опнжедспю Min(a, b: INTEGER): жекне;
-   VAR res: жекне;
+опнжедспю Min(a, b: жекне): жекне;
+   оепел
+      res: жекне;
    мювюкн
-     IF a < b THEN
-       res := a
-     ELSE
-       res := b
-     йнмеж
-     RETURN res
+      еякх a < b рнцдю
+         res := a
+      хмюве
+         res := b
+      йнмеж
+      бепмсрэ res
    йнмеж Min;
 
 опнжедспю [stdcall] _length*(s: ARRAY OF CHAR): жекне;
