@@ -210,29 +210,30 @@
      онбрнпърэ
        str[i] := CHR(x MOD 10 + ORD("0"));
        x := x DIV 10;
-       INC(i)
+       дна(i)
      онйюме x = 0;
      b := i - 1;
      WHILE a < b DO
        c := str[a];
        str[a] := str[b];
        str[b] := c;
-       INC(a);
-       DEC(b)
+       дна(a);
+       бшв(b)
      йнмеж;
      str[i] := 0X
    йнмеж Int;
 
-опнжедспю StrAppend(VAR str: STRING; VAR pos: жекне; s: ARRAY OF CHAR);
-   VAR i, n: жекне;
+опнжедспю StrAppend(оеп str: STRING; оеп pos: жекне; s: люяяхб хг яхлб);
+   оепел
+      i, n: жекне;
    мювюкн
-     n := LEN(s);
-     i := 0;
-     WHILE (i < n) & (s[i] # 0X) DO
-       str[pos] := s[i];
-       INC(pos);
-       INC(i)
-     йнмеж
+      n := LEN(s);
+      i := 0;
+      онйю (i < n) & (s[i] # 0X) DO
+         str[pos] := s[i];
+         дна(pos);
+         дна(i)
+      йнмеж
    йнмеж StrAppend;
 
 опнжедспю [stdcall] _assrt*(code, m: жекне; modname: STRING; line: жекне);
