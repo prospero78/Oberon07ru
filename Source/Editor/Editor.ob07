@@ -1,26 +1,29 @@
-п»ї(*
-    Copyright 2013 Krotov Anton
+(*
+   Copyright 2013 Krotov Anton
 
-    This file is part of Editor.
+   This file is part of Editor.
 
-    Editor is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+   Editor is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
-    Editor is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+   Editor is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with Editor. If not, see <http://www.gnu.org/licenses/>.
-*)
+   You should have received a copy of the GNU General Public License
+   along with Editor. If not, see <http://www.gnu.org/licenses/>.
+   *)
 
 MODULE Editor;
 
-IMPORT API, sys := SYSTEM, TE := TextEdit, TU := TextUtils,
-       Line, List, Text, Param, Dlg := Dialogs;
+IMPORT API := модАПИ,
+   sys := SYSTEM,
+   TE := TextEdit,
+   TU := TextUtils,
+   Line, List, Text, Param, Dlg := Dialogs;
 
 CONST
 
@@ -508,7 +511,7 @@ END Save;
 PROCEDURE SaveErr(name: STRING);
 VAR str: STRING;
 BEGIN
-  TU.concat("РѕС€РёР±РєР° Р·Р°РїРёСЃРё С„Р°Р№Р»Р°", 0DX, str);
+  TU.concat("ошибка записи файла", 0DX, str);
   TU.concat(str, 0AX, str);
   TU.concat(str, name, str);
   MessageBox(mainwnd, wndcaption, str, 16)
@@ -544,12 +547,12 @@ BEGIN
     a := a + n;
     INC(i)
   UNTIL c = 0;
-  str1 := "Р¤Р°Р№Р» ";
+  str1 := "File ";
   TU.concat(str1, str2, str1);
-  TU.concat(str1, " РёР·РјРµРЅРµРЅ.", str1);
+  TU.concat(str1, " изменен.", str1);
   TU.concat(str1, 0DX, str1);
   TU.concat(str1, 0AX, str1);
-  TU.concat(str1, "РЎРѕС…СЂР°РЅРёС‚СЊ РёР·РјРµРЅРµРЅРёСЏ?", str1)
+  TU.concat(str1, "Сохранить изменения?", str1)
   RETURN MessageBox(mainwnd, wndcaption, str1, 51)
 END Confirm;
 
@@ -648,7 +651,7 @@ BEGIN
   IF TE.FList.Count > 0 THEN
     UpdateWindow(Tab);
     IF TE.CurModified() THEN
-      SetStatus(1, "С‚РµРєСЃС‚ РёР·РјРµРЅРµРЅ", 1)
+      SetStatus(1, "текст изменен", 1)
     ELSE
       SetStatus(1, "", 0)
     END;
@@ -756,15 +759,15 @@ BEGIN
     TE.Utf16To8(str3, TE.ExtractFileName(sys.ADR(TE.f.name[0]), "."));
     IF str3 = "ob07" THEN
       SetMain(TE.Index(TE.f), TE.Index(TE.main));
-      TU.concat("РјРѕРґСѓР»СЊ ", str1, str2);
-      TU.concat(str2, " РЅР°Р·РЅР°С‡РµРЅ РіР»Р°РІРЅС‹Рј", str2);
+      TU.concat("модуль ", str1, str2);
+      TU.concat(str2, " назначен главным", str2);
       MessageBox(wnd, wndcaption, str2, 64);
       TE.SetMain
     ELSE
-      MessageBox(wnd, wndcaption, "СЂР°СЃС€РёСЂРµРЅРёРµ С„Р°Р№Р»Р° РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ '.ob07'", 48)
+      MessageBox(wnd, wndcaption, "расширение файла должно быть '.ob07'", 48)
     END
   ELSE
-    MessageBox(wnd, wndcaption, "РЅРµРѕР±С…РѕРґРёРјРѕ СЃРѕС…СЂР°РЅРёС‚СЊ С„Р°Р№Р»", 48)
+    MessageBox(wnd, wndcaption, "необходимо сохранить файл", 48)
   END
 END MainModule;
 
@@ -890,7 +893,7 @@ VAR n, s, X, Y, i, res, err, line, col, size: INTEGER; rect: TU.TRect; sel, save
     F := TU.CreateFileW(name, 80000000H, 0, 0, 3, 80H, 0);
     res := (F # 0) & (F # -1);
     IF res THEN
-      size := API.FileSize(F);
+      size := API.ФайлРазмер_Получить(F);
       file := API.Alloc(64, size + 4096);
       IF file # 0 THEN
         iter := file;
@@ -1019,11 +1022,11 @@ VAR n, s, X, Y, i, res, err, line, col, size: INTEGER; rect: TU.TRect; sel, save
           ELSE
             res := TE.Close();
             CASE err OF
-            |1, 5, 7: str := "РЅРµРїСЂР°РІРёР»СЊРЅС‹Р№ С„РѕСЂРјР°С‚ С„Р°Р№Р»Р°"
-            |2:       str := "РѕС€РёР±РєР° С‡С‚РµРЅРёСЏ С„Р°Р№Р»Р°"
-            |3:       str := "РЅРµРґРѕСЃС‚Р°С‚РѕС‡РЅРѕ РїР°РјСЏС‚Рё"
-            |4:       str := "РѕС€РёР±РєР° РґРѕСЃС‚СѓРїР° Рє С„Р°Р№Р»Сѓ"
-            |6:       str := "С„Р°Р№Р» СЃРѕРґРµСЂР¶РёС‚ СЃР»РёС€РєРѕРј РґР»РёРЅРЅС‹Рµ СЃС‚СЂРѕРєРё"
+            |1, 5, 7: str := "неправильный формат файла"
+            |2:       str := "ошибка чтения файла"
+            |3:       str := "недостаточно памяти"
+            |4:       str := "ошибка доступа к файлу"
+            |6:       str := "файл содержит слишком длинные строки"
             ELSE
             END;
             TE.Utf16To8(name, s);
@@ -1059,7 +1062,7 @@ VAR n, s, X, Y, i, res, err, line, col, size: INTEGER; rect: TU.TRect; sel, save
   PROCEDURE chk_main(): BOOLEAN;
   BEGIN
     IF TE.main = NIL THEN
-      MessageBox(wnd, wndcaption, "РЅРµ Р·Р°РґР°РЅ РіР»Р°РІРЅС‹Р№ РјРѕРґСѓР»СЊ", 48)
+      MessageBox(wnd, wndcaption, "не задан главный модуль", 48)
     END
     RETURN TE.main # NIL
   END chk_main;
@@ -1138,18 +1141,18 @@ VAR n, s, X, Y, i, res, err, line, col, size: INTEGER; rect: TU.TRect; sel, save
     Y := r.Top;
     SelectObject(ParamDC, Arial2);
     TU.SetBkColor(ParamDC, BkColor);
-    proc1("РљР»СЋС‡РµРІС‹Рµ СЃР»РѕРІР°", TU.cKey);
-    proc1("РЎС‚Р°РЅРґР°СЂС‚РЅС‹Рµ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂС‹", TU.cStId);
-    proc1("Р§РёСЃР»Р°", TU.cNum);
-    proc1("РЎС‚СЂРѕРєРё", TU.cStr);
-    proc1("РљРѕРјРјРµРЅС‚Р°СЂРёРё", TU.cCom);
-    proc1("РћСЃС‚Р°Р»СЊРЅРѕР№ С‚РµРєСЃС‚", TU.cText);
-    proc1("Р¤РѕРЅ", TU.cBkText);
-    proc1("Р’С‹РґРµР»РµРЅРёРµ (С„РѕРЅ)", TU.cBkSel);
-    proc1("Р’С‹РґРµР»РµРЅРёРµ (С‚РµРєСЃС‚)", TU.cTextSel);
-    proc1("Р¤РѕРЅ С‚РµРєСѓС‰РµР№ СЃС‚СЂРѕРєРё", TU.cBkCur);
-    proc1("РќРѕРјРµСЂР° СЃС‚СЂРѕРє (С„РѕРЅ)", TU.cBkNum);
-    proc1("РќРѕРјРµСЂР° СЃС‚СЂРѕРє (С‚РµРєСЃС‚)", TU.cTextNum)
+    proc1("Ключевые слова", TU.cKey);
+    proc1("Стандартные идентификаторы", TU.cStId);
+    proc1("Числа", TU.cNum);
+    proc1("Строки", TU.cStr);
+    proc1("Комментарии", TU.cCom);
+    proc1("Остальной текст", TU.cText);
+    proc1("Фон", TU.cBkText);
+    proc1("Выделение (фон)", TU.cBkSel);
+    proc1("Выделение (текст)", TU.cTextSel);
+    proc1("Фон текущей строки", TU.cBkCur);
+    proc1("Номера строк (фон)", TU.cBkNum);
+    proc1("Номера строк (текст)", TU.cTextNum)
   END ParamPaint;
 
   PROCEDURE _Options;
@@ -1187,7 +1190,7 @@ VAR n, s, X, Y, i, res, err, line, col, size: INTEGER; rect: TU.TRect; sel, save
             Text.GoToLine(TE.f.txt, n - 1);
             Redraw
           ELSE
-            str1 := "РІРІРµРґРёС‚Рµ РїСЂР°РІРёР»СЊРЅС‹Р№ РЅРѕРјРµСЂ СЃС‚СЂРѕРєРё РѕС‚ 1 РґРѕ ";
+            str1 := "введите правильный номер строки от 1 до ";
             TU.IntToStr(TE.f.txt.Count, str2);
             TU.concat(str1, str2, str1);
             MessageBox(mainwnd, wndcaption, str1, 48)
@@ -1631,9 +1634,9 @@ BEGIN
   wc.lpszClassName := sys.ADR(wndclassW);
   RegisterClassEx(wc);
   mainwnd := CreateWindow(wndclass, wndcaption, ws_OverlappedWindow, 0, 0, 800, 600, 0, mainmenu, hinstance, 0);
-  optwnd := CreateWindow(wndclass, "РќР°СЃС‚СЂРѕР№РєРё", ORD(BITS(WS_BORDER) + BITS(WS_SYSMENU)), 20, 20, 340, 590, mainwnd, 0, hinstance, 0);
-  BtnOK := CreateWindow("BUTTON", "РїСЂРёРјРµРЅРёС‚СЊ", ORD(WS_VISIBLE + WS_CHILD + BS_DEFPUSHBUTTON), 20, 510, 130, 35, optwnd, 0, hinstance, 0);
-  BtnCncl := CreateWindow("BUTTON", "РѕС‚РјРµРЅР°", ORD(WS_VISIBLE + WS_CHILD + BS_DEFPUSHBUTTON), 182, 510, 130, 35, optwnd, 0, hinstance, 0);
+  optwnd := CreateWindow(wndclass, "Настройки", ORD(BITS(WS_BORDER) + BITS(WS_SYSMENU)), 20, 20, 340, 590, mainwnd, 0, hinstance, 0);
+  BtnOK := CreateWindow("BUTTON", "применить", ORD(WS_VISIBLE + WS_CHILD + BS_DEFPUSHBUTTON), 20, 510, 130, 35, optwnd, 0, hinstance, 0);
+  BtnCncl := CreateWindow("BUTTON", "отмена", ORD(WS_VISIBLE + WS_CHILD + BS_DEFPUSHBUTTON), 182, 510, 130, 35, optwnd, 0, hinstance, 0);
   ComboFont := CreateWindow("COMBOBOX", "combobox", ORD(WS_CHILD + WS_VISIBLE + CBS_DROPDOWNLIST), 20, 20, 130, 800, optwnd, 0, hinstance, 0);
   ComboSize := CreateWindow("COMBOBOX", "combobox", ORD(WS_CHILD + WS_VISIBLE + CBS_DROPDOWNLIST), 182, 20, 130, 800, optwnd, 0, hinstance, 0);
 
@@ -1684,71 +1687,71 @@ BEGIN
   submenuplatf := CreatePopupMenu();
   submenustksize := CreatePopupMenu();
 
-  CreateMenuItem(mainmenu, submenufile, "Р¤Р°Р№Р»", "", mfile);
-    CreateMenuItem(submenufile, 0, "РќРѕРІС‹Р№", "Ctrl+N", snew);
-    CreateMenuItem(submenufile, 0, "РћС‚РєСЂС‹С‚СЊ", "Ctrl+O", sopen);
-    CreateMenuItem(submenufile, 0, "РЎРѕС…СЂР°РЅРёС‚СЊ", "Ctrl+S", ssave);
-    CreateMenuItem(submenufile, 0, "РЎРѕС…СЂР°РЅРёС‚СЊ РєР°Рє", "", ssaveas);
-    CreateMenuItem(submenufile, 0, "РЎРѕС…СЂР°РЅРёС‚СЊ РІСЃРµ", "", ssaveall);
-    CreateMenuItem(submenufile, 0, "Р—Р°РєСЂС‹С‚СЊ", "", sclose);
-    CreateMenuItem(submenufile, 0, "Р—Р°РєСЂС‹С‚СЊ РІСЃРµ", "", scloseall);
+  CreateMenuItem(mainmenu, submenufile, "Файл", "", mfile);
+    CreateMenuItem(submenufile, 0, "Новый", "Ctrl+N", snew);
+    CreateMenuItem(submenufile, 0, "Открыть", "Ctrl+O", sopen);
+    CreateMenuItem(submenufile, 0, "Сохранить", "Ctrl+S", ssave);
+    CreateMenuItem(submenufile, 0, "Сохранить как", "", ssaveas);
+    CreateMenuItem(submenufile, 0, "Сохранить все", "", ssaveall);
+    CreateMenuItem(submenufile, 0, "Закрыть", "", sclose);
+    CreateMenuItem(submenufile, 0, "Закрыть все", "", scloseall);
     CreateMenuSep(submenufile);
-    CreateMenuItem(submenufile, 0, "Р’С‹С…РѕРґ", "", sexit);
-  CreateMenuItem(mainmenu, submenuedit, "РџСЂР°РІРєР°", "", mfile);
-    CreateMenuItem(submenuedit, 0, "РћС‚РјРµРЅРёС‚СЊ", "Ctrl+Z", sundo);
+    CreateMenuItem(submenufile, 0, "Выход", "", sexit);
+  CreateMenuItem(mainmenu, submenuedit, "Правка", "", mfile);
+    CreateMenuItem(submenuedit, 0, "Отменить", "Ctrl+Z", sundo);
     CreateMenuSep(submenuedit);
-    CreateMenuItem(submenuedit, 0, "Р’С‹СЂРµР·Р°С‚СЊ", "Ctrl+X", scut);
-    CreateMenuItem(submenuedit, 0, "РљРѕРїРёСЂРѕРІР°С‚СЊ", "Ctrl+C", scopy);
-    CreateMenuItem(submenuedit, 0, "Р’СЃС‚Р°РІРёС‚СЊ", "Ctrl+V", spaste);
-    CreateMenuItem(submenuedit, 0, "РЈРґР°Р»РёС‚СЊ", "", sdel);
+    CreateMenuItem(submenuedit, 0, "Вырезать", "Ctrl+X", scut);
+    CreateMenuItem(submenuedit, 0, "Копировать", "Ctrl+C", scopy);
+    CreateMenuItem(submenuedit, 0, "Вставить", "Ctrl+V", spaste);
+    CreateMenuItem(submenuedit, 0, "Удалить", "", sdel);
     CreateMenuSep(submenuedit);
-    CreateMenuItem(submenuedit, 0, "РќР°Р№С‚Рё", "Ctrl+F", sfind);
-    CreateMenuItem(submenuedit, 0, "РќР°Р№С‚Рё РґР°Р»РµРµ", "F3", ssearchagain);
-    CreateMenuItem(submenuedit, 0, "Р—Р°РјРµРЅРёС‚СЊ", "Ctrl+H", sreplace);
-    CreateMenuItem(submenuedit, 0, "РџРµСЂРµР№С‚Рё", "Ctrl+G", sgoto);
+    CreateMenuItem(submenuedit, 0, "Найти", "Ctrl+F", sfind);
+    CreateMenuItem(submenuedit, 0, "Найти далее", "F3", ssearchagain);
+    CreateMenuItem(submenuedit, 0, "Заменить", "Ctrl+H", sreplace);
+    CreateMenuItem(submenuedit, 0, "Перейти", "Ctrl+G", sgoto);
     CreateMenuSep(submenuedit);
-    CreateMenuItem(submenuedit, 0, "Р’С‹РґРµР»РёС‚СЊ РІСЃРµ", "Ctrl+A", sselectall);
+    CreateMenuItem(submenuedit, 0, "Выделить все", "Ctrl+A", sselectall);
     CreateMenuSep(submenuedit);
-    CreateMenuItem(submenuedit, submenucase, "Р РµРіРёСЃС‚СЂ", "", scase);
-      CreateMenuItem(submenucase, 0, "Р’РµСЂС…РЅРёР№", "Ctrl+U", supcase);
-      CreateMenuItem(submenucase, 0, "РќРёР¶РЅРёР№", "Ctrl+L", slowcase);
-  CreateMenuItem(mainmenu, submenuview, "Р’РёРґ", "", mfile);
-    CreateMenuItem(submenuview, 0, "РЎРёРЅС‚Р°РєСЃРёСЃ", "", ssyntax);
-    CreateMenuItem(submenuview, 0, "РќРѕРјРµСЂР° СЃС‚СЂРѕРє", "", snumbers);
-    CreateMenuItem(submenuview, 0, "РќР°СЃС‚СЂРѕР№РєРё...", "", soptions);
-  CreateMenuItem(mainmenu, submenuprog, "РџСЂРѕРіСЂР°РјРјР°", "", mfile);
-    CreateMenuItem(submenuprog, 0, "РљРѕРјРїРёР»РёСЂРѕРІР°С‚СЊ", "Ctrl+F9", scompile);
-    CreateMenuItem(submenuprog, 0, "Р’С‹РїРѕР»РЅРёС‚СЊ", "F9", srun);
-    CreateMenuItem(submenuprog, 0, "РџР°СЂР°РјРµС‚СЂС‹...", "", sparam);
-    CreateMenuItem(submenuprog, 0, "Р“Р»Р°РІРЅС‹Р№ РјРѕРґСѓР»СЊ", "Ctrl+M", smain);
-    CreateMenuItem(submenuprog, submenuplatf, "РџР»Р°С‚С„РѕСЂРјР°", "", splatf);
+    CreateMenuItem(submenuedit, submenucase, "Регистр", "", scase);
+      CreateMenuItem(submenucase, 0, "Верхний", "Ctrl+U", supcase);
+      CreateMenuItem(submenucase, 0, "Нижний", "Ctrl+L", slowcase);
+  CreateMenuItem(mainmenu, submenuview, "Вид", "", mfile);
+    CreateMenuItem(submenuview, 0, "Синтаксис", "", ssyntax);
+    CreateMenuItem(submenuview, 0, "Номера строк", "", snumbers);
+    CreateMenuItem(submenuview, 0, "Настройки...", "", soptions);
+  CreateMenuItem(mainmenu, submenuprog, "Программа", "", mfile);
+    CreateMenuItem(submenuprog, 0, "Компилировать", "Ctrl+F9", scompile);
+    CreateMenuItem(submenuprog, 0, "Выполнить", "F9", srun);
+    CreateMenuItem(submenuprog, 0, "Параметры...", "", sparam);
+    CreateMenuItem(submenuprog, 0, "Главный модуль", "Ctrl+M", smain);
+    CreateMenuItem(submenuprog, submenuplatf, "Платформа", "", splatf);
       CreateMenuItem(submenuplatf, 0, "Win32 Console", "", swin32con);
       CreateMenuItem(submenuplatf, 0, "Win32 GUI", "", swin32gui);
       CreateMenuItem(submenuplatf, 0, "Win32 DLL", "", swin32dll);
       CreateMenuItem(submenuplatf, 0, "Linux32", "", slinux32);
       CreateMenuItem(submenuplatf, 0, "KolibriOS", "", skolibri);
       CreateMenuItem(submenuplatf, 0, "KolibriOS DLL", "", skolibridll);
-    CreateMenuItem(submenuprog, submenustksize, "Р Р°Р·РјРµСЂ СЃС‚РµРєР° (РњР±)", "", sstksize);
+    CreateMenuItem(submenuprog, submenustksize, "Размер стека (Мб)", "", sstksize);
       CreateMenuItem(submenustksize, 0, "1", "", sstk1);
       CreateMenuItem(submenustksize, 0, "2", "", sstk2);
       CreateMenuItem(submenustksize, 0, "4", "", sstk4);
       CreateMenuItem(submenustksize, 0, "8", "", sstk8);
 
-  CreateMenuItem(context, 0, "РћС‚РјРµРЅРёС‚СЊ", "", cundo);
+  CreateMenuItem(context, 0, "Отменить", "", cundo);
   CreateMenuSep(context);
-  CreateMenuItem(context, 0, "Р’С‹СЂРµР·Р°С‚СЊ", "", ccut);
-  CreateMenuItem(context, 0, "РљРѕРїРёСЂРѕРІР°С‚СЊ", "", ccopy);
-  CreateMenuItem(context, 0, "Р’СЃС‚Р°РІРёС‚СЊ", "", cpaste);
-  CreateMenuItem(context, 0, "РЈРґР°Р»РёС‚СЊ", "", cdel);
+  CreateMenuItem(context, 0, "Вырезать", "", ccut);
+  CreateMenuItem(context, 0, "Копировать", "", ccopy);
+  CreateMenuItem(context, 0, "Вставить", "", cpaste);
+  CreateMenuItem(context, 0, "Удалить", "", cdel);
   CreateMenuSep(context);
-  CreateMenuItem(context, 0, "Р’С‹РґРµР»РёС‚СЊ РІСЃРµ", "", cselectall);
+  CreateMenuItem(context, 0, "Выделить все", "", cselectall);
 
   DrawMenuBar(mainwnd);
   ShowWindow(mainwnd, SW_SHOWNORMAL);
   MenuEnabled(FALSE);
 
-  CreateInputBox("РїРµСЂРµР№С‚Рё РЅР° СЃС‚СЂРѕРєСѓ", gotownd, gotoBtnOK, gotoBtnCncl, gotoEdit);
-  CreateInputBox("РїР°СЂР°РјРµС‚СЂС‹", paramwnd, paramBtnOK, paramBtnCncl, paramEdit);
+  CreateInputBox("перейти на строку", gotownd, gotoBtnOK, gotoBtnCncl, gotoEdit);
+  CreateInputBox("параметры", paramwnd, paramBtnOK, paramBtnCncl, paramEdit);
 
   CheckMenuRadioItem(submenustksize, sstk1, sstk8, sstk1, mf_bycommand);
   stk := " 1 ";

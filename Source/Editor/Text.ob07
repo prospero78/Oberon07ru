@@ -1,4 +1,4 @@
-Ôªø(*
+(*
     Copyright 2013 Krotov Anton
 
     This file is part of Editor.
@@ -19,7 +19,8 @@
 
 MODULE Text;
 
-IMPORT List, Line, Lexer, TU := TextUtils, API, sys := SYSTEM;
+IMPORT List, Line, Lexer, TU := TextUtils,
+  API := ÏÓ‰¿œ», sys := SYSTEM;
 
 CONST
 
