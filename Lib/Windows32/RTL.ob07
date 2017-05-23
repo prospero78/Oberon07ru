@@ -86,16 +86,17 @@
       бепмсрэ res
    йнмеж _saverec;
 
-опнжедспю [stdcall] _arrayidx*(Dim: жекне; VAR Arr: IntArray; bsize, idx, c: жекне);
-   VAR i, m: INTEGER;
+опнжедспю [stdcall] _arrayidx*(Dim: жекне; оеп Arr: IntArray; bsize, idx, c: жекне);
+   оепел
+      i, m: жекне;
    мювюкн
      m := bsize * idx;
-     FOR i := 4 TO Dim + 2 DO
+     дкъ i := 4 дн Dim + 2 декюрэ
        m := m * Arr[i]
      йнмеж;
-     IF (Arr[3] > idx) & (idx >= 0) THEN
+     еякх (Arr[3] > idx) & (idx >= 0) рнцдю
        Arr[3] := c + m
-     ELSE
+     хмюве
        Arr[3] := 0
      йнмеж
    йнмеж _arrayidx;
