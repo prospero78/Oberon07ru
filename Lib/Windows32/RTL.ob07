@@ -21,117 +21,120 @@
    ЛюОХ := ЛНДюох;
 
 рхош
-
-  IntArray = люяяхб 2048 хг жекне;
-  STRING = люяяхб 2048 хг яхлб;
-  PROC = опнжедспю;
+   IntArray = люяяхб 2048 хг жекне;
+   STRING = люяяхб 2048 хг яхлб;
+   PROC = опнжедспю;
 
 оепел
-
-  SelfName, rtab: жекне;
-  CloseProc: PROC;
+   SelfName, rtab: жекне;
+   CloseProc: PROC;
 
 опнжедспю [stdcall] _halt*(n: жекне);
-   BEGIN
+   мювюкн
      ЛюОХ.ExitProcess(n)
-   END _halt;
+   йнмеж _halt;
 
-опнжедспю [stdcall] _newrec*(size, t: жекне; VAR ptr: жекне);
-   BEGIN
-     ptr := ЛюОХ.оЮЛЪРЭ_оНКСВХРЭ(size);
-     IF ptr # 0 THEN
-       sys.PUT(ptr, t);
-       INC(ptr, 4)
-     END
-   END _newrec;
+опнжедспю [stdcall] _newrec*(ПЮГЛЕП_, t: жекне; оеп ptr: жекне);
+   мювюкн
+      ptr := ЛюОХ.оЮЛЪРЭ_оНКСВХРЭ(ПЮГЛЕП_);
+      еякх ptr # 0 рнцдю
+         sys.PUT(ptr, t);
+         дна(ptr, 4)
+      йнмеж
+   йнмеж _newrec;
 
-опнжедспю [stdcall] _disprec*(VAR ptr: жекне);
-   BEGIN
-     IF ptr # 0 THEN
-       DEC(ptr, 4);
-       ptr := ЛюОХ.оЮЛЪРЭ_нЯБНАНДХРЭ(ptr)
-     END
-   END _disprec;
+опнжедспю [stdcall] _disprec*(оеп ptr: жекне);
+   мювюкн
+      еякх ptr # 0 рнцдю
+         DEC(ptr, 4);
+         ptr := ЛюОХ.оЮЛЪРЭ_нЯБНАНДХРЭ(ptr)
+      йнмеж
+   йнмеж _disprec;
 
 опнжедспю [stdcall] _rset*(y, x: жекне);
-   BEGIN
+   (* ГЮВЕЛ ГДЕЯЭ ОЕПЕЛЕММШЕ??? *)
+   мювюкн
      sys.CODE("8B45088B4D0C3BC87F0A83F91F760B83F81F760633C0C9C2080083F9007D0233C983F81F7E05B81F000000BA000000802BC8F7D9D3FA83E81F8BC8F7D9D3EA8BC2C9C20800")
-   END _rset;
+   йнмеж _rset;
 
 опнжедспю [stdcall] _inset*(y, x: жекне);
-   BEGIN
+   (* ГЮВЕЛ ГДЕЯЭ ОЕПЕЛЕММШЕ??? *)
+   мювюкн
      sys.CODE("8B45088B4D0C83F91F7709D3E883E001C9C20800C933C0C20800")
-   END _inset;
+   йнмеж _inset;
 
 опнжедспю [stdcall] _checktype*(table, t, r: жекне);
-   BEGIN
+   (* ГЮВЕЛ ГДЕЯЭ ОЕПЕЛЕММШЕ??? *)
+   мювюкн
      table := rtab;
      sys.CODE("8B450C8B4D1085C975076A0158C9C20C008B51FC8B4D083BD0740D85D27409C1E20203D18B12EBEF33C93BC20F94C18BC1C9C20C00")
-   END _checktype;
+   йнмеж _checktype;
 
-опнжедспю [stdcall] _savearr*(size, source, dest: жекне);
-   BEGIN
+опнжедспю [stdcall] _savearr*(ПЮГЛЕП_, ХЯРНВМХЙ_, МЮГМЮВЕМХЕ_: жекне);
+   (* ГЮВЕЛ ГДЕЯЭ ОЕПЕЛЕММШЕ??? *)
+   мювюкн
      sys.CODE("9CFC8BD78BC68B7D108B750C8B4D08F3A48BFA8BF09D")
-   END _savearr;
+   йнмеж _savearr;
 
-опнжедспю [stdcall] _saverec*(dyn, stat, size, source, dest: жекне): BOOLEAN;
-   VAR res: BOOLEAN;
-   BEGIN
+опнжедспю [stdcall] _saverec*(dyn, stat, size, source, dest: жекне): аскебн;
+   оепел
+      res: аскебн;
+   мювюкн
      res := dyn = stat;
      IF res THEN
        _savearr(size, source, dest)
-     END
+     йнмеж
      RETURN res
-   END _saverec;
+   йнмеж _saverec;
 
 опнжедспю [stdcall] _arrayidx*(Dim: жекне; VAR Arr: IntArray; bsize, idx, c: жекне);
    VAR i, m: INTEGER;
-   BEGIN
+   мювюкн
      m := bsize * idx;
      FOR i := 4 TO Dim + 2 DO
        m := m * Arr[i]
-     END;
+     йнмеж;
      IF (Arr[3] > idx) & (idx >= 0) THEN
        Arr[3] := c + m
      ELSE
        Arr[3] := 0
-     END
-   END _arrayidx;
+     йнмеж
+   йнмеж _arrayidx;
 
 опнжедспю [stdcall] _arrayidx1*(VAR Arr: IntArray; bsize, idx, c: жекне);
-   BEGIN
+   мювюкн
      IF (Arr[3] > idx) & (idx >= 0) THEN
        Arr[3] := bsize * idx + c
      ELSE
        Arr[3] := 0
-     END
-   END _arrayidx1;
+     йнмеж
+   йнмеж _arrayidx1;
 
 опнжедспю [stdcall] _arrayrot*(m, n: жекне; VAR Arr: IntArray);
    VAR i, j, t: жекне;
-   BEGIN
+   мювюкн
      FOR i := 1 TO n DO
        t := Arr[0];
        FOR j := 0 TO m + n - 1 DO
          Arr[j] := Arr[j + 1]
-       END;
+       йнмеж;
        Arr[m + n] := t
-     END
-   END _arrayrot;
+     йнмеж
+   йнмеж _arrayrot;
 
 опнжедспю Min(a, b: INTEGER): жекне;
    VAR res: жекне;
-   BEGIN
+   мювюкн
      IF a < b THEN
        res := a
      ELSE
        res := b
-     END
+     йнмеж
      RETURN res
-   END Min;
+   йнмеж Min;
 
 опнжедспю [stdcall] _length*(s: ARRAY OF CHAR): жекне;
-   BEGIN
+   мювюкн
      sys.CODE("8B4508");     //  mov     eax, [ebp + 08h]
      sys.CODE("8B4D0C");     //  mov     ecx, [ebp + 0Ch]
      sys.CODE("48");         //  dec     eax
@@ -146,19 +149,19 @@
      sys.CODE("C9");         //  leave
      sys.CODE("C20800");     //  ret     08h
      RETURN 0
-   END _length;
+   йнмеж _length;
 
 опнжедспю [stdcall] _strcopy*(b, blen, a, alen: жекне);
-   BEGIN
+   мювюкн
      _savearr(Min(alen, blen), a, b);
      IF blen > alen THEN
        sys.PUT(b + alen, 0X)
-     END
-   END _strcopy;
+     йнмеж
+   йнмеж _strcopy;
 
 опнжедспю [stdcall] _strcmp*(op: жекне; b, a: ARRAY OF CHAR): BOOLEAN;
    VAR i: жекне; Res: BOOLEAN;
-   BEGIN
+   мювюкн
      i := ЛюОХ.strncmp(sys.ADR(a), sys.ADR(b), Min(LEN(a), LEN(b)));
      IF i = 0 THEN
        i := _length(a) - _length(b)
@@ -171,29 +174,29 @@
      |4: Res := i <= 0
      |5: Res := i >= 0
      ELSE
-     END
+     йнмеж
      RETURN Res
-   END _strcmp;
+   йнмеж _strcmp;
 
 опнжедспю [stdcall] _lstrcmp*(op: жекне; b: CHAR; a: ARRAY OF CHAR): BOOLEAN;
    VAR s: ARRAY 2 OF CHAR;
-   BEGIN
+   мювюкн
      s[0] := b;
      s[1] := 0X;
      RETURN _strcmp(op, s, a)
-   END _lstrcmp;
+   йнмеж _lstrcmp;
 
 опнжедспю [stdcall] _rstrcmp*(op: жекне; b: ARRAY OF CHAR; a: CHAR): BOOLEAN;
    VAR s: ARRAY 2 OF CHAR;
-   BEGIN
+   мювюкн
      s[0] := a;
      s[1] := 0X;
      RETURN _strcmp(op, b, s)
-   END _rstrcmp;
+   йнмеж _rstrcmp;
 
 опнжедспю Int(x: жекне; VAR str: STRING);
    VAR i, a, b: жекне; c: CHAR;
-   BEGIN
+   мювюкн
      i := 0;
      a := 0;
      REPEAT
@@ -208,25 +211,25 @@
        str[b] := c;
        INC(a);
        DEC(b)
-     END;
+     йнмеж;
      str[i] := 0X
-   END Int;
+   йнмеж Int;
 
 опнжедспю StrAppend(VAR str: STRING; VAR pos: жекне; s: ARRAY OF CHAR);
    VAR i, n: жекне;
-   BEGIN
+   мювюкн
      n := LEN(s);
      i := 0;
      WHILE (i < n) & (s[i] # 0X) DO
        str[pos] := s[i];
        INC(pos);
        INC(i)
-     END
-   END StrAppend;
+     йнмеж
+   йнмеж StrAppend;
 
 опнжедспю [stdcall] _assrt*(code, m: жекне; modname: STRING; line: жекне);
    VAR msg, int: STRING; pos, n: жекне;
-   BEGIN
+   мювюкн
      pos := 0;
      n := line MOD 16;
      line := line DIV 16;
@@ -240,7 +243,7 @@
      |7: StrAppend(msg, pos, "МЕДНОСЯРХЛНЕ ГМЮВЕМХЕ Б НОЕПЮРНПЕ бшанп")
      |8: StrAppend(msg, pos, "ДЕКЕМХЕ МЮ МНКЭ")
      ELSE
-     END;
+     йнмеж;
      StrAppend(msg, pos, 0DX);
      StrAppend(msg, pos, 0AX);
      StrAppend(msg, pos, "ЛНДСКЭ ");
@@ -256,29 +259,29 @@
        StrAppend(msg, pos, "code ");
        Int(code, int);
        StrAppend(msg, pos, int)
-     END;
+     йнмеж;
      ЛюОХ.яННАЫ_нРКЮДЙХ(sys.ADR(msg), SelfName)
-   END _assrt;
+   йнмеж _assrt;
 
 опнжедспю [stdcall] _close*;
-   BEGIN
+   мювюкн
      IF CloseProc # NIL THEN
        CloseProc
-     END
-   END _close;
+     йнмеж
+   йнмеж _close;
 
 опнжедспю [stdcall] _init*(self, rec, gsize, gadr, esp: жекне);
-   BEGIN
+   мювюкн
      ЛюОХ.zeromem(gsize, gadr);
      ЛюОХ.мЮЯРПНХРЭ(esp);
      SelfName := self;
      rtab := rec;
      CloseProc := NIL;
-   END _init;
+   йнмеж _init;
 
 опнжедспю SetClose*(proc: PROC);
-   BEGIN
+   мювюкн
      CloseProc := proc
-   END SetClose;
+   йнмеж SetClose;
 
 END RTL.
