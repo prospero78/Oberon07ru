@@ -237,55 +237,57 @@
    КОНЕЦ StrAppend;
 
 ПРОЦЕДУРА [stdcall] _assrt*(code, m: ЦЕЛОЕ; modname: STRING; line: ЦЕЛОЕ);
-   VAR msg, int: STRING; pos, n: ЦЕЛОЕ;
+   ПЕРЕМ
+      msg, int: STRING;
+      pos, n: ЦЕЛОЕ;
    НАЧАЛО
-     pos := 0;
-     n := line MOD 16;
-     line := line DIV 16;
-     CASE n OF
-     |1: StrAppend(msg, pos, "нарушение контроля")
-     |2: StrAppend(msg, pos, "переменные типа процедуры имеет NIL в качестве значения")
-     |3: StrAppend(msg, pos, "ошибка охраны типа")
-     |4: StrAppend(msg, pos, "недопустимый динамический тип")
-     |5: StrAppend(msg, pos, "ошибка проверки индекса")
-     |6: StrAppend(msg, pos, "указатель ПУСТО разыменован")
-     |7: StrAppend(msg, pos, "недопустимое значение в операторе ВЫБОР")
-     |8: StrAppend(msg, pos, "деление на ноль")
-     ELSE
-     КОНЕЦ;
-     StrAppend(msg, pos, 0DX);
-     StrAppend(msg, pos, 0AX);
-     StrAppend(msg, pos, "модуль ");
-     StrAppend(msg, pos, modname);
-     StrAppend(msg, pos, 0DX);
-     StrAppend(msg, pos, 0AX);
-     StrAppend(msg, pos, "строка ");
-     Int(line, int);
-     StrAppend(msg, pos, int);
-     IF m = 2 THEN
-       StrAppend(msg, pos, 0DX);
-       StrAppend(msg, pos, 0AX);
-       StrAppend(msg, pos, "code ");
-       Int(code, int);
-       StrAppend(msg, pos, int)
-     КОНЕЦ;
-     мАпи.Сообщ_Отладки(sys.ADR(msg), SelfName)
+      pos := 0;
+      n := line MOD 16;
+      line := line DIV 16;
+      ВЫБОР n ИЗ
+         |1: StrAppend(msg, pos, "нарушение контроля")
+         |2: StrAppend(msg, pos, "переменные типа процедуры имеет NIL в качестве значения")
+         |3: StrAppend(msg, pos, "ошибка охраны типа")
+         |4: StrAppend(msg, pos, "недопустимый динамический тип")
+         |5: StrAppend(msg, pos, "ошибка проверки индекса")
+         |6: StrAppend(msg, pos, "указатель ПУСТО разыменован")
+         |7: StrAppend(msg, pos, "недопустимое значение в операторе ВЫБОР")
+         |8: StrAppend(msg, pos, "деление на ноль")
+      ИНАЧЕ
+      КОНЕЦ;
+      StrAppend(msg, pos, 0DX);
+      StrAppend(msg, pos, 0AX);
+      StrAppend(msg, pos, "модуль ");
+      StrAppend(msg, pos, modname);
+      StrAppend(msg, pos, 0DX);
+      StrAppend(msg, pos, 0AX);
+      StrAppend(msg, pos, "строка ");
+      Int(line, int);
+      StrAppend(msg, pos, int);
+      ЕСЛИ m = 2 ТОГДА
+         StrAppend(msg, pos, 0DX);
+         StrAppend(msg, pos, 0AX);
+         StrAppend(msg, pos, "code ");
+         Int(code, int);
+         StrAppend(msg, pos, int)
+      КОНЕЦ;
+      мАпи.Сообщ_Отладки(sys.ADR(msg), SelfName)
    КОНЕЦ _assrt;
 
 ПРОЦЕДУРА [stdcall] _close*;
    НАЧАЛО
-     IF CloseProc # NIL THEN
-       CloseProc
-     КОНЕЦ
+      ЕСЛИ CloseProc # NIL ТОГДА
+         CloseProc
+      КОНЕЦ
    КОНЕЦ _close;
 
 ПРОЦЕДУРА [stdcall] _init*(self, rec, gsize, gadr, esp: ЦЕЛОЕ);
    НАЧАЛО
-     мАпи.zeromem(gsize, gadr);
-     мАпи.Настроить(esp);
-     SelfName := self;
-     rtab := rec;
-     CloseProc := NIL;
+      мАпи.zeromem(gsize, gadr);
+      мАпи.Настроить(esp);
+      SelfName := self;
+      rtab := rec;
+      CloseProc := ПУСТО;
    КОНЕЦ _init;
 
 ПРОЦЕДУРА SetClose*(proc: PROC);
