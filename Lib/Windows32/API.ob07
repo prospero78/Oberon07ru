@@ -67,10 +67,10 @@
 опнжедспю zeromem*(size, adr: жекне);
    йнмеж zeromem;
 
-опнжедспю DebugMsg*(lpText, lpCaption: жекне);
+опнжедспю яННАЫ_нРКЮДЙХ*(lpText, lpCaption: жекне);
    мювюкн
       MessageBoxA(0, lpText, lpCaption, 16)
-   йнмеж DebugMsg;
+   йнмеж яННАЫ_нРКЮДЙХ;
 
 опнжедспю FileSize*(F: жекне): жекне;
    оепел

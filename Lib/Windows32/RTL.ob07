@@ -230,23 +230,23 @@
      n := line MOD 16;
      line := line DIV 16;
      CASE n OF
-     |1: StrAppend(msg, pos, "assertion failure")
-     |2: StrAppend(msg, pos, "variable of a procedure type have NIL as value")
-     |3: StrAppend(msg, pos, "typeguard error")
-     |4: StrAppend(msg, pos, "inadmissible dynamic type")
-     |5: StrAppend(msg, pos, "index check error")
-     |6: StrAppend(msg, pos, "NIL pointer dereference")
-     |7: StrAppend(msg, pos, "invalid value in case statement")
-     |8: StrAppend(msg, pos, "division by zero")
+     |1: StrAppend(msg, pos, "нарушение контроля")
+     |2: StrAppend(msg, pos, "переменные типа процедуры имеет NIL в качестве значения")
+     |3: StrAppend(msg, pos, "ошибка охраны типа")
+     |4: StrAppend(msg, pos, "недопустимый динамический тип")
+     |5: StrAppend(msg, pos, "ошибка проверки индекса")
+     |6: StrAppend(msg, pos, "указатель ПУСТО разыменован")
+     |7: StrAppend(msg, pos, "недопустимое значение в операторе ВЫБОР")
+     |8: StrAppend(msg, pos, "деление на ноль")
      ELSE
      END;
      StrAppend(msg, pos, 0DX);
      StrAppend(msg, pos, 0AX);
-     StrAppend(msg, pos, "module ");
+     StrAppend(msg, pos, "модуль ");
      StrAppend(msg, pos, modname);
      StrAppend(msg, pos, 0DX);
      StrAppend(msg, pos, 0AX);
-     StrAppend(msg, pos, "line ");
+     StrAppend(msg, pos, "строка ");
      Int(line, int);
      StrAppend(msg, pos, int);
      IF m = 2 THEN
@@ -256,7 +256,7 @@
        Int(code, int);
        StrAppend(msg, pos, int)
      END;
-     API.DebugMsg(sys.ADR(msg), SelfName)
+     API.Сообщ_Отладки(sys.ADR(msg), SelfName)
    END _assrt;
 
 ПРОЦЕДУРА [stdcall] _close*;
