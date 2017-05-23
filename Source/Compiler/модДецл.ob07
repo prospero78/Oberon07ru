@@ -235,35 +235,35 @@
   КОНЕЦ КлючСлед_Получ;
 
 ПРОЦЕДУРА Ключ_Проверить*(key: ЦЕЛОЕ);
-    ПЕРЕМ
+   ПЕРЕМ
       code: ЦЕЛОЕ;
-    НАЧАЛО
+   НАЧАЛО
       ЕСЛИ мСкан.сущность # key ТОГДА
-        ВЫБОР key ИЗ
-          |мКонст.ксМОДУЛЬ:  code := 21
-          |lxIDENT:   code := 22
-          |мКонст.опТчкЗпт:    code := 23
-          |мКонст.ксКОНЕЦ:     code := 24
-          |lxDot:     code := 25
-          |мКонст.опРавно:      code := 35
-          |мКонст.опСкобкаПрКр:  code := 38
-          |мКонст.ксДО:      code := 40
-          |мКонст.ксИЗ:      code := 41
-          |lxRCurly:  code := 51
-          |lxLRound:  code := 56
-          |мКонст.опЗапятая:   code := 61
-          |мКонст.ксТОГДА:    code := 98
-          |мКонст.опСкобкаПрКв: code := 109
-          |мКонст.ксДЕЛАТЬ:      code := 118
-          |мКонст.ксПОКАНЕ:   code := 119
-          |lxAssign:  code := 120
-          |мКонст.ксВЕРНУТЬ:  code := 124
-          |мКонст.опДвоеточ:   code := 157
-        ИНАЧЕ
-        КОНЕЦ;
-        мПров.Тест2(ЛОЖЬ, code)
+         ВЫБОР key ИЗ
+            |мКонст.ксМОДУЛЬ:  code := 21
+            |lxIDENT:   code := 22
+            |мКонст.опТчкЗпт:    code := 23
+            |мКонст.ксКОНЕЦ:     code := 24
+            |lxDot:     code := 25
+            |мКонст.опРавно:      code := 35
+            |мКонст.опСкобкаПрКр:  code := 38
+            |мКонст.ксДО:      code := 40
+            |мКонст.ксИЗ:      code := 41
+            |lxRCurly:  code := 51
+            |lxLRound:  code := 56
+            |мКонст.опЗапятая:   code := 61
+            |мКонст.ксТОГДА:    code := 98
+            |мКонст.опСкобкаПрКв: code := 109
+            |мКонст.ксДЕЛАТЬ:      code := 118
+            |мКонст.ксПОКАНЕ:   code := 119
+            |lxAssign:  code := 120
+            |мКонст.ксВЕРНУТЬ:  code := 124
+            |мКонст.опДвоеточ:   code := 157
+         ИНАЧЕ
+         КОНЕЦ;
+         мПров.Тест2(ЛОЖЬ, code)
       КОНЕЦ
-    КОНЕЦ Ключ_Проверить;
+   КОНЕЦ Ключ_Проверить;
 
 ПРОЦЕДУРА CheckIdent(Name: мУзел.туУзел): БУЛЕВО;
    ПЕРЕМ
@@ -364,71 +364,71 @@
   КОНЕЦ PushSysType;
 
 ПРОЦЕДУРА StIdent;
-  НАЧАЛО
-    Охрана_Создать;
-    PushStProc("ABS",      stABS);
-    PushStProc("ASR",      stASR);
+   НАЧАЛО
+      Охрана_Создать;
+      PushStProc("ABS",      stABS);
+      PushStProc("ASR",      stASR);
     
-    PushStProc("ASSERT",   stASSERT);
-    PushStProc("КОНТРОЛЬ",   stASSERT);
-    
-    PushStType("BOOLEAN",  TBOOLEAN);
-    PushStType("БУЛЕВО",  TBOOLEAN);
-    
-    PushStType("CHAR",     TCHAR);
-    PushStType("СИМВ",     TCHAR);
-    PushStProc("CHR",      stCHR);
-    PushStProc("COPY",     stCOPY);
-    
-    PushStProc("DEC",      stDEC);
-    PushStProc("ВЫЧ",      stDEC);
-    
-    PushStProc("DISPOSE",  stDISPOSE);
-    PushStProc("EXCL",     stEXCL);
-    PushStProc("FLOOR",    stFLOOR);
-    PushStProc("FLT",      stFLT);
-    
-    PushStProc("INC",      stINC);
-    PushStProc("ДОБ",      stINC);
-    
-    PushStProc("INCL",     stINCL);
-    
-    PushStType("INTEGER",  TINTEGER);
-    PushStType("ЦЕЛОЕ",  TINTEGER);
-    
-    PushStProc("LEN",      stLEN);
-    PushStProc("LSL",      stLSL);
-    
-    PushStProc("LONG",     stLONG);
-    PushStProc("ДЛИН",     stLONG);
-    
-    PushStType("LONGREAL", TLONGREAL);
-    PushStType("ДЛИНВЕЩ", TLONGREAL);
-    
-    PushStProc("NEW",      stNEW);
-    PushStProc("НОВ",      stNEW);
-    
-    PushStProc("ODD",      stODD);
-    PushStProc("ORD",      stORD);
-    PushStProc("PACK",     stPACK);
-    
-    PushStType("REAL",     TREAL);
-    PushStType("ВЕЩ",     TREAL);
-    
-    PushStProc("ROR",      stROR);
-    PushStType("SET",      TSET);
-    
-    PushStProc("SHORT",    stSHORT);
-    PushStProc("КОРОТ",    stSHORT);
-    
-    PushStProc("UNPK",     stUNPK);
-    PushStProc("BITS",     stBITS);
-    PushStProc("LSR",      stLSR);
-    
-    PushStProc("LENGTH",   stLENGTH);
-    PushStProc("ДЛИНА",   stLENGTH);
-    Охрана_Создать
-  КОНЕЦ StIdent;
+      PushStProc("ASSERT",   stASSERT);
+      PushStProc("КОНТРОЛЬ",   stASSERT);
+      
+      PushStType("BOOLEAN",  TBOOLEAN);
+      PushStType("БУЛЕВО",  TBOOLEAN);
+      
+      PushStType("CHAR",     TCHAR);
+      PushStType("СИМВ",     TCHAR);
+      PushStProc("CHR",      stCHR);
+      PushStProc("COPY",     stCOPY);
+      
+      PushStProc("DEC",      stDEC);
+      PushStProc("ВЫЧ",      stDEC);
+      
+      PushStProc("DISPOSE",  stDISPOSE);
+      PushStProc("EXCL",     stEXCL);
+      PushStProc("FLOOR",    stFLOOR);
+      PushStProc("FLT",      stFLT);
+      
+      PushStProc("INC",      stINC);
+      PushStProc("ДОБ",      stINC);
+      
+      PushStProc("INCL",     stINCL);
+      
+      PushStType("INTEGER",  TINTEGER);
+      PushStType("ЦЕЛОЕ",  TINTEGER);
+      
+      PushStProc("LEN",      stLEN);
+      PushStProc("LSL",      stLSL);
+      
+      PushStProc("LONG",     stLONG);
+      PushStProc("ДЛИН",     stLONG);
+      
+      PushStType("LONGREAL", TLONGREAL);
+      PushStType("ДЛИНВЕЩ", TLONGREAL);
+      
+      PushStProc("NEW",      stNEW);
+      PushStProc("НОВ",      stNEW);
+      
+      PushStProc("ODD",      stODD);
+      PushStProc("ORD",      stORD);
+      PushStProc("PACK",     stPACK);
+      
+      PushStType("REAL",     TREAL);
+      PushStType("ВЕЩ",     TREAL);
+      
+      PushStProc("ROR",      stROR);
+      PushStType("SET",      TSET);
+      
+      PushStProc("SHORT",    stSHORT);
+      PushStProc("КОРОТ",    stSHORT);
+      
+      PushStProc("UNPK",     stUNPK);
+      PushStProc("BITS",     stBITS);
+      PushStProc("LSR",      stLSR);
+      
+      PushStProc("LENGTH",   stLENGTH);
+      PushStProc("ДЛИНА",   stLENGTH);
+      Охрана_Создать
+   КОНЕЦ StIdent;
 
 ПРОЦЕДУРА GetQIdent*(Unit: туМодуль; Name: мУзел.туУзел): туСущность;
    ПЕРЕМ
@@ -471,75 +471,76 @@
    КОНЕЦ GetIdent;
 
 ПРОЦЕДУРА Relation*(Op: ЦЕЛОЕ): БУЛЕВО;
-  ПЕРЕМ Res: БУЛЕВО;
-  НАЧАЛО
-    ВЫБОР Op ИЗ
-    |мКонст.опРавно, мКонст.опНеРавно, мКонст.опМеньше, мКонст.опБольше,
-     lxLE, lxGE, мКонст.ксВ, мКонст.ксЕСТЬ:
-      Res := ИСТИНА
-    ИНАЧЕ
-      Res := ЛОЖЬ
-    КОНЕЦ
-    ВЕРНУТЬ Res
-  КОНЕЦ Relation;
+   ПЕРЕМ
+      Res: БУЛЕВО;
+   НАЧАЛО
+      ВЫБОР Op ИЗ
+         |мКонст.опРавно, мКонст.опНеРавно, мКонст.опМеньше, мКонст.опБольше,
+            lxLE, lxGE, мКонст.ксВ, мКонст.ксЕСТЬ:
+                  Res := ИСТИНА
+      ИНАЧЕ
+         Res := ЛОЖЬ
+      КОНЕЦ
+      ВЕРНУТЬ Res
+   КОНЕЦ Relation;
 
 ПРОЦЕДУРА Arith(a, b: ДЛИНВЕЩ; T: мТип.туТип; Op, line, col: ЦЕЛОЕ): ДЛИНВЕЩ;
-  КОНСТ
+   КОНСТ
       max = мСкан.maxDBL;
-  ПЕРЕМ
+   ПЕРЕМ
       res: ДЛИНВЕЩ;
-  НАЧАЛО
-    ВЫБОР Op ИЗ
-    |мКонст.опПлюс: res := a + b
-    |мКонст.опМинус: res := a - b
-    |мКонст.опУмнож: res := a * b
-    |мКонст.опДелен:
-      мПров.Тест(b # 0.0D0, line, col, 46);
-      res := a / b
-    |lxDIV:
-      мПров.Тест(~((a = ДЛИН(FLT(мКонст.целое_мин))) & (b = -1.0D0)), line, col, IOVER);
-      res := ДЛИН(FLT(FLOOR(a) DIV FLOOR(b)))
-    |lxMOD:
-      res := ДЛИН(FLT(FLOOR(a) MOD FLOOR(b)))
-    ИНАЧЕ
-    КОНЕЦ;
-    мПров.Тест(~мУтиль.ЕслиБесконеч(res), line, col, FOVER);
-    ВЫБОР T.тип_ном ИЗ
-      |TINTEGER: 
-            мПров.Тест((res <= ДЛИН(FLT(мКонст.целое_макс))) & (res >= ДЛИН(FLT(мКонст.целое_мин))), line, col, IOVER)
-      |TREAL:     
-            мПров.Тест((res <= ДЛИН(мКонст.вещ_макс)) & (res >= -ДЛИН(мКонст.вещ_макс)), line, col, FOVER)
-      |TLONGREAL: 
-          мПров.Тест((res <= max) & (res >= -max), line, col, FOVER)
-    ИНАЧЕ
-    КОНЕЦ;
-    ЕСЛИ (res = 0.0D0) & (T.тип_ном В {TREAL, TLONGREAL}) ИЛИ (ABS(res) < ДЛИН(мКонст.вещ_мин)) & (T.тип_ном = TREAL) ТОГДА
+   НАЧАЛО
       ВЫБОР Op ИЗ
-      |мКонст.опПлюс:  мПров.Тест(a = -b, line, col, UNDER)
-      |мКонст.опМинус: мПров.Тест(a = b, line, col, UNDER)
-      |мКонст.опУмнож:  мПров.Тест((a = 0.0D0) ИЛИ (b = 0.0D0), line, col, UNDER)
-      |мКонст.опДелен: мПров.Тест((a = 0.0D0), line, col, UNDER)
+         |мКонст.опПлюс: res := a + b
+         |мКонст.опМинус: res := a - b
+         |мКонст.опУмнож: res := a * b
+         |мКонст.опДелен:
+            мПров.Тест(b # 0.0D0, line, col, 46);
+            res := a / b
+         |lxDIV:
+            мПров.Тест(~((a = ДЛИН(FLT(мКонст.целое_мин))) & (b = -1.0D0)), line, col, IOVER);
+            res := ДЛИН(FLT(FLOOR(a) DIV FLOOR(b)))
+         |lxMOD:
+            res := ДЛИН(FLT(FLOOR(a) MOD FLOOR(b)))
       ИНАЧЕ
+      КОНЕЦ;
+      мПров.Тест(~мУтиль.ЕслиБесконеч(res), line, col, FOVER);
+      ВЫБОР T.тип_ном ИЗ
+         |TINTEGER: 
+            мПров.Тест((res <= ДЛИН(FLT(мКонст.целое_макс))) & (res >= ДЛИН(FLT(мКонст.целое_мин))), line, col, IOVER)
+         |TREAL:     
+            мПров.Тест((res <= ДЛИН(мКонст.вещ_макс)) & (res >= -ДЛИН(мКонст.вещ_макс)), line, col, FOVER)
+         |TLONGREAL: 
+          мПров.Тест((res <= max) & (res >= -max), line, col, FOVER)
+      ИНАЧЕ
+      КОНЕЦ;
+      ЕСЛИ (res = 0.0D0) & (T.тип_ном В {TREAL, TLONGREAL}) ИЛИ (ABS(res) < ДЛИН(мКонст.вещ_мин)) & (T.тип_ном = TREAL) ТОГДА
+         ВЫБОР Op ИЗ
+            |мКонст.опПлюс:  мПров.Тест(a = -b, line, col, UNDER)
+            |мКонст.опМинус: мПров.Тест(a = b, line, col, UNDER)
+            |мКонст.опУмнож:  мПров.Тест((a = 0.0D0) ИЛИ (b = 0.0D0), line, col, UNDER)
+            |мКонст.опДелен: мПров.Тест((a = 0.0D0), line, col, UNDER)
+         ИНАЧЕ
+         КОНЕЦ
       КОНЕЦ
-    КОНЕЦ
-    ВЕРНУТЬ res
-  КОНЕЦ Arith;
+      ВЕРНУТЬ res
+   КОНЕЦ Arith;
 
 ПРОЦЕДУРА strcmp(a, b: ДЛИНВЕЩ; Op: ЦЕЛОЕ): ДЛИНВЕЩ;
-  ПЕРЕМ
-    sa, sb: туКонстСтр;
-    Res: ДЛИНВЕЩ;
-  НАЧАЛО
-    sa := Стр_Получ(a);
-    sb := Стр_Получ(b);
-    ВЫБОР Op ИЗ
-    |мКонст.опРавно, мКонст.опНеРавно: Res := ДЛИН(FLT(ORD(sa.стр = sb.стр)))
-    |мКонст.опМеньше, мКонст.опБольше: Res := ДЛИН(FLT(ORD(sa.стр < sb.стр)))
-    |lxLE, lxGE: Res := ДЛИН(FLT(ORD(sa.стр <= sb.стр)))
-    ИНАЧЕ
-    КОНЕЦ
-    ВЕРНУТЬ Res
-  КОНЕЦ strcmp;
+   ПЕРЕМ
+      sa, sb: туКонстСтр;
+      Res: ДЛИНВЕЩ;
+   НАЧАЛО
+      sa := Стр_Получ(a);
+      sb := Стр_Получ(b);
+      ВЫБОР Op ИЗ
+         |мКонст.опРавно, мКонст.опНеРавно: Res := ДЛИН(FLT(ORD(sa.стр = sb.стр)))
+         |мКонст.опМеньше, мКонст.опБольше: Res := ДЛИН(FLT(ORD(sa.стр < sb.стр)))
+         |lxLE, lxGE: Res := ДЛИН(FLT(ORD(sa.стр <= sb.стр)))
+      ИНАЧЕ
+      КОНЕЦ
+      ВЕРНУТЬ Res
+   КОНЕЦ strcmp;
 
 ПРОЦЕДУРА Calc*(a, b: ДЛИНВЕЩ; Ta, Tb: мТип.туТип; Op, line, col: ЦЕЛОЕ; ПЕР Res: ДЛИНВЕЩ; ПЕР TRes: мТип.туТип);
   ПЕРЕМ c: ДЛИНВЕЩ; ai, bi: ЦЕЛОЕ;
