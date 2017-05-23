@@ -135,49 +135,51 @@
       бепмсрэ res
    йнмеж Min;
 
-опнжедспю [stdcall] _length*(s: ARRAY OF CHAR): жекне;
+опнжедспю [stdcall] _length*(s: люяяхб хг яхлб): жекне;
    мювюкн
-     sys.CODE("8B4508");     //  mov     eax, [ebp + 08h]
-     sys.CODE("8B4D0C");     //  mov     ecx, [ebp + 0Ch]
-     sys.CODE("48");         //  dec     eax
+      sys.CODE("8B4508");     //  mov     eax, [ebp + 08h]
+      sys.CODE("8B4D0C");     //  mov     ecx, [ebp + 0Ch]
+      sys.CODE("48");         //  dec     eax
                              //  L1:
-     sys.CODE("40");         //  inc     eax
-     sys.CODE("803800");     //  cmp     byte ptr [eax], 0
-     sys.CODE("7403");       //  jz      L2
-     sys.CODE("E2F8");       //  loop    L1
-     sys.CODE("40");         //  inc     eax
+      sys.CODE("40");         //  inc     eax
+      sys.CODE("803800");     //  cmp     byte ptr [eax], 0
+      sys.CODE("7403");       //  jz      L2
+      sys.CODE("E2F8");       //  loop    L1
+      sys.CODE("40");         //  inc     eax
                              //  L2:
-     sys.CODE("2B4508");     //  sub     eax, [ebp + 08h]
-     sys.CODE("C9");         //  leave
-     sys.CODE("C20800");     //  ret     08h
-     RETURN 0
+      sys.CODE("2B4508");     //  sub     eax, [ebp + 08h]
+      sys.CODE("C9");         //  leave
+      sys.CODE("C20800");     //  ret     08h
+      бепмсрэ 0
    йнмеж _length;
 
 опнжедспю [stdcall] _strcopy*(b, blen, a, alen: жекне);
    мювюкн
      _savearr(Min(alen, blen), a, b);
-     IF blen > alen THEN
+     еякх blen > alen рнцдю
        sys.PUT(b + alen, 0X)
      йнмеж
    йнмеж _strcopy;
 
-опнжедспю [stdcall] _strcmp*(op: жекне; b, a: ARRAY OF CHAR): BOOLEAN;
-   VAR i: жекне; Res: BOOLEAN;
+опнжедспю [stdcall] _strcmp*(op: жекне; b, a: люяяхб хг яхлб): аскебн;
+   оепел
+      i: жекне;
+      Res: аскебн;
    мювюкн
-     i := ЛюОХ.strncmp(sys.ADR(a), sys.ADR(b), Min(LEN(a), LEN(b)));
-     IF i = 0 THEN
-       i := _length(a) - _length(b)
-     END;
-     CASE op OF
-     |0: Res := i = 0
-     |1: Res := i # 0
-     |2: Res := i < 0
-     |3: Res := i > 0
-     |4: Res := i <= 0
-     |5: Res := i >= 0
-     ELSE
-     йнмеж
-     RETURN Res
+      i := ЛюОХ.strncmp(sys.ADR(a), sys.ADR(b), Min(LEN(a), LEN(b)));
+      еякх i = 0 рнцдю
+         i := _length(a) - _length(b)
+      йнмеж;
+      бшанп op хг
+         |0: Res := i = 0
+         |1: Res := i # 0
+         |2: Res := i < 0
+         |3: Res := i > 0
+         |4: Res := i <= 0
+         |5: Res := i >= 0
+      хмюве
+      йнмеж;
+      бепмсрэ Res
    йнмеж _strcmp;
 
 опнжедспю [stdcall] _lstrcmp*(op: жекне; b: CHAR; a: ARRAY OF CHAR): BOOLEAN;
