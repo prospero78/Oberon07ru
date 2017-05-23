@@ -182,32 +182,36 @@
       бепмсрэ Res
    йнмеж _strcmp;
 
-опнжедспю [stdcall] _lstrcmp*(op: жекне; b: CHAR; a: ARRAY OF CHAR): BOOLEAN;
-   VAR s: ARRAY 2 OF CHAR;
+опнжедспю [stdcall] _lstrcmp*(op: жекне; b: яхлб; a: люяяхб хг яхлб): аскебн;
+   оепел
+      s: люяяхб 2 хг яхлб;
    мювюкн
-     s[0] := b;
-     s[1] := 0X;
-     RETURN _strcmp(op, s, a)
+      s[0] := b;
+      s[1] := 0X;
+      бепмсрэ _strcmp(op, s, a)
    йнмеж _lstrcmp;
 
-опнжедспю [stdcall] _rstrcmp*(op: жекне; b: ARRAY OF CHAR; a: CHAR): BOOLEAN;
-   VAR s: ARRAY 2 OF CHAR;
+опнжедспю [stdcall] _rstrcmp*(op: жекне; b: люяяхб хг яхлб; a: яхлб): аскебн;
+   оепел
+      s: люяяхб 2 хг яхлб;
    мювюкн
-     s[0] := a;
-     s[1] := 0X;
-     RETURN _strcmp(op, b, s)
+      s[0] := a;
+      s[1] := 0X;
+      бепмсрэ _strcmp(op, b, s)
    йнмеж _rstrcmp;
 
-опнжедспю Int(x: жекне; VAR str: STRING);
-   VAR i, a, b: жекне; c: CHAR;
+опнжедспю Int(x: жекне; оеп str: STRING);
+   оепел
+      i, a, b: жекне;
+      c: яхлб;
    мювюкн
      i := 0;
      a := 0;
-     REPEAT
+     онбрнпърэ
        str[i] := CHR(x MOD 10 + ORD("0"));
        x := x DIV 10;
        INC(i)
-     UNTIL x = 0;
+     онйюме x = 0;
      b := i - 1;
      WHILE a < b DO
        c := str[a];
