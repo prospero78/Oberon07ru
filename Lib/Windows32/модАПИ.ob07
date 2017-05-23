@@ -83,7 +83,7 @@
       H: жекне;
    мювюкн
       H := GetProcAddress(hMOD, sys.ADR(name[0]));
-      ASSERT(H # 0);
+      йнмрпнкэ(H # 0);
       sys.PUT(adr, H);
    йнмеж GetProc;
 

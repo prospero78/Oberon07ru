@@ -13,8 +13,7 @@
 
    You should have received a copy of the GNU Lesser General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*)
-
+   *)
 лндскэ RTL;
 
 хлонпр sys := SYSTEM,
@@ -76,15 +75,15 @@
      sys.CODE("9CFC8BD78BC68B7D108B750C8B4D08F3A48BFA8BF09D")
    йнмеж _savearr;
 
-опнжедспю [stdcall] _saverec*(dyn, stat, size, source, dest: жекне): аскебн;
+опнжедспю [stdcall] _saverec*(dyn, stat, ПЮГЛЕП_, ХЯРНВМХЙ_, МЮГМЮВЕМХЕ_: жекне): аскебн;
    оепел
       res: аскебн;
    мювюкн
-     res := dyn = stat;
-     IF res THEN
-       _savearr(size, source, dest)
-     йнмеж
-     RETURN res
+      res := dyn = stat;
+      еякх res рнцдю
+         _savearr(ПЮГЛЕП_, ХЯРНВМХЙ_, МЮГМЮВЕМХЕ_)
+      йнмеж
+      бепмсрэ res
    йнмеж _saverec;
 
 опнжедспю [stdcall] _arrayidx*(Dim: жекне; VAR Arr: IntArray; bsize, idx, c: жекне);
