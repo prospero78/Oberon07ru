@@ -17,183 +17,182 @@
    along with Editor. If not, see <http://www.gnu.org/licenses/>.
    *)
 
-MODULE Editor;
+ÃŒƒ”À‹ Editor;
 
-IMPORT API := ÏÓ‰¿œ»,
+»ÃœŒ–“ API := ÏÓ‰¿œ»,
    sys := SYSTEM,
    TE := TextEdit,
    TU := TextUtils,
    Line, List, Text, Param, Dlg := Dialogs;
 
-CONST
+ ŒÕ—“
+   wndclass = "editor";
+   wndcaption = "Oberon-07";
 
-  wndclass = "editor";
-  wndcaption = "Oberon-07";
+   mfile = 100; snew = 101; sopen = 102; ssave = 103; ssaveas = 104; ssaveall = 105;
+   sclose = 106; scloseall = 107; sexit = 108;
 
-  mfile = 100; snew = 101; sopen = 102; ssave = 103; ssaveas = 104; ssaveall = 105;
-  sclose = 106; scloseall = 107; sexit = 108;
+   medit = 200; sundo = 201; scut = 202; scopy = 203; spaste = 204; sdel = 205; sfind = 206;
+   ssearchagain = 207; sreplace = 208; sgoto = 209; sselectall = 210; scase = 211; supcase = 212;
+   slowcase = 213;
 
-  medit = 200; sundo = 201; scut = 202; scopy = 203; spaste = 204; sdel = 205; sfind = 206;
-  ssearchagain = 207; sreplace = 208; sgoto = 209; sselectall = 210; scase = 211; supcase = 212;
-  slowcase = 213;
+   mview = 300; ssyntax = 301; snumbers = 302; soptions = 303;
 
-  mview = 300; ssyntax = 301; snumbers = 302; soptions = 303;
+   mprog = 400; scompile = 401; srun = 402; sparam = 403; smain = 404; splatf = 405;
+   sstksize = 406; sstk1 = 407; sstk2 = 408; sstk4 = 409; sstk8 = 410; swin32con = 411;
+   swin32gui = 412; swin32dll = 413; slinux32 = 414; skolibri = 415; skolibridll = 416;
 
-  mprog = 400; scompile = 401; srun = 402; sparam = 403; smain = 404; splatf = 405;
-  sstksize = 406; sstk1 = 407; sstk2 = 408; sstk4 = 409; sstk8 = 410; swin32con = 411;
-  swin32gui = 412; swin32dll = 413; slinux32 = 414; skolibri = 415; skolibridll = 416;
+   cundo = 501; ccut = 502; ccopy = 503; cpaste = 504; cdel = 505; cselectall = 506;
 
-  cundo = 501; ccut = 502; ccopy = 503; cpaste = 504; cdel = 505; cselectall = 506;
+   separator = 1;
 
-  separator = 1;
+   mf_unchecked = 0;
+   mf_checked = 8;
+   mf_bycommand = 0;
 
-  mf_unchecked = 0;
-  mf_checked = 8;
-  mf_bycommand = 0;
+   mb_iconhand = 16;
 
-  mb_iconhand = 16;
+   WM_DESTROY = 2;
+   WM_COMMAND = 273;
+   WM_QUIT = 18;
+   WM_TIMER = 275;
 
-  WM_DESTROY = 2;
-  WM_COMMAND = 273;
-  WM_QUIT = 18;
-  WM_TIMER = 275;
+   cs_HRedraw = {1};
+   cs_VRedraw = {0};
+   CS_DBLCLKS = {3};
+   idi_Application = 32512;
+   IDC_ARROW = 32512;
+   IDC_IBEAM = 32513;
+   IDC_HAND = 32649;
+   color_window = 5;
+   ws_OverlappedWindow = 13565952;
+   SW_SHOWNORMAL = 1;
+   SW_HIDE = 0;
 
-  cs_HRedraw = {1};
-  cs_VRedraw = {0};
-  CS_DBLCLKS = {3};
-  idi_Application = 32512;
-  IDC_ARROW = 32512;
-  IDC_IBEAM = 32513;
-  IDC_HAND = 32649;
-  color_window = 5;
-  ws_OverlappedWindow = 13565952;
-  SW_SHOWNORMAL = 1;
-  SW_HIDE = 0;
+   CBS_DROPDOWNLIST = {0, 1};
 
-  CBS_DROPDOWNLIST = {0, 1};
+   BS_DEFPUSHBUTTON = {0};
+   WS_VISIBLE = {28};
+   WS_CHILD = {30};
+   WS_CLIPCHILDREN = {25};
+   WS_CLIPSIBLINGS = {26};
+   WS_BORDER = 8388608;
+   WS_SYSMENU = 524288;
+   SBS_HORZ = {};
+   SBS_VERT = {0};
+   SBARS_SIZEGRIP = {8};
+   SB_HORZ = 0;
+   SB_VERT = 1;
+   SB_CTL = 2;
+   WM_HSCROLL = 276;
+   WM_VSCROLL = 277;
+   WM_PAINT = 15;
+   WM_SIZE = 5;
+   SB_THUMBPOSITION = 4;
+   SB_THUMBTRACK = 5;
+   SB_LINELEFT = 0;
+   SB_LINERIGHT = 1;
+   SB_PAGELEFT = 2;
+   SB_PAGERIGHT = 3;
+   TCIF_TEXT = 1;
+   TCM_INSERTITEM = 4926;
+   SIF_TRACKPOS = 16;
+   WM_SETFONT = 48;
+   WM_NOTIFY = 78;
+   WM_MOUSEMOVE = 512;
+   WM_LBUTTONDOWN = 513;
+   WM_LBUTTONUP = 514;
+   WM_MENUSELECT = 11FH;
+   WM_CLOSE = 16;
+   WM_MOUSEWHEEL = 522;
+   WM_LBUTTONDBLCLK = 515;
+   WM_CONTEXTMENU = 123;
+   WM_SETCURSOR = 32;
+   WM_SETTEXT = 12;
+   WM_GETTEXT = 13;
+   WM_GETTEXTLENGTH = 14;
+   SB_SETTEXT = 1035;
+   SW_SHOW = 5;
+   ES_AUTOHSCROLL = 128;
+   EM_SETSEL = 177;
+   
+   TCM_FIRST = 1300H;
+   TCM_SETCURSEL = TCM_FIRST + 12;
+   TCM_GETCURSEL = TCM_FIRST + 11;
+   TCM_DELETEITEM = TCM_FIRST + 8;
+   TCN_SELCHANGE = -551;
+   
+   CB_ADDSTRING = 323;
+   CB_SETCURSEL = 334;
+   CB_GETCURSEL = 327;
+   
+   FW_NORMAL = 400;
+   ANSI_CHARSET = 0;
+   OUT_DEFAULT_PRECIS = 0;
+   CLIP_DEFAULT_PRECIS = 0;
+   DEFAULT_QUALITY = 0;
+   DEFAULT_PITCH = {};
+   FF_DONTCARE = {};
+   
+   miim_state = {0};
+   miim_type = {4};
+   miim_submenu = {2};
+   miim_id = {1};
+   mft_string = 0;
+   mft_separator = 2048;
+   mfs_enabled = 0;
+   
+   VK_LBUTTON = 1;
+   
+   SRCCOPY = 0CC0020H;
+   
+   StatusHeight = 25;
+   
+   ParamTextH = 15;
+   
+   hot_new = 0; hot_open = 1; hot_save = 2; hot_undo = 3; hot_cut = 4; hot_copy = 5;
+   hot_paste = 6; hot_find = 7; hot_searchagain = 8; hot_replace = 9; hot_goto = 10;
+   hot_selectall = 11; hot_upcase = 12; hot_lowcase = 13; hot_compile = 14; hot_run = 15;
+   hot_main = 16;
+   
+   Inter = 2;
+   
+   timer1 = 1; timer2 = 2;
 
-  BS_DEFPUSHBUTTON = {0};
-  WS_VISIBLE = {28};
-  WS_CHILD = {30};
-  WS_CLIPCHILDREN = {25};
-  WS_CLIPSIBLINGS = {26};
-  WS_BORDER = 8388608;
-  WS_SYSMENU = 524288;
-  SBS_HORZ = {};
-  SBS_VERT = {0};
-  SBARS_SIZEGRIP = {8};
-  SB_HORZ = 0;
-  SB_VERT = 1;
-  SB_CTL = 2;
-  WM_HSCROLL = 276;
-  WM_VSCROLL = 277;
-  WM_PAINT = 15;
-  WM_SIZE = 5;
-  SB_THUMBPOSITION = 4;
-  SB_THUMBTRACK = 5;
-  SB_LINELEFT = 0;
-  SB_LINERIGHT = 1;
-  SB_PAGELEFT = 2;
-  SB_PAGERIGHT = 3;
-  TCIF_TEXT = 1;
-  TCM_INSERTITEM = 4926;
-  SIF_TRACKPOS = 16;
-  WM_SETFONT = 48;
-  WM_NOTIFY = 78;
-  WM_MOUSEMOVE = 512;
-  WM_LBUTTONDOWN = 513;
-  WM_LBUTTONUP = 514;
-  WM_MENUSELECT = 11FH;
-  WM_CLOSE = 16;
-  WM_MOUSEWHEEL = 522;
-  WM_LBUTTONDBLCLK = 515;
-  WM_CONTEXTMENU = 123;
-  WM_SETCURSOR = 32;
-  WM_SETTEXT = 12;
-  WM_GETTEXT = 13;
-  WM_GETTEXTLENGTH = 14;
-  SB_SETTEXT = 1035;
-  SW_SHOW = 5;
-  ES_AUTOHSCROLL = 128;
-  EM_SETSEL = 177;
+“»œ€
 
-  TCM_FIRST = 1300H;
-  TCM_SETCURSEL = TCM_FIRST + 12;
-  TCM_GETCURSEL = TCM_FIRST + 11;
-  TCM_DELETEITEM = TCM_FIRST + 8;
-  TCN_SELCHANGE = -551;
+   STRING = Ã¿——»¬ 2048 »« —»Ã¬;
 
-  CB_ADDSTRING = 323;
-  CB_SETCURSEL = 334;
-  CB_GETCURSEL = 327;
+   PRect = ” ¿«¿“≈À‹ Õ¿ TU.TRect;
 
-  FW_NORMAL = 400;
-  ANSI_CHARSET = 0;
-  OUT_DEFAULT_PRECIS = 0;
-  CLIP_DEFAULT_PRECIS = 0;
-  DEFAULT_QUALITY = 0;
-  DEFAULT_PITCH = {};
-  FF_DONTCARE = {};
+   TPoint = «¿œ»—‹
+         X, Y: ÷≈ÀŒ≈
+       ŒÕ≈÷;
 
-  miim_state = {0};
-  miim_type = {4};
-  miim_submenu = {2};
-  miim_id = {1};
-  mft_string = 0;
-  mft_separator = 2048;
-  mfs_enabled = 0;
+   tagMSG = «¿œ»—‹
+         hwnd, message, wParam, lParam, time: ÷≈ÀŒ≈;
+         pt: TPoint
+       ŒÕ≈÷;
 
-  VK_LBUTTON = 1;
+   TWinProc = œ–Œ÷≈ƒ”–¿ [winapi] (Window, Message, WParam, LParam: ÷≈ÀŒ≈): ÷≈ÀŒ≈;
 
-  SRCCOPY = 0CC0020H;
+   tagWNDCLASSEX = «¿œ»—‹
+         cbSize, style: INTEGER; lpfnWndProc: TWinProc; cbClsExtra, cbWndExtra, hInstance, hIcon,
+         hCursor, hbrBackground, lpszMenuName, lpszClassName, hIconSm: ÷≈ÀŒ≈
+       ŒÕ≈÷;
 
-  StatusHeight = 25;
+   tagMENUITEMINFO = «¿œ»—‹
+         cbSize, fMask, fType, fState, wID, hSubMenu, hbmpChecked,
+         hbmpUnchecked, dwItemData, dwTypeData, cch, hbmpItem: ÷≈ÀŒ≈
+      END;
 
-  ParamTextH = 15;
+   tagTCITEM = «¿œ»—‹
+         mask, dwState, dwStateMask, pszText, cchTextMax, iImage, lParam: ÷≈ÀŒ≈
+       ŒÕ≈÷;
 
-  hot_new = 0; hot_open = 1; hot_save = 2; hot_undo = 3; hot_cut = 4; hot_copy = 5;
-  hot_paste = 6; hot_find = 7; hot_searchagain = 8; hot_replace = 9; hot_goto = 10;
-  hot_selectall = 11; hot_upcase = 12; hot_lowcase = 13; hot_compile = 14; hot_run = 15;
-  hot_main = 16;
-
-  Inter = 2;
-
-  timer1 = 1; timer2 = 2;
-
-TYPE
-
-  STRING = ARRAY 2048 OF CHAR;
-
-  PRect = POINTER TO TU.TRect;
-
-  TPoint = RECORD
-    X, Y: INTEGER
-  END;
-
-  tagMSG = RECORD
-    hwnd, message, wParam, lParam, time: INTEGER;
-    pt: TPoint
-  END;
-
-  TWinProc = PROCEDURE [winapi] (Window, Message, WParam, LParam: INTEGER): INTEGER;
-
-  tagWNDCLASSEX = RECORD
-    cbSize, style: INTEGER; lpfnWndProc: TWinProc; cbClsExtra, cbWndExtra, hInstance, hIcon,
-    hCursor, hbrBackground, lpszMenuName, lpszClassName, hIconSm: INTEGER
-  END;
-
-  tagMENUITEMINFO = RECORD
-    cbSize, fMask, fType, fState, wID, hSubMenu, hbmpChecked,
-    hbmpUnchecked, dwItemData, dwTypeData, cch, hbmpItem: INTEGER
-  END;
-
-  tagTCITEM = RECORD
-    mask, dwState, dwStateMask, pszText, cchTextMax, iImage, lParam: INTEGER
-  END;
-
-  tagSCROLLINFO = RECORD
-    cbSize, fMask, nMin, nMax, nPage, nPos, nTrackPos: INTEGER
-  END;
+   tagSCROLLINFO = «¿œ»—‹
+         cbSize, fMask, nMin, nMax, nPage, nPos, nTrackPos: ÷≈ÀŒ≈
+       ŒÕ≈÷;
 
   TPaintStruct = RECORD
     hdc, fErase: INTEGER; rcPaint: TU.TRect; fRestore, fIncUpdate: INTEGER; rgbReserved: ARRAY 32 OF CHAR
@@ -1687,11 +1686,11 @@ BEGIN
   submenuplatf := CreatePopupMenu();
   submenustksize := CreatePopupMenu();
 
-  CreateMenuItem(mainmenu, submenufile, "‘‡ÈÎ", "", mfile);
-    CreateMenuItem(submenufile, 0, "ÕÓ‚˚È", "Ctrl+N", snew);
-    CreateMenuItem(submenufile, 0, "ŒÚÍ˚Ú¸", "Ctrl+O", sopen);
-    CreateMenuItem(submenufile, 0, "—Óı‡ÌËÚ¸", "Ctrl+S", ssave);
-    CreateMenuItem(submenufile, 0, "—Óı‡ÌËÚ¸ Í‡Í", "", ssaveas);
+  CreateMenuItem(mainmenu, submenufile, "File", "", mfile);
+    CreateMenuItem(submenufile, 0, "New", "Ctrl+N", snew);
+    CreateMenuItem(submenufile, 0, "Open", "Ctrl+O", sopen);
+    CreateMenuItem(submenufile, 0, "Save", "Ctrl+S", ssave);
+    CreateMenuItem(submenufile, 0, "Save As..", "", ssaveas);
     CreateMenuItem(submenufile, 0, "—Óı‡ÌËÚ¸ ‚ÒÂ", "", ssaveall);
     CreateMenuItem(submenufile, 0, "«‡Í˚Ú¸", "", sclose);
     CreateMenuItem(submenufile, 0, "«‡Í˚Ú¸ ‚ÒÂ", "", scloseall);
