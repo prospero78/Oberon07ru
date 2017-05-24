@@ -15,7 +15,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *)
 
-МОДУЛЬ Console;
+МОДУЛЬ модВинКонсоль;
 
 ИМПОРТ sys := SYSTEM, WINAPI;
 
@@ -107,4 +107,4 @@
 
 НАЧАЛО
    hConsoleOutput := WINAPI.GetStdHandle(-11);
-КОНЕЦ Console.
+КОНЕЦ модВинКонсоль.
