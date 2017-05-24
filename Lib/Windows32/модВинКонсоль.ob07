@@ -26,85 +26,85 @@
    LightRed* = 12; LightMagenta* = 13; Yellow* = 14;     White* = 15;
 
 ПЕРЕМ
-   hConsoleOutput: ЦЕЛОЕ;
+   уКонсольВывод: ЦЕЛОЕ;
 
-ПРОЦЕДУРА IntToCard16(i: ЦЕЛОЕ): sys.CARD16;
+ПРОЦЕДУРА IntToCard16(число_: ЦЕЛОЕ): sys.CARD16;
    ПЕРЕМ
-      w: sys.CARD16;
+      слово: sys.CARD16;
    НАЧАЛО
-      sys.GET(sys.ADR(i), w)
-      ВЕРНУТЬ w
+      sys.GET(sys.ADR(число_), слово)
+      ВЕРНУТЬ слово
    КОНЕЦ IntToCard16;
 
-ПРОЦЕДУРА Card16ToInt(w: sys.CARD16): ЦЕЛОЕ;
+ПРОЦЕДУРА Card16ToInt(слово_: sys.CARD16): ЦЕЛОЕ;
    ПЕРЕМ
-      i: ЦЕЛОЕ;
+      число: ЦЕЛОЕ;
    НАЧАЛО
-      sys.PUT(sys.ADR(i), w)
-      ВЕРНУТЬ i
+      sys.PUT(sys.ADR(число), слово_)
+      ВЕРНУТЬ число
    КОНЕЦ Card16ToInt;
 
-ПРОЦЕДУРА CoordToInt(Coord: WINAPI.TCoord): ЦЕЛОЕ;
+ПРОЦЕДУРА CoordToInt(зКоорд_: WINAPI.TCoord): ЦЕЛОЕ;
    ПЕРЕМ
-      res: ЦЕЛОЕ;
+      поз: ЦЕЛОЕ;
    НАЧАЛО
-      sys.GET(sys.ADR(Coord), res)
-      ВЕРНУТЬ res
+      sys.GET(sys.ADR(зКоорд_), поз)
+      ВЕРНУТЬ поз
    КОНЕЦ CoordToInt;
 
-ПРОЦЕДУРА SetCursor*(X, Y: ЦЕЛОЕ);
+ПРОЦЕДУРА Курсор_Уст*(Х_, У_: ЦЕЛОЕ);
    ПЕРЕМ
-      Coord: WINAPI.TCoord;
+      зКоорд: WINAPI.TCoord;
    НАЧАЛО
-      Coord.X := IntToCard16(X);
-      Coord.Y := IntToCard16(Y);
-      WINAPI.SetConsoleCursorPosition(hConsoleOutput, CoordToInt(Coord));
-   КОНЕЦ SetCursor;
+      зКоорд.X := IntToCard16(Х_);
+      зКоорд.Y := IntToCard16(У_);
+      WINAPI.SetConsoleCursorPosition(уКонсольВывод, CoordToInt(зКоорд));
+   КОНЕЦ Курсор_Уст;
 
-ПРОЦЕДУРА GetCursor*(ПЕР X, Y: ЦЕЛОЕ);
+ПРОЦЕДУРА КурсорПоз_Получ*(ПЕР Х_, У_: ЦЕЛОЕ);
    ПЕРЕМ
       ScrBufInfo: WINAPI.TConsoleScreenBufferInfo;
    НАЧАЛО
-      WINAPI.GetConsoleScreenBufferInfo(hConsoleOutput, ScrBufInfo);
-      X := Card16ToInt(ScrBufInfo.dwCursorPosition.X);
-      Y := Card16ToInt(ScrBufInfo.dwCursorPosition.Y)
-   КОНЕЦ GetCursor;
+      WINAPI.GetConsoleScreenBufferInfo(уКонсольВывод, ScrBufInfo);
+      Х_ := Card16ToInt(ScrBufInfo.dwCursorPosition.X);
+      У_ := Card16ToInt(ScrBufInfo.dwCursorPosition.Y)
+   КОНЕЦ КурсорПоз_Получ;
 
-ПРОЦЕДУРА Cls*;
+ПРОЦЕДУРА Очистить*;
    ПЕРЕМ
       fill: ЦЕЛОЕ;
       ScrBufInfo: WINAPI.TConsoleScreenBufferInfo;
    НАЧАЛО
-      WINAPI.GetConsoleScreenBufferInfo(hConsoleOutput, ScrBufInfo);
+      WINAPI.GetConsoleScreenBufferInfo(уКонсольВывод, ScrBufInfo);
       fill := Card16ToInt(ScrBufInfo.dwSize.X) * Card16ToInt(ScrBufInfo.dwSize.Y);
-      WINAPI.FillConsoleOutputCharacter(hConsoleOutput, 20H, fill, 0, sys.ADR(fill));
-      WINAPI.FillConsoleOutputAttribute(hConsoleOutput, Card16ToInt(ScrBufInfo.wAttributes), fill, 0, sys.ADR(fill));
-      SetCursor(0, 0);
-   КОНЕЦ Cls;
+      WINAPI.FillConsoleOutputCharacter(уКонсольВывод, 20H, fill, 0, sys.ADR(fill));
+      WINAPI.FillConsoleOutputAttribute(уКонсольВывод, Card16ToInt(ScrBufInfo.wAttributes), fill, 0, sys.ADR(fill));
+      Курсор_Уст(0, 0);
+   КОНЕЦ Очистить;
 
 ПРОЦЕДУРА Цвет_Уст*(курсор_, фон_: ЦЕЛОЕ);
    НАЧАЛО
       ЕСЛИ (курсор_ В {0..15}) & (фон_ В {0..15}) ТОГДА
-         WINAPI.SetConsoleTextAttribute(hConsoleOutput, LSL(фон_, 4) + курсор_)
+         WINAPI.SetConsoleTextAttribute(уКонсольВывод, LSL(фон_, 4) + курсор_)
       КОНЕЦ
    КОНЕЦ Цвет_Уст;
 
-ПРОЦЕДУРА GetCursorX*(): ЦЕЛОЕ;
+ПРОЦЕДУРА КурсорХ_Получ*(): ЦЕЛОЕ;
    ПЕРЕМ
       ScrBufInfo: WINAPI.TConsoleScreenBufferInfo;
    НАЧАЛО
-      WINAPI.GetConsoleScreenBufferInfo(hConsoleOutput, ScrBufInfo)
+      WINAPI.GetConsoleScreenBufferInfo(уКонсольВывод, ScrBufInfo)
       ВЕРНУТЬ Card16ToInt(ScrBufInfo.dwCursorPosition.X)
-   END GetCursorX;
+   END КурсорХ_Получ;
 
-ПРОЦЕДУРА GetCursorY*(): ЦЕЛОЕ;
+ПРОЦЕДУРА КурсорУ_Получ*(): ЦЕЛОЕ;
    ПЕРЕМ
       ScrBufInfo: WINAPI.TConsoleScreenBufferInfo;
    НАЧАЛО
-      WINAPI.GetConsoleScreenBufferInfo(hConsoleOutput, ScrBufInfo)
+      WINAPI.GetConsoleScreenBufferInfo(уКонсольВывод, ScrBufInfo)
       ВЕРНУТЬ Card16ToInt(ScrBufInfo.dwCursorPosition.Y)
-   КОНЕЦ GetCursorY;
+   КОНЕЦ КурсорУ_Получ;
 
 НАЧАЛО
-   hConsoleOutput := WINAPI.GetStdHandle(-11);
+   уКонсольВывод := WINAPI.GetStdHandle(-11);
 КОНЕЦ модВинКонсоль.
