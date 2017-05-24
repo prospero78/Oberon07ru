@@ -16,7 +16,8 @@
    *)
 лндскэ WINAPI;
 
-хлонпр sys := SYSTEM, API;
+хлонпр sys := SYSTEM,
+   API := ЛНДюох;
 
 йнмяр
 
