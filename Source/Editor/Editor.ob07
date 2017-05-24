@@ -286,49 +286,49 @@ END GetMemBMP;
 
 PROCEDURE CreateWindow(lpClassName, lpWindowName: ARRAY OF CHAR;
   dwStyle, X, Y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam: INTEGER): INTEGER;
-VAR n: INTEGER; class, window: STRING;
-BEGIN
-  n := TU.Utf8To16(lpClassName, class);
-  n := TU.Utf8To16(lpWindowName, window)
-  RETURN CreateWindowEx(0, sys.ADR(class), sys.ADR(window), dwStyle, X, Y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam)
-END CreateWindow;
+   VAR n: INTEGER; class, window: STRING;
+   BEGIN
+     n := TU.Utf8To16(lpClassName, class);
+     n := TU.Utf8To16(lpWindowName, window)
+     RETURN CreateWindowEx(0, sys.ADR(class), sys.ADR(window), dwStyle, X, Y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam)
+   END CreateWindow;
 
 PROCEDURE [winapi] CreateMenuItem(hmenu, submenu: INTEGER; cap, hot: ARRAY OF CHAR; _wid: INTEGER): BOOLEAN;
-VAR mi: tagMENUITEMINFO; n: INTEGER; str, name: STRING;
-BEGIN
-  IF hot # "" THEN
-    TU.concat(cap, 9X, str);
-    TU.concat(str, hot, str)
-  ELSE
-    COPY(cap, str)
-  END;
-  n := TU.Utf8To16(str, name);
-  mi.cbSize := sys.SIZE(tagMENUITEMINFO);
-  mi.fMask := ORD(miim_state + miim_type + miim_submenu + miim_id);
-  mi.fType := mft_string;
-  mi.fState := mfs_enabled;
-  mi.wID := _wid;
-  mi.hSubMenu := submenu;
-  mi.dwItemData := 0;
-  mi.dwTypeData := sys.ADR(name);
-  mi.cch := n
-  RETURN InsertMenuItem(hmenu, 0, FALSE, mi)
-END CreateMenuItem;
+   VAR mi: tagMENUITEMINFO; n: INTEGER; str, name: STRING;
+   BEGIN
+     IF hot # "" THEN
+       TU.concat(cap, 9X, str);
+       TU.concat(str, hot, str)
+     ELSE
+       COPY(cap, str)
+     END;
+     n := TU.Utf8To16(str, name);
+     mi.cbSize := sys.SIZE(tagMENUITEMINFO);
+     mi.fMask := ORD(miim_state + miim_type + miim_submenu + miim_id);
+     mi.fType := mft_string;
+     mi.fState := mfs_enabled;
+     mi.wID := _wid;
+     mi.hSubMenu := submenu;
+     mi.dwItemData := 0;
+     mi.dwTypeData := sys.ADR(name);
+     mi.cch := n
+     RETURN InsertMenuItem(hmenu, 0, FALSE, mi)
+   END CreateMenuItem;
 
 PROCEDURE [winapi] CreateMenuSep(hmenu: INTEGER): BOOLEAN;
-VAR mi: tagMENUITEMINFO;
-BEGIN
-  mi.cbSize := sys.SIZE(tagMENUITEMINFO);
-  mi.fMask := ORD(miim_state + miim_type + miim_submenu + miim_id);
-  mi.fType := mft_separator;
-  mi.fState := mfs_enabled;
-  mi.wID := separator;
-  mi.hSubMenu := 0;
-  mi.dwItemData := 0;
-  mi.dwTypeData := sys.ADR("");
-  mi.cch := 0
-  RETURN InsertMenuItem(hmenu, 0, FALSE, mi)
-END CreateMenuSep;
+   VAR mi: tagMENUITEMINFO;
+   BEGIN
+     mi.cbSize := sys.SIZE(tagMENUITEMINFO);
+     mi.fMask := ORD(miim_state + miim_type + miim_submenu + miim_id);
+     mi.fType := mft_separator;
+     mi.fState := mfs_enabled;
+     mi.wID := separator;
+     mi.hSubMenu := 0;
+     mi.dwItemData := 0;
+     mi.dwTypeData := sys.ADR("");
+     mi.cch := 0
+     RETURN InsertMenuItem(hmenu, 0, FALSE, mi)
+   END CreateMenuSep;
 
 PROCEDURE LowWord(n: INTEGER): INTEGER;
   RETURN ASR(LSL(n, 16), 16)
