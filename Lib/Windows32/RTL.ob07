@@ -45,7 +45,7 @@
 опнжедспю [stdcall] _disprec*(оеп ptr: жекне);
    мювюкн
       еякх ptr # 0 рнцдю
-         DEC(ptr, 4);
+         бшв(ptr, 4);
          ptr := ЛюОХ.оЮЛЪРЭ_нЯБНАНДХРЭ(ptr)
       йнмеж
    йнмеж _disprec;
@@ -65,14 +65,14 @@
 опнжедспю [stdcall] _checktype*(table, t, r: жекне);
    (* ГЮВЕЛ ГДЕЯЭ ОЕПЕЛЕММШЕ??? *)
    мювюкн
-     table := rtab;
-     sys.CODE("8B450C8B4D1085C975076A0158C9C20C008B51FC8B4D083BD0740D85D27409C1E20203D18B12EBEF33C93BC20F94C18BC1C9C20C00")
+      table := rtab;
+      sys.CODE("8B450C8B4D1085C975076A0158C9C20C008B51FC8B4D083BD0740D85D27409C1E20203D18B12EBEF33C93BC20F94C18BC1C9C20C00")
    йнмеж _checktype;
 
 опнжедспю [stdcall] _savearr*(ПЮГЛЕП_, ХЯРНВМХЙ_, МЮГМЮВЕМХЕ_: жекне);
    (* ГЮВЕЛ ГДЕЯЭ ОЕПЕЛЕММШЕ??? *)
    мювюкн
-     sys.CODE("9CFC8BD78BC68B7D108B750C8B4D08F3A48BFA8BF09D")
+      sys.CODE("9CFC8BD78BC68B7D108B750C8B4D08F3A48BFA8BF09D")
    йнмеж _savearr;
 
 опнжедспю [stdcall] _saverec*(dyn, stat, ПЮГЛЕП_, ХЯРНВМХЙ_, МЮГМЮВЕМХЕ_: жекне): аскебн;
@@ -205,22 +205,22 @@
       i, a, b: жекне;
       c: яхлб;
    мювюкн
-     i := 0;
-     a := 0;
-     онбрнпърэ
-       str[i] := CHR(x MOD 10 + ORD("0"));
-       x := x DIV 10;
-       дна(i)
-     онйюме x = 0;
-     b := i - 1;
-     WHILE a < b DO
-       c := str[a];
-       str[a] := str[b];
-       str[b] := c;
-       дна(a);
-       бшв(b)
-     йнмеж;
-     str[i] := 0X
+      i := 0;
+      a := 0;
+      онбрнпърэ
+         str[i] := CHR(x MOD 10 + ORD("0"));
+         x := x DIV 10;
+         дна(i)
+      онйюме x = 0;
+      b := i - 1;
+      WHILE a < b DO
+         c := str[a];
+         str[a] := str[b];
+         str[b] := c;
+         дна(a);
+         бшв(b)
+      йнмеж;
+      str[i] := 0X
    йнмеж Int;
 
 опнжедспю StrAppend(оеп str: STRING; оеп pos: жекне; s: люяяхб хг яхлб);

@@ -1,4 +1,4 @@
-О╩©(*
+(*
     Copyright 2013 Krotov Anton
 
     This program is free software: you can redistribute it and/or modify
@@ -15,43 +15,41 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *)
 
-MODULE Console;
+лндскэ Console;
 
 IMPORT sys := SYSTEM, WINAPI;
 
-CONST
+йнмяр
+   Black* = 0;     Blue* = 1;          Green* = 2;       Cyan* = 3;
+   Red* = 4;       Magenta* = 5;       Brown* = 6;       LightGray* = 7;
+   DarkGray* = 8;  LightBlue* = 9;     LightGreen* = 10; LightCyan* = 11;
+   LightRed* = 12; LightMagenta* = 13; Yellow* = 14;     White* = 15;
 
-  Black* = 0;     Blue* = 1;          Green* = 2;       Cyan* = 3;
-  Red* = 4;       Magenta* = 5;       Brown* = 6;       LightGray* = 7;
-  DarkGray* = 8;  LightBlue* = 9;     LightGreen* = 10; LightCyan* = 11;
-  LightRed* = 12; LightMagenta* = 13; Yellow* = 14;     White* = 15;
+оепел
+   hConsoleOutput: жекне;
 
-VAR
-
-  hConsoleOutput: INTEGER;
-
-PROCEDURE IntToCard16(i: INTEGER): sys.CARD16;
+опнжедспю IntToCard16(i: жекне): sys.CARD16;
 VAR w: sys.CARD16;
 BEGIN
   sys.GET(sys.ADR(i), w)
   RETURN w
 END IntToCard16;
 
-PROCEDURE Card16ToInt(w: sys.CARD16): INTEGER;
+опнжедспю Card16ToInt(w: sys.CARD16): жекне;
 VAR i: INTEGER;
 BEGIN
   sys.PUT(sys.ADR(i), w)
   RETURN i
 END Card16ToInt;
 
-PROCEDURE CoordToInt(Coord: WINAPI.TCoord): INTEGER;
+опнжедспю CoordToInt(Coord: WINAPI.TCoord): жекне;
 VAR res: INTEGER;
 BEGIN
   sys.GET(sys.ADR(Coord), res)
   RETURN res
 END CoordToInt;
 
-PROCEDURE SetCursor*(X, Y: INTEGER);
+опнжедспю SetCursor*(X, Y: жекне);
 VAR Coord: WINAPI.TCoord;
 BEGIN
   Coord.X := IntToCard16(X);
@@ -59,7 +57,7 @@ BEGIN
   WINAPI.SetConsoleCursorPosition(hConsoleOutput, CoordToInt(Coord));
 END SetCursor;
 
-PROCEDURE GetCursor*(VAR X, Y: INTEGER);
+опнжедспю GetCursor*(VAR X, Y: жекне);
 VAR ScrBufInfo: WINAPI.TConsoleScreenBufferInfo;
 BEGIN
   WINAPI.GetConsoleScreenBufferInfo(hConsoleOutput, ScrBufInfo);
@@ -67,7 +65,7 @@ BEGIN
   Y := Card16ToInt(ScrBufInfo.dwCursorPosition.Y)
 END GetCursor;
 
-PROCEDURE Cls*;
+опнжедспю Cls*;
 VAR fill: INTEGER; ScrBufInfo: WINAPI.TConsoleScreenBufferInfo;
 BEGIN
   WINAPI.GetConsoleScreenBufferInfo(hConsoleOutput, ScrBufInfo);
@@ -77,21 +75,21 @@ BEGIN
   SetCursor(0, 0);
 END Cls;
 
-PROCEDURE SetColor*(FColor, BColor: INTEGER);
+опнжедспю SetColor*(FColor, BColor: INTEGER);
 BEGIN
   IF (FColor IN {0..15}) & (BColor IN {0..15}) THEN
     WINAPI.SetConsoleTextAttribute(hConsoleOutput, LSL(BColor, 4) + FColor)
   END
 END SetColor;
 
-PROCEDURE GetCursorX*(): INTEGER;
+опнжедспю GetCursorX*(): INTEGER;
 VAR ScrBufInfo: WINAPI.TConsoleScreenBufferInfo;
 BEGIN
   WINAPI.GetConsoleScreenBufferInfo(hConsoleOutput, ScrBufInfo)
   RETURN Card16ToInt(ScrBufInfo.dwCursorPosition.X)
 END GetCursorX;
 
-PROCEDURE GetCursorY*(): INTEGER;
+опнжедспю GetCursorY*(): INTEGER;
 VAR ScrBufInfo: WINAPI.TConsoleScreenBufferInfo;
 BEGIN
   WINAPI.GetConsoleScreenBufferInfo(hConsoleOutput, ScrBufInfo)
