@@ -17,7 +17,7 @@
 
 лндскэ Console;
 
-IMPORT sys := SYSTEM, WINAPI;
+хлонпр sys := SYSTEM, WINAPI;
 
 йнмяр
    Black* = 0;     Blue* = 1;          Green* = 2;       Cyan* = 3;
@@ -38,15 +38,15 @@ IMPORT sys := SYSTEM, WINAPI;
 
 опнжедспю Card16ToInt(w: sys.CARD16): жекне;
    оепел
-      i: INTEGER;
+      i: жекне;
    мювюкн
      sys.PUT(sys.ADR(i), w)
-     RETURN i
-   END Card16ToInt;
+     бепмсрэ i
+   йнмеж Card16ToInt;
 
 опнжедспю CoordToInt(Coord: WINAPI.TCoord): жекне;
    оепел
-      res: INTEGER;
+      res: жекне;
    мювюкн
      sys.GET(sys.ADR(Coord), res)
      RETURN res
@@ -61,7 +61,7 @@ IMPORT sys := SYSTEM, WINAPI;
      WINAPI.SetConsoleCursorPosition(hConsoleOutput, CoordToInt(Coord));
    йнмеж SetCursor;
 
-опнжедспю GetCursor*(VAR X, Y: жекне);
+опнжедспю GetCursor*(оеп X, Y: жекне);
    оепел
       ScrBufInfo: WINAPI.TConsoleScreenBufferInfo;
    мювюкн
@@ -72,7 +72,8 @@ IMPORT sys := SYSTEM, WINAPI;
 
 опнжедспю Cls*;
    оепел
-      fill: INTEGER; ScrBufInfo: WINAPI.TConsoleScreenBufferInfo;
+      fill: жекне;
+      ScrBufInfo: WINAPI.TConsoleScreenBufferInfo;
    мювюкн
      WINAPI.GetConsoleScreenBufferInfo(hConsoleOutput, ScrBufInfo);
      fill := Card16ToInt(ScrBufInfo.dwSize.X) * Card16ToInt(ScrBufInfo.dwSize.Y);
@@ -81,27 +82,27 @@ IMPORT sys := SYSTEM, WINAPI;
      SetCursor(0, 0);
    йнмеж Cls;
 
-опнжедспю SetColor*(FColor, BColor: INTEGER);
+опнжедспю SetColor*(FColor, BColor: жекне);
    мювюкн
-     IF (FColor IN {0..15}) & (BColor IN {0..15}) THEN
+     еякх (FColor б {0..15}) & (BColor IN {0..15}) рнцдю
        WINAPI.SetConsoleTextAttribute(hConsoleOutput, LSL(BColor, 4) + FColor)
      йнмеж
    йнмеж SetColor;
 
-опнжедспю GetCursorX*(): INTEGER;
+опнжедспю GetCursorX*(): жекне;
    оепел
       ScrBufInfo: WINAPI.TConsoleScreenBufferInfo;
    мювюкн
      WINAPI.GetConsoleScreenBufferInfo(hConsoleOutput, ScrBufInfo)
-     RETURN Card16ToInt(ScrBufInfo.dwCursorPosition.X)
+     бепмсрэ Card16ToInt(ScrBufInfo.dwCursorPosition.X)
    END GetCursorX;
 
-опнжедспю GetCursorY*(): INTEGER;
+опнжедспю GetCursorY*(): жекне;
    оепел
       ScrBufInfo: WINAPI.TConsoleScreenBufferInfo;
    мювюкн
      WINAPI.GetConsoleScreenBufferInfo(hConsoleOutput, ScrBufInfo)
-     RETURN Card16ToInt(ScrBufInfo.dwCursorPosition.Y)
+     бепмсрэ Card16ToInt(ScrBufInfo.dwCursorPosition.Y)
    йнмеж GetCursorY;
 
 мювюкн
