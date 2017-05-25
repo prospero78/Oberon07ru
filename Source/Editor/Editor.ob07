@@ -335,205 +335,205 @@ PROCEDURE LowWord(n: INTEGER): INTEGER;
 END LowWord;
 
 PROCEDURE HiWord(n: INTEGER): INTEGER;
-  RETURN ASR(LSL(ROR(n, 16), 16), 16)
-END HiWord;
+     RETURN ASR(LSL(ROR(n, 16), 16), 16)
+   END HiWord;
 
 PROCEDURE ScrollChange(scroll, max, page, wparam: INTEGER; VAR pos: INTEGER);
-VAR scrollinfo: tagSCROLLINFO;
-BEGIN
-  CASE LowWord(wparam) OF
-  |SB_LINERIGHT: INC(pos)
-  |SB_LINELEFT:  DEC(pos)
-  |SB_PAGERIGHT: pos := pos + page
-  |SB_PAGELEFT:  pos := pos - page
-  |SB_THUMBPOSITION, SB_THUMBTRACK:
-    scrollinfo.cbSize := sys.SIZE(tagSCROLLINFO);
-    scrollinfo.fMask := SIF_TRACKPOS;
-    GetScrollInfo(scroll, SB_CTL, scrollinfo);
-    pos := scrollinfo.nTrackPos
-  ELSE
-  END;
-  IF pos > max THEN
-    pos := max
-  END;
-  IF pos < 0 THEN
-    pos := 0
-  END;
-  SetScrollPos(scroll, SB_CTL, pos, TRUE)
-END ScrollChange;
+   VAR scrollinfo: tagSCROLLINFO;
+   BEGIN
+     CASE LowWord(wparam) OF
+     |SB_LINERIGHT: INC(pos)
+     |SB_LINELEFT:  DEC(pos)
+     |SB_PAGERIGHT: pos := pos + page
+     |SB_PAGELEFT:  pos := pos - page
+     |SB_THUMBPOSITION, SB_THUMBTRACK:
+       scrollinfo.cbSize := sys.SIZE(tagSCROLLINFO);
+       scrollinfo.fMask := SIF_TRACKPOS;
+       GetScrollInfo(scroll, SB_CTL, scrollinfo);
+       pos := scrollinfo.nTrackPos
+     ELSE
+     END;
+     IF pos > max THEN
+       pos := max
+     END;
+     IF pos < 0 THEN
+       pos := 0
+     END;
+     SetScrollPos(scroll, SB_CTL, pos, TRUE)
+   END ScrollChange;
 
 PROCEDURE InsertTabItem(Text: ARRAY OF CHAR; Index: INTEGER);
-VAR I: tagTCITEM;
-    name: STRING;
-    n: INTEGER;
-BEGIN
-  n := TU.Utf8To16(Text, name);
-  I.mask := TCIF_TEXT;
-  I.pszText := sys.ADR(name);
-  I.cchTextMax := n;
-  I.iImage := -1;
-  SendMessage(Tab, TCM_INSERTITEM, Index, sys.ADR(I))
-END InsertTabItem;
+   VAR I: tagTCITEM;
+       name: STRING;
+       n: INTEGER;
+   BEGIN
+     n := TU.Utf8To16(Text, name);
+     I.mask := TCIF_TEXT;
+     I.pszText := sys.ADR(name);
+     I.cchTextMax := n;
+     I.iImage := -1;
+     SendMessage(Tab, TCM_INSERTITEM, Index, sys.ADR(I))
+   END InsertTabItem;
 
 PROCEDURE InsertTabItemW(Text, Index: INTEGER);
-VAR I: tagTCITEM;
-BEGIN
-  I.mask := TCIF_TEXT;
-  I.pszText := Text;
-  I.cchTextMax := 1024;
-  I.iImage := -1;
-  SendMessage(Tab, TCM_INSERTITEM, Index, sys.ADR(I))
-END InsertTabItemW;
+   VAR I: tagTCITEM;
+   BEGIN
+     I.mask := TCIF_TEXT;
+     I.pszText := Text;
+     I.cchTextMax := 1024;
+     I.iImage := -1;
+     SendMessage(Tab, TCM_INSERTITEM, Index, sys.ADR(I))
+   END InsertTabItemW;
 
 PROCEDURE HotEnabled(hotkey: INTEGER; Enabled: BOOLEAN);
-BEGIN
-  IF Enabled THEN
-    hotkeys := hotkeys + {hotkey}
-  ELSE
-    hotkeys := hotkeys - {hotkey}
-  END
-END HotEnabled;
+   BEGIN
+     IF Enabled THEN
+       hotkeys := hotkeys + {hotkey}
+     ELSE
+       hotkeys := hotkeys - {hotkey}
+     END
+   END HotEnabled;
 
 PROCEDURE MenuEnabled(Enabled: BOOLEAN);
-VAR En, zero: INTEGER;
-BEGIN
-  zero := 0;
-  En := ORD(~Enabled);
-  EnableMenuItem(submenufile, ssave, En);
-  EnableMenuItem(submenufile, ssaveas, En);
-  EnableMenuItem(submenufile, ssaveall, En);
-  EnableMenuItem(submenufile, sclose, En);
-  EnableMenuItem(submenufile, scloseall, En);
-  EnableMenuItem(submenuedit, sundo, En);
-  EnableMenuItem(submenuedit, scut, En);
-  EnableMenuItem(submenuedit, scopy, En);
-  EnableMenuItem(submenuedit, spaste, En);
-  EnableMenuItem(submenuedit, sdel, En);
-  EnableMenuItem(submenuedit, sfind, En);
-  EnableMenuItem(submenuedit, ssearchagain, En);
-  EnableMenuItem(submenuedit, sreplace, En);
-  EnableMenuItem(submenuedit, sgoto, En);
-  EnableMenuItem(submenuedit, sselectall, En);
-  EnableMenuItem(submenuedit, scase, En);
-  EnableMenuItem(submenuview, ssyntax, En);
-  EnableMenuItem(submenuview, snumbers, En);
-  EnableMenuItem(submenuview, soptions, En);
-  EnableMenuItem(submenuprog, scompile, En);
-  EnableMenuItem(submenuprog, srun, En);
-  EnableMenuItem(submenuprog, sparam, En);
-  EnableMenuItem(submenuprog, smain, En);
-  EnableMenuItem(submenuprog, splatf, En);
-  EnableMenuItem(submenuprog, sstksize, En);
-  HotEnabled(hot_save, Enabled);
-  HotEnabled(hot_undo, Enabled);
-  HotEnabled(hot_cut, Enabled);
-  HotEnabled(hot_copy, Enabled);
-  HotEnabled(hot_paste, Enabled);
-  HotEnabled(hot_find, Enabled);
-  HotEnabled(hot_searchagain, Enabled);
-  HotEnabled(hot_replace, Enabled);
-  HotEnabled(hot_goto, Enabled);
-  HotEnabled(hot_selectall, Enabled);
-  HotEnabled(hot_compile, Enabled);
-  HotEnabled(hot_run, Enabled);
-  HotEnabled(hot_main, Enabled);
-  HotEnabled(hot_lowcase, Enabled);
-  HotEnabled(hot_upcase, Enabled);
-  IF Enabled THEN
-    ShowWindow(VScroll, SW_SHOWNORMAL);
-    ShowWindow(HScroll, SW_SHOWNORMAL)
-  ELSE
-    ShowWindow(VScroll, SW_HIDE);
-    ShowWindow(HScroll, SW_HIDE);
-    ShowWindow(optwnd, SW_HIDE);
-    ShowWindow(gotownd, SW_HIDE);
-    ShowWindow(paramwnd, SW_HIDE);
-    SetFocus(mainwnd);
-    SendMessage(wndSb, SB_SETTEXT, 0, sys.ADR(zero));
-    SendMessage(wndSb, SB_SETTEXT, 1, sys.ADR(zero));
-    SendMessage(wndSb, SB_SETTEXT, 2, sys.ADR(zero))
-  END
-END MenuEnabled;
+   VAR En, zero: INTEGER;
+   BEGIN
+     zero := 0;
+     En := ORD(~Enabled);
+     EnableMenuItem(submenufile, ssave, En);
+     EnableMenuItem(submenufile, ssaveas, En);
+     EnableMenuItem(submenufile, ssaveall, En);
+     EnableMenuItem(submenufile, sclose, En);
+     EnableMenuItem(submenufile, scloseall, En);
+     EnableMenuItem(submenuedit, sundo, En);
+     EnableMenuItem(submenuedit, scut, En);
+     EnableMenuItem(submenuedit, scopy, En);
+     EnableMenuItem(submenuedit, spaste, En);
+     EnableMenuItem(submenuedit, sdel, En);
+     EnableMenuItem(submenuedit, sfind, En);
+     EnableMenuItem(submenuedit, ssearchagain, En);
+     EnableMenuItem(submenuedit, sreplace, En);
+     EnableMenuItem(submenuedit, sgoto, En);
+     EnableMenuItem(submenuedit, sselectall, En);
+     EnableMenuItem(submenuedit, scase, En);
+     EnableMenuItem(submenuview, ssyntax, En);
+     EnableMenuItem(submenuview, snumbers, En);
+     EnableMenuItem(submenuview, soptions, En);
+     EnableMenuItem(submenuprog, scompile, En);
+     EnableMenuItem(submenuprog, srun, En);
+     EnableMenuItem(submenuprog, sparam, En);
+     EnableMenuItem(submenuprog, smain, En);
+     EnableMenuItem(submenuprog, splatf, En);
+     EnableMenuItem(submenuprog, sstksize, En);
+     HotEnabled(hot_save, Enabled);
+     HotEnabled(hot_undo, Enabled);
+     HotEnabled(hot_cut, Enabled);
+     HotEnabled(hot_copy, Enabled);
+     HotEnabled(hot_paste, Enabled);
+     HotEnabled(hot_find, Enabled);
+     HotEnabled(hot_searchagain, Enabled);
+     HotEnabled(hot_replace, Enabled);
+     HotEnabled(hot_goto, Enabled);
+     HotEnabled(hot_selectall, Enabled);
+     HotEnabled(hot_compile, Enabled);
+     HotEnabled(hot_run, Enabled);
+     HotEnabled(hot_main, Enabled);
+     HotEnabled(hot_lowcase, Enabled);
+     HotEnabled(hot_upcase, Enabled);
+     IF Enabled THEN
+       ShowWindow(VScroll, SW_SHOWNORMAL);
+       ShowWindow(HScroll, SW_SHOWNORMAL)
+     ELSE
+       ShowWindow(VScroll, SW_HIDE);
+       ShowWindow(HScroll, SW_HIDE);
+       ShowWindow(optwnd, SW_HIDE);
+       ShowWindow(gotownd, SW_HIDE);
+       ShowWindow(paramwnd, SW_HIDE);
+       SetFocus(mainwnd);
+       SendMessage(wndSb, SB_SETTEXT, 0, sys.ADR(zero));
+       SendMessage(wndSb, SB_SETTEXT, 1, sys.ADR(zero));
+       SendMessage(wndSb, SB_SETTEXT, 2, sys.ADR(zero))
+     END
+   END MenuEnabled;
 
 PROCEDURE [winapi] MessageBox(wnd: INTEGER; Caption, Text: STRING; typ: INTEGER): INTEGER;
-VAR n: INTEGER; str1, str2: STRING;
-BEGIN
-  n := TU.Utf8To16(Text, str2);
-  n := TU.Utf8To16(Caption, str1)
-  RETURN TU.MessageBox(wnd, sys.ADR(str2), sys.ADR(str1), typ)
-END MessageBox;
+   VAR n: INTEGER; str1, str2: STRING;
+   BEGIN
+     n := TU.Utf8To16(Text, str2);
+     n := TU.Utf8To16(Caption, str1)
+     RETURN TU.MessageBox(wnd, sys.ADR(str2), sys.ADR(str1), typ)
+   END MessageBox;
 
 PROCEDURE SaveAs(file: TE.EditFile; VAR err: BOOLEAN): BOOLEAN;
-VAR s, n: INTEGER; res: BOOLEAN;
-BEGIN
-  err := FALSE;
-  res := FALSE;
-  IF file # NIL THEN
-    n := TE.Index(file);
-    SendMessage(Tab, TCM_SETCURSEL, n, 0);
-    TE.ChangePage(n);
-    s := Dlg.SaveAsFile();
-    IF s # 0 THEN
-      TE.SetName(s);
-      res := TE.Save(file);
-      err := ~res;
-      SendMessage(Tab, TCM_DELETEITEM, n, 0);
-      InsertTabItemW(TE.ExtractFileName(s, "\"), n);
-      SendMessage(Tab, TCM_SETCURSEL, n, 0);
-      InvalidateRect(mainwnd, NIL, TRUE)
-    END
-  END
-  RETURN res
-END SaveAs;
+   VAR s, n: INTEGER; res: BOOLEAN;
+   BEGIN
+     err := FALSE;
+     res := FALSE;
+     IF file # NIL THEN
+       n := TE.Index(file);
+       SendMessage(Tab, TCM_SETCURSEL, n, 0);
+       TE.ChangePage(n);
+       s := Dlg.SaveAsFile();
+       IF s # 0 THEN
+         TE.SetName(s);
+         res := TE.Save(file);
+         err := ~res;
+         SendMessage(Tab, TCM_DELETEITEM, n, 0);
+         InsertTabItemW(TE.ExtractFileName(s, "\"), n);
+         SendMessage(Tab, TCM_SETCURSEL, n, 0);
+         InvalidateRect(mainwnd, NIL, TRUE)
+       END
+     END
+     RETURN res
+   END SaveAs;
 
 PROCEDURE Save(file: TE.EditFile; VAR err: BOOLEAN): BOOLEAN;
-VAR res: BOOLEAN; n: INTEGER; name, name2: TU.STRING8;
-BEGIN
-  res := FALSE;
-  err := FALSE;
-  IF file # NIL THEN
-    IF file.Saved THEN
-      TE.Utf16To8(name, sys.ADR(file.name));
-      TU.concat(name, "~", name);
-      n := TU.Utf8To16(name, name2);
-      DeleteFile(sys.ADR(name2));
-      MoveFile(sys.ADR(file.name), sys.ADR(name2));
-      res := TE.Save(file);
-      err := ~res
-    ELSE
-      res := SaveAs(file, err)
-    END
-  END
-  RETURN res
-END Save;
+   VAR res: BOOLEAN; n: INTEGER; name, name2: TU.STRING8;
+   BEGIN
+     res := FALSE;
+     err := FALSE;
+     IF file # NIL THEN
+       IF file.Saved THEN
+         TE.Utf16To8(name, sys.ADR(file.name));
+         TU.concat(name, "~", name);
+         n := TU.Utf8To16(name, name2);
+         DeleteFile(sys.ADR(name2));
+         MoveFile(sys.ADR(file.name), sys.ADR(name2));
+         res := TE.Save(file);
+         err := ~res
+       ELSE
+         res := SaveAs(file, err)
+       END
+     END
+     RETURN res
+   END Save;
 
 PROCEDURE SaveErr(name: STRING);
-VAR str: STRING;
-BEGIN
-  TU.concat("ошибка записи файла", 0DX, str);
-  TU.concat(str, 0AX, str);
-  TU.concat(str, name, str);
-  MessageBox(mainwnd, wndcaption, str, 16)
-END SaveErr;
+   VAR str: STRING;
+   BEGIN
+     TU.concat("ошибка записи файла", 0DX, str);
+     TU.concat(str, 0AX, str);
+     TU.concat(str, name, str);
+     MessageBox(mainwnd, wndcaption, str, 16)
+   END SaveErr;
 
 PROCEDURE SaveAll;
-VAR file, errfile: TE.EditFile; cont, err: BOOLEAN; name, str: STRING;
-BEGIN
-  file := TE.FList.First(TE.EditFile);
-  cont := TRUE;
-  err := FALSE;
-  WHILE ~err & cont & (file # NIL) DO
-    IF file.txt.Modified THEN
-      cont := Save(file, err);
-      errfile := file
-    END;
-    file := file.Next(TE.EditFile)
-  END;
-  IF err THEN
-    TE.Utf16To8(name, sys.ADR(errfile.name));
-    SaveErr(name)
-  END
-END SaveAll;
+   VAR file, errfile: TE.EditFile; cont, err: BOOLEAN; name, str: STRING;
+   BEGIN
+     file := TE.FList.First(TE.EditFile);
+     cont := TRUE;
+     err := FALSE;
+     WHILE ~err & cont & (file # NIL) DO
+       IF file.txt.Modified THEN
+         cont := Save(file, err);
+         errfile := file
+       END;
+       file := file.Next(TE.EditFile)
+     END;
+     IF err THEN
+       TE.Utf16To8(name, sys.ADR(errfile.name));
+       SaveErr(name)
+     END
+   END SaveAll;
 
 PROCEDURE Confirm(name: TE.STRING): INTEGER;
 VAR str1, str2: STRING; c, i, a, n: INTEGER;
