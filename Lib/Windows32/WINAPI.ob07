@@ -20,11 +20,9 @@
    API := ЛНДюох;
 
 йнмяр
-
   OFS_MAXPATHNAME* = 128;
 
-TYPE
-
+рхош
   STRING = ARRAY 260 OF CHAR;
 
   TCoord* = RECORD

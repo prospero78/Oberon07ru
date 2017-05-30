@@ -16,15 +16,13 @@
    You should have received a copy of the GNU General Public License
    along with Editor. If not, see <http://www.gnu.org/licenses/>.
    *)
-
 ÃŒƒ”À‹ TextUtils;
 
 »ÃœŒ–“ Line,
    sys := SYSTEM,
    API := ÏÓ‰¿œ»;
 
-CONST
-
+ ŒÕ—“
   cKey* = 0; cStId* = 1; cNum* = 2; cStr* = 3; cCom* = 4;
   cText* = 5; cBkText* = 6; cBkSel* = 7; cTextSel* = 8;
   cBkCur* = 9; cBkNum* = 10; cTextNum* = 11;
@@ -42,32 +40,32 @@ CONST
 
 TYPE
 
-  TRect* = RECORD Left*, Top*, Right*, Bottom*: INTEGER END;
+   TRect* = RECORD Left*, Top*, Right*, Bottom*: INTEGER END;
 
-  TColors* = ARRAY 12 OF INTEGER;
+   TColors* = ARRAY 12 OF INTEGER;
 
-  STRING = ARRAY 260 OF CHAR;
+   STRING = ARRAY 260 OF CHAR;
 
-  STRING8* = ARRAY 2048 OF CHAR;
+   STRING8* = ARRAY 2048 OF CHAR;
 
-  POverlapped = POINTER TO OVERLAPPED;
+   POverlapped = POINTER TO OVERLAPPED;
 
-  OVERLAPPED = RECORD
-    Internal: INTEGER;
-    InternalHigh: INTEGER;
-    Offset: INTEGER;
-    OffsetHigh: INTEGER;
-    hEvent: INTEGER
-  END;
+   OVERLAPPED = RECORD
+         Internal: INTEGER;
+         InternalHigh: INTEGER;
+         Offset: INTEGER;
+         OffsetHigh: INTEGER;
+         hEvent: INTEGER
+      END;
 
-  OFSTRUCT = RECORD
-    cBytes: CHAR;
-    fFixedDisk: CHAR;
-    nErrCode: sys.CARD16;
-    Reserved1: sys.CARD16;
-    Reserved2: sys.CARD16;
-    szPathName: ARRAY OFS_MAXPATHNAME OF CHAR
-  END;
+   OFSTRUCT = RECORD
+         cBytes: CHAR;
+         fFixedDisk: CHAR;
+         nErrCode: sys.CARD16;
+         Reserved1: sys.CARD16;
+         Reserved2: sys.CARD16;
+         szPathName: ARRAY OFS_MAXPATHNAME OF CHAR
+      END;
 
 VAR
 
