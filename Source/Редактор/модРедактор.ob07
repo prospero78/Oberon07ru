@@ -20,6 +20,10 @@
    paramcolor: жекне;
    Shift, hotkeys: SET;
    
+   РнЙМН = гюохяэ
+   
+      йнмеж;
+   
 опнжедспю нЙМНяНГДЮРЭ(lpClassName, lpWindowName: люяяхб хг яхлб;
                       dwStyle, X, Y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam: жекне): жекне;
    оепел

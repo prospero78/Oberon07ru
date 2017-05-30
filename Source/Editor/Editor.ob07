@@ -285,12 +285,13 @@ BEGIN
 END GetMemBMP;
 
 PROCEDURE CreateWindow(lpClassName, lpWindowName: ARRAY OF CHAR;
-  dwStyle, X, Y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam: INTEGER): INTEGER;
-   VAR n: INTEGER; class, window: STRING;
+      dwStyle, X, Y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam: INTEGER): INTEGER;
+   VAR
+      n: INTEGER; class, window: STRING;
    BEGIN
-     n := TU.Utf8To16(lpClassName, class);
-     n := TU.Utf8To16(lpWindowName, window)
-     RETURN CreateWindowEx(0, sys.ADR(class), sys.ADR(window), dwStyle, X, Y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam)
+      n := TU.Utf8To16(lpClassName, class);
+      n := TU.Utf8To16(lpWindowName, window)
+      RETURN CreateWindowEx(0, sys.ADR(class), sys.ADR(window), dwStyle, X, Y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam)
    END CreateWindow;
 
 PROCEDURE [winapi] CreateMenuItem(hmenu, submenu: INTEGER; cap, hot: ARRAY OF CHAR; _wid: INTEGER): BOOLEAN;
@@ -1789,91 +1790,92 @@ BEGIN
 END Main;
 
 PROCEDURE Init;
-VAR user32, kernel32, gdi32, comctl32, comdlg32, shell32: INTEGER;
+   VAR
+      user32, kernel32, gdi32, comctl32, comdlg32, shell32: INTEGER;
 
-  PROCEDURE GetProc(name: STRING; hMOD, adr: INTEGER);
-  VAR H: INTEGER;
-  BEGIN
-    H := API.GetProcAddress(hMOD, sys.ADR(name));
-    ASSERT(H # 0);
-    sys.PUT(adr, H);
-  END GetProc;
+   PROCEDURE GetProc(name: STRING; hMOD, adr: INTEGER);
+      VAR H: INTEGER;
+      BEGIN
+          H := API.GetProcAddress(hMOD, sys.ADR(name));
+          ASSERT(H # 0);
+          sys.PUT(adr, H);
+      END GetProc;
 
-BEGIN
-  blocksel := FALSE;
-  paramcolor := -1;
-  Shift := {};
-  hotkeys := {hot_new, hot_open};
-  Text.Init(ResetTimer);
-  user32 := API.LoadLibraryA(sys.ADR("user32.dll"));
-  ASSERT(user32 # 0);
-  kernel32 := API.LoadLibraryA(sys.ADR("kernel32.dll"));
-  ASSERT(kernel32 # 0);
-  gdi32 := API.LoadLibraryA(sys.ADR("gdi32.dll"));
-  ASSERT(gdi32 # 0);
-  comctl32 := API.LoadLibraryA(sys.ADR("comctl32.dll"));
-  ASSERT(comctl32 # 0);
-  comdlg32 := API.LoadLibraryA(sys.ADR("comdlg32.dll"));
-  ASSERT(comdlg32 # 0);
-  shell32 := API.LoadLibraryA(sys.ADR("shell32.dll"));
-  ASSERT(comctl32 # 0);
-  GetProc("ShellExecuteW", shell32, sys.ADR(ShellExecute));
-  GetProc("MoveFileW", kernel32, sys.ADR(MoveFile));
-  GetProc("DeleteFileW", kernel32, sys.ADR(DeleteFile));
-  GetProc("CloseHandle", kernel32, sys.ADR(CloseHandle));
-  GetProc("GetCurrentDirectoryW", kernel32, sys.ADR(GetCurrentDirectory));
-  GetProc("DefWindowProcW", user32, sys.ADR(DefWindowProc));
-  GetProc("LoadCursorW", user32, sys.ADR(LoadCursor));
-  GetProc("LoadIconW", user32, sys.ADR(LoadIcon));
-  GetProc("RegisterClassExW", user32, sys.ADR(RegisterClassEx));
-  GetProc("DispatchMessageW", user32, sys.ADR(DispatchMessage));
-  GetProc("GetMessageW", user32, sys.ADR(GetMessage));
-  GetProc("SendMessageW", user32, sys.ADR(SendMessage));
-  GetProc("InsertMenuItemW", user32, sys.ADR(InsertMenuItem));
-  GetProc("GetModuleHandleW", kernel32, sys.ADR(GetModuleHandle));
-  GetProc("MoveWindow", user32, sys.ADR(MoveWindow));
-  GetProc("CreateWindowExW", user32, sys.ADR(CreateWindowEx));
-  GetProc("PostQuitMessage", user32, sys.ADR(PostQuitMessage));
-  GetProc("ShowWindow", user32, sys.ADR(ShowWindow));
-  GetProc("TranslateMessage", user32, sys.ADR(TranslateMessage));
-  GetProc("CheckMenuItem", user32, sys.ADR(CheckMenuItem));
-  GetProc("EnableMenuItem", user32, sys.ADR(EnableMenuItem));
-  GetProc("CheckMenuRadioItem", user32, sys.ADR(CheckMenuRadioItem));
-  GetProc("CreateMenu", user32, sys.ADR(CreateMenu));
-  GetProc("CreatePopupMenu", user32, sys.ADR(CreatePopupMenu));
-  GetProc("DrawMenuBar", user32, sys.ADR(DrawMenuBar));
-  GetProc("SetScrollPos", user32, sys.ADR(SetScrollPos));
-  GetProc("GetScrollInfo", user32, sys.ADR(GetScrollInfo));
-  GetProc("SetScrollRange", user32, sys.ADR(SetScrollRange));
-  GetProc("GetClientRect", user32, sys.ADR(GetClientRect));
-  GetProc("GetDC", user32, sys.ADR(GetDC));
-  GetProc("SetTimer", user32, sys.ADR(SetTimer));
-  GetProc("KillTimer", user32, sys.ADR(KillTimer));
-  GetProc("CreateFontW", gdi32, sys.ADR(CreateFont));
-  GetProc("SelectObject", gdi32, sys.ADR(SelectObject));
-  GetProc("SetCursor", user32, sys.ADR(SetCursor));
-  GetProc("CreateCompatibleDC", gdi32, sys.ADR(CreateCompatibleDC));
-  GetProc("CreateCompatibleBitmap", gdi32, sys.ADR(CreateCompatibleBitmap));
-  GetProc("GetDesktopWindow", user32, sys.ADR(GetDesktopWindow));
-  GetProc("ReleaseDC", user32, sys.ADR(ReleaseDC));
-  GetProc("SetFocus", user32, sys.ADR(SetFocus));
-  GetProc("TrackPopupMenu", user32, sys.ADR(TrackPopupMenu));
-  GetProc("ScreenToClient", user32, sys.ADR(ScreenToClient));
-  GetProc("UpdateWindow", user32, sys.ADR(UpdateWindow));
-  GetProc("InvalidateRect", user32, sys.ADR(InvalidateRect));
-  GetProc("GetCaretBlinkTime", user32, sys.ADR(GetCaretBlinkTime));
-  GetProc("GetCursorPos", user32, sys.ADR(GetCursorPos));
-  GetProc("GetKeyState", user32, sys.ADR(GetKeyState));
-  GetProc("RegisterWindowMessageA", user32, sys.ADR(RegisterWindowMessage));
-  GetProc("CreateStatusWindow", comctl32, sys.ADR(CreateStatusWindow));
-  GetProc("BitBlt", gdi32, sys.ADR(BitBlt));
-  GetProc("GetTextExtentPoint32A", gdi32, sys.ADR(GetTextExtentPoint32));
-  GetProc("GetOpenFileNameW", comdlg32, sys.ADR(GetOpenFileName));
-  GetProc("GetSaveFileNameW", comdlg32, sys.ADR(GetSaveFileName));
-  GetProc("ChooseColorW", comdlg32, sys.ADR(ChooseColor));
-  GetProc("FindTextW", comdlg32, sys.ADR(FindTextW));
-  GetProc("ReplaceTextW", comdlg32, sys.ADR(ReplaceTextW));
-END Init;
+   BEGIN
+     blocksel := FALSE;
+     paramcolor := -1;
+     Shift := {};
+     hotkeys := {hot_new, hot_open};
+     Text.Init(ResetTimer);
+     user32 := API.LoadLibraryA(sys.ADR("user32.dll"));
+     ASSERT(user32 # 0);
+     kernel32 := API.LoadLibraryA(sys.ADR("kernel32.dll"));
+     ASSERT(kernel32 # 0);
+     gdi32 := API.LoadLibraryA(sys.ADR("gdi32.dll"));
+     ASSERT(gdi32 # 0);
+     comctl32 := API.LoadLibraryA(sys.ADR("comctl32.dll"));
+     ASSERT(comctl32 # 0);
+     comdlg32 := API.LoadLibraryA(sys.ADR("comdlg32.dll"));
+     ASSERT(comdlg32 # 0);
+     shell32 := API.LoadLibraryA(sys.ADR("shell32.dll"));
+     ASSERT(comctl32 # 0);
+     GetProc("ShellExecuteW", shell32, sys.ADR(ShellExecute));
+     GetProc("MoveFileW", kernel32, sys.ADR(MoveFile));
+     GetProc("DeleteFileW", kernel32, sys.ADR(DeleteFile));
+     GetProc("CloseHandle", kernel32, sys.ADR(CloseHandle));
+     GetProc("GetCurrentDirectoryW", kernel32, sys.ADR(GetCurrentDirectory));
+     GetProc("DefWindowProcW", user32, sys.ADR(DefWindowProc));
+     GetProc("LoadCursorW", user32, sys.ADR(LoadCursor));
+     GetProc("LoadIconW", user32, sys.ADR(LoadIcon));
+     GetProc("RegisterClassExW", user32, sys.ADR(RegisterClassEx));
+     GetProc("DispatchMessageW", user32, sys.ADR(DispatchMessage));
+     GetProc("GetMessageW", user32, sys.ADR(GetMessage));
+     GetProc("SendMessageW", user32, sys.ADR(SendMessage));
+     GetProc("InsertMenuItemW", user32, sys.ADR(InsertMenuItem));
+     GetProc("GetModuleHandleW", kernel32, sys.ADR(GetModuleHandle));
+     GetProc("MoveWindow", user32, sys.ADR(MoveWindow));
+     GetProc("CreateWindowExW", user32, sys.ADR(CreateWindowEx));
+     GetProc("PostQuitMessage", user32, sys.ADR(PostQuitMessage));
+     GetProc("ShowWindow", user32, sys.ADR(ShowWindow));
+     GetProc("TranslateMessage", user32, sys.ADR(TranslateMessage));
+     GetProc("CheckMenuItem", user32, sys.ADR(CheckMenuItem));
+     GetProc("EnableMenuItem", user32, sys.ADR(EnableMenuItem));
+     GetProc("CheckMenuRadioItem", user32, sys.ADR(CheckMenuRadioItem));
+     GetProc("CreateMenu", user32, sys.ADR(CreateMenu));
+     GetProc("CreatePopupMenu", user32, sys.ADR(CreatePopupMenu));
+     GetProc("DrawMenuBar", user32, sys.ADR(DrawMenuBar));
+     GetProc("SetScrollPos", user32, sys.ADR(SetScrollPos));
+     GetProc("GetScrollInfo", user32, sys.ADR(GetScrollInfo));
+     GetProc("SetScrollRange", user32, sys.ADR(SetScrollRange));
+     GetProc("GetClientRect", user32, sys.ADR(GetClientRect));
+     GetProc("GetDC", user32, sys.ADR(GetDC));
+     GetProc("SetTimer", user32, sys.ADR(SetTimer));
+     GetProc("KillTimer", user32, sys.ADR(KillTimer));
+     GetProc("CreateFontW", gdi32, sys.ADR(CreateFont));
+     GetProc("SelectObject", gdi32, sys.ADR(SelectObject));
+     GetProc("SetCursor", user32, sys.ADR(SetCursor));
+     GetProc("CreateCompatibleDC", gdi32, sys.ADR(CreateCompatibleDC));
+     GetProc("CreateCompatibleBitmap", gdi32, sys.ADR(CreateCompatibleBitmap));
+     GetProc("GetDesktopWindow", user32, sys.ADR(GetDesktopWindow));
+     GetProc("ReleaseDC", user32, sys.ADR(ReleaseDC));
+     GetProc("SetFocus", user32, sys.ADR(SetFocus));
+     GetProc("TrackPopupMenu", user32, sys.ADR(TrackPopupMenu));
+     GetProc("ScreenToClient", user32, sys.ADR(ScreenToClient));
+     GetProc("UpdateWindow", user32, sys.ADR(UpdateWindow));
+     GetProc("InvalidateRect", user32, sys.ADR(InvalidateRect));
+     GetProc("GetCaretBlinkTime", user32, sys.ADR(GetCaretBlinkTime));
+     GetProc("GetCursorPos", user32, sys.ADR(GetCursorPos));
+     GetProc("GetKeyState", user32, sys.ADR(GetKeyState));
+     GetProc("RegisterWindowMessageA", user32, sys.ADR(RegisterWindowMessage));
+     GetProc("CreateStatusWindow", comctl32, sys.ADR(CreateStatusWindow));
+     GetProc("BitBlt", gdi32, sys.ADR(BitBlt));
+     GetProc("GetTextExtentPoint32A", gdi32, sys.ADR(GetTextExtentPoint32));
+     GetProc("GetOpenFileNameW", comdlg32, sys.ADR(GetOpenFileName));
+     GetProc("GetSaveFileNameW", comdlg32, sys.ADR(GetSaveFileName));
+     GetProc("ChooseColorW", comdlg32, sys.ADR(ChooseColor));
+     GetProc("FindTextW", comdlg32, sys.ADR(FindTextW));
+     GetProc("ReplaceTextW", comdlg32, sys.ADR(ReplaceTextW));
+   END Init;
 
 BEGIN
   Init;
