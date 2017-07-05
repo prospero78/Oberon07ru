@@ -1998,7 +1998,7 @@
       дна(current.clen)
    йнмеж OutStringZ;
 
-опнжедспю Epilog*(gsize: жекне; FName: люяяхб хг яхлб; stk: жекне);
+опнжедспю щОХКНЦ*(gsize: жекне; FName: люяяхб хг яхлб; stk: жекне);
    оепел
       i, glob: жекне;
    мювюкн
@@ -2059,6 +2059,6 @@
          йнмеж
       йнмеж;
       FixLabels(FName, stk, gsize, glob)
-   йнмеж Epilog;
+   йнмеж щОХКНЦ;
 
 йнмеж ЛНДюЯЛ86_32.
