@@ -21,7 +21,7 @@
 
 »ћѕќ–“ м—кан := мод—канер,
    м”тиль := мод”тиль,
-   X86 := модјсм86_32,
+   мјсм86 := модјсм86_32,
    mSys := SYSTEM,
    м«вено := мод«вено,
    м“ип := мод“ип,
@@ -184,9 +184,9 @@
         ѕамќш_ѕроверить(стр_нов = ѕ”—“ќ);
         COPY(стр_, стр_нов.стр);
         стр_нов.длина := м—кан.счЄтчик - 1;
-        стр_нов.номер := X86.NewLabel();
+        стр_нов.номер := мјсм86.NewLabel();
         м÷епь.ƒобавить(строки, стр_нов);
-        X86.String(стр_нов.номер, стр_нов.длина, стр_нов.стр)
+        мјсм86.String(стр_нов.номер, стр_нов.длина, стр_нов.стр)
         ¬≈–Ќ”“№ стр_нов
      ќЌ≈÷ —тр_—оздать;
 
@@ -199,9 +199,9 @@
     nov.стр[0] := c;
     nov.стр[1] := 0X;
     nov.длина := 1;
-    nov.номер := X86.NewLabel();
+    nov.номер := мјсм86.NewLabel();
     м÷епь.ƒобавить(строки, nov);
-    X86.String(nov.номер, nov.длина, nov.стр)
+    мјсм86.String(nov.номер, nov.длина, nov.стр)
     ¬≈–Ќ”“№ nov
    ќЌ≈÷ —трћоно_—оздать;
 
@@ -302,10 +302,10 @@
       ident.line := line;
       ident.col := col;
       ≈—Ћ» iType IN {IDPROC, IDMOD} “ќ√ƒј
-         ident.Number := X86.NewLabel();
-         i := X86.NewLabel();
-         i := X86.NewLabel();
-         i := X86.NewLabel()
+         ident.Number := мјсм86.NewLabel();
+         i := мјсм86.NewLabel();
+         i := мјсм86.NewLabel();
+         i := мјсм86.NewLabel()
        ќЌ≈÷;
       ident.iType := iType;
       ident.T := T;
@@ -977,7 +977,7 @@
          ј≈—Ћ» м—кан.сущность = м онст.опƒвоеточ “ќ√ƒј
             люч—лед_ѕолуч;
            Tf := FormalType(line, col);
-           мѕров.“ест(Dim(Tf) <= X86.ADIM, line, col, 110);
+           мѕров.“ест(Dim(Tf) <= мјсм86.ADIM, line, col, 110);
            SetFields(T, Tf, Ћќ∆№);
            ≈—Ћ» proc “ќ√ƒј
              SetVars(Tf)
@@ -1149,11 +1149,11 @@
        ќЌ≈÷;
       ReadFields(nov);
        люч_ѕроверить(м онст.кс ќЌ≈÷);
-      nov.размер := X86.Align(nov.размер, nov.выравнив);
+      nov.размер := мјсм86.Align(nov.размер, nov.выравнив);
       ≈—Ћ» nov.Base # ѕ”—“ќ “ќ√ƒј
-        X86.AddRec(nov.Base.номер)
+         мјсм86.AddRec(nov.Base.номер)
       »Ќј„≈
-        X86.AddRec(0)
+         мјсм86.AddRec(0)
        ќЌ≈÷;
        люч—лед_ѕолуч
     |м онст.кс” ј«ј“≈Ћ№:
@@ -1329,7 +1329,7 @@
         ≈—Ћ» ц одќ— = 6 “ќ√ƒј
           мѕров.“ест((Name # м—кан._START) & (Name # м—кан._version), line, col, 133)
          ќЌ≈÷;
-        X86.ProcExport(id.Number, Name, X86.NewLabel())
+        мјсм86.ProcExport(id.Number, Name, мјсм86.NewLabel())
        ќЌ≈÷;
       id.Parent := curBlock;
       curBlock := id;
@@ -1340,7 +1340,7 @@
        люч—лед_ѕолуч;
       DeclSeq;
       id.LocalSize := id.VarSize - id.ParamSize;
-      X86.ProcBeg(id.Number, id.LocalSize, Ћќ∆№);
+      мјсм86.ProcBeg(id.Number, id.LocalSize, Ћќ∆№);
       ≈—Ћ» м—кан.сущность = м онст.ксЌј„јЋќ “ќ√ƒј
          люч—лед_ѕолуч;
         OpSeq
@@ -1354,7 +1354,7 @@
         Expr(e);
         мѕров.“ест(AssComp(e, curBlock.T.Base, Ћќ∆№), line, col, 125);
         ≈—Ћ» e.eType = eVAR “ќ√ƒј
-          X86.Load(e.T.тип_ном)
+          мјсм86.Load(e.T.тип_ном)
          ќЌ≈÷
       »Ќј„≈
         мѕров.“ест2(м—кан.сущность # м онст.кс¬≈–Ќ”“№, 123)
@@ -1366,7 +1366,7 @@
        люч—лед_ѕолуч;
        люч_ѕроверить(м онст.оп“чк«пт);
        люч—лед_ѕолуч;
-      X86.ProcEnd(id.Number, (id.ParamSize + (id.Level - 3) * 4) * ORD(curBlock.T.вызов ¬ {stdcall, winapi, defcall}), func, curBlock.T.Base.тип_ном ¬ {TREAL, TLONGREAL});
+      мјсм86.ProcEnd(id.Number, (id.ParamSize + (id.Level - 3) * 4) * ORD(curBlock.T.вызов ¬ {stdcall, winapi, defcall}), func, curBlock.T.Base.тип_ном ¬ {TREAL, TLONGREAL});
       PopBlock;
       curBlock := curBlock.Parent
      ќЌ≈÷
@@ -1383,29 +1383,29 @@
           мќш.—ообщ(158);
           мѕроц.«акончить(1)
          ќЌ≈÷;
-        X86.AddRtlProc(num, id.Number)
+        мјсм86.AddRtlProc(num, id.Number)
        ќЌ≈÷ AddProc;
 
   Ќј„јЋќ
-    AddProc("_newrec", X86._newrec);
-    AddProc("_disprec", X86._disprec);
-    AddProc("_rset", X86._rset);
-    AddProc("_inset", X86._inset);
-    AddProc("_saverec", X86._saverec);
-    AddProc("_checktype", X86._checktype);
-    AddProc("_strcmp", X86._strcmp);
-    AddProc("_lstrcmp", X86._lstrcmp);
-    AddProc("_rstrcmp", X86._rstrcmp);
-    AddProc("_savearr", X86._savearr);
-    AddProc("_arrayidx", X86._arrayidx);
-    AddProc("_arrayidx1", X86._arrayidx1);
-    AddProc("_arrayrot", X86._arrayrot);
-    AddProc("_assrt", X86._assrt);
-    AddProc("_strcopy", X86._strcopy);
-    AddProc("_init", X86._init);
-    AddProc("_close", X86._close);
-    AddProc("_halt", X86._halt);
-    AddProc("_length", X86._length);
+    AddProc("_newrec", мјсм86._newrec);
+    AddProc("_disprec", мјсм86._disprec);
+    AddProc("_rset", мјсм86._rset);
+    AddProc("_inset", мјсм86._inset);
+    AddProc("_saverec", мјсм86._saverec);
+    AddProc("_checktype", мјсм86._checktype);
+    AddProc("_strcmp", мјсм86._strcmp);
+    AddProc("_lstrcmp", мјсм86._lstrcmp);
+    AddProc("_rstrcmp", мјсм86._rstrcmp);
+    AddProc("_savearr", мјсм86._savearr);
+    AddProc("_arrayidx", мјсм86._arrayidx);
+    AddProc("_arrayidx1", мјсм86._arrayidx1);
+    AddProc("_arrayrot", мјсм86._arrayrot);
+    AddProc("_assrt", мјсм86._assrt);
+    AddProc("_strcopy", мјсм86._strcopy);
+    AddProc("_init", мјсм86._init);
+    AddProc("_close", мјсм86._close);
+    AddProc("_halt", мјсм86._halt);
+    AddProc("_length", мјсм86._length);
    ќЌ≈÷ Rtl_ƒобав;
 
 ѕ–ќ÷≈ƒ”–ј ImportList;
@@ -1566,12 +1566,12 @@
          м¬ин онс.÷вет_”ст(14, 0);
          м онс.—трока_ѕечать(" омпилирую: "); м онс.—трока_ѕечать(модуль.у”зел.им€_стр); м онс.—трока_ѕечать("."); м онс.Ќов—тр;
          м¬ин онс.÷вет_”ст(7, 0);
-         X86.Module(idmod.у”зел.им€_стр, idmod.Number);
+         мјсм86.Module(idmod.у”зел.им€_стр, idmod.Number);
          UnitNumber := idmod.Number;
          модуль.IdentBegin := модуль.Idents.следующ(ту—ущность);
          curBlock := idmod;
          DeclSeq;
-         X86.ProcBeg(idmod.Number, 0, »—“»Ќј);
+         мјсм86.ProcBeg(idmod.Number, 0, »—“»Ќј);
          ≈—Ћ» м—кан.сущность = м онст.ксЌј„јЋќ “ќ√ƒј
              люч—лед_ѕолуч;
             OpSeq
@@ -1580,7 +1580,7 @@
           люч—лед_ѕолуч;  люч_ѕроверить(lxIDENT);
          мѕров.“ест2(м—кан.id = модуль.у”зел, 26);
           люч—лед_ѕолуч;  люч_ѕроверить(lxDot);
-         X86.Leave;
+         мјсм86.Leave;
          модуль.закрыт := »—“»Ќј;
          м÷епь.ќчистить(модуль.импорт_спис);
          Res := »—“»Ќј
@@ -1672,7 +1672,7 @@
     ≈—Ћ» ц одќ—_ ¬ {1, 2, 3, 4} “ќ√ƒј
       ц—тек–азмер_ := ц—тек–азмер_ * 100000H
      ќЌ≈÷;
-    X86.Epilog(ProgSize, temp, ц—тек–азмер_)
+    мјсм86.Epilog(ProgSize, temp, ц—тек–азмер_)
    ќЌ≈÷  омпилировать;
 
 Ќј„јЋќ
