@@ -154,7 +154,7 @@
    main, sizefunc, winplatf, Const*: БУЛЕВО;
    pParseType: ПРОЦЕДУРА (ПЕР line, col: ЦЕЛОЕ): мТип.туТип;
    пМодуль_Читать: ПРОЦЕДУРА (Path, Name, Ext: мСтр.тСтрока): БУЛЕВО;
-   Platform: ЦЕЛОЕ;
+   цКодОС: ЦЕЛОЕ;
 
 ПРОЦЕДУРА ПроцедурРазм_Уст*;
    НАЧАЛО
@@ -1326,7 +1326,7 @@
       PushIdent(Name, line, col, IDPROC, Тип_Создать(TPROC, 0, 4, 0, sttypes[TVOID], ИСТИНА, ПУСТО), ПУСТО, Export, 0);
       id := модуль.Idents.следующ(туСущность);
       ЕСЛИ id.Export & main ТОГДА
-        ЕСЛИ Platform = 6 ТОГДА
+        ЕСЛИ цКодОС = 6 ТОГДА
           мПров.Тест((Name # мСкан._START) & (Name # мСкан._version), line, col, 133)
         КОНЕЦ;
         X86.ProcExport(id.Number, Name, X86.NewLabel())
@@ -1624,7 +1624,7 @@
   ПЕРЕМ
     full, path, name, ext, temp, path2: мСтр.тСтрока;
   НАЧАЛО
-    Platform := цКодОС_;
+    цКодОС := цКодОС_;
     main := ЛОЖЬ;
     ЕСЛИ Модуль_Читать(Std, "RTL", мКонст.расшир) ТОГДА
       Rtl_Добав(модуль)
