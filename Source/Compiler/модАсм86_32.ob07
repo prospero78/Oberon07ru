@@ -465,7 +465,7 @@
       КОНЕЦ;
       OutFilePos := мПам.Получ(filesize);
       filebuf := OutFilePos;
-      мПам.Ошибка(OutFilePos = 0);
+      мПам.Мало(OutFilePos = 0);
 
       Write(mSys.ADR(Header), mSys.SIZE(тЗаголовок));
       ЕСЛИ dll ТОГДА
@@ -1631,7 +1631,7 @@
       КОНЕЦ;
       OutFilePos := мПам.Получ(Align(size, 4) + datasize + 1000H);
       filebuf := OutFilePos;
-      мПам.Ошибка(OutFilePos = 0);
+      мПам.Мало(OutFilePos = 0);
 
       ЕСЛИ ~obj ТОГДА
          Header.menuet01 := "MENUET01";
@@ -1806,7 +1806,7 @@
 
     OutFilePos := мПам.Получ(code + data + 8000H);
     filebuf := OutFilePos;
-    мПам.Ошибка(OutFilePos = 0);
+    мПам.Мало(OutFilePos = 0);
 
     Write(mSys.ADR(bytes), 817H);
     Fill(2DDH, 90X);
