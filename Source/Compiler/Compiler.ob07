@@ -1495,7 +1495,7 @@
       мДецл.КлючСлед_Получ;
       мДецл.Коорд_Уст(line, col);
       ВЫБОР proc ИЗ
-         |мКонст.stINC, мКонст.stDEC:
+         |мКонст.процДОБ, мКонст.процВЫЧ:
             Designator(e1);
             мПров.Тест(e1.eType = eVAR, line, col, 63);
             мПров.Тест(~e1.Read, line, col, 115);
@@ -1508,29 +1508,29 @@
                iValue := FLOOR(Value);
                мПров.Тест(iValue # 0, line, col, 122);
                ЕСЛИ iValue < 0 ТОГДА
-                  ЕСЛИ proc = мКонст.stINC ТОГДА
-                     proc := мКонст.stDEC
+                  ЕСЛИ proc = мКонст.процДОБ ТОГДА
+                     proc := мКонст.процВЫЧ
                   ИНАЧЕ
-                     proc := мКонст.stINC
+                     proc := мКонст.процДОБ
                   КОНЕЦ;
                   iValue := -iValue
                КОНЕЦ;
                ЕСЛИ iValue # 1 ТОГДА
                   X86.PushConst(iValue);
-                  ЕСЛИ proc = мКонст.stDEC ТОГДА
-                     X86.StProc(мКонст.stDEC)
+                  ЕСЛИ proc = мКонст.процВЫЧ ТОГДА
+                     X86.StProc(мКонст.процВЫЧ)
                   ИНАЧЕ
-                     X86.StProc(мКонст.stINC)
+                     X86.StProc(мКонст.процДОБ)
                   КОНЕЦ
                ИНАЧЕ
-                  ЕСЛИ proc = мКонст.stDEC ТОГДА
+                  ЕСЛИ proc = мКонст.процВЫЧ ТОГДА
                      X86.StProc(мКонст.stDEC1)
                   ИНАЧЕ
                      X86.StProc(мКонст.stINC1)
                   КОНЕЦ
                КОНЕЦ
             ИНАЧЕ
-               ЕСЛИ proc = мКонст.stDEC ТОГДА
+               ЕСЛИ proc = мКонст.процВЫЧ ТОГДА
                   X86.StProc(мКонст.stDEC1)
                ИНАЧЕ
                   X86.StProc(мКонст.stINC1)

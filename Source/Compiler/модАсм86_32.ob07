@@ -1247,8 +1247,8 @@
 ПРОЦЕДУРА StProc*(proc: ЦЕЛОЕ);
   НАЧАЛО
     ВЫБОР proc ИЗ
-    |мКонст.stINC:   PopEDX; OutCode("590111")
-    |мКонст.stDEC:   PopEDX; OutCode("592911")
+    |мКонст.процДОБ:   PopEDX; OutCode("590111")
+    |мКонст.процВЫЧ:   PopEDX; OutCode("592911")
     |мКонст.stINC1:  PopEDX; OutCode("FF02")
     |мКонст.stDEC1:  PopEDX; OutCode("FF0A")
     |мКонст.stINCL:  PopEDX; OutCode("580910")
