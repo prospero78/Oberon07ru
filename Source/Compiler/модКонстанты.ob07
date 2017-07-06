@@ -105,4 +105,30 @@
    sysCODE* = 106;
    sysTYPEID* = 107;
    sysMOVE* = 108;
+ (* стандартные процедуры *)
+   stABS* = 1;
+   stODD* = 2;
+   stLEN* = 3;
+   stLSL* = 4;
+   stASR* = 5;
+   stROR* = 6;
+   stFLOOR* = 7;
+   stFLT* = 8;
+   stORD* = 9;
+   stCHR* = 10;
+   stLONG* = 11;
+   stSHORT* = 12;
+   stINC* = 13;
+   stDEC* = 14;
+   stINCL* = 15;
+   stEXCL* = 16;
+   stCOPY* = 17;
+   stNEW* = 18;
+   stASSERT* = 19;
+   stPACK* = 20;
+   stUNPK* = 21;
+   stDISPOSE* = 22;
+   stBITS* = 23;
+   stLSR* = 24;
+   stLENGTH* = 25;
 КОНЕЦ модКонстанты.

@@ -54,11 +54,6 @@
 
    IDMOD = 1; IDCONST = 2; IDTYPE = 3; IDVAR = 4; IDPROC = 5; IDSTPROC = 6; IDGUARD = 7; IDPARAM = 8; IDSYSPROC = 9;
 
-   stABS = 1; stODD = 2; stLEN = 3; stLSL = 4; stASR = 5; stROR = 6; stFLOOR = 7; stFLT = 8;
-   stORD = 9; stCHR = 10; stLONG = 11; stSHORT = 12; stINC = 13; stDEC = 14; stINCL = 15;
-   stEXCL = 16; stCOPY = 17; stNEW = 18; stASSERT = 19; stPACK = 20; stUNPK = 21; stDISPOSE = 22;
-   stBITS = 23; stLSR = 24; stLENGTH = 25;
-
 ТИПЫ
 
    тМетка = УКАЗАТЕЛЬ НА ЗАПИСЬ (мЗвено.тЗвено)
@@ -421,7 +416,7 @@
       мДецл.КлючСлед_Получ;
       мДецл.Коорд_Уст(line, col);
       ВЫБОР func ИЗ
-         |stABS:
+         |мКонст.stABS:
             пВыраж(e1);
             мПров.Тест(e1.T.тип_ном В {мКонст.типЦЕЛОЕ, мКонст.типВЕЩ, мКонст.типДЛИНВЕЩ}, line, col, 57);
             Выраж_Загрузить(e1);
@@ -436,7 +431,7 @@
                X86.StFunc(X86.stFABS)
             КОНЕЦ;
             e.T := e1.T
-         |stODD:
+         |мКонст.stODD:
             пВыраж(e1);
             мПров.Тест(e1.T.тип_ном = мКонст.типЦЕЛОЕ, line, col, 52);
             Выраж_Загрузить(e1);
@@ -446,7 +441,7 @@
             КОНЕЦ;
             X86.StFunc(X86.stODD);
             e.T := sttypes[мКонст.типБУЛЕВО]
-         |stLEN:
+         |мКонст.stLEN:
             Designator(e1);
             мПров.Тест((e1.eType = eVAR) & (e1.T.тип_ном = мКонст.типМАССИВ), line, col, 102);
             ЕСЛИ e1.T.длина > 0 ТОГДА
@@ -455,7 +450,7 @@
                X86.Len(мДецл.Dim(e1.T))
             КОНЕЦ;
             e.T := sttypes[мКонст.типЦЕЛОЕ]
-         |stLSL, stASR, stROR, stLSR:
+         |мКонст.stLSL, мКонст.stASR, мКонст.stROR, мКонст.stLSR:
             пВыраж(e1);
             мПров.Тест(e1.T.тип_ном = мКонст.типЦЕЛОЕ, line, col, 52);
             Выраж_Загрузить(e1);
@@ -469,24 +464,24 @@
                a := FLOOR(e1.Value);
                b := FLOOR(e2.Value);
                ВЫБОР func ИЗ
-                  |stLSL: a := LSL(a, b)
-                  |stASR: a := ASR(a, b)
-                  |stROR: a := ROR(a, b)
-                  |stLSR: a := LSR(a, b)
+                  |мКонст.stLSL: a := LSL(a, b)
+                  |мКонст.stASR: a := ASR(a, b)
+                  |мКонст.stROR: a := ROR(a, b)
+                  |мКонст.stLSR: a := LSR(a, b)
                ИНАЧЕ
                КОНЕЦ;
                e.Value := ДЛИН(FLT(a));
                e.eType := eCONST
             КОНЕЦ;
             ВЫБОР func ИЗ
-               |stLSL: X86.StFunc(X86.stLSL)
-               |stASR: X86.StFunc(X86.stASR)
-               |stROR: X86.StFunc(X86.stROR)
-               |stLSR: X86.StFunc(X86.stLSR)
+               |мКонст.stLSL: X86.StFunc(X86.stLSL)
+               |мКонст.stASR: X86.StFunc(X86.stASR)
+               |мКонст.stROR: X86.StFunc(X86.stROR)
+               |мКонст.stLSR: X86.StFunc(X86.stLSR)
             ИНАЧЕ
             КОНЕЦ;
             e.T := sttypes[мКонст.типЦЕЛОЕ]
-         |stFLOOR:
+         |мКонст.stFLOOR:
             пВыраж(e1);
             мПров.Тест(e1.T.тип_ном В {мКонст.типВЕЩ, мКонст.типДЛИНВЕЩ}, line, col, 66);
             Выраж_Загрузить(e1);
@@ -497,7 +492,7 @@
             КОНЕЦ;
             X86.StFunc(X86.stFLOOR);
             e.T := sttypes[мКонст.типЦЕЛОЕ]
-         |stFLT:
+         |мКонст.stFLT:
             пВыраж(e1);
             мПров.Тест(e1.T.тип_ном = мКонст.типЦЕЛОЕ, line, col, 52);
             Выраж_Загрузить(e1);
@@ -507,7 +502,7 @@
             КОНЕЦ;
             X86.StFunc(X86.stFLT);
             e.T := sttypes[мКонст.типВЕЩ]
-         |stORD:
+         |мКонст.stORD:
             пВыраж(e1);
             мПров.Тест(e1.T.тип_ном В {мКонст.типЛИТЕРА, мКонст.типБУЛЕВО, мКонст.типНАБОР, мКонст.типСТРОКА}, line, col, 68);
             ЕСЛИ e1.T.тип_ном = мКонст.типСТРОКА ТОГДА
@@ -527,7 +522,7 @@
                X86.StFunc(X86.stORD)
             КОНЕЦ;
             e.T := sttypes[мКонст.типЦЕЛОЕ]
-         |stBITS:
+         |мКонст.stBITS:
             пВыраж(e1);
             мПров.Тест(e1.T.тип_ном = мКонст.типЦЕЛОЕ, line, col, 52);
             Выраж_Загрузить(e1);
@@ -536,7 +531,7 @@
                e.eType := eCONST
             КОНЕЦ;
             e.T := sttypes[мКонст.типНАБОР]
-         |stCHR:
+         |мКонст.stCHR:
             пВыраж(e1);
             мПров.Тест(e1.T.тип_ном = мКонст.типЦЕЛОЕ, line, col, 52);
             Выраж_Загрузить(e1);
@@ -549,7 +544,7 @@
                e.T := sttypes[мКонст.типСТРОКА];
                e.eType := eCONST
             КОНЕЦ
-         |stLONG:
+         |мКонст.stLONG:
             пВыраж(e1);
             мПров.Тест(e1.T.тип_ном = мКонст.типВЕЩ, line, col, 71);
             ЕСЛИ e1.eType = eCONST ТОГДА
@@ -558,7 +553,7 @@
             КОНЕЦ;
             Выраж_Загрузить(e1);
             e.T := sttypes[мКонст.типДЛИНВЕЩ]
-         |stSHORT:
+         |мКонст.stSHORT:
             пВыраж(e1);
             мПров.Тест(e1.T.тип_ном = мКонст.типДЛИНВЕЩ, line, col, 70);
             ЕСЛИ e1.eType = eCONST ТОГДА
@@ -569,7 +564,7 @@
             КОНЕЦ;
             Выраж_Загрузить(e1);
             e.T := sttypes[мКонст.типВЕЩ]
-         |stLENGTH:
+         |мКонст.stLENGTH:
             пВыраж(e1);
             мПров.Тест(ЕслиСтрока(e1), line, col, 141);
             ЕСЛИ e1.T.тип_ном = мКонст.типСТРОКА ТОГДА
@@ -1500,7 +1495,7 @@
       мДецл.КлючСлед_Получ;
       мДецл.Коорд_Уст(line, col);
       ВЫБОР proc ИЗ
-         |stINC, stDEC:
+         |мКонст.stINC, мКонст.stDEC:
             Designator(e1);
             мПров.Тест(e1.eType = eVAR, line, col, 63);
             мПров.Тест(~e1.Read, line, col, 115);
@@ -1513,35 +1508,35 @@
                iValue := FLOOR(Value);
                мПров.Тест(iValue # 0, line, col, 122);
                ЕСЛИ iValue < 0 ТОГДА
-                  ЕСЛИ proc = stINC ТОГДА
-                     proc := stDEC
+                  ЕСЛИ proc = мКонст.stINC ТОГДА
+                     proc := мКонст.stDEC
                   ИНАЧЕ
-                     proc := stINC
+                     proc := мКонст.stINC
                   КОНЕЦ;
                   iValue := -iValue
                КОНЕЦ;
                ЕСЛИ iValue # 1 ТОГДА
                   X86.PushConst(iValue);
-                  ЕСЛИ proc = stDEC ТОГДА
+                  ЕСЛИ proc = мКонст.stDEC ТОГДА
                      X86.StProc(X86.stDEC)
                   ИНАЧЕ
                      X86.StProc(X86.stINC)
                   КОНЕЦ
                ИНАЧЕ
-                  ЕСЛИ proc = stDEC ТОГДА
+                  ЕСЛИ proc = мКонст.stDEC ТОГДА
                      X86.StProc(X86.stDEC1)
                   ИНАЧЕ
                      X86.StProc(X86.stINC1)
                   КОНЕЦ
                КОНЕЦ
             ИНАЧЕ
-               ЕСЛИ proc = stDEC ТОГДА
+               ЕСЛИ proc = мКонст.stDEC ТОГДА
                   X86.StProc(X86.stDEC1)
                ИНАЧЕ
                   X86.StProc(X86.stINC1)
                КОНЕЦ
             КОНЕЦ
-         |stINCL, stEXCL:
+         |мКонст.stINCL, мКонст.stEXCL:
             Designator(e1);
             мПров.Тест(e1.eType = eVAR, line, col, 63);
             мПров.Тест(~e1.Read, line, col, 115);
@@ -1553,14 +1548,14 @@
             мПров.Тест(T.тип_ном = мКонст.типЦЕЛОЕ, line, col, 52);
             iValue := FLOOR(Value);
             мПров.Тест(ASR(iValue, 5) = 0, line, col, 53);
-            ЕСЛИ proc = stINCL ТОГДА
+            ЕСЛИ proc = мКонст.stINCL ТОГДА
                X86.PushConst(ORD({iValue}));
                X86.StProc(X86.stINCL)
             ИНАЧЕ
                X86.PushConst(ORD(-{iValue}));
                X86.StProc(X86.stEXCL)
             КОНЕЦ
-         |stCOPY:
+         |мКонст.stCOPY:
             Expr(e1);
             мПров.Тест(ЕслиСтрока(e1), line, col, 141);
             мДецл.Ключ_Проверить(мКонст.опЗапятая);
@@ -1580,19 +1575,19 @@
             мПров.Тест(~e2.Read, line, col, 115);
             Str(e2);
             X86.StProc(X86.stCOPY)
-         |stNEW, stDISPOSE:
+         |мКонст.stNEW, мКонст.stDISPOSE:
             Designator(e1);
             мПров.Тест(e1.eType = eVAR, line, col, 63);
             мПров.Тест(~e1.Read, line, col, 115);
             мПров.Тест(e1.T.тип_ном = мКонст.типУКАЗАТЕЛЬ, line, col, 145);
-            ЕСЛИ proc = stNEW ТОГДА
+            ЕСЛИ proc = мКонст.stNEW ТОГДА
                X86.PushConst(e1.T.Base.номер);
                X86.PushConst(X86.Align(e1.T.Base.размер + 8, 32));
                X86.newrec
             ИНАЧЕ
                X86.disprec
             КОНЕЦ
-         |stASSERT:
+         |мКонст.stASSERT:
             Expr(e1);
             мПров.Тест(e1.T.тип_ном = мКонст.типБУЛЕВО, line, col, 117);
             Выраж_Загрузить(e1);
@@ -1606,7 +1601,7 @@
             ИНАЧЕ
                X86.Assert(X86.stASSERT1, 0)
             КОНЕЦ
-         |stPACK, stUNPK:
+         |мКонст.stPACK, мКонст.stUNPK:
             Designator(e1);
             мПров.Тест(e1.eType = eVAR, line, col, 63);
             мПров.Тест(e1.T.тип_ном В {мКонст.типВЕЩ, мКонст.типДЛИНВЕЩ}, line, col, 149);
@@ -1614,7 +1609,7 @@
             мДецл.Ключ_Проверить(мКонст.опЗапятая);
             мДецл.КлючСлед_Получ;
             мДецл.Коорд_Уст(line, col);
-            ЕСЛИ proc = stUNPK ТОГДА
+            ЕСЛИ proc = мКонст.stUNPK ТОГДА
                Designator(e2);
                мПров.Тест(e2.eType = eVAR, line, col, 63);
                мПров.Тест(e2.T.тип_ном = мКонст.типЦЕЛОЕ, line, col, 128);
