@@ -405,8 +405,8 @@
       
       PushStProc("ROR",      мКонст.stROR);
       
-      PushStProc("SHORT",    мКонст.stSHORT);
-      PushStProc("КОРОТ",    мКонст.stSHORT);
+      PushStProc("SHORT",    мКонст.процУКОРОТ);
+      PushStProc("УКОРОТ",    мКонст.процУКОРОТ);
       
       PushStProc("UNPK",     мКонст.stUNPK);
       PushStProc("BITS",     мКонст.stBITS);
