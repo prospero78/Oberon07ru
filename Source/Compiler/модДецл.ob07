@@ -322,7 +322,7 @@
          мЦепь.Добавить(types, type);
          sttypes[i] := type
       КОНЕЦ;
-      sttypes[TINTEGER].размер := 4;
+      sttypes[мКонст.TINTEGER].размер := 4;
       sttypes[TREAL].размер := 4;
       sttypes[TLONGREAL].размер := 8;
       sttypes[TBOOLEAN].размер := 1;
@@ -332,7 +332,7 @@
       sttypes[TSTRING].размер := 0;
       sttypes[TNIL].размер := 4;
       sttypes[TCARD16].размер := 2;
-      ДЛЯ i := TINTEGER ДО TSTRING ДЕЛАТЬ
+      ДЛЯ i := мКонст.TINTEGER ДО TSTRING ДЕЛАТЬ
          sttypes[i].выравнив := sttypes[i].размер
       КОНЕЦ
    КОНЕЦ StTypes;
@@ -387,8 +387,8 @@
       
       PushStProc("INCL",     stINCL);
       
-      PushStType("INTEGER",  TINTEGER);
-      PushStType("ЦЕЛОЕ",  TINTEGER);
+      PushStType("INTEGER",  мКонст.TINTEGER);
+      PushStType("ЦЕЛОЕ",  мКонст.TINTEGER);
       
       PushStProc("LEN",      stLEN);
       PushStProc("LSL",      stLSL);
@@ -500,7 +500,7 @@
       КОНЕЦ;
       мПров.Тест(~мУтиль.ЕслиБесконеч(res), line, col, FOVER);
       ВЫБОР T.тип_ном ИЗ
-         |TINTEGER: 
+         |мКонст.TINTEGER: 
             мПров.Тест((res <= ДЛИН(FLT(мКонст.целое_макс))) & (res >= ДЛИН(FLT(мКонст.целое_мин))), line, col, IOVER)
          |TREAL:     
             мПров.Тест((res <= ДЛИН(мКонст.вещ_макс)) & (res >= -ДЛИН(мКонст.вещ_макс)), line, col, FOVER)
@@ -546,8 +546,8 @@
     КОНЕЦ;
     ВЫБОР Op ИЗ
     |мКонст.опПлюс, мКонст.опМинус, мКонст.опУмнож, мКонст.опДелен:
-      мПров.Тест(~((Op = мКонст.опДелен) & (Ta.тип_ном = TINTEGER)), line, col, 37);
-      ЕСЛИ Ta.тип_ном В {TINTEGER, TREAL, TLONGREAL} ТОГДА
+      мПров.Тест(~((Op = мКонст.опДелен) & (Ta.тип_ном = мКонст.TINTEGER)), line, col, 37);
+      ЕСЛИ Ta.тип_ном В {мКонст.TINTEGER, TREAL, TLONGREAL} ТОГДА
         Res := Arith(a, b, Ta, Op, line, col)
       АЕСЛИ Ta.тип_ном = TSET ТОГДА
         ВЫБОР Op ИЗ
@@ -562,7 +562,7 @@
       КОНЕЦ;
       TRes := Ta
     |lxDIV, lxMOD:
-      мПров.Тест(Ta.тип_ном = TINTEGER, line, col, 37);
+      мПров.Тест(Ta.тип_ном = мКонст.TINTEGER, line, col, 37);
       мПров.Тест(bi # 0, line, col, 48);
       TRes := Ta;
       Res := Arith(a, b, Ta, Op, line, col)
@@ -587,7 +587,7 @@
         a := b;
         b := c
       КОНЕЦ;
-      мПров.Тест(Ta.тип_ном В {TSTRING, TINTEGER, TREAL, TLONGREAL}, line, col, 37);
+      мПров.Тест(Ta.тип_ном В {TSTRING, мКонст.TINTEGER, TREAL, TLONGREAL}, line, col, 37);
       ЕСЛИ Ta.тип_ном = TSTRING ТОГДА
         Res := strcmp(a, b, Op)
       ИНАЧЕ
@@ -599,7 +599,7 @@
         a := b;
         b := c
       КОНЕЦ;
-      мПров.Тест(Ta.тип_ном В {TSTRING, TINTEGER, TREAL, TLONGREAL, TSET}, line, col, 37);
+      мПров.Тест(Ta.тип_ном В {TSTRING, мКонст.TINTEGER, TREAL, TLONGREAL, TSET}, line, col, 37);
       ЕСЛИ Ta.тип_ном = TSTRING ТОГДА
         Res := strcmp(a, b, Op)
       АЕСЛИ Ta.тип_ном = TSET ТОГДА
@@ -608,7 +608,7 @@
         Res := ДЛИН(FLT(ORD(a <= b)))
       КОНЕЦ
     |мКонст.ксВ:
-      мПров.Тест((Ta.тип_ном = TINTEGER) & (Tb.тип_ном = TSET), line, col, 37);
+      мПров.Тест((Ta.тип_ном = мКонст.TINTEGER) & (Tb.тип_ном = TSET), line, col, 37);
       мПров.Тест(ASR(ai, 5) = 0, line, col, 49);
       Res := ДЛИН(FLT(ORD(ai IN BITS(bi))))
     ИНАЧЕ
@@ -1097,7 +1097,7 @@
       КлючСлед_Получ;
       Коорд_Уст(line, col);
       ConstExpr(v, T);
-      мПров.Тест(T.тип_ном = TINTEGER, line, col, 52);
+      мПров.Тест(T.тип_ном = мКонст.TINTEGER, line, col, 52);
       мПров.Тест(v > 0.0D0, line, col, 78);
       nov := Тип_Создать(TARRAY, FLOOR(v), 0, 0, ПУСТО, ЛОЖЬ, NewType);
       ЕСЛИ мСкан.сущность = мКонст.опЗапятая ТОГДА
