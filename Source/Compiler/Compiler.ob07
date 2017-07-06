@@ -426,9 +426,9 @@
                ìÏðîâ.Òåñò(~((e1.T.òèï_íîì = ìÊîíñò.òèïÖÅËÎÅ) & (e1.Value = ÄËÈÍ(FLT(ìÊîíñò.öåëîå_ìèí)))), line, col, ìÄåöë.IOVER)
             ÊÎÍÅÖ;
             ÅÑËÈ e1.T.òèï_íîì = ìÊîíñò.òèïÖÅËÎÅ ÒÎÃÄÀ
-               X86.StFunc(X86.stABS)
+               X86.StFunc(ìÊîíñò.stABS)
             ÈÍÀ×Å
-               X86.StFunc(X86.stFABS)
+               X86.StFunc(ìÊîíñò.stFABS)
             ÊÎÍÅÖ;
             e.T := e1.T
          |ìÊîíñò.stODD:
@@ -439,7 +439,7 @@
                e.Value := ÄËÈÍ(FLT(ORD(ODD(FLOOR(e1.Value)))));
                e.eType := eCONST
             ÊÎÍÅÖ;
-            X86.StFunc(X86.stODD);
+            X86.StFunc(ìÊîíñò.stODD);
             e.T := sttypes[ìÊîíñò.òèïÁÓËÅÂÎ]
          |ìÊîíñò.stLEN:
             Designator(e1);
@@ -474,10 +474,10 @@
                e.eType := eCONST
             ÊÎÍÅÖ;
             ÂÛÁÎÐ func ÈÇ
-               |ìÊîíñò.stLSL: X86.StFunc(X86.stLSL)
-               |ìÊîíñò.stASR: X86.StFunc(X86.stASR)
-               |ìÊîíñò.stROR: X86.StFunc(X86.stROR)
-               |ìÊîíñò.stLSR: X86.StFunc(X86.stLSR)
+               |ìÊîíñò.stLSL: X86.StFunc(ìÊîíñò.stLSL)
+               |ìÊîíñò.stASR: X86.StFunc(ìÊîíñò.stASR)
+               |ìÊîíñò.stROR: X86.StFunc(ìÊîíñò.stROR)
+               |ìÊîíñò.stLSR: X86.StFunc(ìÊîíñò.stLSR)
             ÈÍÀ×Å
             ÊÎÍÅÖ;
             e.T := sttypes[ìÊîíñò.òèïÖÅËÎÅ]
@@ -490,7 +490,7 @@
                e.Value := ÄËÈÍ(FLT(FLOOR(e1.Value)));
                e.eType := eCONST
             ÊÎÍÅÖ;
-            X86.StFunc(X86.stFLOOR);
+            X86.StFunc(ìÊîíñò.stFLOOR);
             e.T := sttypes[ìÊîíñò.òèïÖÅËÎÅ]
          |ìÊîíñò.stFLT:
             ïÂûðàæ(e1);
@@ -500,7 +500,7 @@
                e.Value := e1.Value;
                e.eType := eCONST
             ÊÎÍÅÖ;
-            X86.StFunc(X86.stFLT);
+            X86.StFunc(ìÊîíñò.stFLT);
             e.T := sttypes[ìÊîíñò.òèïÂÅÙ]
          |ìÊîíñò.stORD:
             ïÂûðàæ(e1);
@@ -519,7 +519,7 @@
                e.eType := eCONST
             ÊÎÍÅÖ;
             ÅÑËÈ e1.T.òèï_íîì = ìÊîíñò.òèïÁÓËÅÂÎ ÒÎÃÄÀ
-               X86.StFunc(X86.stORD)
+               X86.StFunc(ìÊîíñò.stORD)
             ÊÎÍÅÖ;
             e.T := sttypes[ìÊîíñò.òèïÖÅËÎÅ]
          |ìÊîíñò.stBITS:
@@ -578,7 +578,7 @@
             ÊÎÍÅÖ;
             Str(e1);
             e.T := sttypes[ìÊîíñò.òèïÖÅËÎÅ];
-            X86.StFunc(X86.stLENGTH)
+            X86.StFunc(ìÊîíñò.stLENGTH)
          |ìÊîíñò.sysADR:
             ìÏðîâ.Òåñò((ìÑêàí.ñóùíîñòü = lxIDENT) ÈËÈ (ìÑêàí.ñóùíîñòü = lxSTRING) ÈËÈ (ìÑêàí.ñóùíîñòü = lxCHX), line, col, 43);
             ÅÑËÈ ìÑêàí.ñóùíîñòü = lxIDENT ÒÎÃÄÀ
@@ -1038,7 +1038,7 @@
                X86.Set(ìÊîíñò.îïÓìíîæ)
             ÈÍÀ×Å
                X86.PushConst(n);
-               X86.StFunc(X86.stASR)
+               X86.StFunc(ìÊîíñò.stASR)
             ÊÎÍÅÖ
          ÊÎÍÅÖ
       ÈÍÀ×Å
@@ -1518,22 +1518,22 @@
                ÅÑËÈ iValue # 1 ÒÎÃÄÀ
                   X86.PushConst(iValue);
                   ÅÑËÈ proc = ìÊîíñò.stDEC ÒÎÃÄÀ
-                     X86.StProc(X86.stDEC)
+                     X86.StProc(ìÊîíñò.stDEC)
                   ÈÍÀ×Å
-                     X86.StProc(X86.stINC)
+                     X86.StProc(ìÊîíñò.stINC)
                   ÊÎÍÅÖ
                ÈÍÀ×Å
                   ÅÑËÈ proc = ìÊîíñò.stDEC ÒÎÃÄÀ
-                     X86.StProc(X86.stDEC1)
+                     X86.StProc(ìÊîíñò.stDEC1)
                   ÈÍÀ×Å
-                     X86.StProc(X86.stINC1)
+                     X86.StProc(ìÊîíñò.stINC1)
                   ÊÎÍÅÖ
                ÊÎÍÅÖ
             ÈÍÀ×Å
                ÅÑËÈ proc = ìÊîíñò.stDEC ÒÎÃÄÀ
-                  X86.StProc(X86.stDEC1)
+                  X86.StProc(ìÊîíñò.stDEC1)
                ÈÍÀ×Å
-                  X86.StProc(X86.stINC1)
+                  X86.StProc(ìÊîíñò.stINC1)
                ÊÎÍÅÖ
             ÊÎÍÅÖ
          |ìÊîíñò.stINCL, ìÊîíñò.stEXCL:
@@ -1550,10 +1550,10 @@
             ìÏðîâ.Òåñò(ASR(iValue, 5) = 0, line, col, 53);
             ÅÑËÈ proc = ìÊîíñò.stINCL ÒÎÃÄÀ
                X86.PushConst(ORD({iValue}));
-               X86.StProc(X86.stINCL)
+               X86.StProc(ìÊîíñò.stINCL)
             ÈÍÀ×Å
                X86.PushConst(ORD(-{iValue}));
-               X86.StProc(X86.stEXCL)
+               X86.StProc(ìÊîíñò.stEXCL)
             ÊÎÍÅÖ
          |ìÊîíñò.stCOPY:
             Expr(e1);
@@ -1574,7 +1574,7 @@
             ìÏðîâ.Òåñò(ÅñëèÑòðîêà(e2), line, col, 143);
             ìÏðîâ.Òåñò(~e2.Read, line, col, 115);
             Str(e2);
-            X86.StProc(X86.stCOPY)
+            X86.StProc(ìÊîíñò.stCOPY)
          |ìÊîíñò.stNEW, ìÊîíñò.stDISPOSE:
             Designator(e1);
             ìÏðîâ.Òåñò(e1.eType = eVAR, line, col, 63);
@@ -1597,9 +1597,9 @@
                ìÄåöë.ConstExpr(Value, T);
                ìÏðîâ.Òåñò(T.òèï_íîì = ìÊîíñò.òèïÖÅËÎÅ, line, col, 52);
                ìÏðîâ.Òåñò((Value >= 0.0D0) & (Value <= 127.0D0), line, col, 95);
-               X86.Assert(X86.stASSERT, FLOOR(Value))
+               X86.Assert(ìÊîíñò.stASSERT, FLOOR(Value))
             ÈÍÀ×Å
-               X86.Assert(X86.stASSERT1, 0)
+               X86.Assert(ìÊîíñò.stASSERT1, 0)
             ÊÎÍÅÖ
          |ìÊîíñò.stPACK, ìÊîíñò.stUNPK:
             Designator(e1);
@@ -1615,18 +1615,18 @@
                ìÏðîâ.Òåñò(e2.T.òèï_íîì = ìÊîíñò.òèïÖÅËÎÅ, line, col, 128);
                ìÏðîâ.Òåñò(~e2.Read, line, col, 115);
                ÅÑËÈ e1.T.òèï_íîì = ìÊîíñò.òèïÄËÈÍÂÅÙ ÒÎÃÄÀ
-                  X86.StProc(X86.stUNPK)
+                  X86.StProc(ìÊîíñò.stUNPK)
                ÈÍÀ×Å
-                  X86.StProc(X86.stUNPK1)
+                  X86.StProc(ìÊîíñò.stUNPK1)
                ÊÎÍÅÖ
             ÈÍÀ×Å
                Expr(e2);
                ìÏðîâ.Òåñò(e2.T.òèï_íîì = ìÊîíñò.òèïÖÅËÎÅ, line, col, 52);
                Âûðàæ_Çàãðóçèòü(e2);
                ÅÑËÈ e1.T.òèï_íîì = ìÊîíñò.òèïÄËÈÍÂÅÙ ÒÎÃÄÀ
-                  X86.StProc(X86.stPACK)
+                  X86.StProc(ìÊîíñò.stPACK)
                ÈÍÀ×Å
-                  X86.StProc(X86.stPACK1)
+                  X86.StProc(ìÊîíñò.stPACK1)
                ÊÎÍÅÖ
             ÊÎÍÅÖ
          |ìÊîíñò.sysBIT:

@@ -38,13 +38,6 @@
 
    lxLE = 75; lxGE = 76;
 
-   stABS* = 1; stODD* = 2; stLEN* = 3; stLSL* = 4; stASR* = 5; stROR* = 6; stFLOOR* = 7;
-   stFLT* = 8; stORD* = 9; stCHR* = 10; stLONG* = 11; stSHORT* = 12; stINC* = 13;
-   stDEC* = 14; stINCL* = 15; stEXCL* = 16; stCOPY* = 17; stNEW* = 18; stASSERT* = 19;
-   stPACK* = 20; stUNPK* = 21; stDISPOSE* = 22; stFABS* = 23; stINC1* = 24;
-   stDEC1* = 25; stASSERT1* = 26; stUNPK1* = 27; stPACK1* = 28; stLSR* = 29;
-   stLENGTH* = 30;
-
    sysBIT* = 103; sysMOVE* = 108;
 
    JMP* = 0E9X; CALL = 0E8X;
@@ -1256,19 +1249,19 @@
 ПРОЦЕДУРА StProc*(proc: ЦЕЛОЕ);
   НАЧАЛО
     ВЫБОР proc ИЗ
-    |stINC:   PopEDX; OutCode("590111")
-    |stDEC:   PopEDX; OutCode("592911")
-    |stINC1:  PopEDX; OutCode("FF02")
-    |stDEC1:  PopEDX; OutCode("FF0A")
-    |stINCL:  PopEDX; OutCode("580910")
-    |stEXCL:  PopEDX; OutCode("582110")
-    |sysBIT:  PopECX; OutCode("5A585333DB8A18E3050FABD3EB030FB3D388185B")
-    |stPACK:  OutCode("DB04245A5ADD02D9FDDD1A"); isfpu := ИСТИНА
-    |stPACK1: OutCode("DB04245A5AD902D9FDD91A"); isfpu := ИСТИНА
-    |stUNPK:  PopEDX; OutCode("59DD01D9F4DD19DB1A"); isfpu := ИСТИНА
-    |stUNPK1: PopEDX; OutCode("59D901D9F4D919DB1A"); isfpu := ИСТИНА
-    |stCOPY:  CallRTL(_strcopy)
-    |sysMOVE: CallRTL(_savearr)
+    |мКонст.stINC:   PopEDX; OutCode("590111")
+    |мКонст.stDEC:   PopEDX; OutCode("592911")
+    |мКонст.stINC1:  PopEDX; OutCode("FF02")
+    |мКонст.stDEC1:  PopEDX; OutCode("FF0A")
+    |мКонст.stINCL:  PopEDX; OutCode("580910")
+    |мКонст.stEXCL:  PopEDX; OutCode("582110")
+    |мКонст.sysBIT:  PopECX; OutCode("5A585333DB8A18E3050FABD3EB030FB3D388185B")
+    |мКонст.stPACK:  OutCode("DB04245A5ADD02D9FDDD1A"); isfpu := ИСТИНА
+    |мКонст.stPACK1: OutCode("DB04245A5AD902D9FDD91A"); isfpu := ИСТИНА
+    |мКонст.stUNPK:  PopEDX; OutCode("59DD01D9F4DD19DB1A"); isfpu := ИСТИНА
+    |мКонст.stUNPK1: PopEDX; OutCode("59D901D9F4D919DB1A"); isfpu := ИСТИНА
+    |мКонст.stCOPY:  CallRTL(_strcopy)
+    |мКонст.sysMOVE: CallRTL(_savearr)
     ИНАЧЕ
     КОНЕЦ
   КОНЕЦ StProc;
@@ -1279,7 +1272,7 @@
     OutCode("85D2751368");
     OutInt(мУтиль.строка_ном * 16 + 1);
     PushInt(мУтиль.модуль_ном + 2);
-    ЕСЛИ proc = stASSERT ТОГДА
+    ЕСЛИ proc = мКонст.stASSERT ТОГДА
       OutCode("6A026A")
     ИНАЧЕ
       OutCode("6A016A")
@@ -1291,18 +1284,18 @@
 ПРОЦЕДУРА StFunc*(func: ЦЕЛОЕ);
   НАЧАЛО
     ВЫБОР func ИЗ
-    |stABS:    PopEDX; OutCode("85D27D02F7DA"); PushEDX
-    |stFABS:   OutCode("D9E1")
-    |stFLT:    OutCode("DB0424"); PopEAX; Incfpu;
-    |stFLOOR:  OutCode("83EC06D93C2466812424FFF366810C24FFF7D92C2483C402D9FCDB1C24"); ВЫЧ(fpu)
-    |stODD:    OutCode("83242401")
-    |stROR:    PopECX; OutCode("58D3C8"); PushEAX
-    |stASR:    PopECX; OutCode("58D3F8"); PushEAX
-    |stLSL:    PopECX; OutCode("58D3E0"); PushEAX
-    |stLSR:    PopECX; OutCode("58D3E8"); PushEAX
-    |stORD:    PopEDX; OutCode("85D274036A015A"); PushEDX
-    |stLENGTH: CallRTL(_length); PushEAX
-    |sysBIT:   PopEDX; OutCode("5933C08A010FA3D072046A00EB026A01")
+    |мКонст.stABS:    PopEDX; OutCode("85D27D02F7DA"); PushEDX
+    |мКонст.stFABS:   OutCode("D9E1")
+    |мКонст.stFLT:    OutCode("DB0424"); PopEAX; Incfpu;
+    |мКонст.stFLOOR:  OutCode("83EC06D93C2466812424FFF366810C24FFF7D92C2483C402D9FCDB1C24"); ВЫЧ(fpu)
+    |мКонст.stODD:    OutCode("83242401")
+    |мКонст.stROR:    PopECX; OutCode("58D3C8"); PushEAX
+    |мКонст.stASR:    PopECX; OutCode("58D3F8"); PushEAX
+    |мКонст.stLSL:    PopECX; OutCode("58D3E0"); PushEAX
+    |мКонст.stLSR:    PopECX; OutCode("58D3E8"); PushEAX
+    |мКонст.stORD:    PopEDX; OutCode("85D274036A015A"); PushEDX
+    |мКонст.stLENGTH: CallRTL(_length); PushEAX
+    |мКонст.sysBIT:   PopEDX; OutCode("5933C08A010FA3D072046A00EB026A01")
     ИНАЧЕ
     КОНЕЦ
   КОНЕЦ StFunc;
