@@ -401,7 +401,9 @@
       PushStProc("NEW",      мКонст.процНОВ);
       PushStProc("НОВ",      мКонст.процНОВ);
       
-      PushStProc("ODD",      мКонст.stODD);
+      PushStProc("ODD",      мКонст.процЧЁТ);
+      PushStProc("ЧЁТ",      мКонст.процЧЁТ);
+      
       PushStProc("ORD",      мКонст.stORD);
       PushStProc("PACK",     мКонст.stPACK);
       
@@ -415,7 +417,7 @@
       PushStProc("LSR",      мКонст.stLSR);
       
       PushStProc("LENGTH",   мКонст.stLENGTH);
-      PushStProc("ДЛИНА",    мКонст.stLENGTH);
+      PushStProc("ДЛИНСТР",    мКонст.stLENGTH);
       Охрана_Создать
    КОНЕЦ StIdent;
 
@@ -1603,7 +1605,7 @@
 ПРОЦЕДУРА delfirstchar(ПЕР s: мСтр.тСтрока);
   ПЕРЕМ i: ЦЕЛОЕ;
   НАЧАЛО
-    ДЛЯ i := 0 ДО ДЛИНА(s) - 1 ДЕЛАТЬ
+    ДЛЯ i := 0 ДО ДЛИНСТР(s) - 1 ДЕЛАТЬ
       s[i] := s[i + 1]
     КОНЕЦ
   КОНЕЦ delfirstchar;
@@ -1626,7 +1628,7 @@
       мУтиль.СтрПарам(full, 0);
       мСтр.Разделить(full, path, name, ext);
       ЕСЛИ path[0] # 0X ТОГДА
-        path[ДЛИНА(path) - 1] := 0X
+        path[ДЛИНСТР(path) - 1] := 0X
       КОНЕЦ;
       ЕСЛИ Path[0] = мКонст.слэш ТОГДА
         delfirstchar(Path)

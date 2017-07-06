@@ -431,7 +431,7 @@
                X86.StFunc(мКонст.stFABS)
             КОНЕЦ;
             e.T := e1.T
-         |мКонст.stODD:
+         |мКонст.процЧЁТ:
             пВыраж(e1);
             мПров.Тест(e1.T.тип_ном = мКонст.типЦЕЛОЕ, line, col, 52);
             Выраж_Загрузить(e1);
@@ -439,7 +439,7 @@
                e.Value := УДЛИН(FLT(ORD(ODD(FLOOR(e1.Value)))));
                e.eType := eCONST
             КОНЕЦ;
-            X86.StFunc(мКонст.stODD);
+            X86.StFunc(мКонст.процЧЁТ);
             e.T := sttypes[мКонст.типБУЛЕВО]
          |мКонст.stLEN:
             Designator(e1);
@@ -573,7 +573,7 @@
                   X86.Mono(str.номер);
                   X86.StrMono
                КОНЕЦ;
-               e.Value := УДЛИН(FLT(ДЛИНА(str.стр)));
+               e.Value := УДЛИН(FLT(ДЛИНСТР(str.стр)));
                e.eType := eCONST
             КОНЕЦ;
             Str(e1);
