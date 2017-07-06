@@ -368,7 +368,9 @@
       PushStType("SET",      мКонст.типНАБОР);
       PushStType("НАБОР",    мКонст.типНАБОР);
       
-      PushStProc("ABS",      мКонст.stABS);
+      PushStProc("ABS",      мКонст.процАБС);
+      PushStProc("АБС",      мКонст.процАБС);
+      
       PushStProc("ASR",      мКонст.stASR);
     
       PushStProc("ASSERT",   мКонст.процКОНТРОЛЬ);

@@ -106,7 +106,7 @@
    sysTYPEID* = 107;
    sysMOVE* = 108;
  (* стандартные процедуры *)
-   stABS* = 1;
+   процјЅ—* = 1;
    stODD* = 2;
    stLEN* = 3;
    stLSL* = 4;
