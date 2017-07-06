@@ -72,7 +72,7 @@
       КОНЕЦ;
 
 ПЕРЕМ
-   pExpr, pFactor: ПРОЦЕДУРА (ПЕР e: мДецл.тВыражение);
+   пВыраж, pFactor: ПРОЦЕДУРА (ПЕР e: мДецл.тВыражение);
    pOpSeq: ПРОЦЕДУРА;
    Lex: мСтр.тСтрока;
    sttypes: мДецл.туТипНабор;
@@ -257,7 +257,7 @@
                   мПров.Тест2(выраж_.T.тип_ном = TARRAY, 102);
                   мДецл.КлючСлед_Получ;
                   мДецл.Коорд_Уст(цСтрока, col);
-                  pExpr(выражение);
+                  пВыраж(выражение);
                   мПров.Тест(выражение.T.тип_ном = TINTEGER, цСтрока, col, 52);
                   Выраж_Загрузить(выражение);
                   ЕСЛИ выраж_.T.длина = 0 ТОГДА
@@ -354,7 +354,7 @@
       X86.PushConst(0);
       ПОКА мСкан.сущность # lxRCurly ДЕЛАТЬ
          мДецл.Коорд_Уст(line, col);
-         pExpr(a);
+         пВыраж(a);
          мПров.Тест(a.T.тип_ном = TINTEGER, line, col, 52);
          ЕСЛИ a.eType = eCONST ТОГДА
             мПров.Тест(ASR(FLOOR(a.Value), 5) = 0, line, col, 53)
@@ -364,7 +364,7 @@
          ЕСЛИ мСкан.сущность = lxDbl ТОГДА
             мДецл.КлючСлед_Получ;
             мДецл.Коорд_Уст(line, col);
-            pExpr(b);
+            пВыраж(b);
             мПров.Тест(b.T.тип_ном = TINTEGER, line, col, 52);
             ЕСЛИ b.eType = eCONST ТОГДА
                мПров.Тест(ASR(FLOOR(b.Value), 5) = 0, line, col, 53);
@@ -428,7 +428,7 @@
       мДецл.Коорд_Уст(line, col);
       ВЫБОР func ИЗ
          |stABS:
-            pExpr(e1);
+            пВыраж(e1);
             мПров.Тест(e1.T.тип_ном В {TINTEGER, TREAL, TLONGREAL}, line, col, 57);
             Выраж_Загрузить(e1);
             ЕСЛИ e1.eType = eCONST ТОГДА
@@ -443,7 +443,7 @@
             КОНЕЦ;
             e.T := e1.T
          |stODD:
-            pExpr(e1);
+            пВыраж(e1);
             мПров.Тест(e1.T.тип_ном = TINTEGER, line, col, 52);
             Выраж_Загрузить(e1);
             ЕСЛИ e1.eType = eCONST ТОГДА
@@ -462,13 +462,13 @@
             КОНЕЦ;
             e.T := sttypes[TINTEGER]
          |stLSL, stASR, stROR, stLSR:
-            pExpr(e1);
+            пВыраж(e1);
             мПров.Тест(e1.T.тип_ном = TINTEGER, line, col, 52);
             Выраж_Загрузить(e1);
             мДецл.Ключ_Проверить(мКонст.опЗапятая);
             мДецл.КлючСлед_Получ;
             мДецл.Коорд_Уст(line, col);
-            pExpr(e2);
+            пВыраж(e2);
             мПров.Тест(e2.T.тип_ном = TINTEGER, line, col, 52);
             Выраж_Загрузить(e2);
             ЕСЛИ (e1.eType = eCONST) & (e2.eType = eCONST) ТОГДА
@@ -493,7 +493,7 @@
             КОНЕЦ;
             e.T := sttypes[TINTEGER]
          |stFLOOR:
-            pExpr(e1);
+            пВыраж(e1);
             мПров.Тест(e1.T.тип_ном В {TREAL, TLONGREAL}, line, col, 66);
             Выраж_Загрузить(e1);
             ЕСЛИ e1.eType = eCONST ТОГДА
@@ -504,7 +504,7 @@
             X86.StFunc(X86.stFLOOR);
             e.T := sttypes[TINTEGER]
          |stFLT:
-            pExpr(e1);
+            пВыраж(e1);
             мПров.Тест(e1.T.тип_ном = TINTEGER, line, col, 52);
             Выраж_Загрузить(e1);
             ЕСЛИ e1.eType = eCONST ТОГДА
@@ -514,7 +514,7 @@
             X86.StFunc(X86.stFLT);
             e.T := sttypes[TREAL]
          |stORD:
-            pExpr(e1);
+            пВыраж(e1);
             мПров.Тест(e1.T.тип_ном В {TCHAR, TBOOLEAN, TSET, TSTRING}, line, col, 68);
             ЕСЛИ e1.T.тип_ном = TSTRING ТОГДА
                мПров.Тест(Стр_Длина(e1.Value) = 1, line, col, 94)
@@ -534,7 +534,7 @@
             КОНЕЦ;
             e.T := sttypes[TINTEGER]
          |stBITS:
-            pExpr(e1);
+            пВыраж(e1);
             мПров.Тест(e1.T.тип_ном = TINTEGER, line, col, 52);
             Выраж_Загрузить(e1);
             ЕСЛИ e1.eType = eCONST ТОГДА
@@ -543,7 +543,7 @@
             КОНЕЦ;
             e.T := sttypes[TSET]
          |stCHR:
-            pExpr(e1);
+            пВыраж(e1);
             мПров.Тест(e1.T.тип_ном = TINTEGER, line, col, 52);
             Выраж_Загрузить(e1);
             e.T := sttypes[TCHAR];
@@ -556,7 +556,7 @@
                e.eType := eCONST
             КОНЕЦ
          |stLONG:
-            pExpr(e1);
+            пВыраж(e1);
             мПров.Тест(e1.T.тип_ном = TREAL, line, col, 71);
             ЕСЛИ e1.eType = eCONST ТОГДА
                e.Value := e1.Value;
@@ -565,7 +565,7 @@
             Выраж_Загрузить(e1);
             e.T := sttypes[TLONGREAL]
          |stSHORT:
-            pExpr(e1);
+            пВыраж(e1);
             мПров.Тест(e1.T.тип_ном = TLONGREAL, line, col, 70);
             ЕСЛИ e1.eType = eCONST ТОГДА
                мПров.Тест(ABS(e1.Value) <= ДЛИН(мКонст.вещ_макс), line, col, мДецл.FOVER);
@@ -576,7 +576,7 @@
             Выраж_Загрузить(e1);
             e.T := sttypes[TREAL]
          |stLENGTH:
-            pExpr(e1);
+            пВыраж(e1);
             мПров.Тест(ЕслиСтрока(e1), line, col, 141);
             ЕСЛИ e1.T.тип_ном = TSTRING ТОГДА
                str := мДецл.уКонстСтр_Получ(e1.Value);
@@ -611,13 +611,13 @@
             e.T := sttypes[TINTEGER];
             X86.ADR(мДецл.Dim(e1.T))
          |sysBIT:
-            pExpr(e1);
+            пВыраж(e1);
             мПров.Тест(e1.T.тип_ном = TINTEGER, line, col, 52);
             Выраж_Загрузить(e1);
             мДецл.Ключ_Проверить(мКонст.опЗапятая);
             мДецл.КлючСлед_Получ;
             мДецл.Коорд_Уст(line, col);
-            pExpr(e1);
+            пВыраж(e1);
             мПров.Тест(e1.T.тип_ном = TINTEGER, line, col, 52);
             Выраж_Загрузить(e1);
             X86.StFunc(X86.sysBIT);
@@ -813,7 +813,7 @@
       ПОКА param # ПУСТО ДЕЛАТЬ
          мДецл.Коорд_Уст(line, col);
          X86.Param;
-         pExpr(e1);
+         пВыраж(e1);
          мПров.Тест(ParamComp(e1, param.T, param.ByRef), line, col, 114);
          мПров.Тест(~(param.ByRef & e1.Read), line, col, 115);
          мПров.Тест(~((e1.eType = ePROC) & (e1.id.Level > 3)), line, col, 116);
@@ -963,7 +963,7 @@
          мДецл.КлючСлед_Получ
       |lxLRound:
          мДецл.КлючСлед_Получ;
-         pExpr(e);
+         пВыраж(e);
          мДецл.Ключ_Проверить(мКонст.опСкобкаПрКр);
          мДецл.КлючСлед_Получ
       |мКонст.опОтриц:
@@ -1906,7 +1906,7 @@
       мУтиль.СтрПарам(уФайл.стрИмяРасшир, 1);
       мУтиль.СтрПарам(ОС.стрИмя, 2);
       мУтиль.СтрПарам(стек.стрРазмер, 3);
-      pExpr := Expr;
+      пВыраж := Expr;
       pFactor := Factor;
       pOpSeq := OpSeq;
       мСтр.Разделить(уФайл.стрИмяРасшир, путь, уФайл.стрИмя, уФайл.стрРасшир);
