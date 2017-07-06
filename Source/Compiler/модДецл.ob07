@@ -735,7 +735,7 @@
           cur.Offset := 0
         КОНЕЦ
       ИНАЧЕ
-        Tr.длина := Tr.длина + 4 * (ORD((Tf.тип_ном = мКонст.TRECORD) & cur.ByRef) + Dim(Tf) + ORD((Tf.тип_ном = мКонст.типДЛИНВЕЩ) & ~cur.ByRef) + 1)
+        Tr.длина := Tr.длина + 4 * (ORD((Tf.тип_ном = мКонст.типЗАПИСЬ) & cur.ByRef) + Dim(Tf) + ORD((Tf.тип_ном = мКонст.типДЛИНВЕЩ) & ~cur.ByRef) + 1)
       КОНЕЦ;
       cur := cur.следующ(туПоле)
     КОНЕЦ
@@ -776,7 +776,7 @@
 
 ПРОЦЕДУРА notrecurs(id: БУЛЕВО; T: мТип.туТип): БУЛЕВО;
     ВЕРНУТЬ ~(id & (модуль.Idents.следующ(туСущность).iType = IDTYPE) & (модуль.Idents.следующ(туСущность).T = T) &
-            (T.тип_ном В {мКонст.TRECORD, мКонст.TARRAY}))
+            (T.тип_ном В {мКонст.типЗАПИСЬ, мКонст.TARRAY}))
   КОНЕЦ notrecurs;
 
 ПРОЦЕДУРА ReadFields(T: мТип.туТип);
@@ -849,10 +849,10 @@
     ПОКА cur # ПУСТО ДЕЛАТЬ
       cur.T := T;
       ЕСЛИ cur.Export ТОГДА
-        мПров.Тест(~(T.тип_ном В {мКонст.TRECORD, мКонст.TARRAY}), cur.line, cur.col, 90)
+        мПров.Тест(~(T.тип_ном В {мКонст.типЗАПИСЬ, мКонст.TARRAY}), cur.line, cur.col, 90)
       КОНЕЦ;
-      ЕСЛИ(cur.VarKind = paramvar) ИЛИ (cur.VarKind = param) & (T.тип_ном В {мКонст.TRECORD, мКонст.TARRAY}) ТОГДА
-        n := 4 * (1 + Dim(T) + ORD((cur.VarKind = paramvar) & (T.тип_ном = мКонст.TRECORD)))
+      ЕСЛИ(cur.VarKind = paramvar) ИЛИ (cur.VarKind = param) & (T.тип_ном В {мКонст.типЗАПИСЬ, мКонст.TARRAY}) ТОГДА
+        n := 4 * (1 + Dim(T) + ORD((cur.VarKind = paramvar) & (T.тип_ном = мКонст.типЗАПИСЬ)))
       ИНАЧЕ
         n := T.размер;
         мПров.Тест2(n <= мКонст.целое_макс - мПам.Выровнять(n), 93);
@@ -868,7 +868,7 @@
         ЕСЛИ cur.VarKind = 0 ТОГДА
           cur.Offset := curBlock.ParamSize - curBlock.VarSize - n
         ИНАЧЕ
-          cur.Offset := curBlock.VarSize - 8 + 4 * (cur.Level + ORD((cur.VarKind = paramvar) & (T.тип_ном = мКонст.TRECORD)))
+          cur.Offset := curBlock.VarSize - 8 + 4 * (cur.Level + ORD((cur.VarKind = paramvar) & (T.тип_ном = мКонст.типЗАПИСЬ)))
         КОНЕЦ
       КОНЕЦ;
       мПров.Тест2(curBlock.VarSize <= мКонст.целое_макс - n, 93);
@@ -1025,7 +1025,7 @@
         Ключ_Проверить(lxIDENT);
         Res := IdType(line, col);
         мПров.Тест(Res # ПУСТО, line, col, 42);
-        мПров.Тест(~(Res.тип_ном В {мКонст.TRECORD, мКонст.TARRAY}), line, col, 82)
+        мПров.Тест(~(Res.тип_ном В {мКонст.типЗАПИСЬ, мКонст.TARRAY}), line, col, 82)
       КОНЕЦ
     КОНЕЦ
   КОНЕЦ FormalList;
@@ -1119,7 +1119,7 @@
     |мКонст.ксЗАПИСЬ:
       КлючСлед_Получ;
       ДОБ(RecCount);
-      nov := Тип_Создать(мКонст.TRECORD, 0, 0, RecCount, ПУСТО, ИСТИНА, NewType);
+      nov := Тип_Создать(мКонст.типЗАПИСЬ, 0, 0, RecCount, ПУСТО, ИСТИНА, NewType);
       nov.выравнив := 1;
       Коорд_Уст(line, col);
       ЕСЛИ RecFlag(nov.запись) ТОГДА
@@ -1132,7 +1132,7 @@
         Ключ_Проверить(lxIDENT);
         nov.Base := IdType(line, col);
         мПров.Тест(nov.Base # ПУСТО, line, col, 42);
-        мПров.Тест(nov.Base.тип_ном = мКонст.TRECORD, line, col, 80);
+        мПров.Тест(nov.Base.тип_ном = мКонст.типЗАПИСЬ, line, col, 80);
         мПров.Тест(notrecurs(ИСТИНА, nov.Base), line, col, 96);
         nov.размер := nov.Base.размер;
         nov.выравнив := nov.Base.выравнив;
@@ -1162,7 +1162,7 @@
         мПров.Тест(модуль.typedecl, line, col, 42);
         AddPtrBase(NamePtrBase, line, col, nov)
       ИНАЧЕ
-        мПров.Тест(nov.Base.тип_ном = мКонст.TRECORD, line, col, 81)
+        мПров.Тест(nov.Base.тип_ном = мКонст.типЗАПИСЬ, line, col, 81)
       КОНЕЦ
     |мКонст.ксПРОЦЕДУРА:
       КлючСлед_Получ;
@@ -1219,7 +1219,7 @@
     ПОКА cur # ПУСТО ДЕЛАТЬ
       id := GetIdent(cur.Name);
       мПров.Тест(id # ПУСТО, cur.line, cur.col, 42);
-      мПров.Тест(id.T.тип_ном = мКонст.TRECORD, cur.line, cur.col, 81);
+      мПров.Тест(id.T.тип_ном = мКонст.типЗАПИСЬ, cur.line, cur.col, 81);
       cur.Ptr.Base := id.T;
       cur := cur.следующ(PTRBASE)
     КОНЕЦ;
