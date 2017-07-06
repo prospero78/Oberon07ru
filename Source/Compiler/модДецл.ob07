@@ -392,7 +392,12 @@
       
       PushStProc("INCL",     мКонст.stINCL);
       
-      PushStProc("LEN",      мКонст.stLEN);
+      PushStProc("LEN",      мКонст.процДЛИН);
+      PushStProc("ДЛИНА",    мКонст.процДЛИН);
+      
+      PushStProc("LENGTH",   мКонст.процДЛИНСТР);
+      PushStProc("ДЛИНСТР",    мКонст.процДЛИНСТР);
+      
       PushStProc("LSL",      мКонст.stLSL);
       
       PushStProc("LONG",     мКонст.процУДЛИН);
@@ -416,8 +421,6 @@
       PushStProc("BITS",     мКонст.stBITS);
       PushStProc("LSR",      мКонст.stLSR);
       
-      PushStProc("LENGTH",   мКонст.stLENGTH);
-      PushStProc("ДЛИНСТР",    мКонст.stLENGTH);
       Охрана_Создать
    КОНЕЦ StIdent;
 
