@@ -687,7 +687,7 @@
           ЕСЛИ Check() ТОГДА
             Res := ИСТИНА
           ИНАЧЕ
-            ЕСЛИ (T1.тип_ном = мКонст.TPROC) & (T2.тип_ном = мКонст.TPROC) & (T1 # T2) ТОГДА
+            ЕСЛИ (T1.тип_ном = мКонст.типПРОЦЕДУРА) & (T2.тип_ном = мКонст.типПРОЦЕДУРА) & (T1 # T2) ТОГДА
               Res := (T1.вызов = T2.вызов) & (T1.поля.счетчик = T2.поля.счетчик) & ProcTypeComp1(T1.Base, T2.Base);
               fp := T1.поля.предыдущ(мДецл.туПоле);
               ft := T2.поля.предыдущ(мДецл.туПоле);
@@ -760,7 +760,7 @@
             КОНЕЦ
          |мКонст.TRECORD: Res := BaseOf(T, e.T)
          |мКонст.TPOINTER: Res := BaseOf(T, e.T) ИЛИ (e.T.тип_ном = мКонст.TNIL)
-         |мКонст.TPROC: Res := (e.T.тип_ном = мКонст.TNIL) ИЛИ (e.eType = ePROC) & ProcTypeComp(e.id.T, T) ИЛИ
+         |мКонст.типПРОЦЕДУРА: Res := (e.T.тип_ном = мКонст.TNIL) ИЛИ (e.eType = ePROC) & ProcTypeComp(e.id.T, T) ИЛИ
             (e.eType # ePROC) & ProcTypeComp(e.T, T)
       ИНАЧЕ
          Res := ЛОЖЬ
@@ -786,7 +786,7 @@
                   КОНЕЦ
                |мКонст.TRECORD:
                   Res := BaseOf(T, e.T)
-               |мКонст.TPROC:
+               |мКонст.типПРОЦЕДУРА:
                   Res := ProcTypeComp(e.T, T)
             ИНАЧЕ
             КОНЕЦ
@@ -896,7 +896,7 @@
             ИНАЧЕ
                X86.PushInt(e.id.Number)
             КОНЕЦ
-         АЕСЛИ (e.eType = eVAR) & (e.T.тип_ном = мКонст.TPROC) & (мСкан.сущность = lxLRound) ТОГДА
+         АЕСЛИ (e.eType = eVAR) & (e.T.тип_ном = мКонст.типПРОЦЕДУРА) & (мСкан.сущность = lxLRound) ТОГДА
             мПров.Тест2(e.T.Base.тип_ном # мКонст.TVOID, 73);
             мДецл.КлючСлед_Получ;
             X86.PushCall(begcall);
@@ -1073,10 +1073,10 @@
       |мКонст.опРавно, мКонст.опНеРавно:
          мПров.Тест(((a.T.тип_ном В {мКонст.типЦЕЛОЕ, мКонст.типВЕЩ, мКонст.типДЛИНВЕЩ, мКонст.типНАБОР, мКонст.типБУЛЕВО}) & (a.T.тип_ном = b.T.тип_ном)) ИЛИ
          (IsChr(a) ИЛИ ЕслиСтрока(a)) & (IsChr(b) ИЛИ ЕслиСтрока(b)) ИЛИ
-         (a.T.тип_ном В {мКонст.TPOINTER, мКонст.TPROC, мКонст.TNIL}) & (b.T.тип_ном = мКонст.TNIL) ИЛИ
-         (b.T.тип_ном В {мКонст.TPOINTER, мКонст.TPROC, мКонст.TNIL}) & (a.T.тип_ном = мКонст.TNIL) ИЛИ
+         (a.T.тип_ном В {мКонст.TPOINTER, мКонст.типПРОЦЕДУРА, мКонст.TNIL}) & (b.T.тип_ном = мКонст.TNIL) ИЛИ
+         (b.T.тип_ном В {мКонст.TPOINTER, мКонст.типПРОЦЕДУРА, мКонст.TNIL}) & (a.T.тип_ном = мКонст.TNIL) ИЛИ
          (a.T.тип_ном = мКонст.TPOINTER) & (b.T.тип_ном = мКонст.TPOINTER) & (BaseOf(a.T, b.T) ИЛИ BaseOf(b.T, a.T)) ИЛИ
-         (a.T.тип_ном = мКонст.TPROC) & ProcTypeComp(b.T, a.T) ИЛИ (a.eType = ePROC) & ProcTypeComp(b.T, a.id.T) ИЛИ
+         (a.T.тип_ном = мКонст.типПРОЦЕДУРА) & ProcTypeComp(b.T, a.T) ИЛИ (a.eType = ePROC) & ProcTypeComp(b.T, a.id.T) ИЛИ
          (b.eType = ePROC) & ProcTypeComp(a.T, b.id.T), line, col, 37);
          ЕСЛИ a.T.тип_ном В {мКонст.типВЕЩ, мКонст.типДЛИНВЕЩ} ТОГДА
             X86.fcmp(Op)
@@ -1729,7 +1729,7 @@
       begcall := X86.current;
       Designator(e1);
       мПров.Тест(e1.eType # eCONST, line, col, 130);
-      ЕСЛИ (e1.eType = eVAR) & (e1.T.тип_ном # мКонст.TPROC) ТОГДА
+      ЕСЛИ (e1.eType = eVAR) & (e1.T.тип_ном # мКонст.типПРОЦЕДУРА) ТОГДА
          мДецл.Ключ_Проверить(lxAssign);
          мПров.Тест(~e1.Read, line, col, 115);
          мДецл.КлючСлед_Получ;
@@ -1781,7 +1781,7 @@
          X86.Call(e1.id.Number, ЛОЖЬ, ЛОЖЬ, e1.id.T.вызов, ccall, e1.id.Level - 3, мДецл.curBlock.Level - 3, e1.id.ParamSize, мДецл.curBlock.LocalSize)
       АЕСЛИ e1.eType В {eSTPROC, eSYSPROC} ТОГДА
           StProc(e1.id.StProc)
-      АЕСЛИ (e1.eType = eVAR) & (e1.T.тип_ном = мКонст.TPROC) ТОГДА
+      АЕСЛИ (e1.eType = eVAR) & (e1.T.тип_ном = мКонст.типПРОЦЕДУРА) ТОГДА
          ЕСЛИ мСкан.сущность = lxLRound ТОГДА
             мДецл.КлючСлед_Получ;
             мПров.Тест((e1.T.Base.тип_ном = мКонст.TVOID) ИЛИ (e1.T.вызов = мДецл.winapi), line, col, 132);
@@ -1797,9 +1797,9 @@
             мПров.Тест(AssComp(e2, e1.T, ЛОЖЬ), line, col, 131);
             мПров.Тест(~((e2.eType = ePROC) & (e2.id.Level > 3)), line, col, 116);
             ЕСЛИ e2.eType = eVAR ТОГДА
-               X86.Load(мКонст.TPROC)
+               X86.Load(мКонст.типПРОЦЕДУРА)
             КОНЕЦ;
-            X86.Save(мКонст.TPROC)
+            X86.Save(мКонст.типПРОЦЕДУРА)
          ИНАЧЕ
             мПров.Тест2(e1.T.поля.счетчик = 0, 155);
             мПров.Тест((e1.T.Base.тип_ном = мКонст.TVOID) ИЛИ (e1.T.вызов = мДецл.winapi), line, col, 132);
