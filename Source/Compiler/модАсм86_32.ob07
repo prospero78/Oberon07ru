@@ -95,7 +95,7 @@
 
    TIDX* = люяяхб ADIM хг жекне;
 
-   РяЕЙЖХЪхЛЪ = люяяхб 8 хг яхлб;
+   РяЕЙЖХЪхЛЪ = люяяхб 8 хг кхр;
 
    РяЕЙЖХЪ = гюохяэ
          ХЛЪ: РяЕЙЖХЪхЛЪ;
@@ -103,7 +103,7 @@
       йнмеж;
 
    РгЮЦНКНБНЙ = гюохяэ
-         msdos: люяяхб 180 хг яхлб;
+         msdos: люяяхб 180 хг кхр;
          typecomp, seccount: mSys.CARD16;
          time, reserved1, reserved2: жекне;
          PEoptsize, infflags, PEfile, compver: mSys.CARD16;
@@ -129,7 +129,7 @@
       йнмеж;
 
    РгЮЦНКНБНЙKol = гюохяэ
-         menuet01: люяяхб 8 хг яхлб;
+         menuet01: люяяхб 8 хг кхр;
          ver, start, size, mem, sp, param, path: жекне
       йнмеж;
 
@@ -138,7 +138,7 @@
          namecount, arradroffset, arrnameptroffset, arrnumoffset: жекне;
          arradr, arrnameptr: люяяхб 10000H хг жекне;
          arrnum: люяяхб 10000H хг mSys.CARD16;
-         text: люяяхб 1000000 хг яхлб;
+         text: люяяхб 1000000 хг кхр;
          textlen, size: жекне
       йнмеж;
 
@@ -157,13 +157,13 @@
    current*: РСгБЕМНюЯЛ;
    callstk: люяяхб 1024, 2 хг РСгБЕМНюЯЛ;
    OutFile: ЛяРП.РяРПНЙЮ;
-   Code: люяяхб 4000000 хг яхлб; ccount: жекне; Data: люяяхб 1000000 хг яхлб; dcount: жекне;
+   Code: люяяхб 4000000 хг кхр; ccount: жекне; Data: люяяхб 1000000 хг кхр; dcount: жекне;
    Labels: люяяхб 200000 хг жекне;
    rdata: люяяхб 400H хг жекне;
    Header: РгЮЦНКНБНЙ;
    etable: ETABLE;
    ExecName: ЛяРП.РяРПНЙЮ;
-   LoadAdr: жекне; Reloc: люяяхб 200000 хг яхлб; rcount: жекне;
+   LoadAdr: жекне; Reloc: люяяхб 200000 хг кхр; rcount: жекне;
    RtlProc: люяяхб 20 хг жекне; OutFilePos: жекне;
    RelocSection: РяЕЙЖХЪ;
    felf: ЛяРП.РяРПНЙЮ;
@@ -195,7 +195,7 @@
       бепмсрэ w
    йнмеж IntToCard16;
 
-опнжедспю CopyStr(оеп Dest: люяяхб хг яхлб; Source: люяяхб хг яхлб; оеп di: жекне; si: жекне);
+опнжедспю CopyStr(оеп Dest: люяяхб хг кхр; Source: люяяхб хг кхр; оеп di: жекне; si: жекне);
    мювюкн
       бшв(di);
       онбрнпърэ
@@ -214,13 +214,13 @@
       b := c
    йнмеж exch;
 
-опнжедспю Sort(оеп NamePtr, Adr: люяяхб хг жекне; Text: люяяхб хг яхлб; LB, RB: жекне);
+опнжедспю Sort(оеп NamePtr, Adr: люяяхб хг жекне; Text: люяяхб хг кхр; LB, RB: жекне);
    оепел
       L, R: жекне;
 
    опнжедспю strle(s1, s2: жекне): аскебн; (* БНР ЩРН ВРН??? МЕ ПЮАНРЮЕР? *)
       оепел
-         S1, S2: люяяхб 256 хг яхлб; i: жекне;
+         S1, S2: люяяхб 256 хг кхр; i: жекне;
       мювюкн
          i := 0;
          CopyStr(S1, Text, i, s1);
@@ -254,7 +254,7 @@
       йнмеж
    йнмеж Sort;
 
-опнжедспю PackExport(Name: люяяхб хг яхлб);
+опнжедспю PackExport(Name: люяяхб хг кхр);
    оепел
       i: жекне;
    мювюкн
@@ -350,7 +350,7 @@
       OutFilePos := OutFilePos + N
    йнмеж Write;
 
-опнжедспю Fill(n: жекне; c: яхлб);
+опнжедспю Fill(n: жекне; c: кхр);
    оепел 
       i: жекне;
    мювюкн
@@ -369,7 +369,7 @@
       Section.attrflags := attrflags;
    йнмеж SetSection;
 
-опнжедспю WritePE(FName: люяяхб хг яхлб; stksize, codesize, datasize, rdatasize, gsize: жекне);
+опнжедспю WritePE(FName: люяяхб хг кхр; stksize, codesize, datasize, rdatasize, gsize: жекне);
    CONST
       textattr = 60000020H; rdataattr = 40000040H; dataattr = 0C0000040H; relocattr = 42000040H;
    оепел
@@ -659,7 +659,7 @@
     дна(dcount, 4)
   йнмеж dataint;
 
-опнжедспю jmp*(jamp: яхлб; label: жекне);
+опнжедспю jmp*(jamp: кхр; label: жекне);
    оепел
       n: жекне;
    мювюкн
@@ -683,7 +683,7 @@
       дна(ccount, 4)
    йнмеж jmp;
 
-опнжедспю jmplong(jamp: яхлб; label: жекне);
+опнжедспю jmplong(jamp: кхр; label: жекне);
    мювюкн
       jmp(jamp, label);
       current.АйНПНРЙНЕ := кнфэ
@@ -1614,7 +1614,7 @@
     йнмеж
   йнмеж Optimization;
 
-опнжедспю WriteKOS(FName: люяяхб хг яхлб; stk, size, datasize, gsize: жекне; obj: аскебн);
+опнжедспю WriteKOS(FName: люяяхб хг кхр; stk, size, datasize, gsize: жекне; obj: аскебн);
    йнмяр
       strsize = 2048;
    оепел
@@ -1622,7 +1622,7 @@
       F, i, filesize, filebuf, a, sec, adr, size2: жекне;
       cur: РСгБЕМНюЯЛ;
       Coff: РгЮЦНКНБНЙCoff;
-      sym: люяяхб 18 * 4 хг яхлб;
+      sym: люяяхб 18 * 4 хг кхр;
       FileName: ЛяРП.РяРПНЙЮ;
    мювюкн
       F := ЛтЮИК.яНГДЮРЭ(FName);
@@ -1741,11 +1741,11 @@
       ЛтЮИК.гЮЙПШРЭ(F)
    йнмеж WriteKOS;
 
-опнжедспю WriteELF(FName: люяяхб хг яхлб; code, data, glob: жекне);
+опнжедспю WriteELF(FName: люяяхб хг кхр; code, data, glob: жекне);
   оепел
     F, res, delta, filebuf: жекне;
     cur: РСгБЕМНюЯЛ;
-    bytes: люяяхб 817H + 55FH + 4900 хг яхлб;
+    bytes: люяяхб 817H + 55FH + 4900 хг кхр;
     опнжедспю Add(offset: жекне);
     оепел m: жекне;
     мювюкн
@@ -1829,12 +1829,12 @@
     ЛтЮИК.гЮЙПШРЭ(F)
   йнмеж WriteELF;
 
-опнжедспю FixLabels(FName: люяяхб хг яхлб; stk, gsize, glob: жекне);
+опнжедспю FixLabels(FName: люяяхб хг кхр; stk, gsize, glob: жекне);
    оепел
       size, asize, i, rdatasize, RCount, n, temp, temp2, temp3: жекне;
       cur: РСгБЕМНюЯЛ;
       R: РпЕКНЙ;
-      c: яхлб;
+      c: кхр;
    мювюкн
       dcount := Align(dcount, 4);
       еякх dll рнцдю
@@ -1983,7 +1983,7 @@
       йнмеж
    йнмеж FixLabels;
 
-опнжедспю OutStringZ(str: люяяхб хг яхлб);
+опнжедспю OutStringZ(str: люяяхб хг кхр);
    оепел
       i: жекне;
    мювюкн
@@ -1998,7 +1998,7 @@
       дна(current.clen)
    йнмеж OutStringZ;
 
-опнжедспю щОХКНЦ*(gsize: жекне; FName: люяяхб хг яхлб; stk: жекне);
+опнжедспю щОХКНЦ*(gsize: жекне; FName: люяяхб хг кхр; stk: жекне);
    оепел
       i, glob: жекне;
    мювюкн

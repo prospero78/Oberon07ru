@@ -26,12 +26,12 @@
 
 рхош
    OFSTRUCT* = гюохяэ
-         cBytes: яхлб;
-         fFixedDisk: яхлб;
+         cBytes: кхр;
+         fFixedDisk: кхр;
          nErrCode: sys.CARD16;
          Reserved1: sys.CARD16;
          Reserved2: sys.CARD16;
-         szPathName: люяяхб OFS_MAXPATHNAME хг яхлб
+         szPathName: люяяхб OFS_MAXPATHNAME хг кхр
       йнмеж;
 
 оепел
@@ -56,10 +56,10 @@
    GetProcAddress*: опнжедспю [winapi] (hModule, name: жекне): жекне;
    LoadLibraryA*: опнжедспю [winapi] (name: жекне): жекне;
 
-   kos_OCFile*:   опнжедспю (FName: люяяхб хг яхлб; mode: жекне; оеп memerr: BOOLEAN): жекне;
+   kos_OCFile*:   опнжедспю (FName: люяяхб хг кхр; mode: жекне; оеп memerr: BOOLEAN): жекне;
    GetName*:      опнжедспю (): жекне;
-   lnx_CreateFile*: опнжедспю (FName: люяяхб хг яхлб): жекне;
-   lnx_OpenFile*: опнжедспю (FName: люяяхб хг яхлб): жекне;
+   lnx_CreateFile*: опнжедспю (FName: люяяхб хг кхр): жекне;
+   lnx_OpenFile*: опнжедспю (FName: люяяхб хг кхр): жекне;
 
 опнжедспю zeromem*(size, adr: жекне);
    йнмеж zeromem;
@@ -78,7 +78,7 @@
       бепмсрэ ПЮГЛЕП
    йнмеж тЮИКпЮГЛЕП_оНКСВХРЭ;
 
-опнжедспю GetProc(name: люяяхб хг яхлб; hMOD, adr: жекне);
+опнжедспю GetProc(name: люяяхб хг кхр; hMOD, adr: жекне);
    оепел
       H: жекне;
    мювюкн
