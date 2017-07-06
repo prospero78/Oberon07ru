@@ -323,7 +323,7 @@
       sttypes[мКонст.типВЕЩ].размер := 4;
       sttypes[мКонст.типДЛИНВЕЩ].размер := 8;
       sttypes[мКонст.TBOOLEAN].размер := 1;
-      sttypes[мКонст.TCHAR].размер := 1;
+      sttypes[мКонст.типЛИТЕРА].размер := 1;
       sttypes[мКонст.TSET].размер := 4;
       sttypes[мКонст.TVOID].размер := 0;
       sttypes[мКонст.TSTRING].размер := 0;
@@ -361,8 +361,9 @@
       PushStType("BOOLEAN",  мКонст.TBOOLEAN);
       PushStType("БУЛЕВО",  мКонст.TBOOLEAN);
       
-      PushStType("CHAR",     мКонст.TCHAR);
-      PushStType("СИМВ",     мКонст.TCHAR);
+      PushStType("CHAR",     мКонст.типЛИТЕРА);
+      PushStType("СИМВ",     мКонст.типЛИТЕРА);
+      PushStType("ЛИТ",      мКонст.типЛИТЕРА);
       
       PushStType("INTEGER",  мКонст.типЦЕЛОЕ);
       PushStType("ЦЕЛОЕ",    мКонст.типЦЕЛОЕ);
