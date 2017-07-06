@@ -38,8 +38,6 @@
 
    lxLE = 75; lxGE = 76;
 
-   sysBIT* = 103; sysMOVE* = 108;
-
    JMP* = 0E9X; CALL = 0E8X;
    JE = 84X; JNE = 85X; JLE = 8EX; JGE = 8DX; JG = 8FX; JL = 8CX;
 
