@@ -61,7 +61,7 @@
    sysADR = 101; sysSIZE = 102; sysBIT = 103; sysGET = 104; sysPUT = 105; sysCODE = 106;
    sysTYPEID = 107; sysMOVE = 108;
 
-   TINTEGER = 1; TREAL = 2; TLONGREAL = 3; TCHAR = 4; TSET = 5; TBOOLEAN = 6; TVOID = 7; TNIL = 8;
+   TREAL = 2; TLONGREAL = 3; TCHAR = 4; TSET = 5; TBOOLEAN = 6; TVOID = 7; TNIL = 8;
    TCARD16 = 9; TSTRING = 10; TARRAY = 11; TRECORD = 12; TPOINTER = 13; TPROC = 14;
 
    paramvar* = 1; param* = 2;
@@ -315,7 +315,7 @@
       i: жекне;
    мювюкн
       sttypes[0] := осярн;
-      дкъ i := TINTEGER дн TSTRING декюрэ
+      дкъ i := ЛйНМЯР.TINTEGER дн TSTRING декюрэ
          мнб(type);
          ЛоЮЛ.лЮКН(type = осярн);
          type.РХО_МНЛ := i;

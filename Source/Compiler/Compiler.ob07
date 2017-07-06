@@ -50,7 +50,7 @@
    lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69;
    lxLE = 75; lxGE = 76;
 
-   TINTEGER = 1; TREAL = 2; TLONGREAL = 3; TCHAR = 4; TSET = 5; TBOOLEAN = 6; TVOID = 7;
+    TREAL = 2; TLONGREAL = 3; TCHAR = 4; TSET = 5; TBOOLEAN = 6; TVOID = 7;
    TNIL = 8; TCARD16 = 9; TSTRING = 10; TARRAY = 11; TRECORD = 12; TPOINTER = 13; TPROC = 14;
 
    eVAR = 1; eCONST = 2; eEXP = 3; ePROC = 4; eSTPROC = 5; eSYSPROC = 6;
