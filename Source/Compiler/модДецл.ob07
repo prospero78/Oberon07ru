@@ -393,8 +393,8 @@
       PushStProc("LEN",      мКонст.stLEN);
       PushStProc("LSL",      мКонст.stLSL);
       
-      PushStProc("LONG",     мКонст.stLONG);
-      PushStProc("УДЛИН",     мКонст.stLONG);
+      PushStProc("LONG",     мКонст.процУДЛИН);
+      PushStProc("УДЛИН",    мКонст.процУДЛИН);
       
       PushStProc("NEW",      мКонст.процНОВ);
       PushStProc("НОВ",      мКонст.процНОВ);
