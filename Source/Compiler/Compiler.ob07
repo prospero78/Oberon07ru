@@ -59,9 +59,6 @@
    stEXCL = 16; stCOPY = 17; stNEW = 18; stASSERT = 19; stPACK = 20; stUNPK = 21; stDISPOSE = 22;
    stBITS = 23; stLSR = 24; stLENGTH = 25;
 
-   sysADR = 101; sysSIZE = 102; sysBIT = 103; sysGET = 104; sysPUT = 105; sysCODE = 106;
-   sysTYPEID = 107; sysMOVE = 108;
-
 ТИПЫ
 
    тМетка = УКАЗАТЕЛЬ НА ЗАПИСЬ (мЗвено.тЗвено)
@@ -587,7 +584,7 @@
             Str(e1);
             e.T := sttypes[мКонст.типЦЕЛОЕ];
             X86.StFunc(X86.stLENGTH)
-         |sysADR:
+         |мКонст.sysADR:
             мПров.Тест((мСкан.сущность = lxIDENT) ИЛИ (мСкан.сущность = lxSTRING) ИЛИ (мСкан.сущность = lxCHX), line, col, 43);
             ЕСЛИ мСкан.сущность = lxIDENT ТОГДА
                Designator(e1);
@@ -607,7 +604,7 @@
             КОНЕЦ;
             e.T := sttypes[мКонст.типЦЕЛОЕ];
             X86.ADR(мДецл.Dim(e1.T))
-         |sysBIT:
+         |мКонст.sysBIT:
             пВыраж(e1);
             мПров.Тест(e1.T.тип_ном = мКонст.типЦЕЛОЕ, line, col, 52);
             Выраж_Загрузить(e1);
@@ -619,14 +616,14 @@
             Выраж_Загрузить(e1);
             X86.StFunc(X86.sysBIT);
             e.T := sttypes[мКонст.типБУЛЕВО]
-         |sysSIZE, sysTYPEID:
+         |мКонст.sysSIZE, мКонст.sysTYPEID:
             мДецл.ПроцедурРазм_Уст;
             мДецл.Ключ_Проверить(lxIDENT);
             T := мДецл.IdType(line, col);
             мПров.Тест(T # ПУСТО, line, col, 42);
             e.eType := eCONST;
             e.T := sttypes[мКонст.типЦЕЛОЕ];
-            ЕСЛИ func = sysTYPEID ТОГДА
+            ЕСЛИ func = мКонст.sysTYPEID ТОГДА
                мПров.Тест(T.тип_ном В {мКонст.типЗАПИСЬ, мКонст.типУКАЗАТЕЛЬ}, line, col, 47);
                ЕСЛИ T.тип_ном = мКонст.типУКАЗАТЕЛЬ ТОГДА
                   T := T.Base
@@ -1637,7 +1634,7 @@
                   X86.StProc(X86.stPACK1)
                КОНЕЦ
             КОНЕЦ
-         |sysBIT:
+         |мКонст.sysBIT:
             Expr(e1);
             мПров.Тест(e1.T.тип_ном = мКонст.типЦЕЛОЕ, line, col, 52);
             Выраж_Загрузить(e1);
@@ -1647,7 +1644,7 @@
             Expr(e1);
             мПров.Тест(e1.T.тип_ном = мКонст.типЦЕЛОЕ, line, col, 52);
             Выраж_Загрузить(e1)
-         |sysPUT, sysGET:
+         |мКонст.sysPUT, мКонст.sysGET:
             begcall := X86.current;
             Expr(e1);
             мПров.Тест(e1.T.тип_ном = мКонст.типЦЕЛОЕ, line, col, 52);
@@ -1655,7 +1652,7 @@
             мДецл.Ключ_Проверить(мКонст.опЗапятая);
             мДецл.КлючСлед_Получ;
             мДецл.Коорд_Уст(line, col);
-            ЕСЛИ proc = sysGET ТОГДА
+            ЕСЛИ proc = мКонст.sysGET ТОГДА
                X86.PushCall(begcall);
                X86.Param;
                Designator(e2);
@@ -1674,13 +1671,13 @@
                Выраж_Загрузить(e2);
                X86.Save(e2.T.тип_ном)
             КОНЕЦ
-         |sysCODE:
+         |мКонст.sysCODE:
             мПров.Тест(мСкан.сущность = lxSTRING, line, col, 150);
             мСкан.GetLexStr(стрСущн);
             CheckCode(стрСущн, мСкан.счётчик - 1, line, col);
             X86.Asm(стрСущн);
             мДецл.КлючСлед_Получ
-         |sysMOVE:
+         |мКонст.sysMOVE:
             begcall := X86.current;
             Expr(e1);
             мПров.Тест(e1.T.тип_ном = мКонст.типЦЕЛОЕ, line, col, 52);
@@ -1705,9 +1702,9 @@
       КОНЕЦ;
       мДецл.Ключ_Проверить(мКонст.опСкобкаПрКр);
       мДецл.КлючСлед_Получ;
-      ЕСЛИ proc = sysMOVE ТОГДА
+      ЕСЛИ proc = мКонст.sysMOVE ТОГДА
          X86.StProc(X86.sysMOVE);
-      АЕСЛИ proc = sysBIT ТОГДА
+      АЕСЛИ proc = мКонст.sysBIT ТОГДА
          мДецл.Ключ_Проверить(lxAssign);
          мДецл.КлючСлед_Получ;
          мДецл.Коорд_Уст(line, col);
