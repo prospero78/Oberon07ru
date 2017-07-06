@@ -38,9 +38,6 @@
 
    lxLE = 75; lxGE = 76;
 
-   TINTEGER = 1; TREAL = 2; TLONGREAL = 3; TCHAR = 4; TSET = 5; TBOOLEAN = 6; TVOID = 7;
-   TNIL = 8; TCARD16 = 9; TSTRING = 10; TARRAY = 11; TRECORD = 12; TPOINTER = 13; TPROC = 14;
-
    stABS* = 1; stODD* = 2; stLEN* = 3; stLSL* = 4; stASR* = 5; stROR* = 6; stFLOOR* = 7;
    stFLT* = 8; stORD* = 9; stCHR* = 10; stLONG* = 11; stSHORT* = 12; stINC* = 13;
    stDEC* = 14; stINCL* = 15; stEXCL* = 16; stCOPY* = 17; stNEW* = 18; stASSERT* = 19;
@@ -1331,7 +1328,7 @@
   НАЧАЛО
     lastcmd := current;
     ВЫБОР T ИЗ
-    |TINTEGER, TSET, TPOINTER, TPROC:
+    |мКонст.типЦЕЛОЕ, мКонст.типНАБОР, мКонст.типУКАЗАТЕЛЬ, мКонст.типПРОЦЕДУРА:
       ЕСЛИ lastcmd.tcmd = ECMD ТОГДА
         del;
         IntByte("8B55", "8B95", offset);
@@ -1340,7 +1337,7 @@
         PopEDX;
         OutCode("FF32")
       КОНЕЦ
-    |TCHAR, TBOOLEAN:
+    |мКонст.типЛИТЕРА, мКонст.типБУЛЕВО:
       ЕСЛИ lastcmd.tcmd = ECMD ТОГДА
         del;
         OutCode("33D28A");
@@ -1351,7 +1348,7 @@
         OutCode("33C98A0A");
         PushECX
       КОНЕЦ
-    |TLONGREAL:
+    |мКонст.типДЛИНВЕЩ:
       ЕСЛИ lastcmd.tcmd = ECMD ТОГДА
         del;
         IntByte("DD45", "DD85", offset)
@@ -1360,7 +1357,7 @@
         OutCode("DD02")
       КОНЕЦ;
       Incfpu
-    |TREAL:
+    |мКонст.типВЕЩ:
       ЕСЛИ lastcmd.tcmd = ECMD ТОГДА
         del;
         IntByte("D945", "D985", offset)
@@ -1369,7 +1366,7 @@
         OutCode("D902")
       КОНЕЦ;
       Incfpu
-    |TCARD16:
+    |мКонст.TCARD16:
       ЕСЛИ lastcmd.tcmd = ECMD ТОГДА
         del;
         OutCode("33D2668B");
@@ -1387,28 +1384,28 @@
 ПРОЦЕДУРА Save*(T: ЦЕЛОЕ);
   НАЧАЛО
     ВЫБОР T ИЗ
-    |TINTEGER, TSET, TPOINTER, TPROC:
+    |мКонст.типЦЕЛОЕ, мКонст.типНАБОР, мКонст.типУКАЗАТЕЛЬ, мКонст.типПРОЦЕДУРА:
       PopEDX;
       OutCode("588910")
-    |TCHAR, TSTRING, TBOOLEAN:
+    |мКонст.типЛИТЕРА, мКонст.типСТРОКА, мКонст.типБУЛЕВО:
       PopEDX;
       OutCode("588810")
-    |TCARD16:
+    |мКонст.TCARD16:
       PopEDX;
       OutCode("58668910")
-    |TLONGREAL:
+    |мКонст.типДЛИНВЕЩ:
       PopEDX;
       OutCode("DD1A");
       ВЫЧ(fpu)
-    |TREAL:
+    |мКонст.типВЕЩ:
       PopEDX;
       OutCode("D91A");
       ВЫЧ(fpu)
-    |TRECORD:
+    |мКонст.типЗАПИСЬ:
       CallRTL(_saverec);
       OutCode("83F800750A");
       OnError(4)
-    |TARRAY:
+    |мКонст.типМАССИВ:
       CallRTL(_savearr)
     ИНАЧЕ
     КОНЕЦ
