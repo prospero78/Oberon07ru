@@ -123,7 +123,7 @@
    stINCL* = 15;
    stEXCL* = 16;
    stCOPY* = 17;
-   stNEW* = 18;
+   ןנמצÍÎÂ* = 18;
    stASSERT* = 19;
    stPACK* = 20;
    stUNPK* = 21;

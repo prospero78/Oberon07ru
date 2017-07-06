@@ -377,7 +377,7 @@
          КОНЕЦ
       КОНЕЦ;
       ЕСЛИ flag ТОГДА
-         e.Value := ДЛИН(FLT(ORD(s)));
+         e.Value := УДЛИН(FLT(ORD(s)));
          e.eType := eCONST
       КОНЕЦ;
       мДецл.КлючСлед_Получ
@@ -423,7 +423,7 @@
             ЕСЛИ e1.eType = eCONST ТОГДА
                e.Value := ABS(e1.Value);
                e.eType := eCONST;
-               мПров.Тест(~((e1.T.тип_ном = мКонст.типЦЕЛОЕ) & (e1.Value = ДЛИН(FLT(мКонст.целое_мин)))), line, col, мДецл.IOVER)
+               мПров.Тест(~((e1.T.тип_ном = мКонст.типЦЕЛОЕ) & (e1.Value = УДЛИН(FLT(мКонст.целое_мин)))), line, col, мДецл.IOVER)
             КОНЕЦ;
             ЕСЛИ e1.T.тип_ном = мКонст.типЦЕЛОЕ ТОГДА
                X86.StFunc(мКонст.stABS)
@@ -436,7 +436,7 @@
             мПров.Тест(e1.T.тип_ном = мКонст.типЦЕЛОЕ, line, col, 52);
             Выраж_Загрузить(e1);
             ЕСЛИ e1.eType = eCONST ТОГДА
-               e.Value := ДЛИН(FLT(ORD(ODD(FLOOR(e1.Value)))));
+               e.Value := УДЛИН(FLT(ORD(ODD(FLOOR(e1.Value)))));
                e.eType := eCONST
             КОНЕЦ;
             X86.StFunc(мКонст.stODD);
@@ -470,7 +470,7 @@
                   |мКонст.stLSR: a := LSR(a, b)
                ИНАЧЕ
                КОНЕЦ;
-               e.Value := ДЛИН(FLT(a));
+               e.Value := УДЛИН(FLT(a));
                e.eType := eCONST
             КОНЕЦ;
             ВЫБОР func ИЗ
@@ -486,8 +486,8 @@
             мПров.Тест(e1.T.тип_ном В {мКонст.типВЕЩ, мКонст.типДЛИНВЕЩ}, line, col, 66);
             Выраж_Загрузить(e1);
             ЕСЛИ e1.eType = eCONST ТОГДА
-               мПров.Тест((e1.Value - 1.0D0 < ДЛИН(FLT(мКонст.целое_макс))) & (e1.Value >= ДЛИН(FLT(мКонст.целое_мин))), line, col, 74);
-               e.Value := ДЛИН(FLT(FLOOR(e1.Value)));
+               мПров.Тест((e1.Value - 1.0D0 < УДЛИН(FLT(мКонст.целое_макс))) & (e1.Value >= УДЛИН(FLT(мКонст.целое_мин))), line, col, 74);
+               e.Value := УДЛИН(FLT(FLOOR(e1.Value)));
                e.eType := eCONST
             КОНЕЦ;
             X86.StFunc(мКонст.stFLOOR);
@@ -512,7 +512,7 @@
             ЕСЛИ e1.eType = eCONST ТОГДА
                ЕСЛИ e1.T.тип_ном = мКонст.типСТРОКА ТОГДА
                   str := мДецл.уКонстСтр_Получ(e1.Value);
-                  e.Value := ДЛИН(FLT(ORD(str.стр[0])))
+                  e.Value := УДЛИН(FLT(ORD(str.стр[0])))
                ИНАЧЕ
                   e.Value := e1.Value
                КОНЕЦ;
@@ -540,7 +540,7 @@
                мПров.Тест(ASR(FLOOR(e1.Value), 8) = 0, line, col, 76);
                str2 := мДецл.СтрМоно_Создать(CHR(FLOOR(e1.Value)));
                mSys.GET(mSys.ADR(str2), p);
-               e.Value := ДЛИН(FLT(p));
+               e.Value := УДЛИН(FLT(p));
                e.T := sttypes[мКонст.типСТРОКА];
                e.eType := eCONST
             КОНЕЦ
@@ -557,8 +557,8 @@
             пВыраж(e1);
             мПров.Тест(e1.T.тип_ном = мКонст.типДЛИНВЕЩ, line, col, 70);
             ЕСЛИ e1.eType = eCONST ТОГДА
-               мПров.Тест(ABS(e1.Value) <= ДЛИН(мКонст.вещ_макс), line, col, мДецл.FOVER);
-               мПров.Тест(ABS(e1.Value) >= ДЛИН(мКонст.вещ_мин), line, col, мДецл.UNDER);
+               мПров.Тест(ABS(e1.Value) <= УДЛИН(мКонст.вещ_макс), line, col, мДецл.FOVER);
+               мПров.Тест(ABS(e1.Value) >= УДЛИН(мКонст.вещ_мин), line, col, мДецл.UNDER);
                e.Value := e1.Value;
                e.eType := eCONST
             КОНЕЦ;
@@ -573,7 +573,7 @@
                   X86.Mono(str.номер);
                   X86.StrMono
                КОНЕЦ;
-               e.Value := ДЛИН(FLT(ДЛИНА(str.стр)));
+               e.Value := УДЛИН(FLT(ДЛИНА(str.стр)));
                e.eType := eCONST
             КОНЕЦ;
             Str(e1);
@@ -623,10 +623,10 @@
                ЕСЛИ T.тип_ном = мКонст.типУКАЗАТЕЛЬ ТОГДА
                   T := T.Base
                КОНЕЦ;
-               e.Value := ДЛИН(FLT(T.номер));
+               e.Value := УДЛИН(FLT(T.номер));
                X86.PushConst(T.номер)
             ИНАЧЕ
-               e.Value := ДЛИН(FLT(T.размер));
+               e.Value := УДЛИН(FLT(T.размер));
                X86.PushConst(T.размер)
             КОНЕЦ
       ИНАЧЕ
@@ -920,7 +920,7 @@
             мСкан.GetLexStr(стрСущн);
             str2 := мДецл.Стр_Создать(стрСущн);
             mSys.GET(mSys.ADR(str2), p);
-            e.Value := ДЛИН(FLT(p));
+            e.Value := УДЛИН(FLT(p));
             s := мДецл.уКонстСтр_Получ(e.Value);
             ЕСЛИ s.длина = 1 ТОГДА
                X86.PushConst(ORD(s.стр[0]))
@@ -930,7 +930,7 @@
          ИНАЧЕ
             str2 := мДецл.СтрМоно_Создать(мСкан.vCHX);
             mSys.GET(mSys.ADR(str2), p);
-            e.Value := ДЛИН(FLT(p));
+            e.Value := УДЛИН(FLT(p));
             X86.PushConst(ORD(мСкан.vCHX))
          КОНЕЦ;
          e.T := sttypes[мКонст.типСТРОКА];
@@ -947,7 +947,7 @@
          мДецл.КлючСлед_Получ
       |lxINT, lxHEX:
          e.T := sttypes[мКонст.типЦЕЛОЕ];
-         e.Value := ДЛИН(FLT(мСкан.vINT));
+         e.Value := УДЛИН(FLT(мСкан.vINT));
          X86.PushConst(мСкан.vINT);
          мДецл.КлючСлед_Получ
       |lxLRound:
@@ -962,7 +962,7 @@
          мПров.Тест(e.T.тип_ном = мКонст.типБУЛЕВО, line, col, 37);
          Выраж_Загрузить(e);
          ЕСЛИ e.eType = eCONST ТОГДА
-            e.Value := ДЛИН(FLT(ORD(e.Value = 0.0D0)))
+            e.Value := УДЛИН(FLT(ORD(e.Value = 0.0D0)))
          ИНАЧЕ
             e.eType := eEXP
          КОНЕЦ;
@@ -1142,9 +1142,9 @@
          ЕСЛИ (uOp = мКонст.опМинус) & (e.eType = eCONST) ТОГДА
             ВЫБОР e.T.тип_ном ИЗ
                |мКонст.типЦЕЛОЕ:
-                  мПров.Тест(e.Value # ДЛИН(FLT(мКонст.целое_мин)), uline, ucol, мДецл.IOVER)
+                  мПров.Тест(e.Value # УДЛИН(FLT(мКонст.целое_мин)), uline, ucol, мДецл.IOVER)
                |мКонст.типНАБОР:
-                  e.Value := -ДЛИН(FLT(ORD(-BITS(FLOOR(e.Value)))))
+                  e.Value := -УДЛИН(FLT(ORD(-BITS(FLOOR(e.Value)))))
             ИНАЧЕ
             КОНЕЦ;
             e.Value := -e.Value
@@ -1575,12 +1575,12 @@
             мПров.Тест(~e2.Read, line, col, 115);
             Str(e2);
             X86.StProc(мКонст.stCOPY)
-         |мКонст.stNEW, мКонст.stDISPOSE:
+         |мКонст.процНОВ, мКонст.stDISPOSE:
             Designator(e1);
             мПров.Тест(e1.eType = eVAR, line, col, 63);
             мПров.Тест(~e1.Read, line, col, 115);
             мПров.Тест(e1.T.тип_ном = мКонст.типУКАЗАТЕЛЬ, line, col, 145);
-            ЕСЛИ proc = мКонст.stNEW ТОГДА
+            ЕСЛИ proc = мКонст.процНОВ ТОГДА
                X86.PushConst(e1.T.Base.номер);
                X86.PushConst(X86.Align(e1.T.Base.размер + 8, 32));
                X86.newrec

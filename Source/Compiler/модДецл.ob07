@@ -53,11 +53,6 @@
 
    IDMOD = 1; IDCONST = 2; IDTYPE = 3; IDVAR = 4; IDPROC = 5; IDSTPROC = 6; IDGUARD = 7; IDPARAM = 8; IDSYSPROC = 9;
 
-   stABS = 1; stODD = 2; stLEN = 3; stLSL = 4; stASR = 5; stROR = 6; stFLOOR = 7; stFLT = 8;
-   stORD = 9; stCHR = 10; stLONG = 11; stSHORT = 12; stINC = 13; stDEC = 14; stINCL = 15;
-   stEXCL = 16; stCOPY = 17; stNEW = 18; stASSERT = 19; stPACK = 20; stUNPK = 21; stDISPOSE = 22;
-   stBITS = 23; stLSR = 24; stLENGTH = 25;
-
    paramvar* = 1; param* = 2;
  
    defcall = 0; stdcall = 1; cdecl = 2; winapi* = 3;
@@ -373,52 +368,52 @@
       PushStType("SET",      мКонст.типНАБОР);
       PushStType("НАБОР",    мКонст.типНАБОР);
       
-      PushStProc("ABS",      stABS);
-      PushStProc("ASR",      stASR);
+      PushStProc("ABS",      мКонст.stABS);
+      PushStProc("ASR",      мКонст.stASR);
     
-      PushStProc("ASSERT",   stASSERT);
-      PushStProc("КОНТРОЛЬ", stASSERT);
+      PushStProc("ASSERT",   мКонст.stASSERT);
+      PushStProc("КОНТРОЛЬ", мКонст.stASSERT);
 
-      PushStProc("CHR",      stCHR);
-      PushStProc("COPY",     stCOPY);
+      PushStProc("CHR",      мКонст.stCHR);
+      PushStProc("COPY",     мКонст.stCOPY);
       
-      PushStProc("DEC",      stDEC);
-      PushStProc("ВЫЧ",      stDEC);
+      PushStProc("INC",      мКонст.процДОБ);
+      PushStProc("ДОБ",      мКонст.процДОБ);
       
-      PushStProc("DISPOSE",  stDISPOSE);
-      PushStProc("EXCL",     stEXCL);
-      PushStProc("FLOOR",    stFLOOR);
-      PushStProc("FLT",      stFLT);
+      PushStProc("DEC",      мКонст.процВЫЧ);
+      PushStProc("ВЫЧ",      мКонст.процВЫЧ);
       
-      PushStProc("INC",      stINC);
-      PushStProc("ДОБ",      stINC);
+      PushStProc("DISPOSE",  мКонст.stDISPOSE);
+      PushStProc("EXCL",     мКонст.stEXCL);
+      PushStProc("FLOOR",    мКонст.stFLOOR);
+      PushStProc("FLT",      мКонст.stFLT);
       
-      PushStProc("INCL",     stINCL);
+      PushStProc("INCL",     мКонст.stINCL);
       
-      PushStProc("LEN",      stLEN);
-      PushStProc("LSL",      stLSL);
+      PushStProc("LEN",      мКонст.stLEN);
+      PushStProc("LSL",      мКонст.stLSL);
       
-      PushStProc("LONG",     stLONG);
-      PushStProc("ДЛИН",     stLONG);
+      PushStProc("LONG",     мКонст.stLONG);
+      PushStProc("УДЛИН",     мКонст.stLONG);
       
-      PushStProc("NEW",      stNEW);
-      PushStProc("НОВ",      stNEW);
+      PushStProc("NEW",      мКонст.процНОВ);
+      PushStProc("НОВ",      мКонст.процНОВ);
       
-      PushStProc("ODD",      stODD);
-      PushStProc("ORD",      stORD);
-      PushStProc("PACK",     stPACK);
+      PushStProc("ODD",      мКонст.stODD);
+      PushStProc("ORD",      мКонст.stORD);
+      PushStProc("PACK",     мКонст.stPACK);
       
-      PushStProc("ROR",      stROR);
+      PushStProc("ROR",      мКонст.stROR);
       
-      PushStProc("SHORT",    stSHORT);
-      PushStProc("КОРОТ",    stSHORT);
+      PushStProc("SHORT",    мКонст.stSHORT);
+      PushStProc("КОРОТ",    мКонст.stSHORT);
       
-      PushStProc("UNPK",     stUNPK);
-      PushStProc("BITS",     stBITS);
-      PushStProc("LSR",      stLSR);
+      PushStProc("UNPK",     мКонст.stUNPK);
+      PushStProc("BITS",     мКонст.stBITS);
+      PushStProc("LSR",      мКонст.stLSR);
       
-      PushStProc("LENGTH",   stLENGTH);
-      PushStProc("ДЛИНА",    stLENGTH);
+      PushStProc("LENGTH",   мКонст.stLENGTH);
+      PushStProc("ДЛИНА",    мКонст.stLENGTH);
       Охрана_Создать
    КОНЕЦ StIdent;
 
@@ -490,23 +485,23 @@
             мПров.Тест(b # 0.0D0, line, col, 46);
             res := a / b
          |lxDIV:
-            мПров.Тест(~((a = ДЛИН(FLT(мКонст.целое_мин))) & (b = -1.0D0)), line, col, IOVER);
-            res := ДЛИН(FLT(FLOOR(a) DIV FLOOR(b)))
+            мПров.Тест(~((a = УДЛИН(FLT(мКонст.целое_мин))) & (b = -1.0D0)), line, col, IOVER);
+            res := УДЛИН(FLT(FLOOR(a) DIV FLOOR(b)))
          |lxMOD:
-            res := ДЛИН(FLT(FLOOR(a) MOD FLOOR(b)))
+            res := УДЛИН(FLT(FLOOR(a) MOD FLOOR(b)))
       ИНАЧЕ
       КОНЕЦ;
       мПров.Тест(~мУтиль.ЕслиБесконеч(res), line, col, FOVER);
       ВЫБОР T.тип_ном ИЗ
          |мКонст.типЦЕЛОЕ: 
-            мПров.Тест((res <= ДЛИН(FLT(мКонст.целое_макс))) & (res >= ДЛИН(FLT(мКонст.целое_мин))), line, col, IOVER)
+            мПров.Тест((res <= УДЛИН(FLT(мКонст.целое_макс))) & (res >= УДЛИН(FLT(мКонст.целое_мин))), line, col, IOVER)
          |мКонст.типВЕЩ:     
-            мПров.Тест((res <= ДЛИН(мКонст.вещ_макс)) & (res >= -ДЛИН(мКонст.вещ_макс)), line, col, FOVER)
+            мПров.Тест((res <= УДЛИН(мКонст.вещ_макс)) & (res >= -УДЛИН(мКонст.вещ_макс)), line, col, FOVER)
          |мКонст.типДЛИНВЕЩ: 
           мПров.Тест((res <= max) & (res >= -max), line, col, FOVER)
       ИНАЧЕ
       КОНЕЦ;
-      ЕСЛИ (res = 0.0D0) & (T.тип_ном В {мКонст.типВЕЩ, мКонст.типДЛИНВЕЩ}) ИЛИ (ABS(res) < ДЛИН(мКонст.вещ_мин)) & (T.тип_ном = мКонст.типВЕЩ) ТОГДА
+      ЕСЛИ (res = 0.0D0) & (T.тип_ном В {мКонст.типВЕЩ, мКонст.типДЛИНВЕЩ}) ИЛИ (ABS(res) < УДЛИН(мКонст.вещ_мин)) & (T.тип_ном = мКонст.типВЕЩ) ТОГДА
          ВЫБОР Op ИЗ
             |мКонст.опПлюс:  мПров.Тест(a = -b, line, col, UNDER)
             |мКонст.опМинус: мПров.Тест(a = b, line, col, UNDER)
@@ -526,9 +521,9 @@
       sa := уКонстСтр_Получ(адр1);
       sb := уКонстСтр_Получ(адр2);
       ВЫБОР Op ИЗ
-         |мКонст.опРавно, мКонст.опНеРавно: Res := ДЛИН(FLT(ORD(sa.стр = sb.стр)))
-         |мКонст.опМеньше, мКонст.опБольше: Res := ДЛИН(FLT(ORD(sa.стр < sb.стр)))
-         |lxLE, lxGE: Res := ДЛИН(FLT(ORD(sa.стр <= sb.стр)))
+         |мКонст.опРавно, мКонст.опНеРавно: Res := УДЛИН(FLT(ORD(sa.стр = sb.стр)))
+         |мКонст.опМеньше, мКонст.опБольше: Res := УДЛИН(FLT(ORD(sa.стр < sb.стр)))
+         |lxLE, lxGE: Res := УДЛИН(FLT(ORD(sa.стр <= sb.стр)))
       ИНАЧЕ
       КОНЕЦ
       ВЕРНУТЬ Res
@@ -549,10 +544,10 @@
         Res := Arith(a, b, Ta, Op, line, col)
       АЕСЛИ Ta.тип_ном = мКонст.типНАБОР ТОГДА
         ВЫБОР Op ИЗ
-        |мКонст.опПлюс:  Res := ДЛИН(FLT(ORD(BITS(ai) + BITS(bi))))
-        |мКонст.опМинус: Res := ДЛИН(FLT(ORD(BITS(ai) - BITS(bi))))
-        |мКонст.опУмнож:  Res := ДЛИН(FLT(ORD(BITS(ai) * BITS(bi))))
-        |мКонст.опДелен: Res := ДЛИН(FLT(ORD(BITS(ai) / BITS(bi))))
+        |мКонст.опПлюс:  Res := УДЛИН(FLT(ORD(BITS(ai) + BITS(bi))))
+        |мКонст.опМинус: Res := УДЛИН(FLT(ORD(BITS(ai) - BITS(bi))))
+        |мКонст.опУмнож:  Res := УДЛИН(FLT(ORD(BITS(ai) * BITS(bi))))
+        |мКонст.опДелен: Res := УДЛИН(FLT(ORD(BITS(ai) / BITS(bi))))
         ИНАЧЕ
         КОНЕЦ
       ИНАЧЕ
@@ -566,18 +561,18 @@
       Res := Arith(a, b, Ta, Op, line, col)
     |мКонст.опИ:
       мПров.Тест(Ta.тип_ном = мКонст.типБУЛЕВО, line, col, 37);
-      Res := ДЛИН(FLT(ORD((ai # 0) & (bi # 0))))
+      Res := УДЛИН(FLT(ORD((ai # 0) & (bi # 0))))
     |мКонст.lxOR:
       мПров.Тест(Ta.тип_ном = мКонст.типБУЛЕВО, line, col, 37);
-      Res := ДЛИН(FLT(ORD((ai # 0) ИЛИ (bi # 0))))
+      Res := УДЛИН(FLT(ORD((ai # 0) ИЛИ (bi # 0))))
     |мКонст.опРавно, мКонст.опНеРавно:
       ЕСЛИ Ta.тип_ном = мКонст.типСТРОКА ТОГДА
         Res := strcmp(a, b, Op)
       ИНАЧЕ
-        Res := ДЛИН(FLT(ORD(a = b)))
+        Res := УДЛИН(FLT(ORD(a = b)))
       КОНЕЦ;
       ЕСЛИ Op = мКонст.опНеРавно ТОГДА
-        Res := ДЛИН(FLT(ORD(Res = 0.0D0)))
+        Res := УДЛИН(FLT(ORD(Res = 0.0D0)))
       КОНЕЦ
     |мКонст.опМеньше, мКонст.опБольше:
       ЕСЛИ Op = мКонст.опБольше ТОГДА
@@ -589,7 +584,7 @@
       ЕСЛИ Ta.тип_ном = мКонст.типСТРОКА ТОГДА
         Res := strcmp(a, b, Op)
       ИНАЧЕ
-        Res := ДЛИН(FLT(ORD(a < b)))
+        Res := УДЛИН(FLT(ORD(a < b)))
       КОНЕЦ
     |lxLE, lxGE:
       ЕСЛИ Op = lxGE ТОГДА
@@ -601,14 +596,14 @@
       ЕСЛИ Ta.тип_ном = мКонст.типСТРОКА ТОГДА
         Res := strcmp(a, b, Op)
       АЕСЛИ Ta.тип_ном = мКонст.типНАБОР ТОГДА
-        Res := ДЛИН(FLT(ORD(BITS(FLOOR(a)) <= BITS(FLOOR(b)))))
+        Res := УДЛИН(FLT(ORD(BITS(FLOOR(a)) <= BITS(FLOOR(b)))))
       ИНАЧЕ
-        Res := ДЛИН(FLT(ORD(a <= b)))
+        Res := УДЛИН(FLT(ORD(a <= b)))
       КОНЕЦ
     |мКонст.ксВ:
       мПров.Тест((Ta.тип_ном = мКонст.типЦЕЛОЕ) & (Tb.тип_ном = мКонст.типНАБОР), line, col, 37);
       мПров.Тест(ASR(ai, 5) = 0, line, col, 49);
-      Res := ДЛИН(FLT(ORD(ai IN BITS(bi))))
+      Res := УДЛИН(FLT(ORD(ai IN BITS(bi))))
     ИНАЧЕ
     КОНЕЦ;
     ЕСЛИ Relation(Op) ИЛИ (Op = мКонст.опИ) ИЛИ (Op = мКонст.lxOR) ТОГДА
