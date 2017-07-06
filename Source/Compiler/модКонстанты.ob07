@@ -124,7 +124,7 @@
    stEXCL* = 16;
    stCOPY* = 17;
    ןנמצÍÎÂ* = 18;
-   stASSERT* = 19;
+   ןנמצÊÎÍÒÐÎËÜ* = 19;
    stPACK* = 20;
    stUNPK* = 21;
    stDISPOSE* = 22;

@@ -371,8 +371,8 @@
       PushStProc("ABS",      мКонст.stABS);
       PushStProc("ASR",      мКонст.stASR);
     
-      PushStProc("ASSERT",   мКонст.stASSERT);
-      PushStProc("КОНТРОЛЬ", мКонст.stASSERT);
+      PushStProc("ASSERT",   мКонст.процКОНТРОЛЬ);
+      PushStProc("КОНТРОЛЬ", мКонст.процКОНТРОЛЬ);
 
       PushStProc("CHR",      мКонст.stCHR);
       PushStProc("COPY",     мКонст.stCOPY);
