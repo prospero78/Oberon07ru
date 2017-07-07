@@ -416,8 +416,8 @@
       PushStProc("ORD",      мКонст.stORD);
       PushStProc("PACK",     мКонст.stPACK);
       
-      PushStProc("ROR",      мКонст.процЦСР);
-      PushStProc("ЦСР",      мКонст.процЦСР);
+      PushStProc("ROR",      мКонст.процЦСП);
+      PushStProc("ЦСП",      мКонст.процЦСП);
       
       PushStProc("SHORT",    мКонст.процУКОРОТ);
       PushStProc("УКОРОТ",    мКонст.процУКОРОТ);
