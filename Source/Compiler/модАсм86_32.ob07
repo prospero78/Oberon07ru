@@ -1288,7 +1288,7 @@
     |мКонст.stFLOOR:  OutCode("83EC06D93C2466812424FFF366810C24FFF7D92C2483C402D9FCDB1C24"); ВЫЧ(fpu)
     |мКонст.процЧЁТ:    OutCode("83242401")
     |мКонст.процЦСР:    PopECX; OutCode("58D3C8"); PushEAX
-    |мКонст.stASR:    PopECX; OutCode("58D3F8"); PushEAX
+    |мКонст.процЗСП:    PopECX; OutCode("58D3F8"); PushEAX
     |мКонст.процЛСЛ:    PopECX; OutCode("58D3E0"); PushEAX
     |мКонст.процЛСР:    PopECX; OutCode("58D3E8"); PushEAX
     |мКонст.stORD:    PopEDX; OutCode("85D274036A015A"); PushEDX
