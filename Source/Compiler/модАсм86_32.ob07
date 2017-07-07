@@ -1251,7 +1251,7 @@
     |мКонст.процВЫЧ:   PopEDX; OutCode("592911")
     |мКонст.stINC1:  PopEDX; OutCode("FF02")
     |мКонст.stDEC1:  PopEDX; OutCode("FF0A")
-    |мКонст.stINCL:  PopEDX; OutCode("580910")
+    |мКонст.процДОБВ:  PopEDX; OutCode("580910")
     |мКонст.stEXCL:  PopEDX; OutCode("582110")
     |мКонст.sysBIT:  PopECX; OutCode("5A585333DB8A18E3050FABD3EB030FB3D388185B")
     |мКонст.stPACK:  OutCode("DB04245A5ADD02D9FDDD1A"); isfpu := ИСТИНА

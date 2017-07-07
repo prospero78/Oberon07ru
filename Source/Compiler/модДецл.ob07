@@ -399,7 +399,8 @@
       PushStProc("FLT",      мКонст.процКВЕЩ);
       PushStProc("КВЕЩ",      мКонст.процКВЕЩ);
       
-      PushStProc("INCL",     мКонст.stINCL);
+      PushStProc("INCL",     мКонст.процДОБВ);
+      PushStProc("ДОБВ",     мКонст.процДОБВ);
       
       PushStProc("LEN",      мКонст.процДЛИН);
       PushStProc("ДЛИНА",    мКонст.процДЛИН);
