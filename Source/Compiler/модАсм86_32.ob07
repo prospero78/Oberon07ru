@@ -1283,7 +1283,7 @@
   НАЧАЛО
     ВЫБОР func ИЗ
     |мКонст.процАБС:    PopEDX; OutCode("85D27D02F7DA"); PushEDX
-    |мКонст.stFABS:   OutCode("D9E1")
+    |мКонст.процАБСВ:   OutCode("D9E1")
     |мКонст.процКВЕЩ:    OutCode("DB0424"); PopEAX; Incfpu;
     |мКонст.процКЦЕЛ:  OutCode("83EC06D93C2466812424FFF366810C24FFF7D92C2483C402D9FCDB1C24"); ВЫЧ(fpu)
     |мКонст.процЧЁТ:    OutCode("83242401")
