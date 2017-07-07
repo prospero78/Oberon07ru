@@ -1258,7 +1258,7 @@
     |мКонст.stPACK1: OutCode("DB04245A5AD902D9FDD91A"); isfpu := ИСТИНА
     |мКонст.stUNPK:  PopEDX; OutCode("59DD01D9F4DD19DB1A"); isfpu := ИСТИНА
     |мКонст.stUNPK1: PopEDX; OutCode("59D901D9F4D919DB1A"); isfpu := ИСТИНА
-    |мКонст.stCOPY:  CallRTL(_strcopy)
+    |мКонст.процКОПИЯ:  CallRTL(_strcopy)
     |мКонст.sysMOVE: CallRTL(_savearr)
     ИНАЧЕ
     КОНЕЦ
@@ -1992,7 +1992,7 @@
    НАЧАЛО
       glob := 0;
       gsize := Align(gsize, 4) + 4;
-      COPY(FName, OutFile);
+      КОПИЯ(FName, OutFile);
       Labels[RTABLE] := -dcount;
       dataint(recarray[0]);
       ДЛЯ i := 1 ДО reccount ДЕЛАТЬ
