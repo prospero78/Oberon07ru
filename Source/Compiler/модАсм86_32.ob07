@@ -294,7 +294,7 @@
    йнмеж Err;
 
 опнжедспю Align*(n, m: жекне): жекне;
-      бепмсрэ n + (m - n MOD m) MOD m
+      бепмсрэ n + (m - n няр m) няр m
    йнмеж Align;
 
 опнжедспю PutReloc(R: РпЕКНЙ);
@@ -969,7 +969,7 @@
       OutByte(0C3H)
     хмюве
       OutByte(0C2H);
-      OutByte(Param MOD 256);
+      OutByte(Param няр 256);
       OutByte(гяо(Param, 8))
     йнмеж;
     InsertFpuInit
@@ -1709,7 +1709,7 @@
          size := size2;
          Fill(Align(size, 4) - size2, 0X);
          Write(mSys.ADR(Data), datasize);
-         Coff.text.reserved8 := rcount DIV 10;
+         Coff.text.reserved8 := rcount дек 10;
          Coff.PointerToSymbolTable := Coff.text.reserved6 + rcount;
          Coff.NumberOfSymbols := 4;
 
@@ -1944,7 +1944,7 @@
          еякх dll & (cur.tcmd IN {GCMD, OCMD}) рнцдю
             n := cur.ЮДП.ЮДПЕЯ - LoadAdr;
             еякх гяо(n, 12) = гяо(R.ЯРПЮМХЖЮ, 12) рнцдю
-               R.reloc[RCount] := IntToCard16(n MOD 1000H + 3000H);
+               R.reloc[RCount] := IntToCard16(n няр 1000H + 3000H);
                дна(RCount);
                дна(R.Size, 2)
             хмюве
@@ -1953,7 +1953,7 @@
                йнмеж;
                R.ЯРПЮМХЖЮ := гяо(n, 12) * 1000H;
                R.Size := 10;
-               R.reloc[0] := IntToCard16(n MOD 1000H + 3000H);
+               R.reloc[0] := IntToCard16(n няр 1000H + 3000H);
                RCount := 1
             йнмеж
          йнмеж;

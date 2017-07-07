@@ -40,7 +40,6 @@
 КОНСТ
 
    lxEOF = 0; lxINT = -1; lxREAL = -2; lxSTRING = -3; lxIDENT = -4; lxHEX = -5; lxCHX = -6; lxLONGREAL = -7;
-   lxDIV = 6;
 
    lxLRound = 60; lxCaret = 63;
    lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69;
@@ -513,11 +512,11 @@
          |мКонст.опДелен:
             мПров.Тест(b # 0.0D0, line, col, 46);
             res := a / b
-         |lxDIV:
+         |мКонст.ксДЕЛ:
             мПров.Тест(~((a = УДЛИН(КВЕЩ(мКонст.целое_мин))) & (b = -1.0D0)), line, col, IOVER);
-            res := УДЛИН(КВЕЩ(КЦЕЛ(a) DIV КЦЕЛ(b)))
+            res := УДЛИН(КВЕЩ(КЦЕЛ(a) ДЕЛ КЦЕЛ(b)))
          |мКонст.ксОСТ:
-            res := УДЛИН(КВЕЩ(КЦЕЛ(a) MOD КЦЕЛ(b)))
+            res := УДЛИН(КВЕЩ(КЦЕЛ(a) ОСТ КЦЕЛ(b)))
       ИНАЧЕ
       КОНЕЦ;
       мПров.Тест(~мУтиль.ЕслиБесконеч(res), line, col, FOVER);
@@ -583,7 +582,7 @@
         мПров.Тест(ЛОЖЬ, line, col, 37)
       КОНЕЦ;
       TRes := Ta
-    |lxDIV, мКонст.ксОСТ:
+    |мКонст.ксДЕЛ, мКонст.ксОСТ:
       мПров.Тест(Ta.тип_ном = мКонст.типЦЕЛОЕ, line, col, 37);
       мПров.Тест(bi # 0, line, col, 48);
       TRes := Ta;
@@ -711,8 +710,8 @@
 
 ПРОЦЕДУРА FieldOffset(Align, RecSize: ЦЕЛОЕ): ЦЕЛОЕ;
   НАЧАЛО
-    мПров.Тест2(RecSize <= мКонст.целое_макс - (Align - RecSize MOD Align) MOD Align, 83)
-    ВЕРНУТЬ RecSize + (Align - RecSize MOD Align) MOD Align
+    мПров.Тест2(RecSize <= мКонст.целое_макс - (Align - RecSize ОСТ Align) ОСТ Align, 83)
+    ВЕРНУТЬ RecSize + (Align - RecSize ОСТ Align) ОСТ Align
   КОНЕЦ FieldOffset;
 
 ПРОЦЕДУРА Dim*(T: мТип.туТип): ЦЕЛОЕ;
@@ -1134,7 +1133,7 @@
       ИНАЧЕ
         мПров.Тест2(ЛОЖЬ, 79)
       КОНЕЦ;
-      мПров.Тест2(nov.Base.размер <= мКонст.целое_макс DIV nov.длина, 83);
+      мПров.Тест2(nov.Base.размер <= мКонст.целое_макс ДЕЛ nov.длина, 83);
       nov.размер := nov.Base.размер * nov.длина;
       nov.выравнив := nov.Base.выравнив
     |мКонст.ксЗАПИСЬ:
