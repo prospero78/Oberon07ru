@@ -1249,7 +1249,7 @@
     ВЫБОР proc ИЗ
     |мКонст.процДОБ:   PopEDX; OutCode("590111")
     |мКонст.процВЫЧ:   PopEDX; OutCode("592911")
-    |мКонст.stINC1:  PopEDX; OutCode("FF02")
+    |мКонст.процДОПОЛН:  PopEDX; OutCode("FF02")
     |мКонст.stDEC1:  PopEDX; OutCode("FF0A")
     |мКонст.процДОБВ:  PopEDX; OutCode("580910")
     |мКонст.процВЫЧВ:  PopEDX; OutCode("582110")
