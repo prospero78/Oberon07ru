@@ -305,7 +305,7 @@
       ДОБ(rcount, 4);
       mSys.PUT(mSys.ADR(Reloc[rcount]), R.Size);
       ДОБ(rcount, 4);
-      ДЛЯ i := 0 ДО ASR(R.Size - 8, 1) - 1 ДЕЛАТЬ
+      ДЛЯ i := 0 ДО ЗСП(R.Size - 8, 1) - 1 ДЕЛАТЬ
          mSys.PUT(mSys.ADR(Reloc[rcount]), R.reloc[i]);
          ДОБ(rcount, 2)
       КОНЕЦ
@@ -940,7 +940,7 @@
     ЕСЛИ Local > 12 ТОГДА
       IntByte("83EC", "81EC", Local);
       OutCode("8BD733C08BFCB9");
-      OutInt(ASR(Local, 2));
+      OutInt(ЗСП(Local, 2));
       OutCode("9CFCF3AB8BFA9D")
     ИНАЧЕ
       ДЛЯ i := 4 ДО Local ПО 4 ДЕЛАТЬ
@@ -970,7 +970,7 @@
     ИНАЧЕ
       OutByte(0C2H);
       OutByte(Param MOD 256);
-      OutByte(ASR(Param, 8))
+      OutByte(ЗСП(Param, 8))
     КОНЕЦ;
     InsertFpuInit
   КОНЕЦ ProcEnd;
@@ -1285,7 +1285,7 @@
     |мКонст.процАБС:    PopEDX; OutCode("85D27D02F7DA"); PushEDX
     |мКонст.stFABS:   OutCode("D9E1")
     |мКонст.stFLT:    OutCode("DB0424"); PopEAX; Incfpu;
-    |мКонст.stFLOOR:  OutCode("83EC06D93C2466812424FFF366810C24FFF7D92C2483C402D9FCDB1C24"); ВЫЧ(fpu)
+    |мКонст.процКЦЕЛ:  OutCode("83EC06D93C2466812424FFF366810C24FFF7D92C2483C402D9FCDB1C24"); ВЫЧ(fpu)
     |мКонст.процЧЁТ:    OutCode("83242401")
     |мКонст.процЦСП:    PopECX; OutCode("58D3C8"); PushEAX
     |мКонст.процЗСП:    PopECX; OutCode("58D3F8"); PushEAX
@@ -1943,7 +1943,7 @@
          КОНЕЦ;
          ЕСЛИ dll & (cur.tcmd IN {GCMD, OCMD}) ТОГДА
             n := cur.адр.адрес - LoadAdr;
-            ЕСЛИ ASR(n, 12) = ASR(R.страница, 12) ТОГДА
+            ЕСЛИ ЗСП(n, 12) = ЗСП(R.страница, 12) ТОГДА
                R.reloc[RCount] := IntToCard16(n MOD 1000H + 3000H);
                ДОБ(RCount);
                ДОБ(R.Size, 2)
@@ -1951,7 +1951,7 @@
                ЕСЛИ R.Size # 0 ТОГДА
                   PutReloc(R)
                КОНЕЦ;
-               R.страница := ASR(n, 12) * 1000H;
+               R.страница := ЗСП(n, 12) * 1000H;
                R.Size := 10;
                R.reloc[0] := IntToCard16(n MOD 1000H + 3000H);
                RCount := 1
@@ -2010,7 +2010,7 @@
          OutByte(54H)
       КОНЕЦ;
       GlobalAdr(0);
-      PushConst(ASR(gsize, 2));
+      PushConst(ЗСП(gsize, 2));
       PushInt(RTABLE);
       PushInt(SELFNAME);
       CallRTL(_init);
