@@ -319,7 +319,7 @@
       i := 0;
       ПОКА (i < n) & (chars[i] # 0X) ДЕЛАТЬ
          x := мСкан.Число16_в_Целое(chars[i]) * 16 + мСкан.Число16_в_Целое(chars[i + 1]);
-         mSys.PUT(adr, CHR(x));
+         mSys.PUT(adr, ВЛИТ(x));
          ДОБ(adr);
          ДОБ(i, 2)
       КОНЕЦ
@@ -512,7 +512,7 @@
    НАЧАЛО
       New;
       current.clen := 1;
-      Code[ccount] := CHR(byte);
+      Code[ccount] := ВЛИТ(byte);
       ДОБ(ccount)
    КОНЕЦ OutByte;
 
@@ -850,7 +850,7 @@
     ЕСЛИ current.предыдущ(туЗвеноАсм).tcmd = ICMP2 ТОГДА
       c := CmpOpt(ИСТИНА);
       OutCode("5A583BC2");
-      jmp(CHR(c), L)
+      jmp(ВЛИТ(c), L)
     ИНАЧЕ
       PopECX;
       OutCode("85C9");
@@ -871,7 +871,7 @@
     ЕСЛИ current.предыдущ(туЗвеноАсм).tcmd = ICMP2 ТОГДА
       c := CmpOpt(orop);
       OutCode("5A583BC2");
-      jmp(CHR(c), L1);
+      jmp(ВЛИТ(c), L1);
       PushConst(НЛИТ(orop))
     ИНАЧЕ
       PopECX;

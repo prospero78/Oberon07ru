@@ -377,7 +377,9 @@
       PushStProc("ASSERT",   мКонст.процКОНТРОЛЬ);
       PushStProc("КОНТРОЛЬ", мКонст.процКОНТРОЛЬ);
 
-      PushStProc("CHR",      мКонст.stCHR);
+      PushStProc("CHR",      мКонст.процВЛИТ);
+      PushStProc("ВЛИТ",      мКонст.процВЛИТ);
+      
       PushStProc("COPY",     мКонст.stCOPY);
       
       PushStProc("INC",      мКонст.процДОБ);
