@@ -400,7 +400,8 @@
       PushStProc("LENGTH",   мКонст.процДЛИНСТР);
       PushStProc("ДЛИНСТР",    мКонст.процДЛИНСТР);
       
-      PushStProc("LSL",      мКонст.stLSL);
+      PushStProc("LSL",      мКонст.процЛСЛ);
+      PushStProc("ЛСЛ",      мКонст.процЛСЛ);
       
       PushStProc("LONG",     мКонст.процУДЛИН);
       PushStProc("УДЛИН",    мКонст.процУДЛИН);
