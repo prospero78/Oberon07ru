@@ -418,7 +418,7 @@
       Header.oldestverNT := 0004H;
       Header.filesize := Align(codesize, 1000H) + Align(datasize + gsize, 1000H) + Align(rdatasize, 1000H) + Align(rcount, 1000H) + 1000H;
       Header.headersize := 0400H;
-      Header.UI := IntToCard16(ORD(con) + 2);
+      Header.UI := IntToCard16(НЛИТ(con) + 2);
       Header.stksize := stksize;
       Header.stkalloc := stkalloc;
       Header.heapsize := heapsize;
@@ -767,7 +767,7 @@
   ПЕРЕМ i: ЦЕЛОЕ;
   НАЧАЛО
     ЕСЛИ ccall # 0 ТОГДА
-      ДЛЯ i := level ДО level - bases + ORD(ccall = 1) + 1 ПО -1 ДЕЛАТЬ
+      ДЛЯ i := level ДО level - bases + НЛИТ(ccall = 1) + 1 ПО -1 ДЕЛАТЬ
         IntByte("FF75", "FFB5", 4 * i + 4)
       КОНЕЦ;
       ЕСЛИ ccall = 1 ТОГДА
@@ -825,7 +825,7 @@
 ПРОЦЕДУРА CmpOpt(inv: БУЛЕВО): ЦЕЛОЕ;
   ПЕРЕМ cur: туЗвеноАсм; c: ЦЕЛОЕ;
   НАЧАЛО
-    c := ORD(Code[current.предыдущ.предыдущ(туЗвеноАсм).кмд]);
+    c := НЛИТ(Code[current.предыдущ.предыдущ(туЗвеноАсм).кмд]);
     ЕСЛИ inv ТОГДА
       ЕСЛИ ODD(c) ТОГДА
         ВЫЧ(c)
@@ -872,7 +872,7 @@
       c := CmpOpt(orop);
       OutCode("5A583BC2");
       jmp(CHR(c), L1);
-      PushConst(ORD(orop))
+      PushConst(НЛИТ(orop))
     ИНАЧЕ
       PopECX;
       OutCode("85C9");
@@ -903,7 +903,7 @@
     ЕСЛИ Len > 1 ТОГДА
       datastr(str)
     АЕСЛИ Len = 1 ТОГДА
-      dataint(ORD(str[0]))
+      dataint(НЛИТ(str[0]))
     ИНАЧЕ
       dataint(0)
     КОНЕЦ
@@ -1291,7 +1291,7 @@
     |мКонст.процЗСП:    PopECX; OutCode("58D3F8"); PushEAX
     |мКонст.процЛСЛ:    PopECX; OutCode("58D3E0"); PushEAX
     |мКонст.процЛСП:    PopECX; OutCode("58D3E8"); PushEAX
-    |мКонст.stORD:    PopEDX; OutCode("85D274036A015A"); PushEDX
+    |мКонст.процНЛИТ:    PopEDX; OutCode("85D274036A015A"); PushEDX
     |мКонст.процДЛИНСТР: CallRTL(_length); PushEAX
     |мКонст.sysBIT:   PopEDX; OutCode("5933C08A010FA3D072046A00EB026A01")
     ИНАЧЕ
@@ -1871,7 +1871,7 @@
                ЕСЛИ c = JMP ТОГДА
                   mSys.PUT(cur(туЗвеноАсм).код.адрес - 1, 0EBX)
                ИНАЧЕ (*JE, JNE, JLE, JGE, JG, JL*)
-                  mSys.PUT(cur(туЗвеноАсм).код.адрес - 2, ORD(c) - 16);
+                  mSys.PUT(cur(туЗвеноАсм).код.адрес - 2, НЛИТ(c) - 16);
                   mSys.PUT(cur(туЗвеноАсм).код.адрес - 1, temp3);
                   ВЫЧ(cur(туЗвеноАсм).код.адрес)
                КОНЕЦ;
