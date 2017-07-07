@@ -425,8 +425,8 @@
       PushStProc("UNPK",     мКонст.stUNPK);
       PushStProc("BITS",     мКонст.stBITS);
       
-      PushStProc("LSR",      мКонст.процЛСР);
-      PushStProc("ЛСР",      мКонст.процЛСР);
+      PushStProc("LSR",      мКонст.процЛСП);
+      PushStProc("ЛСП",      мКонст.процЛСП);
       
       Охрана_Создать
    КОНЕЦ StIdent;
