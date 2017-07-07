@@ -41,7 +41,6 @@
 
    lxEOF = 0; lxINT = -1; lxREAL = -2; lxSTRING = -3; lxIDENT = -4; lxHEX = -5; lxCHX = -6; lxLONGREAL = -7;
    lxDIV = 6;
-   lxMOD = 17;
 
    lxLRound = 60; lxCaret = 63;
    lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69;
@@ -517,7 +516,7 @@
          |lxDIV:
             мПров.Тест(~((a = УДЛИН(КВЕЩ(мКонст.целое_мин))) & (b = -1.0D0)), line, col, IOVER);
             res := УДЛИН(КВЕЩ(КЦЕЛ(a) DIV КЦЕЛ(b)))
-         |lxMOD:
+         |мКонст.ксОСТ:
             res := УДЛИН(КВЕЩ(КЦЕЛ(a) MOD КЦЕЛ(b)))
       ИНАЧЕ
       КОНЕЦ;
@@ -584,7 +583,7 @@
         мПров.Тест(ЛОЖЬ, line, col, 37)
       КОНЕЦ;
       TRes := Ta
-    |lxDIV, lxMOD:
+    |lxDIV, мКонст.ксОСТ:
       мПров.Тест(Ta.тип_ном = мКонст.типЦЕЛОЕ, line, col, 37);
       мПров.Тест(bi # 0, line, col, 48);
       TRes := Ta;

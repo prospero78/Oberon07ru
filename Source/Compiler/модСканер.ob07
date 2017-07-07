@@ -38,8 +38,6 @@
    lxEOF = 0; lxINT = -1; lxREAL = -2; lxSTRING = -3; lxIDENT = -4; lxHEX = -5; lxCHX = -6; lxLONGREAL = -7;
    lxDIV = 6; 
    
-   lxMOD = 17;
-   
    lxLRound = 60; lxCaret = 63;
    lxRCurly = 66; lxDot = 67; lxDbl = 68; lxAssign = 69;
    lxLE = 75; lxGE = 76;
@@ -679,7 +677,8 @@
       КОНЕЦ;
          _START := мУзел.Добавить("START");
          _version := мУзел.Добавить("version");
-         КлючСлово_Добавить("MOD", lxMOD);
+         КлючСлово_Добавить("MOD", мКонст.ксОСТ);
+         КлючСлово_Добавить("ОСТ", мКонст.ксОСТ);
         
          КлючСлово_Добавить("CASE", мКонст.ксВЫБОР);
          КлючСлово_Добавить("ВЫБОР", мКонст.ксВЫБОР);
