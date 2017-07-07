@@ -43,7 +43,7 @@
 КОНСТ
 
    lxEOF = 0; lxINT = -1; lxREAL = -2; lxSTRING = -3; lxIDENT = -4; lxHEX = -5; lxCHX = -6; lxLONGREAL = -7;
-   lxBY = 3; lxDIV = 6;
+   lxDIV = 6;
    lxMOD = 17; 
 
    lxLRound = 60; lxCaret = 63;
@@ -1340,7 +1340,7 @@
       мПров.Тест(e.T.тип_ном = мКонст.типЦЕЛОЕ, line, col, 52);
       Выраж_Загрузить(e);
       iValue := 1;
-      ЕСЛИ мСкан.сущность = lxBY ТОГДА
+      ЕСЛИ мСкан.сущность = мКонст.ксПО ТОГДА
          мДецл.КлючСлед_Получ;
          мДецл.Коорд_Уст(line, col);
          мДецл.ConstExpr(Value, T);

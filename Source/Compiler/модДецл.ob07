@@ -40,7 +40,6 @@
  ŒÕ—“
 
    lxEOF = 0; lxINT = -1; lxREAL = -2; lxSTRING = -3; lxIDENT = -4; lxHEX = -5; lxCHX = -6; lxLONGREAL = -7;
-   lxBY = 3;
    lxDIV = 6;
    lxMOD = 17;
 
