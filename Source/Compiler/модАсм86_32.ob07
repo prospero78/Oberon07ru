@@ -1290,7 +1290,7 @@
     |мКонст.stROR:    PopECX; OutCode("58D3C8"); PushEAX
     |мКонст.stASR:    PopECX; OutCode("58D3F8"); PushEAX
     |мКонст.stLSL:    PopECX; OutCode("58D3E0"); PushEAX
-    |мКонст.stLSR:    PopECX; OutCode("58D3E8"); PushEAX
+    |мКонст.процЛСР:    PopECX; OutCode("58D3E8"); PushEAX
     |мКонст.stORD:    PopEDX; OutCode("85D274036A015A"); PushEDX
     |мКонст.процДЛИНСТР: CallRTL(_length); PushEAX
     |мКонст.sysBIT:   PopEDX; OutCode("5933C08A010FA3D072046A00EB026A01")
