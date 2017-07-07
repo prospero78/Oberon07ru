@@ -391,7 +391,8 @@
       PushStProc("DISPOSE",  мКонст.процЛИШН);
       PushStProc("ЛИШН",     мКонст.процЛИШН);
       
-      PushStProc("EXCL",     мКонст.stEXCL);
+      PushStProc("EXCL",     мКонст.процВЫЧВ);
+      PushStProc("ВЫЧВ",     мКонст.процВЫЧВ);
       
       PushStProc("FLOOR",    мКонст.процКЦЕЛ);
       PushStProc("КЦЕЛ",    мКонст.процКЦЕЛ);

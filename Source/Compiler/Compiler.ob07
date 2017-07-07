@@ -1536,7 +1536,7 @@
                   X86.StProc(мКонст.stINC1)
                КОНЕЦ
             КОНЕЦ
-         |мКонст.процДОБВ, мКонст.stEXCL:
+         |мКонст.процДОБВ, мКонст.процВЫЧВ:
             Designator(e1);
             мПров.Тест(e1.eType = eVAR, line, col, 63);
             мПров.Тест(~e1.Read, line, col, 115);
@@ -1553,7 +1553,7 @@
                X86.StProc(мКонст.процДОБВ)
             ИНАЧЕ
                X86.PushConst(НЛИТ(-{iValue}));
-               X86.StProc(мКонст.stEXCL)
+               X86.StProc(мКонст.процВЫЧВ)
             КОНЕЦ
          |мКонст.stCOPY:
             Expr(e1);
