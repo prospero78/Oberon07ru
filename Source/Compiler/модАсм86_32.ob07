@@ -1256,7 +1256,7 @@
     |мКонст.sysBIT:  PopECX; OutCode("5A585333DB8A18E3050FABD3EB030FB3D388185B")
     |мКонст.процУПАК:  OutCode("DB04245A5ADD02D9FDDD1A"); isfpu := ИСТИНА
     |мКонст.stPACK1: OutCode("DB04245A5AD902D9FDD91A"); isfpu := ИСТИНА
-    |мКонст.stUNPK:  PopEDX; OutCode("59DD01D9F4DD19DB1A"); isfpu := ИСТИНА
+    |мКонст.процРАСП:  PopEDX; OutCode("59DD01D9F4DD19DB1A"); isfpu := ИСТИНА
     |мКонст.stUNPK1: PopEDX; OutCode("59D901D9F4D919DB1A"); isfpu := ИСТИНА
     |мКонст.процКОПИЯ:  CallRTL(_strcopy)
     |мКонст.sysMOVE: CallRTL(_savearr)

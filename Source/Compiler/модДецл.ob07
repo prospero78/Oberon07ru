@@ -428,13 +428,17 @@
       PushStProc("PACK",     мКонст.процУПАК);
       PushStProc("УПАК",     мКонст.процУПАК);
       
+      PushStProc("UNPK",     мКонст.процРАСП);
+      PushStProc("РАСП",     мКонст.процРАСП);
+      
       PushStProc("ROR",      мКонст.процЦСП);
       PushStProc("ЦСП",      мКонст.процЦСП);
       
       PushStProc("SHORT",    мКонст.процУКОРОТ);
       PushStProc("УКОРОТ",    мКонст.процУКОРОТ);
       
-      PushStProc("UNPK",     мКонст.stUNPK);
+      
+      
       PushStProc("BITS",     мКонст.stBITS);
       
       PushStProc("LSR",      мКонст.процЛСП);
