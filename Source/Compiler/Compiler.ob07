@@ -1575,7 +1575,7 @@
             мПров.Тест(~e2.Read, line, col, 115);
             Str(e2);
             X86.StProc(мКонст.stCOPY)
-         |мКонст.процНОВ, мКонст.stDISPOSE:
+         |мКонст.процНОВ, мКонст.процЛИШН:
             Designator(e1);
             мПров.Тест(e1.eType = eVAR, line, col, 63);
             мПров.Тест(~e1.Read, line, col, 115);

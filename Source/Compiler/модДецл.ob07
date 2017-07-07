@@ -385,7 +385,9 @@
       PushStProc("DEC",      мКонст.процВЫЧ);
       PushStProc("ВЫЧ",      мКонст.процВЫЧ);
       
-      PushStProc("DISPOSE",  мКонст.stDISPOSE);
+      PushStProc("DISPOSE",  мКонст.процЛИШН);
+      PushStProc("ЛИШН",  мКонст.процЛИШН);
+      
       PushStProc("EXCL",     мКонст.stEXCL);
       PushStProc("FLOOR",    мКонст.stFLOOR);
       PushStProc("FLT",      мКонст.stFLT);
