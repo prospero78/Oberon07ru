@@ -270,7 +270,7 @@
          дна(etable.adrcount);
          etable.arrnameptr[etable.namecount] := etable.textlen;
          дна(etable.namecount);
-         CopyStr(etable.text, Name.ХЛЪ_ЯРП, etable.textlen, 0);
+         CopyStr(etable.text, Name.ЯРПхЛЪ, etable.textlen, 0);
          дна(etable.textlen)
       юеякх obj рнцдю
          kosexp[kosexpcount].Name := Name;
@@ -2043,7 +2043,7 @@
          Label(szversion); OutStringZ("version");
          дкъ i := 0 дн kosexpcount - 1 декюрэ
             Label(kosexp[i].NameLabel);
-            OutStringZ(kosexp[i].Name.ХЛЪ_ЯРП)
+            OutStringZ(kosexp[i].Name.ЯРПхЛЪ)
          йнмеж
       йнмеж;
       FixLabels(FName, stk, gsize, glob)
