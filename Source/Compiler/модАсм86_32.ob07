@@ -160,7 +160,7 @@
    maxfpu: жекне;
    fpucmd: РСгБЕМНюЯЛ;
    kosexp: люяяхб 65536 хг гюохяэ
-      Name: ЛсГЕК.РСгБЕМНйЯ;
+      Name: ЛсГЕК.РСгБЕМНяСЫ;
       Adr, NameLabel: жекне
    йнмеж;
    kosexpcount: жекне;
@@ -263,7 +263,7 @@
       etable.size := etable.size + etable.textlen
    йнмеж PackExport;
 
-опнжедспю ProcExport*(Number: жекне; Name: ЛсГЕК.РСгБЕМНйЯ; NameLabel: жекне);
+опнжедспю ProcExport*(Number: жекне; Name: ЛсГЕК.РСгБЕМНяСЫ; NameLabel: жекне);
    мювюкн
       еякх dll рнцдю
          etable.arradr[etable.adrcount] := Number;
