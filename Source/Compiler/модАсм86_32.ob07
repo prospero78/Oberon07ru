@@ -160,7 +160,7 @@
    maxfpu: ÷≈Ћќ≈;
    fpucmd: ту«венојсм;
    kosexp: ћј——»¬ 65536 »« «јѕ»—№
-      Name: м«в—ущ.ту«вено—ущ;
+      у«вено—ущ: м«в—ущ.ту«вено—ущ;
       Adr, NameLabel: ÷≈Ћќ≈
     ќЌ≈÷;
    kosexpcount: ÷≈Ћќ≈;
@@ -263,17 +263,17 @@
       etable.size := etable.size + etable.textlen
     ќЌ≈÷ PackExport;
 
-ѕ–ќ÷≈ƒ”–ј ProcExport*(Number: ÷≈Ћќ≈; Name: м«в—ущ.ту«вено—ущ; NameLabel: ÷≈Ћќ≈);
+ѕ–ќ÷≈ƒ”–ј ProcExport*(Number: ÷≈Ћќ≈; у«вено—ущ_: м«в—ущ.ту«вено—ущ; NameLabel: ÷≈Ћќ≈);
    Ќј„јЋќ
       ≈—Ћ» dll “ќ√ƒј
          etable.arradr[etable.adrcount] := Number;
          ƒќЅ(etable.adrcount);
          etable.arrnameptr[etable.namecount] := etable.textlen;
          ƒќЅ(etable.namecount);
-         CopyStr(etable.text, Name.стр»м€, etable.textlen, 0);
+         CopyStr(etable.text, у«вено—ущ_.стр»м€, etable.textlen, 0);
          ƒќЅ(etable.textlen)
       ј≈—Ћ» obj “ќ√ƒј
-         kosexp[kosexpcount].Name := Name;
+         kosexp[kosexpcount].у«вено—ущ := у«вено—ущ_;
          kosexp[kosexpcount].Adr := Number;
          kosexp[kosexpcount].NameLabel := NameLabel;
          ƒќЅ(kosexpcount)
@@ -2043,7 +2043,7 @@
          Label(szversion); OutStringZ("version");
          ƒЋя i := 0 ƒќ kosexpcount - 1 ƒ≈Ћј“№
             Label(kosexp[i].NameLabel);
-            OutStringZ(kosexp[i].Name.стр»м€)
+            OutStringZ(kosexp[i].у«вено—ущ.стр»м€)
           ќЌ≈÷
        ќЌ≈÷;
       FixLabels(FName, stk, gsize, glob)
