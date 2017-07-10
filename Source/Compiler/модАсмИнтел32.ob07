@@ -16,7 +16,7 @@
    You should have received a copy of the GNU General Public License
    along with Compiler. If not, see <http://www.gnu.org/licenses/>.
    *)
-ћќƒ”Ћ№ модјсм86_32;
+ћќƒ”Ћ№ модјсм»нтел32;
 
 »ћѕќ–“ м”тиль := мод”тиль,
    mSys := SYSTEM,
@@ -2060,4 +2060,4 @@
       FixLabels(стр‘айл»м€, stk, gsize, glob)
     ќЌ≈÷ Ёпилог;
 
- ќЌ≈÷ модјсм86_32.
+ ќЌ≈÷ модјсм»нтел32.

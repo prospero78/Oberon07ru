@@ -21,7 +21,7 @@
 
 »ћѕќ–“ м—кан := мод—канер,
    м”тиль := мод”тиль,
-   мјсм86 := модјсм86_32,
+   мјсм»32 := модјсм»нтел32,
    mSys := SYSTEM,
    м«вено := мод«вено,
    м“ип := мод“ип,
@@ -147,10 +147,9 @@
         мѕам.ћало(стр_нов = ѕ”—“ќ);
          ќѕ»я(стр_, стр_нов.стр—трока);
         стр_нов.цƒлина := м—кан.счЄтчик - 1;
-        стр_нов.цЌомер := мјсм86.NewLabel();
+        стр_нов.цЌомер := мјсм»32.NewLabel();
         м÷епь.ƒобавить(строки, стр_нов);
-        (* #‘» — оптимизировать этот вызов *)
-        мјсм86.—трока(стр_нов)
+        мјсм»32.—трока(стр_нов)
         ¬≈–Ќ”“№ стр_нов
      ќЌ≈÷ —тр_—оздать;
 
@@ -163,9 +162,9 @@
       nov.стр—трока[0] := лит_;
       nov.стр—трока[1] := 0X;
       nov.цƒлина := 1;
-      nov.цЌомер := мјсм86.NewLabel();
+      nov.цЌомер := мјсм»32.NewLabel();
       м÷епь.ƒобавить(строки, nov);
-      мјсм86.—трока(nov)
+      мјсм»32.—трока(nov)
       ¬≈–Ќ”“№ nov
     ќЌ≈÷ —трћоно_—оздать;
 
@@ -261,10 +260,10 @@
       ident.line := у оорд_.ц—трока;
       ident.col := у оорд_.цѕоз;
       ≈—Ћ» iType IN {IDPROC, IDMOD} “ќ√ƒј
-         ident.Number := мјсм86.NewLabel();
-         i := мјсм86.NewLabel();
-         i := мјсм86.NewLabel();
-         i := мјсм86.NewLabel()
+         ident.Number := мјсм»32.NewLabel();
+         i := мјсм»32.NewLabel();
+         i := мјсм»32.NewLabel();
+         i := мјсм»32.NewLabel()
        ќЌ≈÷;
       ident.iType := iType;
       ident.у“ип := T;
@@ -1000,7 +999,7 @@
          ј≈—Ћ» м—кан.ц—ущность = м онст.опƒвоеточ “ќ√ƒј
            —ущн—лед_ѕолуч;
            Tf := FormalType(у оорд);
-           мѕров.“ест(Dim(Tf) <= мјсм86.ADIM, у оорд, 110);
+           мѕров.“ест(Dim(Tf) <= мјсм»32.ADIM, у оорд, 110);
            SetFields(T, Tf, Ћќ∆№);
            ≈—Ћ» proc “ќ√ƒј
              SetVars(Tf)
@@ -1176,11 +1175,11 @@
              ќЌ≈÷;
             ReadFields(nov);
             —ущность_ѕроверить(м онст.кс ќЌ≈÷);
-            nov.размер := мјсм86.Align(nov.размер, nov.выравнив);
+            nov.размер := мјсм»32.Align(nov.размер, nov.выравнив);
             ≈—Ћ» nov.уѕредок # ѕ”—“ќ “ќ√ƒј
-               мјсм86.AddRec(nov.уѕредок.номер)
+               мјсм»32.AddRec(nov.уѕредок.номер)
             »Ќј„≈
-               мјсм86.AddRec(0)
+               мјсм»32.AddRec(0)
              ќЌ≈÷;
             —ущн—лед_ѕолуч
          |м онст.кс” ј«ј“≈Ћ№:
@@ -1364,7 +1363,7 @@
            ≈—Ћ» ц одќ— = 6 “ќ√ƒј
              мѕров.“ест((Name # м—кан._«в—тарт) & (Name # м—кан._version), у оорд, 133)
             ќЌ≈÷;
-           мјсм86.ProcExport(id.Number, Name, мјсм86.NewLabel())
+           мјсм»32.ProcExport(id.Number, Name, мјсм»32.NewLabel())
           ќЌ≈÷;
          id.Parent := curBlock;
          curBlock := id;
@@ -1375,7 +1374,7 @@
          —ущн—лед_ѕолуч;
          DeclSeq;
          id.LocalSize := id.VarSize - id.ParamSize;
-         мјсм86.ProcBeg(id.Number, id.LocalSize, Ћќ∆№);
+         мјсм»32.ProcBeg(id.Number, id.LocalSize, Ћќ∆№);
          ≈—Ћ» м—кан.ц—ущность = м онст.ксЌј„јЋќ “ќ√ƒј
            —ущн—лед_ѕолуч;
            OpSeq
@@ -1389,7 +1388,7 @@
            Expr(e);
            мѕров.“ест(AssComp(e, curBlock.у“ип.уѕредок, Ћќ∆№), у оорд, 125);
            ≈—Ћ» e.ц“ип = eVAR “ќ√ƒј
-             мјсм86.Load(e.у“ип.цћаркер)
+             мјсм»32.Load(e.у“ип.цћаркер)
             ќЌ≈÷
          »Ќј„≈
            мѕров.“ест2(м—кан.ц—ущность # м онст.кс¬≈–Ќ”“№, 123)
@@ -1401,7 +1400,7 @@
          —ущн—лед_ѕолуч;
          —ущность_ѕроверить(м онст.оп“чк«пт);
          —ущн—лед_ѕолуч;
-         мјсм86.ProcEnd(id.Number, (id.ParamSize + (id.Level - 3) * 4) * ЌЋ»“(curBlock.у“ип.вызов ¬ {stdcall, winapi, defcall}), func, curBlock.у“ип.уѕредок.цћаркер ¬ {м онст.тип¬≈ў, м онст.типƒЋ»Ќ¬≈ў});
+         мјсм»32.ProcEnd(id.Number, (id.ParamSize + (id.Level - 3) * 4) * ЌЋ»“(curBlock.у“ип.вызов ¬ {stdcall, winapi, defcall}), func, curBlock.у“ип.уѕредок.цћаркер ¬ {м онст.тип¬≈ў, м онст.типƒЋ»Ќ¬≈ў});
          PopBlock;
          curBlock := curBlock.Parent
         ќЌ≈÷
@@ -1418,29 +1417,29 @@
           мќш.—ообщ(158);
           мѕроц.«акончить(1)
          ќЌ≈÷;
-        мјсм86.AddRtlProc(num, id.Number)
+        мјсм»32.AddRtlProc(num, id.Number)
        ќЌ≈÷ AddProc;
 
   Ќј„јЋќ
-    AddProc("_newrec", мјсм86._newrec);
-    AddProc("_disprec", мјсм86._disprec);
-    AddProc("_rset", мјсм86._rset);
-    AddProc("_inset", мјсм86._inset);
-    AddProc("_saverec", мјсм86._saverec);
-    AddProc("_checktype", мјсм86._checktype);
-    AddProc("_strcmp", мјсм86._strcmp);
-    AddProc("_lstrcmp", мјсм86._lstrcmp);
-    AddProc("_rstrcmp", мјсм86._rstrcmp);
-    AddProc("_savearr", мјсм86._savearr);
-    AddProc("_arrayidx", мјсм86._arrayidx);
-    AddProc("_arrayidx1", мјсм86._arrayidx1);
-    AddProc("_arrayrot", мјсм86._arrayrot);
-    AddProc("_assrt", мјсм86._assrt);
-    AddProc("_strcopy", мјсм86._strcopy);
-    AddProc("_init", мјсм86._init);
-    AddProc("_close", мјсм86._close);
-    AddProc("_halt", мјсм86._halt);
-    AddProc("_length", мјсм86._length);
+    AddProc("_newrec", мјсм»32._newrec);
+    AddProc("_disprec", мјсм»32._disprec);
+    AddProc("_rset", мјсм»32._rset);
+    AddProc("_inset", мјсм»32._inset);
+    AddProc("_saverec", мјсм»32._saverec);
+    AddProc("_checktype", мјсм»32._checktype);
+    AddProc("_strcmp", мјсм»32._strcmp);
+    AddProc("_lstrcmp", мјсм»32._lstrcmp);
+    AddProc("_rstrcmp", мјсм»32._rstrcmp);
+    AddProc("_savearr", мјсм»32._savearr);
+    AddProc("_arrayidx", мјсм»32._arrayidx);
+    AddProc("_arrayidx1", мјсм»32._arrayidx1);
+    AddProc("_arrayrot", мјсм»32._arrayrot);
+    AddProc("_assrt", мјсм»32._assrt);
+    AddProc("_strcopy", мјсм»32._strcopy);
+    AddProc("_init", мјсм»32._init);
+    AddProc("_close", мјсм»32._close);
+    AddProc("_halt", мјсм»32._halt);
+    AddProc("_length", мјсм»32._length);
    ќЌ≈÷ Rtl_ƒобав;
 
 ѕ–ќ÷≈ƒ”–ј ImportList;
@@ -1613,12 +1612,12 @@
          м¬ин онс.÷вет_”ст(7, 0);
           ќѕ»я(idmod.у«в—ущ.стр»м€, у—трока.стр—трока);
          у—трока.цЌомер := idmod.Number;
-         мјсм86.Module(у—трока);
+         мјсм»32.Module(у—трока);
          UnitNumber := idmod.Number;
          модуль.IdentBegin := модуль.Idents.следующ(ту—ущность);
          curBlock := idmod;
          DeclSeq;
-         мјсм86.ProcBeg(idmod.Number, 0, »—“»Ќј);
+         мјсм»32.ProcBeg(idmod.Number, 0, »—“»Ќј);
          ≈—Ћ» м—кан.ц—ущность = м онст.ксЌј„јЋќ “ќ√ƒј
             —ущн—лед_ѕолуч;
             OpSeq
@@ -1627,7 +1626,7 @@
          —ущн—лед_ѕолуч; —ущность_ѕроверить(м онст.сущ»ћя);
          мѕров.“ест2(м—кан.у—ущность = модуль.у—ущ, 26);
          —ущн—лед_ѕолуч; —ущность_ѕроверить(м онст.оп“очка);
-         мјсм86.Leave;
+         мјсм»32.Leave;
          модуль.закрыт := »—“»Ќј;
          м÷епь.ќчистить(модуль.цепь_импорта);
          Res := »—“»Ќј
@@ -1719,7 +1718,7 @@
     ≈—Ћ» ц одќ—_ ¬ {1, 2, 3, 4} “ќ√ƒј
       ц—тек–азмер_ := ц—тек–азмер_ * 100000H
      ќЌ≈÷;
-    мјсм86.Ёпилог(ProgSize, temp, ц—тек–азмер_)
+    мјсм»32.Ёпилог(ProgSize, temp, ц—тек–азмер_)
    ќЌ≈÷  омпилировать;
 
 Ќј„јЋќ
