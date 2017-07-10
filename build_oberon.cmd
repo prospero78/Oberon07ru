@@ -1,4 +1,4 @@
 @echo off
 REM Ўрифт должен быть Lucida Console или Consolas!!!
 chcp 1251 >nul
-Compiler.exe .\Source\Compiler\Compiler.ob07 con 4
+oc.exe .\Source\Compiler\oc.ob07 con 4
