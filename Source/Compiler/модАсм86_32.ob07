@@ -765,17 +765,17 @@
     CallRTL(_disprec)
   КОНЕЦ disprec;
 
-ПРОЦЕДУРА String*(Number, Len: ЦЕЛОЕ; str: мСтр.тСтрока);
+ПРОЦЕДУРА Строка*(уСтр_: мСтр.туСтрока);
   НАЧАЛО
-    Labels[Number] := -dcount;
-    ЕСЛИ Len > 1 ТОГДА
-      datastr(str)
-    АЕСЛИ Len = 1 ТОГДА
-      dataint(НЛИТ(str[0]))
+    Labels[уСтр_.цНомер] := -dcount;
+    ЕСЛИ уСтр_.цДлина > 1 ТОГДА
+      datastr(уСтр_.стрСтрока)
+    АЕСЛИ уСтр_.цДлина = 1 ТОГДА
+      dataint(НЛИТ(уСтр_.стрСтрока[0]))
     ИНАЧЕ
       dataint(0)
     КОНЕЦ
-  КОНЕЦ String;
+  КОНЕЦ Строка;
 
 ПРОЦЕДУРА InsertFpuInit;
   ПЕРЕМ t: туЗвеноАсм;
@@ -843,10 +843,10 @@
     InsertFpuInit
   КОНЕЦ ProcEnd;
 
-ПРОЦЕДУРА Module*(Name: мСтр.тСтрока; Number: ЦЕЛОЕ);
+ПРОЦЕДУРА Module*(уСтр_: мСтр.туСтрока);
   НАЧАЛО
-    String(Number + 2, LENGTH(Name), Name);
-    jmplong(JMP, Number + 1)
+    Строка(уСтр_);
+    jmplong(JMP, уСтр_.цНомер + 1)
   КОНЕЦ Module;
 
 ПРОЦЕДУРА Asm*(s: мСтр.тСтрока);
