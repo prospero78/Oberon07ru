@@ -573,16 +573,6 @@
     йнмеж
   йнмеж IntByte;
 
-опнжедспю DropFpu*(long: аскебн);
-  мювюкн
-    еякх long рнцдю
-      OutCode("83EC08DD1C24")
-    хмюве
-      OutCode("83EC04D91C24")
-    йнмеж;
-    бшв(fpu)
-  йнмеж DropFpu;
-
 опнжедспю AfterRet(func, float: аскебн; callconv, parsize: жекне);
   мювюкн
     еякх callconv = cdecl рнцдю
@@ -631,7 +621,17 @@
     йнмеж
   йнмеж FpuLoad;
 
-опнжедспю Call*(proc: жекне; func, float: аскебн; callconv, ccall, bases, level, parsize, local: жекне);
+опнжедспю лос_гЮОПЕРХРЭ*(long: аскебн);
+    мювюкн
+      еякх long рнцдю
+        OutCode("83EC08DD1C24")
+      хмюве
+        OutCode("83EC04D91C24")
+      йнмеж;
+      бшв(fpu)
+    йнмеж лос_гЮОПЕРХРЭ;
+
+опнжедспю оПНЖЕДСПС_бШГБЮРЭ*(proc: жекне; func, float: аскебн; callconv, ccall, bases, level, parsize, local: жекне);
   оепел i: жекне;
   мювюкн
     еякх ccall # 0 рнцдю
@@ -646,7 +646,7 @@
     jmplong(CALL, proc);
     AfterRet(func, float, callconv, parsize);
     FpuLoad(local, func & float)
-  йнмеж Call;
+  йнмеж оПНЖЕДСПС_бШГБЮРЭ;
 
 опнжедспю CallRTL(Proc: жекне);
   мювюкн
