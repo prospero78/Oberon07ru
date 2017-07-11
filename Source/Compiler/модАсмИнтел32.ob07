@@ -42,8 +42,15 @@
    JE = 84X; JNE = 85X; JLE = 8EX; JGE = 8DX; JG = 8FX; JL = 8CX;
 
    JCMD = 1; LCMD = 2; GCMD = 3; OCMD = 4; ECMD = 5;
-   PUSHEAX = 6; PUSHECX = 7; PUSHEDX = 8; POPEAX = 9; POPECX = 10; POPEDX = 11;
-   ICMP1 = 13; ICMP2 = 14;
+   PUSH_EAX = 6;
+   PUSHECX = 7;
+   PUSHEDX = 8;
+   POPEAX = 9;
+   POPECX = 10;
+   POPEDX = 11;
+
+   ICMP1 = 13;
+   ICMP2 = 14;
 
    defcall = 0; stdcall = 1; cdecl = 2; winapi = 3;
 
@@ -392,25 +399,25 @@
       дна(ccount, 4)
    йнмеж OutInt;
 
-опнжедспю PushEAX;
+опнжедспю PushEAX; (* ================================================================= *)
    мювюкн
       OutByte(50H);
-      current.tcmd := PUSHEAX
+      current.tcmd := PUSH_EAX
    йнмеж PushEAX;
 
-опнжедспю PushECX;
+опнжедспю PushECX; (* ================================================================= *)
    мювюкн
       OutByte(51H);
       current.tcmd := PUSHECX
    йнмеж PushECX;
 
-опнжедспю PushEDX;
+опнжедспю PushEDX; (* ================================================================= *)
    мювюкн
       OutByte(52H);
       current.tcmd := PUSHEDX
    йнмеж PushEDX;
 
-опнжедспю PopEAX;
+опнжедспю PopEAX; (* ================================================================== *)
    мювюкн
       OutByte(58H);
       current.tcmd := POPEAX
@@ -1452,7 +1459,7 @@
     онйю cur # осярн декюрэ
       flag := кнфэ;
       бшанп cur.tcmd хг
-      |PUSHEAX:
+      |PUSH_EAX:
         flag := cur.ЯКЕДСЧЫ(РСгБЕМНюЯЛ).tcmd = POPEAX
       |PUSHECX:
         flag := cur.ЯКЕДСЧЫ(РСгБЕМНюЯЛ).tcmd = POPECX
