@@ -1364,7 +1364,7 @@
            ≈—Ћ» ц одќ— = 6 “ќ√ƒј
              мѕров.“ест((Name # м—кан._«в—тарт) & (Name # м—кан._version), у оорд, 133)
             ќЌ≈÷;
-           мјсм.ProcExport(id.Number, Name, мјсм»32.NewLabel())
+           мјсм.ѕроц_Ёкспортировать(id.Number, Name, мјсм»32.NewLabel())
           ќЌ≈÷;
          id.Parent := curBlock;
          curBlock := id;

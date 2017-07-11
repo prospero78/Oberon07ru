@@ -263,7 +263,7 @@
       etable.size := etable.size + etable.textlen
    КОНЕЦ PackExport;
 
-ПРОЦЕДУРА ProcExport*(Number: ЦЕЛОЕ; уЗвеноСущ_: мЗвСущ.туЗвеноСущ; NameLabel: ЦЕЛОЕ);
+ПРОЦЕДУРА Проц_Экспортировать*(Number: ЦЕЛОЕ; уЗвеноСущ_: мЗвСущ.туЗвеноСущ; NameLabel: ЦЕЛОЕ);
    НАЧАЛО
       ЕСЛИ dll ТОГДА
          etable.arradr[etable.adrcount] := Number;
@@ -278,7 +278,7 @@
          kosexp[kosexpcount].NameLabel := NameLabel;
          ДОБ(kosexpcount)
       КОНЕЦ
-   КОНЕЦ ProcExport;
+   КОНЕЦ Проц_Экспортировать;
 
 ПРОЦЕДУРА Err(code: ЦЕЛОЕ);
    НАЧАЛО
@@ -463,10 +463,10 @@
       ДОБ(topstk)
    КОНЕЦ PushCall;
 
-ПРОЦЕДУРА Param*;
+ПРОЦЕДУРА Стек_Ограничить*;
    НАЧАЛО
       current := callstk[topstk - 1][0]
-   КОНЕЦ Param;
+   КОНЕЦ Стек_Ограничить;
 
 ПРОЦЕДУРА Вызов_Закончить*;
   НАЧАЛО
@@ -515,7 +515,7 @@
     ДОБ(dcount, 4)
   КОНЕЦ dataint;
 
-ПРОЦЕДУРА jmp*(jamp: ЛИТ; label: ЦЕЛОЕ);
+ПРОЦЕДУРА Переход_Выполнить*(jamp: ЛИТ; label: ЦЕЛОЕ);
    ПЕРЕМ
       n: ЦЕЛОЕ;
    НАЧАЛО
@@ -537,20 +537,20 @@
       current.tcmd := JCMD;
       current.бКороткое := ИСТИНА;
       ДОБ(ccount, 4)
-   КОНЕЦ jmp;
+   КОНЕЦ Переход_Выполнить;
 
 ПРОЦЕДУРА jmplong(jamp: ЛИТ; label: ЦЕЛОЕ);
    НАЧАЛО
-      jmp(jamp, label);
+      Переход_Выполнить(jamp, label);
       current.бКороткое := ЛОЖЬ
    КОНЕЦ jmplong;
 
-ПРОЦЕДУРА Label*(label: ЦЕЛОЕ);
+ПРОЦЕДУРА Метку_Назначить*(label: ЦЕЛОЕ);
   НАЧАЛО
     New;
     current.перем.адрес := mSys.ADR(Labels[label]);
     current.tcmd := LCMD
-  КОНЕЦ Label;
+  КОНЕЦ Метку_Назначить;
 
 ПРОЦЕДУРА CmdN(Number: ЦЕЛОЕ);
   НАЧАЛО
@@ -673,7 +673,7 @@
     dataint(0);
     Labels[SELFNAME] := -dcount;
     datastr(exename);
-    Label(START);
+    Метку_Назначить(START);
     ЕСЛИ dll ТОГДА
       OutCode("558BEC837D0C007507");
       CallRTL(_close);
@@ -718,11 +718,11 @@
     ЕСЛИ current.предыдущ(туЗвеноАсм).tcmd = ICMP2 ТОГДА
       c := CmpOpt(ИСТИНА);
       OutCode("5A583BC2");
-      jmp(ВЛИТ(c), L)
+      Переход_Выполнить(ВЛИТ(c), L)
     ИНАЧЕ
       PopECX;
       OutCode("85C9");
-      jmp(JE, L)
+      Переход_Выполнить(JE, L)
     КОНЕЦ
   КОНЕЦ ifwh;
 
@@ -739,20 +739,20 @@
     ЕСЛИ current.предыдущ(туЗвеноАсм).tcmd = ICMP2 ТОГДА
       c := CmpOpt(orop);
       OutCode("5A583BC2");
-      jmp(ВЛИТ(c), L1);
+      Переход_Выполнить(ВЛИТ(c), L1);
       PushConst(НЛИТ(orop))
     ИНАЧЕ
       PopECX;
       OutCode("85C9");
       ЕСЛИ orop ТОГДА
-        jmp(JE, L1)
+        Переход_Выполнить(JE, L1)
       ИНАЧЕ
-        jmp(JNE, L1)
+        Переход_Выполнить(JNE, L1)
       КОНЕЦ;
       PushECX
     КОНЕЦ;
-    jmp(JMP, L);
-    Label(L1)
+    Переход_Выполнить(JMP, L);
+    Метку_Назначить(L1)
   КОНЕЦ IfWhile;
 
 ПРОЦЕДУРА newrec*;
@@ -797,12 +797,12 @@
   НАЧАЛО
     ЕСЛИ Module ТОГДА
       OutCode("EB0C");
-      Label(Number + 3);
+      Метку_Назначить(Number + 3);
       PushInt(Number + 2);
       jmplong(JMP, HALT);
-      Label(Number + 1)
+      Метку_Назначить(Number + 1)
     ИНАЧЕ
-      Label(Number)
+      Метку_Назначить(Number)
     КОНЕЦ;
     OutCode("558BEC");
     ЕСЛИ Local > 12 ТОГДА
@@ -1377,12 +1377,12 @@
   НАЧАЛО
     LEnd := NewLabel();
     LBeg := NewLabel();
-    Label(LBeg);
+    Метку_Назначить(LBeg);
     OutCode("8B14248B4424043910");
     ЕСЛИ inc ТОГДА
-      jmp(JG, LEnd)
+      Переход_Выполнить(JG, LEnd)
     ИНАЧЕ
-      jmp(JL, LEnd)
+      Переход_Выполнить(JL, LEnd)
     КОНЕЦ
   КОНЕЦ For;
 
@@ -1396,8 +1396,8 @@
     ИНАЧЕ
       IntByte("8302", "8102", step)
     КОНЕЦ;
-    jmp(JMP, LBeg);
-    Label(LEnd);
+    Переход_Выполнить(JMP, LBeg);
+    Метку_Назначить(LEnd);
     OutCode("83C408")
   КОНЕЦ NextFor;
 
@@ -1407,14 +1407,14 @@
     L := NewLabel();
     IntByte("83FA", "81FA", a);
     ЕСЛИ a = b ТОГДА
-      jmp(JNE, L)
+      Переход_Выполнить(JNE, L)
     ИНАЧЕ
-      jmp(JL, L);
+      Переход_Выполнить(JL, L);
       IntByte("83FA", "81FA", b);
-      jmp(JG, L)
+      Переход_Выполнить(JG, L)
     КОНЕЦ;
-    jmp(JMP, LBeg);
-    Label(L)
+    Переход_Выполнить(JMP, LBeg);
+    Метку_Назначить(L)
   КОНЕЦ CaseLabel;
 
 ПРОЦЕДУРА Drop*;
@@ -2033,27 +2033,27 @@
          OutCode("B801000000C9C20400")
       КОНЕЦ;
       OutCode("EB05");
-      Label(ASSRT);
+      Метку_Назначить(ASSRT);
       CallRTL(_assrt);
       OutCode("EB09");
-      Label(HALT);
+      Метку_Назначить(HALT);
       OutCode("6A006A00");
       CallRTL(_assrt);
       OutCode("6A00");
       CallRTL(_halt);
       OutByte(90H);
       ЕСЛИ obj ТОГДА
-         Label(Exports);
+         Метку_Назначить(Exports);
          CmdN(szSTART); CmdN(START);
          CmdN(szversion); OutInt(stk);
          ДЛЯ i := 0 ДО kosexpcount - 1 ДЕЛАТЬ
             CmdN(kosexp[i].NameLabel); CmdN(kosexp[i].Adr)
          КОНЕЦ;
          OutInt(0);
-         Label(szSTART); OutStringZ("START");
-         Label(szversion); OutStringZ("version");
+         Метку_Назначить(szSTART); OutStringZ("START");
+         Метку_Назначить(szversion); OutStringZ("version");
          ДЛЯ i := 0 ДО kosexpcount - 1 ДЕЛАТЬ
-            Label(kosexp[i].NameLabel);
+            Метку_Назначить(kosexp[i].NameLabel);
             OutStringZ(kosexp[i].уЗвеноСущ.стрИмя)
          КОНЕЦ
       КОНЕЦ;
