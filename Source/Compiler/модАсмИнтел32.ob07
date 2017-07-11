@@ -660,11 +660,12 @@
     ДОБ(ccount, 4)
   КОНЕЦ CallRTL;
 
-ПРОЦЕДУРА PushInt*(n: ЦЕЛОЕ);
+ПРОЦЕДУРА НаСтек_ЦЕЛОЕ*(n: ЦЕЛОЕ);
   НАЧАЛО
+  (* #ФИКС вообще-то код 64Н для PSH n *)
     OutByte(68H);
     CmdN(n)
-  КОНЕЦ PushInt;
+  КОНЕЦ НаСтек_ЦЕЛОЕ;
 
 ПРОЦЕДУРА Prolog*(exename: мСтр.тСтрока);
   НАЧАЛО
@@ -798,7 +799,7 @@
     ЕСЛИ Module ТОГДА
       OutCode("EB0C");
       Метку_Назначить(Number + 3);
-      PushInt(Number + 2);
+      НаСтек_ЦЕЛОЕ(Number + 2);
       jmplong(JMP, HALT);
       Метку_Назначить(Number + 1)
     ИНАЧЕ
@@ -866,7 +867,7 @@
 ПРОЦЕДУРА Mono*(Number: ЦЕЛОЕ);
   НАЧАЛО
     PopEDX;
-    PushInt(Number)
+    НаСтек_ЦЕЛОЕ(Number)
   КОНЕЦ Mono;
 
 ПРОЦЕДУРА StrMono*;
@@ -1137,7 +1138,7 @@
     PopEDX;
     OutCode("85D2751368");
     OutInt(мУтиль.строка_ном * 16 + 1);
-    PushInt(мУтиль.модуль_ном + 2);
+    НаСтек_ЦЕЛОЕ(мУтиль.модуль_ном + 2);
     ЕСЛИ proc = мКонст.процКОНТРОЛЬ ТОГДА
       OutCode("6A026A")
     ИНАЧЕ
@@ -2011,8 +2012,8 @@
       КОНЕЦ;
       current := start;
       ЕСЛИ con ИЛИ gui ИЛИ dll ТОГДА
-         PushInt(LoadLibrary);
-         PushInt(GetProcAddress);
+         НаСтек_ЦЕЛОЕ(LoadLibrary);
+         НаСтек_ЦЕЛОЕ(GetProcAddress);
          OutCode("5859FF31FF3054")
       АЕСЛИ elf ТОГДА
          OutCode("6800000000");
@@ -2022,8 +2023,8 @@
       КОНЕЦ;
       GlobalAdr(0);
       PushConst(ЗСП(gsize, 2));
-      PushInt(RTABLE);
-      PushInt(SELFNAME);
+      НаСтек_ЦЕЛОЕ(RTABLE);
+      НаСтек_ЦЕЛОЕ(SELFNAME);
       CallRTL(_init);
       current := asmlist.следующ(туЗвеноАсм);
       ЕСЛИ dll ТОГДА
