@@ -165,15 +165,15 @@
    йнмеж;
    kosexpcount: жекне;
 
-опнжедспю setfelf*(name: ЛяРП.РяРПНЙЮ);
+опнжедспю тЮИКкХМ_сЯР*(name: ЛяРП.РяРПНЙЮ);
    мювюкн
       ЯРПтЮИКхЛЪ_ЦКНА := name
-   йнмеж setfelf;
+   йнмеж тЮИКкХМ_сЯР;
 
-опнжедспю AddRtlProc*(idx, proc: жекне);
+опнжедспю оПНЖпРК_дНАЮБХРЭ*(idx, proc: жекне);
    мювюкн
       RtlProc[idx] := proc
-   йнмеж AddRtlProc;
+   йнмеж оПНЖпРК_дНАЮБХРЭ;
 
 опнжедспю IntToCard16(i: жекне): mSys.CARD16;
    оепел
@@ -667,7 +667,7 @@
     CmdN(n)
   йнмеж мЮяРЕЙ_жекне;
 
-опнжедспю Prolog*(exename: ЛяРП.РяРПНЙЮ);
+опнжедспю оПНКНЦ*(exename: ЛяРП.РяРПНЙЮ);
   мювюкн
     ExecName := exename;
     Labels[hInstance] := -dcount;
@@ -683,13 +683,13 @@
       OutCode("558BEC")
     йнмеж;
     start := asmlist.ЯКЕДСЧЫ(РСгБЕМНюЯЛ)
-  йнмеж Prolog;
+  йнмеж оПНКНЦ;
 
-опнжедспю AddRec*(base: жекне);
+опнжедспю гюохяэ_дНАЮБХРЭ*(base: жекне);
   мювюкн
     дна(reccount);
     recarray[reccount] := base
-  йнмеж AddRec;
+  йнмеж гюохяэ_дНАЮБХРЭ;
 
 опнжедспю CmpOpt(inv: аскебн): жекне;
   оепел cur: РСгБЕМНюЯЛ; c: жекне;
@@ -855,14 +855,14 @@
     OutCode(s)
   йнмеж Asm;
 
-опнжедспю GlobalAdr*(offset: жекне);
+опнжедспю юДПЕЯцКНАЮКЭМШИ*(offset: жекне);
   мювюкн
     OutByte(0BAH);
     OutInt(offset);
     current.ЙНД.ЮДПЕЯ := mSys.ADR(Code[ccount - 4]);
     current.tcmd := GCMD;
     PushEDX
-  йнмеж GlobalAdr;
+  йнмеж юДПЕЯцКНАЮКЭМШИ;
 
 опнжедспю Mono*(Number: жекне);
   мювюкн
@@ -1062,7 +1062,7 @@
     FpuLoad(local, func & float)
   йнмеж CallVar;
 
-опнжедспю LocalAdr*(offset, bases: жекне);
+опнжедспю юДПЕЯкНЙЮКЭМШИ*(offset, bases: жекне);
   мювюкн
     еякх bases = 0 рнцдю
       Empty(offset);
@@ -1075,7 +1075,7 @@
     еякх bases = 0 рнцдю
       Empty(offset)
     йнмеж
-  йнмеж LocalAdr;
+  йнмеж юДПЕЯкНЙЮКЭМШИ;
 
 опнжедспю Field*(offset: жекне);
   мювюкн
@@ -1167,7 +1167,7 @@
     йнмеж
   йнмеж StFunc;
 
-опнжедспю Load*(T: жекне);
+опнжедспю гЮЦПСГХРЭ*(T: жекне);
    оепел
       lastcmd: РСгБЕМНюЯЛ;
       offset: жекне;
@@ -1239,7 +1239,7 @@
       йнмеж
     хмюве
     йнмеж
-  йнмеж Load;
+  йнмеж гЮЦПСГХРЭ;
 
 опнжедспю Save*(T: жекне);
   мювюкн
@@ -2021,7 +2021,7 @@
       юеякх kos хкх obj рнцдю
          OutByte(54H)
       йнмеж;
-      GlobalAdr(0);
+      юДПЕЯцКНАЮКЭМШИ(0);
       PushConst(гяо(gsize, 2));
       мЮяРЕЙ_жекне(RTABLE);
       мЮяРЕЙ_жекне(SELFNAME);
