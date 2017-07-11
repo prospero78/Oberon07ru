@@ -1090,7 +1090,7 @@
     OutCode("FF72FC")
   йнмеж DerefType;
 
-опнжедспю Guard*(T: жекне; Check: аскебн);
+опнжедспю гЮЫХРХРЭ*(T: жекне; Check: аскебн);
   мювюкн
     еякх Check рнцдю
       PopEAX;
@@ -1111,7 +1111,7 @@
       OutCode("85C0750A");
       OnError(3)
     йнмеж
-  йнмеж Guard;
+  йнмеж гЮЫХРХРЭ;
 
 опнжедспю StProc*(proc: жекне);
   мювюкн
@@ -1309,13 +1309,13 @@
     PushEDX
   йнмеж FixIdx;
 
-опнжедспю Idx*;
+опнжедспю хлъ_яНУП*;
   мювюкн
     PopEDX;
     PopECX;
     OutCode("03D1");
     PushEDX
-  йнмеж Idx;
+  йнмеж хлъ_яНУП;
 
 опнжедспю DupLoadCheck*;
   мювюкн
