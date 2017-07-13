@@ -829,11 +829,11 @@
     isfpu := кнфэ
   йнмеж оПНЖ_мЮВЮРЭ;
 
-опнжедспю Leave*;
+опнжедспю оНЙХМСРЭ*;
   мювюкн
     OutByte(0C9H);
     InsertFpuInit
-  йнмеж Leave;
+  йнмеж оНЙХМСРЭ;
 
 опнжедспю ProcEnd*(Number, Param: жекне; func, float: аскебн);
   мювюкн
