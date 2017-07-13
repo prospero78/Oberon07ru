@@ -800,7 +800,7 @@
     йнмеж
   йнмеж InsertFpuInit;
 
-опнжедспю ProcBeg*(Number, Local: жекне; Module: аскебн);
+опнжедспю оПНЖ_мЮВЮРЭ*(Number, Local: жекне; Module: аскебн);
   оепел i: жекне;
   мювюкн
     еякх Module рнцдю
@@ -827,7 +827,7 @@
     fpu := 0;
     maxfpu := 0;
     isfpu := кнфэ
-  йнмеж ProcBeg;
+  йнмеж оПНЖ_мЮВЮРЭ;
 
 опнжедспю Leave*;
   мювюкн
