@@ -1377,7 +1377,7 @@
          —ущн—лед_ѕолуч;
          DeclSeq;
          id.LocalSize := id.VarSize - id.ParamSize;
-         мјсм»32.ѕроц_Ќачать(id.Number, id.LocalSize, Ћќ∆№);
+         мјсм.ѕроц_Ќачать(id.Number, id.LocalSize, Ћќ∆№);
          ≈—Ћ» м—кан.ц—ущность = м онст.ксЌј„јЋќ “ќ√ƒј
            —ущн—лед_ѕолуч;
            OpSeq
@@ -1615,7 +1615,7 @@
          м¬ин онс.÷вет_”ст(7, 0);
           ќѕ»я(idmod.у«в—ущ.стр»м€, у—трока.стр—трока);
          у—трока.цЌомер := idmod.Number;
-         мјсм»32.Module(у—трока);
+         мјсм.ћодуль_¬ызвать(у—трока);
          UnitNumber := idmod.Number;
          модуль.IdentBegin := модуль.Idents.следующ(ту—ущность);
          curBlock := idmod;
