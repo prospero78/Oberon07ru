@@ -73,7 +73,7 @@
 
    тСекция = ЗАПИСЬ
          имя: тСекцияИмя;
-         size, adr, sizealign, OAPfile, reserved6, reserved7, reserved8, attrflags: ЦЕЛОЕ
+         цРазмер, цАдрес, sizealign, OAPfile, reserved6, reserved7, reserved8, attrflags: ЦЕЛОЕ
       КОНЕЦ;
 
    тЗаголовок = ЗАПИСЬ
@@ -336,8 +336,8 @@
 ПРОЦЕДУРА SetSection(ПЕР Section: тСекция; name: тСекцияИмя; size, adr, sizealign, OAPfile, attrflags: ЦЕЛОЕ);
    НАЧАЛО
       Section.имя := name;
-      Section.size := size;
-      Section.adr := adr;
+      Section.цРазмер := size;
+      Section.цАдрес := adr;
       Section.sizealign := sizealign;
       Section.OAPfile := OAPfile;
       Section.attrflags := attrflags;
@@ -1518,8 +1518,8 @@
             Coff.Characteristics := IntToCard16(0184H);
 
             Coff.text.имя := ".flat";
-            Coff.text.size := 0;
-            Coff.text.adr := 0;
+            Coff.text.цРазмер := 0;
+            Coff.text.цАдрес := 0;
             Coff.text.sizealign := size;
             Coff.text.OAPfile := 8CH;
             Coff.text.reserved6 := size + datasize + 8CH;
@@ -1527,8 +1527,8 @@
             Coff.text.attrflags := 40300020H;
 
             Coff.data.имя := ".data";
-            Coff.data.size := 0;
-            Coff.data.adr := 0;
+            Coff.data.цРазмер := 0;
+            Coff.data.цАдрес := 0;
             Coff.data.sizealign := datasize;
             Coff.data.OAPfile := size + 8CH;
             Coff.data.reserved6 := 0;
@@ -1537,8 +1537,8 @@
             Coff.data.attrflags := 0C0300040H;
 
             Coff.bss.имя := ".bss";
-            Coff.bss.size := 0;
-            Coff.bss.adr := 0;
+            Coff.bss.цРазмер := 0;
+            Coff.bss.цАдрес := 0;
             Coff.bss.sizealign := gsize;
             Coff.bss.OAPfile := 0;
             Coff.bss.reserved6 := 0;
@@ -1776,9 +1776,9 @@
             Выровнять(datasize, 200H), Выровнять(codesize, 200H) + Выровнять(rdatasize, 200H) + 400H, dataattr);
 
          ЕСЛИ dll ТОГДА
-            SetSection(RelocSection, ".reloc", rcount, Header.sections[2].adr + Выровнять(datasize + gsize, 1000H), Выровнять(rcount, 200H),
+            SetSection(RelocSection, ".reloc", rcount, Header.sections[2].цАдрес + Выровнять(datasize + gsize, 1000H), Выровнять(rcount, 200H),
                Header.sections[2].OAPfile + Выровнять(datasize, 200H), relocattr);
-            Header.structs[5].adr := RelocSection.adr;
+            Header.structs[5].adr := RelocSection.цАдрес;
             Header.structs[5].size := rcount
          КОНЕЦ;
 
