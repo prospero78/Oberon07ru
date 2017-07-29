@@ -57,7 +57,7 @@
 
    record = 0; union = 1; noalign = 2;
 
-   ePROC = 4; eSTPROC = 5; eSYSPROC = 6;
+   eSTPROC = 5; eSYSPROC = 6;
 
 рхош
 
