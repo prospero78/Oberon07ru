@@ -47,7 +47,6 @@
 
    lxDbl = 68;
 
-   IDSTPROC = 6; IDGUARD = 7;
    IDPARAM = 8; IDSYSPROC = 9;
 
 “»ѕџ
@@ -181,7 +180,7 @@
             выраж_.у“ип := sttypes[м онст.TVOID]
          |м онст.IDTYPE:
             мѕров.“ест(Ћќ∆№, у оорд, 101)
-         |IDSTPROC:
+         |м онст.IDSTPROC:
             выраж_.ц“ип := м онст.eSTPROC;
             выраж_.у“ип := sttypes[м онст.TVOID]
          |IDSYSPROC:

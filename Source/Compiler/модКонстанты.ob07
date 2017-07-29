@@ -91,6 +91,8 @@
    IDTYPE* = 3;
    IDVAR* = 4;
    IDPROC* = 5;
+   IDSTPROC* = 6;
+   IDGUARD* = 7;
  (* выражения *)
    eVAR* = 1;
    eCONST* = 2;

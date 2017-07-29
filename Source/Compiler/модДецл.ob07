@@ -48,7 +48,6 @@
    FOVER* = lxERR7 - lxERR0;
    UNDER* = lxERR9 - lxERR0;
 
-   IDSTPROC = 6; IDGUARD = 7;
    IDPARAM = 8; IDSYSPROC = 9;
 
    paramvar* = 1; param* = 2;
@@ -227,10 +226,10 @@
       cur: ту—ущность;
    Ќј„јЋќ
       cur := модуль.Idents.следующ(ту—ущность);
-      ѕќ ј (cur.iType # IDGUARD) & (cur.у«в—ущ # Name) ƒ≈Ћј“№
+      ѕќ ј (cur.iType # м онст.IDGUARD) & (cur.у«в—ущ # Name) ƒ≈Ћј“№
          cur := cur.предыдущ(ту—ущность)
        ќЌ≈÷
-      ¬≈–Ќ”“№ cur.iType = IDGUARD
+      ¬≈–Ќ”“№ cur.iType = м онст.IDGUARD
     ќЌ≈÷ CheckIdent;
 
 ѕ–ќ÷≈ƒ”–ј ќхрана_—оздать;
@@ -240,7 +239,7 @@
       Ќќ¬(ident);
       мѕам.ћало(ident = ѕ”—“ќ);
       ident.у«в—ущ := ѕ”—“ќ;
-      ident.iType := IDGUARD;
+      ident.iType := м онст.IDGUARD;
       ident.у“ип := sttypes[м онст.TVOID];
       м÷епь.ƒобавить(модуль.Idents, ident);
       ƒќЅ(модуль.ц”ровень)
@@ -307,7 +306,7 @@
       Ќќ¬(у оорд);
       у оорд.ц—трока := 0;
       у оорд.цѕоз := 0;
-      PushIdent(м«в—ущ.ƒобавить(Name), у оорд, IDSTPROC, sttypes[м онст.TVOID], ѕ”—“ќ, Ћќ∆№, StProc)
+      PushIdent(м«в—ущ.ƒобавить(Name), у оорд, м онст.IDSTPROC, sttypes[м онст.TVOID], ѕ”—“ќ, Ћќ∆№, StProc)
     ќЌ≈÷ PushStProc;
 
 ѕ–ќ÷≈ƒ”–ј PushStType(Name: м—тр.т—трока; T: ÷≈Ћќ≈);
@@ -451,7 +450,7 @@
       res := ѕ”—“ќ;
       мќш. оорд_”ст(у оорд);
       cur := Unit.IdentBegin.следующ(ту—ущность);
-      ѕќ ј (cur # ѕ”—“ќ) & (cur.iType # IDGUARD) ƒ≈Ћј“№
+      ѕќ ј (cur # ѕ”—“ќ) & (cur.iType # м онст.IDGUARD) ƒ≈Ћј“№
          ≈—Ћ» cur.у«в—ущ = Name “ќ√ƒј
             ≈—Ћ» (Unit # модуль) & ~cur.Export “ќ√ƒј
                res := ѕ”—“ќ
@@ -1232,7 +1231,7 @@
   Ќј„јЋќ
     cur := модуль.Idents.следующ(ту—ущность);
     n := 0;
-    ѕќ ј cur.iType # IDGUARD ƒ≈Ћј“№
+    ѕќ ј cur.iType # м онст.IDGUARD ƒ≈Ћј“№
       cur := cur.предыдущ(ту—ущность);
       ƒќЅ(n)
      ќЌ≈÷;
