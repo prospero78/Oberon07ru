@@ -88,6 +88,7 @@
    сущКОН* = 0;
    IDMOD* = 1;
    IDCONST* = 2;
+   IDTYPE* = 3;
  (* выражения *)
    eVAR* = 1;
    eCONST* = 2;
