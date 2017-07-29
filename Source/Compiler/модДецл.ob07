@@ -48,7 +48,7 @@
    FOVER* = lxERR7 - lxERR0;
    UNDER* = lxERR9 - lxERR0;
 
-   IDCONST = 2; IDTYPE = 3; IDVAR = 4; IDPROC = 5; IDSTPROC = 6; IDGUARD = 7;
+   IDTYPE = 3; IDVAR = 4; IDPROC = 5; IDSTPROC = 6; IDGUARD = 7;
    IDPARAM = 8; IDSYSPROC = 9;
 
    paramvar* = 1; param* = 2;
@@ -1296,7 +1296,7 @@
          СущнСлед_Получ;
          ПОКА мСкан.цСущность = мКонст.сущИМЯ ДЕЛАТЬ
            IdentDef;
-           PushIdent(Name, уКоорд, IDCONST, ПУСТО, ПУСТО, Export, 0);
+           PushIdent(Name, уКоорд, мКонст.IDCONST, ПУСТО, ПУСТО, Export, 0);
            last := модуль.Idents.следующ(туСущность);
            Сущность_Проверить(мКонст.опРавно);
            СущнСлед_Получ;

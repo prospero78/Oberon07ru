@@ -47,7 +47,7 @@
 
    lxDbl = 68;
 
-   IDCONST = 2; IDTYPE = 3; IDVAR = 4; IDPROC = 5; IDSTPROC = 6; IDGUARD = 7;
+   IDTYPE = 3; IDVAR = 4; IDPROC = 5; IDSTPROC = 6; IDGUARD = 7;
    IDPARAM = 8; IDSYSPROC = 9;
 
 “»ѕџ
@@ -159,7 +159,7 @@
                мјсм.јдресЋокальный(у—ущн.Offset, цЅаза);
                мјсм.«агрузить(м онст.тип÷≈Ћќ≈)
              ќЌ≈÷
-         |IDCONST:
+         |м онст.IDCONST:
             мѕров.“ест(у—ущн.у“ип # ѕ”—“ќ, у оорд, 75);
             выраж_.ц“ип := м онст.eCONST;
             выраж_.у“ип := у—ущн.у“ип;
