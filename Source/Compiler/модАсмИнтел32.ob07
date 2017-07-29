@@ -53,7 +53,10 @@
    _rset* = 0; _inset* = 1; _saverec* = 2; _length* = 3; _checktype* = 4; _strcmp* = 5;
    _lstrcmp* = 6; _rstrcmp* = 7; _savearr* = 8; _newrec* = 9; _disprec* = 10; _arrayidx* = 11;
    _arrayrot* = 12; _assrt* = 13; _strcopy* = 14; _arrayidx1* = 15; _init* = 16; _close* = 17; _halt* = 18;
-   ASSRT = 19; hInstance = 20; SELFNAME = 21; RTABLE = 22;LoadLibrary = 23; GetProcAddress = 24;
+   ASSRT = 19; hInstance = 20; SELFNAME = 21; RTABLE = 22;
+
+   LoadLibrary = 23;
+   GetProcAddress = 24;
    Exports = 25; szSTART = 26; START = 27; szversion = 28; HALT = 29;
 
    FREGS = 8;
