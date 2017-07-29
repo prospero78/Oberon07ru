@@ -74,10 +74,10 @@
          у“ип*: м“ип.ту“ип;
          модуль*: тућодуль;
          уѕредок: ту—ущность;
-         Value*: ƒЋ»Ќ¬≈ў;
-         ц—трока, цѕоз, цЌомер*, ц—ущн*, StProc*, VarSize, ParamSize*,
-         LocalSize*, ц—мещение*, VarKind*, Level*, ParamCount*: ÷≈Ћќ≈;
-         Export: Ѕ”Ћ≈¬ќ
+         дв«начение*: ƒЋ»Ќ¬≈ў;
+         ц—трока, цѕоз, цЌомер*, ц—ущн*, StProc*, ц«нач–азмер, цѕарам–азмер*,
+         цЋокал–азмер*, ц—мещение*, VarKind*, Level*, ParamCount*: ÷≈Ћќ≈;
+         бЁкспорт: Ѕ”Ћ≈¬ќ
        ќЌ≈÷;
 
    PTRBASE = ” ј«ј“≈Ћ№ Ќј «јѕ»—№ (м«вено.т«вено)
@@ -263,7 +263,7 @@
       ident.ц—ущн := iType;
       ident.у“ип := T;
       ident.модуль := u;
-      ident.Export := Export;
+      ident.бЁкспорт := Export;
       ident.StProc := StProc;
       ident.Level := модуль.ц”ровень;
       м÷епь.ƒобавить(модуль.Idents, ident)
@@ -450,7 +450,7 @@
       cur := Unit.IdentBegin.следующ(ту—ущность);
       ѕќ ј (cur # ѕ”—“ќ) & (cur.ц—ущн # м онст.сущќхрана) ƒ≈Ћј“№
          ≈—Ћ» cur.у«в—ущ = Name “ќ√ƒј
-            ≈—Ћ» (Unit # модуль) & ~cur.Export “ќ√ƒј
+            ≈—Ћ» (Unit # модуль) & ~cur.бЁкспорт “ќ√ƒј
                res := ѕ”—“ќ
             »Ќј„≈
                res := cur
@@ -872,7 +872,7 @@
     cur := cur.следующ(ту—ущность);
     ѕќ ј cur # ѕ”—“ќ ƒ≈Ћј“№
       cur.у“ип := T;
-      ≈—Ћ» cur.Export “ќ√ƒј
+      ≈—Ћ» cur.бЁкспорт “ќ√ƒј
          у оорд.ц—трока := cur.ц—трока;
          у оорд.цѕоз := cur.цѕоз;
         мѕров.“ест(~(T.цћаркер ¬ {м онст.тип«јѕ»—№, м онст.типћј——»¬}), у оорд, 90)
@@ -892,17 +892,17 @@
         ProgSize := ProgSize + мѕам.¬ыровн€ть(ProgSize)
       »Ќј„≈
         ≈—Ћ» cur.VarKind = 0 “ќ√ƒј
-          cur.ц—мещение := curBlock.ParamSize - curBlock.VarSize - n
+          cur.ц—мещение := curBlock.цѕарам–азмер - curBlock.ц«нач–азмер - n
         »Ќј„≈
-          cur.ц—мещение := curBlock.VarSize - 8 + 4 * (cur.Level + ЌЋ»“((cur.VarKind = paramvar) & (T.цћаркер = м онст.тип«јѕ»—№)))
+          cur.ц—мещение := curBlock.ц«нач–азмер - 8 + 4 * (cur.Level + ЌЋ»“((cur.VarKind = paramvar) & (T.цћаркер = м онст.тип«јѕ»—№)))
          ќЌ≈÷
        ќЌ≈÷;
-      мѕров.“ест2(curBlock.VarSize <= м онст.целое_макс - n, 93);
-      curBlock.VarSize := curBlock.VarSize + n;
-      мѕров.“ест2(curBlock.VarSize <= м онст.целое_макс - мѕам.¬ыровн€ть(curBlock.VarSize), 93);
-      curBlock.VarSize := curBlock.VarSize + мѕам.¬ыровн€ть(curBlock.VarSize);
+      мѕров.“ест2(curBlock.ц«нач–азмер <= м онст.целое_макс - n, 93);
+      curBlock.ц«нач–азмер := curBlock.ц«нач–азмер + n;
+      мѕров.“ест2(curBlock.ц«нач–азмер <= м онст.целое_макс - мѕам.¬ыровн€ть(curBlock.ц«нач–азмер), 93);
+      curBlock.ц«нач–азмер := curBlock.ц«нач–азмер + мѕам.¬ыровн€ть(curBlock.ц«нач–азмер);
       ≈—Ћ» cur.VarKind # 0 “ќ√ƒј
-        curBlock.ParamSize := curBlock.VarSize
+        curBlock.цѕарам–азмер := curBlock.ц«нач–азмер
        ќЌ≈÷;
       cur := cur.следующ(ту—ущность)
      ќЌ≈÷
@@ -1299,7 +1299,7 @@
            —ущн—лед_ѕолуч;
            ConstExpr(Value, T);
            —ущность_ѕроверить(м онст.оп“чк«пт);
-           last.Value := Value;
+           last.дв«начение := Value;
            last.у“ип := T;
            —ущн—лед_ѕолуч
           ќЌ≈÷
@@ -1358,7 +1358,7 @@
          IdentDef;
          PushIdent(Name, у оорд, м онст.сущѕ–ќ÷≈ƒ”–ј, “ип_—оздать(м онст.типѕ–ќ÷≈ƒ”–ј, 0, 4, 0, sttypes[м онст.TVOID], »—“»Ќј, ѕ”—“ќ), ѕ”—“ќ, Export, 0);
          id := модуль.Idents.следующ(ту—ущность);
-         ≈—Ћ» id.Export & main “ќ√ƒј
+         ≈—Ћ» id.бЁкспорт & main “ќ√ƒј
            ≈—Ћ» ц одќ— = 6 “ќ√ƒј
              мѕров.“ест((Name # м—кан._«в—тарт) & (Name # м—кан._version), у оорд, 133)
             ќЌ≈÷;
@@ -1372,8 +1372,8 @@
          —ущность_ѕроверить(м онст.оп“чк«пт);
          —ущн—лед_ѕолуч;
          DeclSeq;
-         id.LocalSize := id.VarSize - id.ParamSize;
-         мјсм.ѕроц_Ќачать(id.цЌомер, id.LocalSize, Ћќ∆№);
+         id.цЋокал–азмер := id.ц«нач–азмер - id.цѕарам–азмер;
+         мјсм.ѕроц_Ќачать(id.цЌомер, id.цЋокал–азмер, Ћќ∆№);
          ≈—Ћ» м—кан.ц—ущность = м онст.ксЌј„јЋќ “ќ√ƒј
            —ущн—лед_ѕолуч;
            OpSeq
@@ -1399,7 +1399,7 @@
          —ущн—лед_ѕолуч;
          —ущность_ѕроверить(м онст.оп“чк«пт);
          —ущн—лед_ѕолуч;
-         мјсм»32.ProcEnd(id.цЌомер, (id.ParamSize + (id.Level - 3) * 4) * ЌЋ»“(curBlock.у“ип.вызов ¬ {stdcall, winapi, defcall}), func, curBlock.у“ип.уѕредок.цћаркер ¬ {м онст.тип¬≈ў, м онст.типƒЋ»Ќ¬≈ў});
+         мјсм»32.ProcEnd(id.цЌомер, (id.цѕарам–азмер + (id.Level - 3) * 4) * ЌЋ»“(curBlock.у“ип.вызов ¬ {stdcall, winapi, defcall}), func, curBlock.у“ип.уѕредок.цћаркер ¬ {м онст.тип¬≈ў, м онст.типƒЋ»Ќ¬≈ў});
          PopBlock;
          curBlock := curBlock.уѕредок
         ќЌ≈÷
