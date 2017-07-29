@@ -48,8 +48,6 @@
    FOVER* = lxERR7 - lxERR0;
    UNDER* = lxERR9 - lxERR0;
 
-   IDPARAM = 8; IDSYSPROC = 9;
-
    paramvar* = 1; param* = 2;
 
    defcall = 0; stdcall = 1; cdecl = 2; winapi* = 3;
@@ -326,7 +324,7 @@
       НОВ(уКоорд);
       уКоорд.цСтрока := 0;
       уКоорд.цПоз := 0;
-      PushIdent(мЗвСущ.Добавить(Name), уКоорд, IDSYSPROC, sttypes[мКонст.TVOID], ПУСТО, ИСТИНА, StProc)
+      PushIdent(мЗвСущ.Добавить(Name), уКоорд, мКонст.IDSYSPROC, sttypes[мКонст.TVOID], ПУСТО, ИСТИНА, StProc)
    КОНЕЦ PushSysProc;
 
 ПРОЦЕДУРА PushSysType(Name: мСтр.тСтрока; T: ЦЕЛОЕ);

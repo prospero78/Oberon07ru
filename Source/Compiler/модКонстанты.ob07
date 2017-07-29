@@ -93,6 +93,8 @@
    IDPROC* = 5;
    IDSTPROC* = 6;
    IDGUARD* = 7;
+   IDPARAM = 8; (* а такой вообще используется хоть где-то?? *)
+   IDSYSPROC* = 9;
  (* выражения *)
    eVAR* = 1;
    eCONST* = 2;
