@@ -48,7 +48,7 @@
    FOVER* = lxERR7 - lxERR0;
    UNDER* = lxERR9 - lxERR0;
 
-   IDPROC = 5; IDSTPROC = 6; IDGUARD = 7;
+   IDSTPROC = 6; IDGUARD = 7;
    IDPARAM = 8; IDSYSPROC = 9;
 
    paramvar* = 1; param* = 2;
@@ -257,7 +257,7 @@
       ident.уЗвСущ := Name;
       ident.line := уКоорд_.цСтрока;
       ident.col := уКоорд_.цПоз;
-      ЕСЛИ iType IN {IDPROC, мКонст.IDMOD} ТОГДА
+      ЕСЛИ iType IN {мКонст.IDPROC, мКонст.IDMOD} ТОГДА
          ident.Number := мАсм.Метка_Новая();
          i := мАсм.Метка_Новая();
          i := мАсм.Метка_Новая();
@@ -1359,7 +1359,7 @@
          КОНЕЦ;
          Сущность_Проверить(мКонст.сущИМЯ);
          IdentDef;
-         PushIdent(Name, уКоорд, IDPROC, Тип_Создать(мКонст.типПРОЦЕДУРА, 0, 4, 0, sttypes[мКонст.TVOID], ИСТИНА, ПУСТО), ПУСТО, Export, 0);
+         PushIdent(Name, уКоорд, мКонст.IDPROC, Тип_Создать(мКонст.типПРОЦЕДУРА, 0, 4, 0, sttypes[мКонст.TVOID], ИСТИНА, ПУСТО), ПУСТО, Export, 0);
          id := модуль.Idents.следующ(туСущность);
          ЕСЛИ id.Export & main ТОГДА
            ЕСЛИ цКодОС = 6 ТОГДА
