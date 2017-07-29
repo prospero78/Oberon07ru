@@ -48,7 +48,7 @@
    FOVER* = lxERR7 - lxERR0;
    UNDER* = lxERR9 - lxERR0;
 
-   IDVAR = 4; IDPROC = 5; IDSTPROC = 6; IDGUARD = 7;
+   IDPROC = 5; IDSTPROC = 6; IDGUARD = 7;
    IDPARAM = 8; IDSYSPROC = 9;
 
    paramvar* = 1; param* = 2;
@@ -985,7 +985,7 @@
          field.уТип := ПУСТО;
          field.ByRef := ByRef;
          ЕСЛИ proc ТОГДА
-           PushIdent(Name, уКоорд, IDVAR, ПУСТО, ПУСТО, ЛОЖЬ, 0);
+           PushIdent(Name, уКоорд, мКонст.IDVAR, ПУСТО, ПУСТО, ЛОЖЬ, 0);
            ДОБ(curBlock.ParamCount);
            fp := модуль.Idents.следующ(туСущность);
            ЕСЛИ ByRef ТОГДА
@@ -1333,7 +1333,7 @@
          СущнСлед_Получ;
          ПОКА мСкан.цСущность = мКонст.сущИМЯ ДЕЛАТЬ
            IdentDef;
-           PushIdent(Name, уКоорд, IDVAR, ПУСТО, ПУСТО, Export, 0);
+           PushIdent(Name, уКоорд, мКонст.IDVAR, ПУСТО, ПУСТО, Export, 0);
            ЕСЛИ мСкан.цСущность = мКонст.опЗапятая ТОГДА
              СущнСлед_Получ;
              Сущность_Проверить(мКонст.сущИМЯ)
