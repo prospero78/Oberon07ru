@@ -52,8 +52,6 @@
 
    defcall = 0; stdcall = 1; cdecl = 2; winapi* = 3;
 
-   noalign = 2;
-
 ТИПЫ
 
    туСущность* = УКАЗАТЕЛЬ НА тСущность;
@@ -745,7 +743,7 @@
           cur.Offset := FieldOffset(Tf.выравнив, Tr.размер);
           мПров.Тест2(cur.Offset <= мКонст.целое_макс - Tf.размер, 83);
           Tr.размер := cur.Offset + Tf.размер
-        АЕСЛИ Tr.запись = noalign ТОГДА
+        АЕСЛИ Tr.запись = мКонст.noalign ТОГДА
           cur.Offset := FieldOffset(1, Tr.размер);
           мПров.Тест2(cur.Offset <= мКонст.целое_макс - Tf.размер, 83);
           Tr.размер := cur.Offset + Tf.размер
@@ -1099,7 +1097,7 @@
       ЕСЛИ flag = "union" ТОГДА
         rec := мКонст.union
       АЕСЛИ flag = "noalign" ТОГДА
-        rec := noalign
+        rec := мКонст.noalign
       ИНАЧЕ
         мПров.Тест2(ЛОЖЬ, 103)
       КОНЕЦ;
