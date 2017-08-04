@@ -433,8 +433,8 @@
 ѕ–ќ÷≈ƒ”–ј Del*(last: мјт.ту«венојсм);
    Ќј„јЋќ
       last.у«вѕрав := current.у«вѕрав;
-      ≈—Ћ» current = asmlist.следующ “ќ√ƒј
-         asmlist.следующ := last
+      ≈—Ћ» current = asmlist.у«вƒальше “ќ√ƒј
+         asmlist.у«вƒальше := last
        ќЌ≈÷;
       current := last
     ќЌ≈÷ Del;
@@ -481,7 +481,7 @@
     MemErr(asmlist = ѕ”—“ќ);
     Ќќ¬(nov);
     MemErr(nov = ѕ”—“ќ);
-    м÷епь.ƒобавить(asmlist, nov);
+    м÷епь.«в_ƒоб(asmlist, nov);
     current := nov;
    ќЌ≈÷ Ќастроить;
 
@@ -672,7 +672,7 @@
     ј≈—Ћ» obj “ќ√ƒј
       OutCode("558BEC")
      ќЌ≈÷;
-    start := asmlist.следующ(мјт.ту«венојсм)
+    start := asmlist.у«вƒальше(мјт.ту«венојсм)
    ќЌ≈÷ ѕролог;
 
 ѕ–ќ÷≈ƒ”–ј «јѕ»—№_ƒобавить*(base: ÷≈Ћќ≈);
@@ -1441,7 +1441,7 @@
     cur: мјт.ту«венојсм;
     flag: Ѕ”Ћ≈¬ќ;
   Ќј„јЋќ
-    cur := asmlist.предыдущ(мјт.ту«венојсм);
+    cur := asmlist.у«вѕервое(мјт.ту«венојсм);
     ѕќ ј cur # ѕ”—“ќ ƒ≈Ћј“№
       flag := Ћќ∆№;
       ¬џЅќ– cur.tcmd »«
@@ -1504,7 +1504,7 @@
 
             Write(mSys.ADR(Header), mSys.SIZE(т«аголовокKol));
 
-            cur := asmlist.предыдущ(мјт.ту«венојсм);
+            cur := asmlist.у«вѕервое(мјт.ту«венојсм);
             ѕќ ј cur # ѕ”—“ќ ƒ≈Ћј“№
                Write(mSys.ADR(Code[cur.кмд]), cur.clen);
                cur := cur.у«вѕрав(мјт.ту«венојсм)
@@ -1552,7 +1552,7 @@
 
             size := јдр¬ырав_ѕолуч(size2, 4);
             rcount := 0;
-            cur := asmlist.предыдущ(мјт.ту«венојсм);
+            cur := asmlist.у«вѕервое(мјт.ту«венојсм);
             ѕќ ј cur # ѕ”—“ќ ƒ≈Ћј“№
                ≈—Ћ» cur.tcmd IN {OCMD, GCMD} “ќ√ƒј
                   mSys.GET(mSys.ADR(Code[cur.кмд]), a);
@@ -1675,7 +1675,7 @@
 
          Write(mSys.ADR(bytes), 817H);
          Fill(2DDH, 90X);
-         cur := asmlist.предыдущ(мјт.ту«венојсм);
+         cur := asmlist.у«вѕервое(мјт.ту«венојсм);
          ѕќ ј cur # ѕ”—“ќ ƒ≈Ћј“№
             Write(mSys.ADR(Code[cur.кмд]), cur.clen);
             cur := cur.у«вѕрав(мјт.ту«венојсм)
@@ -1802,7 +1802,7 @@
             Fill(јдр¬ырав_ѕолуч(mSys.SIZE(т«аголовок), 200H) - mSys.SIZE(т«аголовок), 0X)
           ќЌ≈÷;
 
-         cur := asmlist.предыдущ(мјт.ту«венојсм);
+         cur := asmlist.у«вѕервое(мјт.ту«венојсм);
          ѕќ ј cur # ѕ”—“ќ ƒ≈Ћј“№
             Write(mSys.ADR(Code[cur.кмд]), cur.clen);
             cur := cur.у«вѕрав(мјт.ту«венојсм)
@@ -1852,7 +1852,7 @@
 
       ќптимизировать;
       temp2 := size;
-      cur := asmlist.предыдущ(мјт.ту«венојсм);
+      cur := asmlist.у«вѕервое(мјт.ту«венојсм);
       ѕќ ј cur # ѕ”—“ќ ƒ≈Ћј“№
          cur.адр.адрес := size;
          ≈—Ћ» cur.tcmd = LCMD “ќ√ƒј
@@ -1863,7 +1863,7 @@
        ќЌ≈÷;
 
       size := temp2;
-      cur := asmlist.предыдущ(мјт.ту«венојсм);
+      cur := asmlist.у«вѕервое(мјт.ту«венојсм);
       ѕќ ј cur # ѕ”—“ќ ƒ≈Ћј“№
          cur.адр.адрес := size;
          ≈—Ћ» cur.tcmd = LCMD “ќ√ƒј
@@ -1927,7 +1927,7 @@
          R.Size := 0;
          RCount := 0;
        ќЌ≈÷;
-      cur := asmlist.предыдущ(мјт.ту«венојсм);
+      cur := asmlist.у«вѕервое(мјт.ту«венојсм);
 
       ƒЋя i := 0 ƒќ LEN(RtlProc) - 1 ƒ≈Ћј“№
          RtlProc[i] := Labels[RtlProc[i]]
@@ -2019,7 +2019,7 @@
       Ќа—тек_÷≈Ћќ≈(RTABLE);
       Ќа—тек_÷≈Ћќ≈(SELFNAME);
       CallRTL(_init);
-      current := asmlist.следующ(мјт.ту«венојсм);
+      current := asmlist.у«вƒальше(мјт.ту«венојсм);
       ≈—Ћ» dll “ќ√ƒј
          OutCode("B801000000C9C20C00")
        ќЌ≈÷;
