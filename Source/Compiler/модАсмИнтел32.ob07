@@ -355,7 +355,7 @@
       MemErr(nov = ѕ”—“ќ);
       nov.кмд := ccount;
       м÷епь.¬ставить(asmlist, nov, current);
-      current := current.следующ(мјт.ту«венојсм)
+      current := current.у«вѕрав(мјт.ту«венојсм)
     ќЌ≈÷ New;
 
 ѕ–ќ÷≈ƒ”–ј Empty(varadr: ÷≈Ћќ≈);
@@ -432,7 +432,7 @@
 
 ѕ–ќ÷≈ƒ”–ј Del*(last: мјт.ту«венојсм);
    Ќј„јЋќ
-      last.следующ := current.следующ;
+      last.у«вѕрав := current.у«вѕрав;
       ≈—Ћ» current = asmlist.следующ “ќ√ƒј
          asmlist.следующ := last
        ќЌ≈÷;
@@ -1446,21 +1446,21 @@
       flag := Ћќ∆№;
       ¬џЅќ– cur.tcmd »«
       |PUSH_EAX:
-        flag := cur.следующ(мјт.ту«венојсм).tcmd = POPEAX
+        flag := cur.у«вѕрав(мјт.ту«венојсм).tcmd = POPEAX
       |PUSHECX:
-        flag := cur.следующ(мјт.ту«венојсм).tcmd = POPECX
+        flag := cur.у«вѕрав(мјт.ту«венојсм).tcmd = POPECX
       |PUSHEDX:
-        flag := cur.следующ(мјт.ту«венојсм).tcmd = POPEDX
+        flag := cur.у«вѕрав(мјт.ту«венојсм).tcmd = POPEDX
       »Ќј„≈
        ќЌ≈÷;
       ≈—Ћ» flag “ќ√ƒј
         cur.clen := 0;
         cur.tcmd := 0;
-        cur := cur.следующ(мјт.ту«венојсм);
+        cur := cur.у«вѕрав(мјт.ту«венојсм);
         cur.clen := 0;
         cur.tcmd := 0
        ќЌ≈÷;
-      cur := cur.следующ(мјт.ту«венојсм)
+      cur := cur.у«вѕрав(мјт.ту«венојсм)
      ќЌ≈÷
    ќЌ≈÷ ќптимизировать;
 
@@ -1507,7 +1507,7 @@
             cur := asmlist.предыдущ(мјт.ту«венојсм);
             ѕќ ј cur # ѕ”—“ќ ƒ≈Ћј“№
                Write(mSys.ADR(Code[cur.кмд]), cur.clen);
-               cur := cur.следующ(мјт.ту«венојсм)
+               cur := cur.у«вѕрав(мјт.ту«венојсм)
              ќЌ≈÷;
             Fill(јдр¬ырав_ѕолуч(size, 4) - size, 0X);
             Write(mSys.ADR(Data), datasize);
@@ -1575,7 +1575,7 @@
                   mSys.PUT(mSys.ADR(Reloc[rcount]), 00X); ƒќЅ(rcount);
                 ќЌ≈÷;
                Write(mSys.ADR(Code[cur.кмд]), cur.clen);
-               cur := cur.следующ(мјт.ту«венојсм)
+               cur := cur.у«вѕрав(мјт.ту«венојсм)
              ќЌ≈÷;
             size := size2;
             Fill(јдр¬ырав_ѕолуч(size, 4) - size2, 0X);
@@ -1678,7 +1678,7 @@
          cur := asmlist.предыдущ(мјт.ту«венојсм);
          ѕќ ј cur # ѕ”—“ќ ƒ≈Ћј“№
             Write(mSys.ADR(Code[cur.кмд]), cur.clen);
-            cur := cur.следующ(мјт.ту«венојсм)
+            cur := cur.у«вѕрав(мјт.ту«венојсм)
           ќЌ≈÷;
          Fill(јдр¬ырав_ѕолуч(code, 1000H) - code, 90X);
          Write(mSys.ADR(bytes[817H]), 55FH);
@@ -1805,7 +1805,7 @@
          cur := asmlist.предыдущ(мјт.ту«венојсм);
          ѕќ ј cur # ѕ”—“ќ ƒ≈Ћј“№
             Write(mSys.ADR(Code[cur.кмд]), cur.clen);
-            cur := cur.следующ(мјт.ту«венојсм)
+            cur := cur.у«вѕрав(мјт.ту«венојсм)
           ќЌ≈÷;
          Fill(јдр¬ырав_ѕолуч(codesize, 200H) - codesize, 0X);
          Write(mSys.ADR(rdata), 0DAH);
@@ -1859,7 +1859,7 @@
             mSys.PUT(cur.перем.адрес, size)
           ќЌ≈÷;
          size := size + cur.clen;
-         cur := cur.следующ(мјт.ту«венојсм)
+         cur := cur.у«вѕрав(мјт.ту«венојсм)
        ќЌ≈÷;
 
       size := temp2;
@@ -1870,7 +1870,7 @@
             mSys.PUT(cur.перем.адрес, size)
          ј≈—Ћ» (cur.tcmd = JCMD) & cur.б ороткое “ќ√ƒј
             mSys.GET(cur.перем.адрес, i);
-            temp3 := i - cur.следующ(мјт.ту«венојсм).адр.адрес;
+            temp3 := i - cur.у«вѕрав(мјт.ту«венојсм).адр.адрес;
             ≈—Ћ» (-131 <= temp3) & (temp3 <= 123) “ќ√ƒј
                mSys.GET(cur(мјт.ту«венојсм).код.адрес - 1, c);
                ≈—Ћ» c = JMP “ќ√ƒј
@@ -1884,7 +1884,7 @@
              ќЌ≈÷
           ќЌ≈÷;
          size := size + cur.clen;
-         cur := cur.следующ(мјт.ту«венојсм)
+         cur := cur.у«вѕрав(мјт.ту«венојсм)
        ќЌ≈÷;
 
       ≈—Ћ» dll »Ћ» con »Ћ» gui “ќ√ƒј
@@ -1938,7 +1938,7 @@
          ¬џЅќ– cur.tcmd »«
             |JCMD:
                mSys.GET(cur.перем.адрес, i);
-               mSys.PUT(cur.код.адрес, i - cur.следующ(мјт.ту«венојсм).адр.адрес)
+               mSys.PUT(cur.код.адрес, i - cur.у«вѕрав(мјт.ту«венојсм).адр.адрес)
             |GCMD:
                mSys.GET(cur.код.адрес, i);
                mSys.PUT(cur.код.адрес, i + temp3)
@@ -1962,7 +1962,7 @@
                RCount := 1
              ќЌ≈÷
           ќЌ≈÷;
-         cur := cur.следующ(мјт.ту«венојсм)
+         cur := cur.у«вѕрав(мјт.ту«венојсм)
        ќЌ≈÷;
       ≈—Ћ» R.Size # 0 “ќ√ƒј
          PutReloc(R)
