@@ -30,7 +30,7 @@
    м«вено := мод«вено,
    м÷епь := мод÷епь,
    м—тр := мод—троки,
-   м с := мод люч—лово,
+   м«в—ущ := мод«вено—ущ,
    мјт := модјсм“ипы,
    м рд := мод оординаты;
 
@@ -150,7 +150,7 @@
    maxfpu: ÷≈Ћќ≈;
    fpucmd: мјт.ту«венојсм;
    kosexp: ћј——»¬ 65536 »« «јѕ»—№
-      у«вено—ущ: м с.ту«в с;
+      у«вено—ущ: м«в—ущ.ту«вено—ущ;
       Adr, NameLabel: ÷≈Ћќ≈
     ќЌ≈÷;
    kosexpcount: ÷≈Ћќ≈;
@@ -253,14 +253,14 @@
       etable.size := etable.size + etable.textlen
     ќЌ≈÷ PackExport;
 
-ѕ–ќ÷≈ƒ”–ј ѕроц_Ёкспортировать*(Number: ÷≈Ћќ≈; у«вено—ущ_: м с.ту«в с; NameLabel: ÷≈Ћќ≈);
+ѕ–ќ÷≈ƒ”–ј ѕроц_Ёкспортировать*(Number: ÷≈Ћќ≈; у«вено—ущ_: м«в—ущ.ту«вено—ущ; NameLabel: ÷≈Ћќ≈);
    Ќј„јЋќ
       ≈—Ћ» dll “ќ√ƒј
          etable.arradr[etable.adrcount] := Number;
          ƒќЅ(etable.adrcount);
          etable.arrnameptr[etable.namecount] := etable.textlen;
          ƒќЅ(etable.namecount);
-         CopyStr(etable.text, у«вено—ущ_.с»м€, etable.textlen, 0);
+         CopyStr(etable.text, у«вено—ущ_.стр»м€, etable.textlen, 0);
          ƒќЅ(etable.textlen)
       ј≈—Ћ» obj “ќ√ƒј
          kosexp[kosexpcount].у«вено—ущ := у«вено—ущ_;
@@ -308,7 +308,7 @@
       n := LEN(chars) - 1;
       i := 0;
       ѕќ ј (i < n) & (chars[i] # 0X) ƒ≈Ћј“№
-         x := м—кан.Ћит16_в_÷елое(chars[i]) * 16 + м—кан.Ћит16_в_÷елое(chars[i + 1]);
+         x := м—кан.„исло16_в_÷елое(chars[i]) * 16 + м—кан.„исло16_в_÷елое(chars[i + 1]);
          mSys.PUT(adr, ¬Ћ»“(x));
          ƒќЅ(adr);
          ƒќЅ(i, 2)
@@ -2048,7 +2048,7 @@
          ћетку_Ќазначить(szversion); OutStringZ("version");
          ƒЋя i := 0 ƒќ kosexpcount - 1 ƒ≈Ћј“№
             ћетку_Ќазначить(kosexp[i].NameLabel);
-            OutStringZ(kosexp[i].у«вено—ущ.с»м€)
+            OutStringZ(kosexp[i].у«вено—ущ.стр»м€)
           ќЌ≈÷
        ќЌ≈÷;
       FixLabels(стр‘айл»м€, stk, gsize, glob)
